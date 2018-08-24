@@ -3,11 +3,10 @@ CXXFLAGS = -g
 INCS = -I./ -I../../src 
 TEST_FILES = catch.hpp
 TEST_FILES += main.cpp
-TEST_FILES += addition_ut.cpp
 
 
 
-FILES = ../../src/addition.cpp
+FILES = ../../src/
 
 
 testAll: $(FILES) $(TEST_FILES)
