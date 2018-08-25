@@ -1,0 +1,21 @@
+////////////////////////////////////////////////////////////////////////////////
+// File Name: main.cpp
+// Author: Riley Kopp
+// Date Modified: 25 Aug 18
+// Description: The main function for the platform
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+// Includes
+#include <iostream>
+
+
+
+// Main
+
+int main(void)
+{
+   std::cout << "Hello World" << std::endl;
+   return 0;
+}
