@@ -20,6 +20,7 @@ test:
    tags:
       - ubuntu16.04
    script:
+      - ls
       - echo "Running tests"
       - make
       - ./testAll
