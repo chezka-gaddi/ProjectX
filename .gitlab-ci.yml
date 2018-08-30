@@ -14,13 +14,13 @@ build:
       - ubuntu16.04
    script:
       - g++ --version
-      - make
 
 test:
    stage: test
    tags:
-      - 16.04
+      - ubuntu16.04
    script:
+      - cd tests/src
       - echo "Running tests"
       - make
       - ./testAll
