@@ -20,7 +20,6 @@ test:
    tags:
       - ubuntu16.04
    script:
-      - cd test/src/
       - echo "Running tests"
       - make
       - ./testAll
