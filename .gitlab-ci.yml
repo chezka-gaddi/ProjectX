@@ -1,3 +1,27 @@
-before:
+variables:
+   PROJECT_NAME: "CSC 340 Platform Fall 2018"
+
+before_script:
+   - echo "Starting build for $PROJECT_NAME"
+
+stages:
+   - build
+   - test
+
+build:
+   stage: build
+   tags:
+      - ubuntu16.04
    script:
-      - echo 'Hello World'
+      - g++ --version
+      - make
+
+test:
+   stage: test
+   tags:
+      - 16.04
+   script:
+      - echo "Running tests"
+      - make
+      - ./testAll
+
