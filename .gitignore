@@ -11,7 +11,8 @@
 !*.*
 
 #ignores cmake stuff i use cmake so this is helpful for me -jake
-/cmake-build-debug/
+src/cmake-build-debug/
+src/.idea/
 #CMakeLists.txt
 #unignores makefile
 !Makefile
