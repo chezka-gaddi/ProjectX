@@ -10,13 +10,31 @@
 class TankActor : public Actor{
 
 public:
-    void move(GameField &gameField) override {
 
-    }
 
-    void attack(GameField &gameField) override {
+    MoveData move() override;
 
-    }
+    AttackData attack() override;
+
+    /*******************************/
+    /********constructors***********/
+    /*******************************/
+
+
+
+
+    /*******************************/
+    /*************getters***********/
+    /*******************************/
+
+
+
+
+    /*******************************/
+    /************setters************/
+    /*******************************/
 
 };
+
+
 #endif //SLACKERS_PLATFORM_TANKACTOR_H
