@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -std=c++11 -fprofile-arcs -ftest-coverage
+CXXFLAGS = -g -std=c++11 
 INCS = -I./ -I../../src/ 
 TEST_FILES = catch.hpp
 TEST_FILES += main.cpp
