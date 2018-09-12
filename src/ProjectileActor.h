@@ -7,14 +7,34 @@
 
 #include "Actor.h"
 class ProjectileActor:public Actor{
-
+protected:
+    int range;
+    int startX;
+    int startY;
+    int endX;
+    int endY;
 public:
-    void move(GameField &gameField) override {
+    MoveData move() override;
 
-    }
+    AttackData attack() override;
+    /*******************************/
+    /********constructors***********/
+    /*******************************/
 
-    void attack(GameField &gameField) override {
 
-    }
-}
+
+
+    /*******************************/
+    /*************getters***********/
+    /*******************************/
+
+
+
+
+    /*******************************/
+    /************setters************/
+    /*******************************/
+};
+
+
 #endif //SLACKERS_PLATFORM_PROJECTILEACTOR_H
