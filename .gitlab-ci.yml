@@ -34,6 +34,7 @@ test_FT:
       - ubuntu16.04
    script:
       - cd tests/functional_tests/
+      - g++ -I../src/ --std=c++11 -c main.cpp 
       - make
       - ./testAll
       - cd ../../
