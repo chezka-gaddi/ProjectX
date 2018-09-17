@@ -5,8 +5,10 @@ TEST_FILES = catch.hpp
 TEST_FILES += main.cpp
 
 
-
-#FILES = ../../src/test.cpp
+#FILES = main.cpp
+#FILES = ../../src/Actor.cpp
+#FILES = ../../src/Actor.h
+#FILES = ActorTesting.cpp
 
 
 testAll: $(FILES) $(TEST_FILES)
