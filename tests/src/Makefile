@@ -2,11 +2,12 @@ CXX = g++
 CXXFLAGS = -g -std=c++11 
 INCS = -I./ -I../../src/ 
 TEST_FILES = catch.hpp
-TEST_FILES += main.cpp
+TEST_FILES = main.cpp
+TEST_FILES += AsciiTankActorTest.cpp
 
 
 
-#FILES = ../../src/test.cpp
+FILES = ../../src/AsciiTankActor.cpp
 
 
 testAll: $(FILES) $(TEST_FILES)
