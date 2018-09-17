@@ -23,19 +23,18 @@ protected:
     int damage;//damage of the actor for tanks it is the damage done when firing for projectiles it is damage done on hit
 
 public:
-    //#ifndef testing
-    //#define testing
+    #ifndef testing
     /**
      * calculates a move, and returns the data describing its move
      * @return MoveData the desired move to be made, if it is possible then the gamefield will do the move
      */
-    //virtual MoveData move() = 0;
+    virtual MoveData move() = 0;
     /**
      * calculates an attack and returns the data describing its attack
      * @return Attack data the desired attack to be made, if possible the gamefield will do the move
      */
-    //virtual AttackData attack() = 0;
-    //#endif
+    virtual AttackData attack() = 0;
+    #endif
 
     Actor();
 

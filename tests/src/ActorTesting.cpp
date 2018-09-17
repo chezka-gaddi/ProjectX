@@ -1,7 +1,7 @@
+#define testing
 #include "catch.hpp"
 #include "../../src/Actor.h"
 #include <string>
-#define testing
 
 // Testing setters and default constructor
 TEST_CASE("Calling getName() member function and checking construstor")
