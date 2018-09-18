@@ -7,5 +7,4 @@ TEST_CASE("Call move function to create and return MoveData struct")
 {
    AsciiTankActor tank;
    tank.move( 1, 9);
-   
 }
