@@ -22,7 +22,7 @@ class GameField{
 protected:
     //this is all of the actors on the field: tanks + projectiles
     std::vector<Actor *> actors;
-    int turn_count;
+    int turnCount;
 public:
     /**
      * Each turn will be as follows:
@@ -52,14 +52,14 @@ public:
     /********constructors***********/
     /*******************************/
 
-
+    GameField();
 
 
     /*******************************/
     /*************getters***********/
     /*******************************/
 
-
+    int getTurnCount();
 
 
     /*******************************/
