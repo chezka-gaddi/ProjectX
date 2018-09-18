@@ -1,19 +1,26 @@
 CXX = g++
-CXXFLAGS = -g -std=c++11 -Dtesting
+CXXFLAGS = -g -std=c++11 
 INCS = -I./ -I../../src/ 
-TEST_FILES = main.cpp
-TEST_FILES += ActorTesting.cpp
-TEST_FILES += ProjectileActorTest.cpp
+TEST_FILES = catch.hpp
+TEST_FILES += main.o
+TEST_FILES += GameFeildTests.o
+TEST_FILES += ../../src/GameField.o
+TEST_FILES += ActorTesting.o
+TEST_FILES += ProjectileActorTest.o
 
-FILES = ../../src/Actor.cpp
-FILES += ../../src/ProjectileActor.cpp
+FILES = ../../src/Actor.o
+FILES += ../../src/ProjectileActor.o
 
+#FILES = ../../src/test.cpp
+
+%.o : %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
 
 testAll: $(FILES) $(TEST_FILES)
 	$(CXX) $(CXXFLAGS) $(INCS) -o testAll $(FILES) $(TEST_FILES)
 
-%.o: %.cpp
+.cpp.o:
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
 
 clean:
-	rm testAll 
+	rm -rf testAll *.o
