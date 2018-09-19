@@ -21,6 +21,13 @@ SCENARIO("The tank moves around the gamefied")
       // Load Tanks
       // Add_Tank(test_tank)
       //
+      // Add map that looks like this:
+      // wwwwwwwwwww
+      // w         w
+      // w    t    w
+      // w         w
+      // wwwwwwwwwww
+      //
 
       WHEN("The tank ties to move up")
       {
@@ -74,10 +81,46 @@ SCENARIO("The tank encounters a wall")
       //
       //Add Tank
       //Add Tank(tank)
+      //
+      // Make a map that looks like this
+      //    w
+      //   wtw
+      //    w
+      // load custom map array
+      // add_map(map)
+      //
    
       WHEN("A tank hits a wall going up")
       {
-         //Tank.up()
+         THEN("The tank cannot move up anymore")
+         {
+            //REQUIRE(tank.up() == false);
+         }
       }
+
+      WHEN("A tank hits a wall going left")
+      {
+         THEN("The tank cannot move left anymore")
+         {
+            //REQUIRE(tank.left() == false);
+         }
+      }
+
+      WHEN("A tank hits a wall going right")
+      {
+         THEN("The tank cannot move right anymore")
+         {
+            //REQUIRE(tank.right() == false);
+         }
+      }
+
+      WHEN("A tank hits a wall going down")
+      {
+         THEN("The tank cannot move down anymore")
+         {
+            //REQUIRE(tank.down() == false);
+         }
+      }
+
    }
 }
