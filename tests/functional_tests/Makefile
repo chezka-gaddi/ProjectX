@@ -4,6 +4,7 @@ INCS = -I./ -I../../src/ -I../src
 #TEST_FILES = ../src/catch.hpp
 #TEST_FILES += main.cpp
 TEST_FILES = proof_of_concept_ft.cpp
+TEST_FILES += movement_tests.cpp
 
 
 
