@@ -1,5 +1,5 @@
 variables:
-   PROJECT_NAME: "CSC 340 Platform Fall 2018"
+   PROJECT_NAME: "Slackers Platform Fall 2018"
 
 before_script:
    - echo "Starting build for $PROJECT_NAME"
@@ -7,6 +7,7 @@ before_script:
 stages:
    - build
    - test
+   - test_FT
 
 build:
    stage: build
@@ -24,4 +25,16 @@ test:
       - echo "Running tests"
       - make
       - ./testAll
+      - cd ../../
 
+
+test_FT:
+   stage: test_FT
+   tags:
+      - ubuntu16.04
+   script:
+      - cd tests/functional_tests/
+      - g++ -I../src/ --std=c++11 -c main.cpp 
+      - make
+      - ./testAll
+      - cd ../../
