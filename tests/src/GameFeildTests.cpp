@@ -69,3 +69,8 @@ TEST_CASE("cull() removes only actors with health of 0")
     REQUIRE(g.getActors().size() == 2);
 }
 
+TEST_CASE("Construct GameField with dimensions")
+{
+    GameField g (4, 5);
+    REQUIRE ((g.getWidth() == 4 && g.getHeight() == 5));
+}

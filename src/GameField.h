@@ -21,6 +21,7 @@ protected:
     //this is all of the actors on the field: tanks + projectiles
     std::vector<Actor *> actors;
     int turnCount;
+    int fieldWidth, fieldHeight;
 public:
     /**
      * Each turn will be as follows:
@@ -28,7 +29,6 @@ public:
      * it starts over again
      */
     void nextTurn();
-    void runMoves();
     void addActor(Actor *);
     /**
      *
@@ -53,6 +53,7 @@ public:
     /*******************************/
 
     GameField();
+    GameField(int width, int height);
 
 
     /*******************************/
@@ -60,6 +61,8 @@ public:
     /*******************************/
 
     int getTurnCount();
+    int getWidth();
+    int getHeight();
 
     std::vector<Actor *> getActors();
 
