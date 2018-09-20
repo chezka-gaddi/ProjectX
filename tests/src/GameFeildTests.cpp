@@ -56,4 +56,16 @@ TEST_CASE("findActorByCoord() returns correct actors")
     
 }
 
+TEST_CASE("cull() removes only actors with health of 0")
+{
+    GameField g;
+    Actor a1 ("", 0, 0, 0, 0, 0);
+    Actor a2 ("", 0, 0, 0, 1, 0);
+    Actor a3 ("", 0, 0, 0, -1, 0);
+    g.addActor(&a1);
+    g.addActor(&a2);
+    g.addActor(&a3);
+    g.cull();
+    REQUIRE(g.getActors().size() == 2);
+}
 
