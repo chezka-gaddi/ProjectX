@@ -1,6 +1,11 @@
+#include <iostream>
 #include "AsciiTankActor.h"
 
 using namespace std;
+
+AsciiTankActor::AsciiTankActor()
+{
+}
 
 MoveData AsciiTankActor::move()
 {
