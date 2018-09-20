@@ -74,3 +74,9 @@ TEST_CASE("Construct GameField with dimensions")
     GameField g (4, 5);
     REQUIRE ((g.getWidth() == 4 && g.getHeight() == 5));
 }
+TEST_CASE("getMap() returns valid map")
+{
+    GameField g (2, 2);
+    std::vector<int> ref = {0, 0, 0, 0};
+    REQUIRE(g.getMap() == ref);
+}
