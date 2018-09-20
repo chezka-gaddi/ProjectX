@@ -80,3 +80,13 @@ TEST_CASE("getMap() returns valid map")
     std::vector<int> ref = {0, 0, 0, 0};
     REQUIRE(g.getMap() == ref);
 }
+TEST_CASE("GameField constructs with actors")
+{
+    Actor a1 ("", 1, 0, 0, 0, 0);
+    Actor a2 ("", 2, 1, 0, 0, 0);
+    std::vector<Actor *> actorVect;
+    actorVect.push_back(&a1);
+    actorVect.push_back(&a2);
+    GameField g (10, 10, actorVect);
+    REQUIRE(g.getActors().size() == 2);
+}

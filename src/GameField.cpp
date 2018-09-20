@@ -14,6 +14,12 @@ GameField::GameField(int width, int height) : fieldWidth(width), fieldHeight(hei
     map.resize(width * height);
     std::fill(map.begin(), map.end(), 0);
 }
+GameField::GameField(int width, int height, std::vector<Actor *> acts) : fieldWidth(width), fieldHeight(height), actors(acts)
+{
+    turnCount = 0;
+    map.resize(width * height);
+    std::fill(map.begin(), map.end(), 0);
+}
 int GameField::getTurnCount()
 {
     return turnCount;

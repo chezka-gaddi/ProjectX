@@ -21,8 +21,8 @@ protected:
     int fieldWidth, fieldHeight;
     //row major order, 0 for empty tiles and actor id for nonempty.
     std::vector<int> map;
-    
-    
+
+ 
 public:
     /**
      * Each turn will be as follows:
@@ -55,7 +55,7 @@ public:
 
     GameField();
     GameField(int width, int height);
-
+    GameField(int width, int height, std::vector<Actor *> startActors);
 
     /*******************************/
     /*************getters***********/
