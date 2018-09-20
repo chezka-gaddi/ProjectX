@@ -52,6 +52,7 @@ void GameField::nextTurn()
 void GameField::addActor(Actor *a)
 {
     actors.push_back(a);
+    updateMap();
 }
 std::vector<Actor *> GameField::getActors()
 {
