@@ -1,7 +1,8 @@
+/******************************************************
+ * This file contains the function definitions for all
+ *    functions within the Actor Class
+ ******************************************************/
 #include "Actor.h"
-
-using namespace std;
-
 
 /*************************************************************************//**
  * @author John Weatherhead
@@ -20,25 +21,30 @@ Actor::Actor()
  * @author John Weatherhead
  *
  * @par Description:
- * This constructor will set all member variables to a give value
+ * This member function will return the value contained in the member variable
+ *     name of the current object.
+ * 
+ * @returns name
  *
  ****************************************************************************/
-Actor::Actor(string newName, int newId)
+string Actor::getName()
 {
-   name = newName;
-   id = newId;
+    return name;
 }
 
 /*************************************************************************//**
  * @author John Weatherhead
  *
  * @par Description:
- * This destructor will clean up any dynamic memory if needed
+ * This member function will return the value contained in the member variable
+ *     id of the current object.
+ * 
+ * @returns id
  *
  ****************************************************************************/
-Actor::~Actor()
+int Actor::getId()
 {
-
+    return id;
 }
 
 /*************************************************************************//**
@@ -100,4 +106,5 @@ void Actor::setId(int newId)
 {
     id = newId;
 }
+
 
