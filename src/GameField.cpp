@@ -31,3 +31,11 @@ std::vector<Actor *> GameField::findActorsByCoord(int x, int y)
     }
     return hits;
 }
+void GameField::cull()
+{
+    for (int i = 0; i < actors.size(); ++i)
+    {
+        if (actors[i]->getHealth() == 0)
+            actors.erase(actors.begin()+i);
+    }
+}
