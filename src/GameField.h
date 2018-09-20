@@ -21,7 +21,7 @@ protected:
     int fieldWidth, fieldHeight;
     //row major order, 0 for empty tiles and actor id for nonempty.
     std::vector<int> map;
-
+    void updateMap();
  
 public:
     /**
