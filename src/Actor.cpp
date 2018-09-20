@@ -15,10 +15,40 @@ Actor::Actor()
 {
    name = "";
    id = 0;
-   field_x = 0;
-   field_y = 0;
-   health = 0;
-   damage = 0;   
+   field_x = -1;
+   field_y = -1;
+   health = -1;
+   damage = 1;   
+}
+
+/*************************************************************************//**
+ * @author John Weatherhead
+ *
+ * @par Description:
+ * This constructor will set all member variables to a give value
+ *
+ ****************************************************************************/
+Actor::Actor(string newName, int newId, int newFieldX, int newFieldY
+               , int newHealth, int newDamage)
+{
+   name = newName;
+   id = newId;
+   field_x = newFieldX;
+   field_y = newFieldY;
+   health = newHealth;
+   damage = newDamage;
+}
+
+/*************************************************************************//**
+ * @author John Weatherhead
+ *
+ * @par Description:
+ * This destructor will clean up any dynamic memory if needed
+ *
+ ****************************************************************************/
+Actor::~Actor()
+{
+
 }
 
 /*************************************************************************//**

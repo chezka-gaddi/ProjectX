@@ -6,8 +6,6 @@
 #define SLACKERS_PLATFORM_GAMEFIELD_H
 
 #include <vector>
-#include "TankActor.h"
-#include "ProjectileActor.h"
 #include "PositionData.h"
 #include "Actor.h"
 
@@ -30,7 +28,9 @@ public:
      * it starts over again
      */
     void nextTurn();
-    /***
+    void runMoves();
+    void addActor(Actor *);
+    /**
      *
      * returns a vector of the position of all of the actors on the game field
      * @return vector<PositionData> the state of each actor on the field
@@ -61,6 +61,7 @@ public:
 
     int getTurnCount();
 
+    std::vector<Actor *> getActors();
 
     /*******************************/
     /************setters************/

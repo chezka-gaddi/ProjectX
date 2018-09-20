@@ -37,6 +37,8 @@ public:
     #endif
 
     Actor();
+    Actor(string newName, int newId, int newFieldX, int newFieldY, int newHealth, int newDamage);
+    ~Actor();
 
     /*******************************/
     /*************getters***********/
