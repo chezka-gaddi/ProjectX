@@ -21,3 +21,13 @@ std::vector<Actor *> GameField::getActors()
 {
     return actors;
 }
+std::vector<Actor *> GameField::findActorsByCoord(int x, int y)
+{
+    std::vector<Actor *> hits;
+    for (auto a : actors) //check each actor
+    {
+        if (a->getFieldX() == x && a->getFieldY() == y)
+            hits.push_back(a);
+    }
+    return hits;
+}
