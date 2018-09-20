@@ -5,10 +5,14 @@ GameField::GameField()
     turnCount = 0;
     fieldWidth = 10;
     fieldHeight = 10;
+    map.resize(100);
+    std::fill(map.begin(), map.end(), 0);
 }
 GameField::GameField(int width, int height) : fieldWidth(width), fieldHeight(height)
 {
     turnCount = 0;
+    map.resize(width * height);
+    std::fill(map.begin(), map.end(), 0);
 }
 int GameField::getTurnCount()
 {
@@ -22,6 +26,10 @@ int GameField::getHeight()
 {
     return fieldHeight;
 }
+std::vector<int> GameField::getMap()
+{
+    return map;
+}
 void GameField::nextTurn()
 {
     ++turnCount;
@@ -29,7 +37,6 @@ void GameField::nextTurn()
 void GameField::addActor(Actor *a)
 {
     actors.push_back(a);
-    ++idCount;
 }
 std::vector<Actor *> GameField::getActors()
 {

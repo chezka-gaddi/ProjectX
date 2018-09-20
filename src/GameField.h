@@ -6,22 +6,23 @@
 #define SLACKERS_PLATFORM_GAMEFIELD_H
 
 #include <vector>
+#include <algorithm>
 #include "PositionData.h"
 #include "Actor.h"
 
 
 //this will eventually be where we make the playing field, but for now to make everything as complete as possible it will be empty
 class GameField{
-    /**
-     * on construction of game field this should be set to 0
-     */
-    int idCount;//mostly for the creation of more actors, each actor needs an id and it would be best if each id was different
-
+   
 protected:
     //this is all of the actors on the field: tanks + projectiles
     std::vector<Actor *> actors;
     int turnCount;
     int fieldWidth, fieldHeight;
+    //row major order, 0 for empty tiles and actor id for nonempty.
+    std::vector<int> map;
+    
+    
 public:
     /**
      * Each turn will be as follows:
@@ -63,7 +64,7 @@ public:
     int getTurnCount();
     int getWidth();
     int getHeight();
-
+    std::vector<int> getMap();
     std::vector<Actor *> getActors();
 
     /*******************************/
