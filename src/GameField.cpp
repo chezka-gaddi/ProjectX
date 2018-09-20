@@ -19,6 +19,7 @@ GameField::GameField(int width, int height, std::vector<Actor *> acts) : fieldWi
     turnCount = 0;
     map.resize(width * height);
     std::fill(map.begin(), map.end(), 0);
+    updateMap();
 }
 int GameField::getTurnCount()
 {
@@ -35,6 +36,14 @@ int GameField::getHeight()
 std::vector<int> GameField::getMap()
 {
     return map;
+}
+void GameField::updateMap()
+{
+    std::fill(map.begin(), map.end(), 0);
+    for (auto a : actors)
+    {
+        map[a->getFieldX() + fieldWidth * a->getFieldY()] = a->getId();
+    }
 }
 void GameField::nextTurn()
 {

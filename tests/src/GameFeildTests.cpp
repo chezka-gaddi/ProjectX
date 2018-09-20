@@ -90,3 +90,14 @@ TEST_CASE("GameField constructs with actors")
     GameField g (10, 10, actorVect);
     REQUIRE(g.getActors().size() == 2);
 }
+TEST_CASE("GameField correctly places actors on the map")
+{
+    Actor a1 ("", 1, 1, 0, 0, 0);
+    Actor a2 ("", 2, 0, 1, 0, 0);
+    std::vector<Actor *> actorVect;
+    actorVect.push_back(&a1);
+    actorVect.push_back(&a2);
+    GameField g (2, 2, actorVect);
+    std::vector<int> ref = {0, 1, 2, 0};
+    REQUIRE(g.getMap() == ref);
+}
