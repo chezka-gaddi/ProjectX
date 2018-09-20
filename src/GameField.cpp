@@ -3,11 +3,24 @@
 GameField::GameField()
 {
     turnCount = 0;
-    
+    fieldWidth = 10;
+    fieldHeight = 10;
+}
+GameField::GameField(int width, int height) : fieldWidth(width), fieldHeight(height)
+{
+    turnCount = 0;
 }
 int GameField::getTurnCount()
 {
     return turnCount;
+}
+int GameField::getWidth()
+{
+    return fieldWidth;
+}
+int GameField::getHeight()
+{
+    return fieldHeight;
 }
 void GameField::nextTurn()
 {
@@ -16,6 +29,7 @@ void GameField::nextTurn()
 void GameField::addActor(Actor *a)
 {
     actors.push_back(a);
+    ++idCount;
 }
 std::vector<Actor *> GameField::getActors()
 {
