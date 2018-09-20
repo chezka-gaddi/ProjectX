@@ -1,6 +1,6 @@
 #include "catch.hpp"
-#include "../../src/GameField.h"
-#include "../../src/Actor.h"
+#include <GameField.h>
+#include <Actor.h>
 
 
 TEST_CASE("Instantiate GameField")
