@@ -46,7 +46,7 @@ public:
      * this will find all the actors in a single cell
      * @return vector of actors that all have the same position
      */
-    std::vector<Actor*> findActorsByCoord();
+    std::vector<Actor*> findActorsByCoord(int x, int y);
 
     /*******************************/
     /********constructors***********/
