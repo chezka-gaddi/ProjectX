@@ -6,7 +6,6 @@
 #define SLACKERS_PLATFORM_PROJECTILEACTOR_H
 
 #include "Actor.h"
-#include <cmath>
 class ProjectileActor:public Actor{
 protected:
     int range;
@@ -17,22 +16,22 @@ protected:
 public:
     ProjectileActor();
 
-    MoveData move() override;
+    MoveData move();
 
-    AttackData attack() override;
+    AttackData attack();
 
     //Getters
-int ProjectileActor::getRange();
-int ProjectileActor::getStartX();
-int ProjectileActor::getStartY();
-int ProjectileActor::getEndX();
-int ProjectileActor::getEndY();
-//Setters
-void ProjectileActor::setRange(int rangeUpdate);
-void ProjectileActor::setStartX(int startXUpdate);
-void ProjectileActor::setStartY(int startYUpdate);
-void ProjectileActor::setEndX(int endXUpdate);
-void ProjectileActor::setEndY(int endYUpdate);
+    int getRange();
+    int getStartX();
+    int getStartY();
+    int getEndX();
+    int getEndY();
+    //Setters
+    void setRange(int rangeUpdate);
+    void setStartX(int startXUpdate);
+    void setStartY(int startYUpdate);
+    void setEndX(int endXUpdate);
+    void setEndY(int endYUpdate);
 };
 
 
