@@ -6,6 +6,7 @@
 #define SLACKERS_PLATFORM_PROJECTILEACTOR_H
 
 #include "Actor.h"
+
 class ProjectileActor:public Actor{
 protected:
     int range;
