@@ -15,12 +15,16 @@ SCENARIO("The tank moves around the gamefied")
 {
    GIVEN("A tank and a working gamefield")
    {
-      // Initialize game field
-      // Slackers()
-      //
+      TankActor * tank = nullptr;
+      GameField gamefield();
+      
       // Load Tanks
-      // Add_Tank(test_tank)
-      //
+      tank = new TankActor();
+      REQUIRE(tank != nullptr);
+      gamefield.addActor(tank)
+      
+         
+         
       // Add map that looks like this:
       // wwwwwwwwwww
       // w         w
@@ -29,9 +33,9 @@ SCENARIO("The tank moves around the gamefied")
       // wwwwwwwwwww
       //
 
-      WHEN("The tank ties to move up")
+      WHEN("The tank tries to move up")
       {
-         //tank.up()
+         tank.up()
          THEN("The tank moves up")
          {
             //Compare map with the initial map
@@ -39,7 +43,7 @@ SCENARIO("The tank moves around the gamefied")
          }
       }
 
-      WHEN("The tank ties to move down")
+      WHEN("The tank tries to move down")
       {
          //tank.down()
          THEN("The tank moves down")
@@ -49,7 +53,7 @@ SCENARIO("The tank moves around the gamefied")
          }
       }
       
-      WHEN("The tank ties to move left")
+      WHEN("The tank tries to move left")
       {
          //tank.left()
          THEN("The tank moves left")
@@ -59,7 +63,7 @@ SCENARIO("The tank moves around the gamefied")
          }
       }
 
-      WHEN("The tank ties to move right")
+      WHEN("The tank tries to move right")
       {
          //tank.right()
          THEN("The tank moves right")
