@@ -3,10 +3,11 @@ CXXFLAGS = -g -std=c++11 -Dtesting
 INCS = -I./ -I../../src/ 
 TEST_FILES = catch.hpp
 TEST_FILES += main.o
-TEST_FILES += GameFeildTests.o
-TEST_FILES += ../../src/GameField.o
-TEST_FILES += ../../src/Actor.o
-
+#TEST_FILES += GameFeildTests.o
+#TEST_FILES += ../../src/GameField.o
+TEST_FILES += ../../src/Actor-Alternate.o
+TEST_FILES += ../../src/SimpleActor.o
+TEST_FILES += SimpleActorTests.o
 
 #FILES = ../../src/test.cpp
 
