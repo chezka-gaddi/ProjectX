@@ -9,26 +9,36 @@ using std::endl;
 direction AsciiTankActor::move( MapData map, PositionData status)
 {
    char decision = 0;
+   direction movement = stay;
 
    cout << "Enter in a direction to move" << endl;
-   cout << "u (up) d (down) a (left) d (right) :" << endl;
+   cout << "w (up) d (down) a (left) d (right) p (stay):" << endl;
    
-   decision = getchar();
-   
+   cin >> decision;
+
    switch (decision)
    {
-	case 'u' :
-		return up;
+	case 'w' :
+		movement = up;
+		break;
 	case 's' :
-		return down;
+		movement = down;
+		break;
 	case 'a' :
-		return left;
+		movement = left;
+		break;
 	case 'd' :
-		return right;
+		movement = right;
+		break;
+	case 'p' :
+		movement = stay;
+		break;
 	default:
 		cout << "Not a valid direction" << endl;
-		decision = 0;
+		cout << "Your turn will be skipped" << endl;
+		movement = stay;
    }
+   return movement;
 }
 
 AttackData AsciiTankActor::attack( MapData ma, PositionData status)
