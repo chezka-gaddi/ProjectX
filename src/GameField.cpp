@@ -66,15 +66,15 @@ std::vector<ActorInfo> GameField::getActors()
 }
 std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
 {
-    /*
-    std::vector<Actor *> hits;
+    
+    std::vector<ActorInfo> hits;
     for (auto a : actors) //check each actor
     {
-        if (a->getFieldX() == x && a->getFieldY() == y)
+        if (a.x == x && a.y == y)
             hits.push_back(a);
     }
     return hits;
-    */
+    
 }
 void GameField::cull()
 {
