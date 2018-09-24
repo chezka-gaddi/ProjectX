@@ -12,15 +12,16 @@
 #include "MapData.h"
 #include "ActorInfo.h"
 
-//this will eventually be where we make the playing field, but for now to make everything as complete as possible it will be empty
 class GameField{
    
 protected:
     //this is all of the actors on the field: tanks + projectiles
     std::vector<ActorInfo> actors;
     int turnCount;
+    //struct with width, height, and a vector of ints in
     //row major order, 0 for empty tiles and actor id for nonempty.
     MapData fieldMap;
+    
     void updateMap();
  
 public:
@@ -31,12 +32,6 @@ public:
      */
     void nextTurn();
     void addActor(ActorInfo);
-    /**
-     *
-     * returns a vector of the position of all of the actors on the game field
-     * @return vector<PositionData> the state of each actor on the field
-     */
-    std::vector<PositionData> currentGameState();
 
     /**
      * removes all actors that have a health of 0 from the game (not actors with health less than 0)
