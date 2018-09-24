@@ -95,18 +95,21 @@ TEST_CASE("GameField constructs with actors")
     GameField g (10, 10, actors);
     REQUIRE(g.getActors().size() == 2);
 }
-/*
+
 TEST_CASE("GameField correctly places actors on the map at construction")
 {
-    Actor a1 ("", 1, 1, 0, 0, 0);
-    Actor a2 ("", 2, 0, 1, 0, 0);
-    std::vector<Actor *> actorVect;
-    actorVect.push_back(&a1);
-    actorVect.push_back(&a2);
+    std::vector<ActorInfo> actorVect(2);
+    actorVect[0].id = 1;
+    actorVect[0].x = 1;
+    actorVect[0].y = 0;
+    actorVect[1].id = 2;
+    actorVect[1].x = 0;
+    actorVect[1].y = 1;
     GameField g (2, 2, actorVect);
     std::vector<int> ref = {0, 1, 2, 0};
     REQUIRE(g.getMap() == ref);
 }
+/*
 TEST_CASE("GameField correctly places actors on the map when added")
 {
     Actor a1 ("", 1, 1, 0, 0, 0);
