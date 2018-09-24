@@ -6,7 +6,7 @@
 #include "PositionData.h"
 #include "AttackData.h"
 
-class AsciiTankActor : public TankActor
+class AsciiTankActor : public Actor
 {
    public:
       AsciiTankActor();
