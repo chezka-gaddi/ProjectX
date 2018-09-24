@@ -3,22 +3,26 @@
 GameField::GameField()
 {
     turnCount = 0;
-    fieldWidth = 10;
-    fieldHeight = 10;
-    map.resize(100);
-    std::fill(map.begin(), map.end(), 0);
+    fieldMap.width = 10;
+    fieldMap.height = 10;
+    fieldMap.map.resize(100);
+    std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
 }
-GameField::GameField(int width, int height) : fieldWidth(width), fieldHeight(height)
+GameField::GameField(int width, int height)
 {
     turnCount = 0;
-    map.resize(width * height);
-    std::fill(map.begin(), map.end(), 0);
+    fieldMap.width = width;
+    fieldMap.height = height;
+    fieldMap.map.resize(width * height);
+    std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
 }
-GameField::GameField(int width, int height, std::vector<Actor *> acts) : fieldWidth(width), fieldHeight(height), actors(acts)
+GameField::GameField(int width, int height, std::vector<Actor *> acts) : actors(acts)
 {
     turnCount = 0;
-    map.resize(width * height);
-    std::fill(map.begin(), map.end(), 0);
+    fieldMap.width = width;
+    fieldMap.height = height;
+    fieldMap.map.resize(width * height);
+    std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
     updateMap();
 }
 int GameField::getTurnCount()
@@ -27,23 +31,25 @@ int GameField::getTurnCount()
 }
 int GameField::getWidth()
 {
-    return fieldWidth;
+    return fieldMap.width;
 }
 int GameField::getHeight()
 {
-    return fieldHeight;
+    return fieldMap.height;
 }
 std::vector<int> GameField::getMap()
 {
-    return map;
+    return fieldMap.map;
 }
 void GameField::updateMap()
 {
-    std::fill(map.begin(), map.end(), 0);
+    /*
+    std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
     for (auto a : actors)
     {
-        map[a->getFieldX() + fieldWidth * a->getFieldY()] = a->getId();
+        fieldMap.map[a->getFieldX() + fieldMap.width * a->getFieldY()] = a->getId();
     }
+    */
 }
 void GameField::nextTurn()
 {
@@ -60,6 +66,7 @@ std::vector<Actor *> GameField::getActors()
 }
 std::vector<Actor *> GameField::findActorsByCoord(int x, int y)
 {
+    /*
     std::vector<Actor *> hits;
     for (auto a : actors) //check each actor
     {
@@ -67,12 +74,15 @@ std::vector<Actor *> GameField::findActorsByCoord(int x, int y)
             hits.push_back(a);
     }
     return hits;
+    */
 }
 void GameField::cull()
 {
+    /*
     for (int i = 0; i < actors.size(); ++i)
     {
         if (actors[i]->getHealth() == 0)
             actors.erase(actors.begin()+i);
     }
+    */
 }

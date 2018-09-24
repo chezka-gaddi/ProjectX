@@ -8,8 +8,8 @@
 #include <vector>
 #include <algorithm>
 #include "PositionData.h"
-#include "Actor.h"
-
+#include "Actor-Alternate.h"
+#include "MapData.h"
 
 //this will eventually be where we make the playing field, but for now to make everything as complete as possible it will be empty
 class GameField{
@@ -18,9 +18,8 @@ protected:
     //this is all of the actors on the field: tanks + projectiles
     std::vector<Actor *> actors;
     int turnCount;
-    int fieldWidth, fieldHeight;
     //row major order, 0 for empty tiles and actor id for nonempty.
-    std::vector<int> map;
+    MapData fieldMap;
     void updateMap();
  
 public:
