@@ -9,6 +9,8 @@
 
 // Include(s)
 #include <catch.hpp>
+#include <GameField.h>
+#include <TankActor.h>
 
 
 SCENARIO("The tank moves around the gamefied")
