@@ -2,7 +2,7 @@
 
 direction SimpleActor::move(MapData map, PositionData status)
 {
-    return stay;
+    return up;
 }
 AttackData SimpleActor::attack(MapData map, PositionData status)
 {
