@@ -43,13 +43,13 @@ std::vector<int> GameField::getMap()
 }
 void GameField::updateMap()
 {
-    /*
+    
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
     for (auto a : actors)
     {
-        fieldMap.map[a->getFieldX() + fieldMap.width * a->getFieldY()] = a->getId();
+        fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
     }
-    */
+    
 }
 void GameField::nextTurn()
 {
