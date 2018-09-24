@@ -55,6 +55,7 @@ void GameField::nextTurn()
     ++turnCount;
     direction dir;
     PositionData pos;
+    AttackData atk;
     for (auto &a : actors)
     {
         pos.game_x = a.x;
@@ -85,8 +86,16 @@ void GameField::nextTurn()
             break;
         default:
             break;
-            }
+        }
+
+        atk = a.act_p->attack(fieldMap, pos);
+        for (auto &t :actors)
+        {
+            if (t.x == atk.attack_x && t.y == atk.attack_y)
+                t.health--;
+        }
     }
+    cull();
     updateMap();
 }
 void GameField::addActor(ActorInfo a)
