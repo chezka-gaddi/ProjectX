@@ -109,13 +109,14 @@ TEST_CASE("GameField correctly places actors on the map at construction")
     std::vector<int> ref = {0, 1, 2, 0};
     REQUIRE(g.getMap() == ref);
 }
-/*
+
 TEST_CASE("GameField correctly places actors on the map when added")
 {
-    Actor a1 ("", 1, 1, 0, 0, 0);
+    SimpleActor a;
+    ActorInfo newAI(&a, 1, 1, 1, 0, 1);
     GameField g (2, 2);
-    g.addActor(&a1);
+    g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
     REQUIRE(g.getMap() == ref);
 }
-*/
+
