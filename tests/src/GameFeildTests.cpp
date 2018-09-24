@@ -129,4 +129,13 @@ TEST_CASE("Actor moves when nextTurn() is called")
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }
-
+TEST_CASE("Actors are prevented from moving off the map")
+{
+    SimpleActor a;
+    ActorInfo newAI(&a, 1, 1, 0, 0, 1);
+    GameField g (2, 2);
+    g.addActor(newAI);
+    std::vector<int> ref = {1, 0, 0, 0};
+    g.nextTurn();
+    REQUIRE(g.getMap() == ref);
+}
