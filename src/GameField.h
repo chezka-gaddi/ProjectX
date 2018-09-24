@@ -10,13 +10,14 @@
 #include "PositionData.h"
 #include "Actor-Alternate.h"
 #include "MapData.h"
+#include "ActorInfo.h"
 
 //this will eventually be where we make the playing field, but for now to make everything as complete as possible it will be empty
 class GameField{
    
 protected:
     //this is all of the actors on the field: tanks + projectiles
-    std::vector<Actor *> actors;
+    std::vector<ActorInfo> actors;
     int turnCount;
     //row major order, 0 for empty tiles and actor id for nonempty.
     MapData fieldMap;
@@ -29,7 +30,7 @@ public:
      * it starts over again
      */
     void nextTurn();
-    void addActor(Actor *);
+    void addActor(ActorInfo);
     /**
      *
      * returns a vector of the position of all of the actors on the game field
@@ -46,7 +47,7 @@ public:
      * this will find all the actors in a single cell
      * @return vector of actors that all have the same position
      */
-    std::vector<Actor*> findActorsByCoord(int x, int y);
+    std::vector<ActorInfo> findActorsByCoord(int x, int y);
 
     /*******************************/
     /********constructors***********/
@@ -54,7 +55,7 @@ public:
 
     GameField();
     GameField(int width, int height);
-    GameField(int width, int height, std::vector<Actor *> startActors);
+    GameField(int width, int height, std::vector<ActorInfo> startActors);
 
     /*******************************/
     /*************getters***********/
@@ -64,7 +65,7 @@ public:
     int getWidth();
     int getHeight();
     std::vector<int> getMap();
-    std::vector<Actor *> getActors();
+    std::vector<ActorInfo> getActors();
 
     /*******************************/
     /************setters************/

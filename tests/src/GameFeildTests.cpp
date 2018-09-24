@@ -25,10 +25,10 @@ TEST_CASE("nextTurn increments turnCount")
 TEST_CASE("addActor adds an actor to actors")
 {
     GameField g;
-    Actor * a;
-    a = new  SimpleActor;
-    g.addActor(a);
-    REQUIRE(g.getActors()[0] == a);
+    Actor * a = new  SimpleActor;
+    ActorInfo ai( a, 1, 1, 0, 0, 1);
+    g.addActor(ai);
+    REQUIRE(g.getActors()[0].act_p == a);
     delete a;
 }
 /*
@@ -38,6 +38,7 @@ TEST_CASE("findActorByCoord() works with no actors")
     GameField g;
     REQUIRE(g.findActorsByCoord(0,0).size() == 0);
 }
+
 TEST_CASE("findActorByCoord() returns correct actors")
 {
     GameField g;

@@ -15,6 +15,7 @@ struct ActorInfo
     int x;
     int y;
     int id;
+    ActorInfo(Actor *a, int h, int d, int xpos, int ypos, int i) : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i) {}
 };
 
 #endif

@@ -16,7 +16,7 @@ GameField::GameField(int width, int height)
     fieldMap.map.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
 }
-GameField::GameField(int width, int height, std::vector<Actor *> acts) : actors(acts)
+GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actors(acts)
 {
     turnCount = 0;
     fieldMap.width = width;
@@ -55,16 +55,16 @@ void GameField::nextTurn()
 {
     ++turnCount;
 }
-void GameField::addActor(Actor *a)
+void GameField::addActor(ActorInfo a)
 {
     actors.push_back(a);
     updateMap();
 }
-std::vector<Actor *> GameField::getActors()
+std::vector<ActorInfo> GameField::getActors()
 {
     return actors;
 }
-std::vector<Actor *> GameField::findActorsByCoord(int x, int y)
+std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
 {
     /*
     std::vector<Actor *> hits;
