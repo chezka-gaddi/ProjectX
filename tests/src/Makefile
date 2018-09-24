@@ -1,10 +1,12 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -Dtesting
 INCS = -I./ -I../../src/ 
-TEST_FILES = main.o
-TEST_FILES += ActorTesting.o
+TEST_FILES = main.cpp
+TEST_FILES += ActorTesting.cpp
+TEST_FILES += ProjectileActorTest.cpp
 
 FILES = ../../src/Actor.cpp
+FILES += ../../src/ProjectileActor.cpp
 
 
 testAll: $(FILES) $(TEST_FILES)
