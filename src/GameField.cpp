@@ -42,8 +42,7 @@ std::vector<int> GameField::getMap()
     return fieldMap.map;
 }
 void GameField::updateMap()
-{
-    
+{    
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
     for (auto a : actors)
     {
@@ -54,6 +53,37 @@ void GameField::updateMap()
 void GameField::nextTurn()
 {
     ++turnCount;
+    direction dir;
+    PositionData pos;
+    for (auto &a : actors)
+    {
+        pos.game_x = a.x;
+        pos.game_y = a.y;
+        pos.health = a.health;
+        pos.id = a.id;
+        dir = a.act_p->move(fieldMap, pos);
+        switch (dir)
+        {
+        case up:
+            a.y--;
+            break;
+            
+        case down:
+            a.y++;
+            break;
+            
+        case left:
+            a.x--;
+            break;
+                
+        case right:
+            a.x++;
+            break;
+        default:
+            break;
+            }
+    }
+    updateMap();
 }
 void GameField::addActor(ActorInfo a)
 {
