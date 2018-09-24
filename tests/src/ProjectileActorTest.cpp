@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "../../src/ProjectileActor.h"
+#include "../../src/<ProjectileActor.h>"
 
 TEST_CASE("Vertical movement in move()")
 {
