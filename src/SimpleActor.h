@@ -12,6 +12,7 @@
 
 class SimpleActor : public Actor
 {
+public:
     virtual direction move(MapData map, PositionData status);
     virtual AttackData attack(MapData map, PositionData status);
 
