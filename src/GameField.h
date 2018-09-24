@@ -14,6 +14,8 @@
 #include "ActorInfo.h"
 #include "direction.h"
 
+
+//this will eventually be where we make the playing field, but for now to make everything as complete as possible it will be empty
 class GameField{
    
 protected:

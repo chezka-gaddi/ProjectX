@@ -21,5 +21,8 @@ TEST_FILES += ../../src/ActorInfo.o
 testAll: $(FILES) $(TEST_FILES)
 	$(CXX) $(CXXFLAGS) $(INCS) -o testAll $(FILES) $(TEST_FILES)
 
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
+
 clean:
 	rm -rf testAll *.o ../../src/*.o
