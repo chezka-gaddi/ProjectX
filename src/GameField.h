@@ -1,7 +1,8 @@
-//
-// Created by jlee on 8/25/18.
-//
-
+/**
+ * @file GameField.h
+ * @author David Donahue
+ * @brief GameField manages the play field and  actors.
+ */                            
 #ifndef SLACKERS_PLATFORM_GAMEFIELD_H
 #define SLACKERS_PLATFORM_GAMEFIELD_H
 

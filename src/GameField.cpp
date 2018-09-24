@@ -1,6 +1,12 @@
+/**
+ * @file GameField.cpp
+ * @author David Donahue
+ */
 #include "GameField.h"
 
 /**
+ * @author David Donahue
+ * @par Description:
  * Default constructor, makes a 10x10 empty map
  */
 
@@ -13,6 +19,8 @@ GameField::GameField()
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
 }
 /**
+ * @author David Donahue
+ * @par Description:
  * Constructor given dimensions
  */
 GameField::GameField(int width, int height)
@@ -24,6 +32,8 @@ GameField::GameField(int width, int height)
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
 }
 /**
+ * @author David Donahue
+ * @par Description:
  * Constructor with dimensions and a vector of ActorInfo
  */
 GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actors(acts)
@@ -36,6 +46,8 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     updateMap();
 }
 /**
+ * @author David Donahue
+ * @par Description:
  * Gets the number of turns that have elapsed
  */
 int GameField::getTurnCount()
@@ -43,6 +55,8 @@ int GameField::getTurnCount()
     return turnCount;
 }
 /**
+ * @author David Donahue
+ * @par Description:
  * Gets the width of the field
  */
 int GameField::getWidth()
@@ -50,6 +64,8 @@ int GameField::getWidth()
     return fieldMap.width;
 }
 /**
+ * @author David Donahue
+ * @par Description:
  * Gets the height of the field
  */
 
@@ -59,6 +75,8 @@ int GameField::getHeight()
 }
 
 /**
+ * @author David Donahue
+ * @par Description:
  * Gets just the map as a vector of ints
  */ 
 std::vector<int> GameField::getMap()
@@ -66,6 +84,8 @@ std::vector<int> GameField::getMap()
     return fieldMap.map;
 }
 /**
+ * @author David Donahue
+ * @par Description:
  * Update the map with the current postions of all actors
  */
 void GameField::updateMap()
@@ -80,6 +100,8 @@ void GameField::updateMap()
     
 }
 /**
+ * @author David Donahue
+ * @par Description:
  * Executes the move and attack phase of each AI's turn and increments the turn counter.
  * AI's are culled
  */
@@ -139,6 +161,8 @@ void GameField::nextTurn()
     updateMap();
 }
 /**
+ * @author David Donahue
+ * @par Description:
  * Add an actor to the list
  */
 void GameField::addActor(ActorInfo a)
@@ -148,6 +172,8 @@ void GameField::addActor(ActorInfo a)
 }
 
 /**
+ * @author David Donahue
+ * @par Description:
  * Get the current set of actors
  */
 std::vector<ActorInfo> GameField::getActors()
@@ -155,6 +181,8 @@ std::vector<ActorInfo> GameField::getActors()
     return actors;
 }
 /**
+ * @author David Donahue
+ * @par Description:
  * Get a vector of actors at a given location on the map
  */
 std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
@@ -170,6 +198,8 @@ std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
     
 }
 /**
+ * @author David Donahue
+ * @par Description:
  * Remove actors with hp of 0 from the game
  */
 void GameField::cull()
