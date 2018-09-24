@@ -119,4 +119,14 @@ TEST_CASE("GameField correctly places actors on the map when added")
     std::vector<int> ref = {0, 1, 0, 0};
     REQUIRE(g.getMap() == ref);
 }
+TEST_CASE("Actor moves when nextTurn() is called")
+{
+    SimpleActor a;
+    ActorInfo newAI(&a, 1, 1, 0, 1, 1);
+    GameField g (2, 2);
+    g.addActor(newAI);
+    std::vector<int> ref = {1, 0, 0, 0};
+    g.nextTurn();
+    REQUIRE(g.getMap() == ref);
+}
 
