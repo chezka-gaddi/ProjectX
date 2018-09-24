@@ -78,11 +78,11 @@ std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
 }
 void GameField::cull()
 {
-    /*
+    
     for (int i = 0; i < actors.size(); ++i)
     {
-        if (actors[i]->getHealth() == 0)
+        if (actors[i].health == 0)
             actors.erase(actors.begin()+i);
     }
-    */
+    
 }

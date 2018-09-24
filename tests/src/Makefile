@@ -8,7 +8,7 @@ TEST_FILES += ../../src/GameField.o
 TEST_FILES += ../../src/Actor-Alternate.o
 TEST_FILES += ../../src/SimpleActor.o
 TEST_FILES += SimpleActorTests.o
-
+TEST_FILES += ../../src/ActorInfo.o
 #FILES = ../../src/test.cpp
 
 %.o : %.cpp
@@ -18,4 +18,4 @@ testAll: $(FILES) $(TEST_FILES)
 	$(CXX) $(CXXFLAGS) $(INCS) -o testAll $(FILES) $(TEST_FILES)
 
 clean:
-	rm -rf testAll *.o
+	rm -rf testAll *.o ../../src/*.o
