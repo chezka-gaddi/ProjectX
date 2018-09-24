@@ -122,20 +122,30 @@ TEST_CASE("GameField correctly places actors on the map when added")
 TEST_CASE("Actor moves when nextTurn() is called")
 {
     SimpleActor a;
-    ActorInfo newAI(&a, 1, 1, 0, 1, 1);
+    ActorInfo newAI(&a, 1, 1, 1, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
-    std::vector<int> ref = {1, 0, 0, 0};
+    std::vector<int> ref = {0, 1, 0, 0};
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }
 TEST_CASE("Actors are prevented from moving off the map")
 {
     SimpleActor a;
+    ActorInfo newAI(&a, 1, 1, 1, 0, 1);
+    GameField g (2, 2);
+    g.addActor(newAI);
+    std::vector<int> ref = {0, 1, 0, 0};
+    g.nextTurn();
+    REQUIRE(g.getMap() == ref);
+}
+TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are culled")
+{
+    SimpleActor a;
     ActorInfo newAI(&a, 1, 1, 0, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
-    std::vector<int> ref = {1, 0, 0, 0};
+    std::vector<int> ref = {0, 0, 0, 0};
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }
