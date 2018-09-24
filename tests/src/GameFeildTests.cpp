@@ -71,7 +71,7 @@ TEST_CASE("cull() removes only actors with health of 0")
     g.cull();
     REQUIRE(g.getActors().size() == 2);
 }
-/*
+
 TEST_CASE("Construct GameField with dimensions")
 {
     GameField g (4, 5);
@@ -84,16 +84,18 @@ TEST_CASE("getMap() returns valid map")
     std::vector<int> ref = {0, 0, 0, 0};
     REQUIRE(g.getMap() == ref);
 }
+
 TEST_CASE("GameField constructs with actors")
 {
-    Actor a1 ("", 1, 0, 0, 0, 0);
-    Actor a2 ("", 2, 1, 0, 0, 0);
-    std::vector<Actor *> actorVect;
-    actorVect.push_back(&a1);
-    actorVect.push_back(&a2);
-    GameField g (10, 10, actorVect);
+    SimpleActor a1;
+    SimpleActor a2;
+    std::vector<ActorInfo> actors(2);
+    actors[0].act_p = &a1;
+    actors[1].act_p = &a2;
+    GameField g (10, 10, actors);
     REQUIRE(g.getActors().size() == 2);
 }
+/*
 TEST_CASE("GameField correctly places actors on the map at construction")
 {
     Actor a1 ("", 1, 1, 0, 0, 0);
