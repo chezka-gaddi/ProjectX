@@ -58,25 +58,26 @@ TEST_CASE("findActorByCoord() returns correct actors")
              && (hits[0] == a2 || hits[1] == a2) ));
     
 }
-/*
+
 TEST_CASE("cull() removes only actors with health of 0")
 {
     GameField g;
-    Actor a1 ("", 0, 0, 0, 0, 0);
-    Actor a2 ("", 0, 0, 0, 1, 0);
-    Actor a3 ("", 0, 0, 0, -1, 0);
-    g.addActor(&a1);
-    g.addActor(&a2);
-    g.addActor(&a3);
+    ActorInfo a1 (NULL, 1, 0, 0, 0, 0);
+    ActorInfo a2 (NULL, 0, 0, 0, 0, 0);
+    ActorInfo a3 (NULL, -1, 0, 0, 0, 0);
+    g.addActor(a1);
+    g.addActor(a2);
+    g.addActor(a3);
     g.cull();
     REQUIRE(g.getActors().size() == 2);
 }
-
+/*
 TEST_CASE("Construct GameField with dimensions")
 {
     GameField g (4, 5);
     REQUIRE ((g.getWidth() == 4 && g.getHeight() == 5));
 }
+
 TEST_CASE("getMap() returns valid map")
 {
     GameField g (2, 2);
