@@ -16,37 +16,15 @@ Actor::Actor()
    name = "";
    id = 0;   
 }
-
 /*************************************************************************//**
- * @author John Weatherhead
+ * @author David Donahue
  *
  * @par Description:
- * This member function will return the value contained in the member variable
- *     name of the current object.
- * 
- * @returns name
+ * Destructor as this is a base class and it is needed.
  *
  ****************************************************************************/
-string Actor::getName()
-{
-    return name;
-}
-
-/*************************************************************************//**
- * @author John Weatherhead
- *
- * @par Description:
- * This member function will return the value contained in the member variable
- *     id of the current object.
- * 
- * @returns id
- *
- ****************************************************************************/
-int Actor::getId()
-{
-    return id;
-}
-
+Actor::~Actor()
+{}
 /*************************************************************************//**
  * @author John Weatherhead
  *

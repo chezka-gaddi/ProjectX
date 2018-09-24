@@ -8,9 +8,10 @@
 #include <vector>
 #include <algorithm>
 #include "PositionData.h"
-#include "Actor-Alternate.h"
+#include "Actor.h"
 #include "MapData.h"
 #include "ActorInfo.h"
+#include "direction.h"
 
 class GameField{
    

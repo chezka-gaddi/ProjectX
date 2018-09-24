@@ -8,7 +8,8 @@
 #ifndef __SIMPLE_ACTOR_H
 #define __SIMPLE_ACTOR_H
 
-#include "Actor-Alternate.h"
+#include "Actor.h"
+#include "direction.h"
 
 class SimpleActor : public Actor
 {
