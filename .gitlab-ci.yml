@@ -25,7 +25,6 @@ test:
       - echo "Running tests"
       - make
       - ./testAll -s -d yes
-      - cd ../../
 
 
 test_FT:
@@ -37,4 +36,3 @@ test_FT:
       - g++ -I../src/ --std=c++11 -c main.cpp 
       - make
       - ./testAll -s -d yes
-      - cd ../../
