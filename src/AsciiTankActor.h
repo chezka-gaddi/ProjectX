@@ -1,17 +1,13 @@
 #ifndef	ASCIITANKACTOR_H
 #define ASCIITANKACTOR_H
 
-#include "TankActor.h"
-#include "MoveData.h"
-#include "PositionData.h"
-#include "AttackData.h"
+#include "Actor-Alternate.h"
 
 class AsciiTankActor : public Actor
 {
-   public:
-      AsciiTankActor();
-      MoveData move();
-      AttackData attack();
+public:
+      virtual direction move(MapData map, PositionData status);
+      virtual AttackData attack(MapData map, PositionData status);
 };
 
 #endif

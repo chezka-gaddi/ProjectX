@@ -1,32 +1,46 @@
 #include <iostream>
 #include "AsciiTankActor.h"
 
-using namespace std;
+using std::cout;
+using std::cin;
+using std::endl;
 
-AsciiTankActor::AsciiTankActor()
-{
-}
 
-MoveData AsciiTankActor::move()
+direction AsciiTankActor::move( MapData map, PositionData status)
 {
-   MoveData playerMove;
+   char decision = 0;
+
+   cout << "Enter in a direction to move" << endl;
+   cout << "u (up) d (down) a (left) d (right) :" << endl;
    
-   cout << "Where would you like to go?" << endl;
-   cout << "Enter your x then y:" << endl;
-   cin >> playerMove.new_x >> playerMove.new_y;
-
-   return playerMove;
+   decision = getchar();
+   
+   switch (decision)
+   {
+	case 'u' :
+		return up;
+	case 's' :
+		return down;
+	case 'a' :
+		return left;
+	case 'd' :
+		return right;
+	default:
+		cout << "Not a valid direction" << endl;
+		decision = 0;
+   }
 }
 
-AttackData AsciiTankActor::attack()
+AttackData AsciiTankActor::attack( MapData ma, PositionData status)
 {
    AttackData playerAttack;
 
    playerAttack.damage = 1;
 
-   cout << "Where would you like to attack?" << endl;
-   cout << "Enter your x then y:" << endl;
-   cin >> playerAttack.attack_x >> playerAttack.attack_y;
+   cout << "Enter an x coordinate for your attack:" << endl;
+   cin >> playerAttack.attack_x;
+   cout << "Enter an y coordinate for your attack:" << endl;
+   cin >> playerAttack.attack_y;
    
    return playerAttack;
 }

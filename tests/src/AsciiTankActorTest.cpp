@@ -3,9 +3,8 @@
 
 using namespace std;
 
-TEST_CASE("Call move function to create and return MoveData struct")
+TEST_CASE("Create an AsciiTankActor object.")
 {
    AsciiTankActor tank;
-   tank.move();
-   
+   REQUIRE( sizeof(tank) > 0 ); 
 }
