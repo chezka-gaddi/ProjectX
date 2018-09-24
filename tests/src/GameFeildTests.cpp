@@ -31,14 +31,13 @@ TEST_CASE("addActor adds an actor to actors")
     REQUIRE(g.getActors()[0].act_p == a);
     delete a;
 }
-/*
-//Actor(string newName, int newId, int newFieldX, int newFieldY, int newHealth, int newDamage);
+
 TEST_CASE("findActorByCoord() works with no actors")
 {
     GameField g;
     REQUIRE(g.findActorsByCoord(0,0).size() == 0);
 }
-
+/*
 TEST_CASE("findActorByCoord() returns correct actors")
 {
     GameField g;
