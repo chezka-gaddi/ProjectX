@@ -7,5 +7,7 @@ direction SimpleActor::move(MapData map, PositionData status)
 AttackData SimpleActor::attack(MapData map, PositionData status)
 {
     AttackData ret;
+    ret.attack_x = 0;
+    ret.attack_y = 0;
     return ret;
 }
