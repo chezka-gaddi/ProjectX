@@ -1,8 +1,7 @@
-/******************************************************
- * This file contains the function definitions for all
- *    functions within the Actor Class
- ******************************************************/
 #include "Actor.h"
+
+using namespace std;
+
 
 /*************************************************************************//**
  * @author John Weatherhead
@@ -14,11 +13,7 @@
 Actor::Actor()
 {
    name = "";
-   id = 0;
-   field_x = -1;
-   field_y = -1;
-   health = -1;
-   damage = 1;   
+   id = 0;   
 }
 
 /*************************************************************************//**
@@ -28,15 +23,10 @@ Actor::Actor()
  * This constructor will set all member variables to a give value
  *
  ****************************************************************************/
-Actor::Actor(string newName, int newId, int newFieldX, int newFieldY
-               , int newHealth, int newDamage)
+Actor::Actor(string newName, int newId)
 {
    name = newName;
    id = newId;
-   field_x = newFieldX;
-   field_y = newFieldY;
-   health = newHealth;
-   damage = newDamage;
 }
 
 /*************************************************************************//**
@@ -85,66 +75,6 @@ int Actor::getId()
  * @author John Weatherhead
  *
  * @par Description:
- * This member function will return the value contained in the member variable
- *     field_x of the current object.
- * 
- * @returns field_x
- *
- ****************************************************************************/
-int Actor::getFieldX()
-{
-    return field_x;
-}
-
-/*************************************************************************//**
- * @author John Weatherhead
- *
- * @par Description:
- * This member function will return the value contained in the member variable
- *     field_y of the current object.
- * 
- * @returns field_y
- *
- ****************************************************************************/
-int Actor::getFieldY()
-{
-    return field_y;
-}
-
-/*************************************************************************//**
- * @author John Weatherhead
- *
- * @par Description:
- * This member function will return the value contained in the member variable
- *     health of the current object.
- * 
- * @returns health
- *
- ****************************************************************************/
-int Actor::getHealth()
-{
-    return health;
-}
-
-/*************************************************************************//**
- * @author John Weatherhead
- *
- * @par Description:
- * This member function will return the value contained in the member variable
- *     damage of the current object.
- * 
- * @returns damage
- *
- ****************************************************************************/
-int Actor::getDamage()
-{
-    return damage;
-}
-
-/*************************************************************************//**
- * @author John Weatherhead
- *
- * @par Description:
  * This member function will set the member variable name to a new value 
  *         contained in newName.
  * 
@@ -169,65 +99,5 @@ void Actor::setName(string newName)
 void Actor::setId(int newId)
 {
     id = newId;
-}
-
-/*************************************************************************//**
- * @author John Weatherhead
- *
- * @par Description:
- * This member function will set the member variable field_x to a new value 
- *         contained in newFieldX.
- * 
- * @param[in]        newFieldX - The new int that field_x will be
- *
- ****************************************************************************/
-void Actor::setFieldX(int newFieldX)
-{
-    field_x = newFieldX;
-}
-
-/*************************************************************************//**
- * @author John Weatherhead
- *
- * @par Description:
- * This member function will set the member variable field_y to a new value 
- *         contained in newFieldY.
- * 
- * @param[in]        newFieldY - The new int that field_y will be
- *
- ****************************************************************************/
-void Actor::setFieldY(int newFieldY)
-{
-    field_y = newFieldY;
-}
-
-/*************************************************************************//**
- * @author John Weatherhead
- *
- * @par Description:
- * This member function will set the member variable health to a new value 
- *         contained in newHealth.
- * 
- * @param[in]        newHealth - The new int that health will be
- *
- ****************************************************************************/
-void Actor::setHealth(int newHealth)
-{
-    health = newHealth;
-}
-
-/*************************************************************************//**
- * @author John Weatherhead
- *
- * @par Description:
- * This member function will set the member variable damage to a new value 
- *         contained in newDamage.
- * 
- * @param[in]        newDamage - The new int damamge will be
- *
- ****************************************************************************/
-void Actor::setDamage(int newDamage)
-{
-    damage = newDamage;
 }
 
