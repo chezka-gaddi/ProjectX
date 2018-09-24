@@ -49,13 +49,13 @@ ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
  *
  * @returns MoveProjectile - struct with new coordinates to move to
 ******************************************************************************/
-/*MoveData ProjectileActor::move()
+MoveData ProjectileActor::move(MapData map, PositionData status)
 {
 	//temporary variables used for movement calculation in each direction
 	int xDiff, yDiff;
 
 	//struct for projectile's coordinates
-//	moveData moveProjectile;
+	MoveData moveProjectile;
 	
 	//calculates how far to move each position
 	xDiff = endX - startX;
@@ -69,13 +69,12 @@ ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
         }
 	
 	//sets new coordinates for projectile 
-//       	moveProjectile.new_x = startX + xDiff;
-//       	moveProjectile.new_y = startY +yDiff;
-   	}
+       	moveProjectile.new_x = startX + xDiff;
+       	moveProjectile.new_y = startY + yDiff;
 	
 	return moveProjectile;
 }
-*/
+
 /******************************************************************************
  * @author Brad Peterson
  * 
@@ -86,18 +85,18 @@ ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
  * 
  * @returns attackProjectile - struct with data on where to attack and damage
 ******************************************************************************/
-/*AttackData ProjectileActor::attack()
+AttackData ProjectileActor::attack(MapData map, PositionData status)
 {
 	AttackData attackProjectile;
 
 	//Initialize variables
-	attackProjectile.attack_x = fieldX;
-	attackProjectile.attack_y = fieldY;
+	attackProjectile.attack_x = 1;
+	attackProjectile.attack_y = 1;
 	attackProjectile.damage = 1;
 	
 	return attackProjectile;
 }
-*/
+
 
 //Getters
 /******************************************************************************

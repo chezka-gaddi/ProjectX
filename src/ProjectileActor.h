@@ -6,6 +6,8 @@
 #define SLACKERS_PLATFORM_PROJECTILEACTOR_H
 
 #include "Actor.h"
+#include "MoveData.h"
+#include "AttackData.h"
 
 class ProjectileActor:public Actor{
 protected:
@@ -20,9 +22,9 @@ public:
     ProjectileActor();
     ProjectileActor(int, int, int, int, int);
 
-    MoveData move();
+    direction move(MapData map, PositionData status);
 
-    AttackData attack();
+    AttackData attack(MapData map, PositionData status);
 
     //Getters
     int getRange();

@@ -11,9 +11,8 @@ TEST_FILES += SimpleActorTests.o
 #TEST_FILES += ProjectileActorTest.o
 
 FILES = ../../src/Actor.o
-FILES += ../../src/ProjectileActor.o
+#FILES += ../../src/ProjectileActor.o
 TEST_FILES += ../../src/ActorInfo.o
-#FILES = ../../src/test.cpp
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
