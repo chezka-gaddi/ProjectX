@@ -2,6 +2,9 @@
 #define ASCIITANKACTOR_H
 
 #include "TankActor.h"
+#include "MoveData.h"
+#include "PositionData.h"
+#include "AttackData.h"
 
 class AsciiTankActor : public TankActor
 {

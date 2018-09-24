@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "../../src/AsciiTankActor.h"
+#include <../../src/AsciiTankActor.h>
 
 using namespace std;
 
