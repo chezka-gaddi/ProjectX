@@ -5,7 +5,7 @@
 #ifndef __ACTOR_INFO_H
 #define __ACTOR_INFO_H
 
-#include "Actor-Alternate.h"
+#include "Actor.h"
 
 struct ActorInfo
 {
