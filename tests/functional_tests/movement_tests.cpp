@@ -24,7 +24,7 @@ SCENARIO("The tank moves around the gamefied")
       REQUIRE(tank != nullptr);
 
       // Load Tanks
-      ActorInfo   tank_s(tank, 100, 1, 1, 1, 0);
+      ActorInfo   tank_s(tank, 100, 0, 1, 1, 2);
 
       std::vector<ActorInfo> actor_list = {tank_s};
 
@@ -35,18 +35,21 @@ SCENARIO("The tank moves around the gamefied")
 
       // Add a tank into a vector of actors
 
-      GameField gamefield(10, 10, actor_list);
+      GameField gamefield(1, 2, actor_list);
 
       WHEN("The tank tries to move up")
       {
-         gamefield.
+         gamefield.nextTurn()
          THEN("The tank moves up")
          {
             //Compare map with the initial map
-            REQUIRE(true == true);
+            std::vector<int> expected_map = { 2, 0 };
+
+            std::vector<int> actual_map = gamefield.getMap();
+            REQUIRE(expected_map == actual_map);
          }
       }
-
+/*
       WHEN("The tank tries to move down")
       {
          //tank.down()
@@ -75,11 +78,11 @@ SCENARIO("The tank moves around the gamefied")
             //Compare map with the initial map
             REQUIRE(true == true);
          }
-      }
+      }*/
    }
 }
 
-
+/*
 SCENARIO("The tank encounters a wall")
 {
    GIVEN("A tank and a gamefield")
@@ -132,3 +135,4 @@ SCENARIO("The tank encounters a wall")
 
    }
 }
+*/

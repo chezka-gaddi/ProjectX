@@ -2,8 +2,8 @@ CXX = g++
 CXXFLAGS = -g -std=c++11 
 INCS = -I./ -I../../src/ -I../src 
 #TEST_FILES = ../src/catch.hpp
-#TEST_FILES += main.cpp
-TEST_FILES = proof_of_concept_ft.cpp
+TEST_FILES = main.cpp
+TEST_FILES += proof_of_concept_ft.cpp
 TEST_FILES += movement_tests.cpp
 
 
@@ -12,7 +12,7 @@ TEST_FILES += movement_tests.cpp
 
 
 testAll: $(FILES) $(TEST_FILES)
-	$(CXX) $(CXXFLAGS) $(INCS) -o testAll main.o $(FILES) $(TEST_FILES)
+	$(CXX) $(CXXFLAGS) $(INCS) -o testAll  $(FILES) $(TEST_FILES)
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
