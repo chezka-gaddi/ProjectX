@@ -10,34 +10,36 @@
 // Include(s)
 #include <catch.hpp>
 #include <GameField.h>
-#include <TankActor.h>
+#include <SimpleActor.h>
+#include <vector>
 
 
 SCENARIO("The tank moves around the gamefied")
 {
    GIVEN("A tank and a working gamefield")
    {
-      TankActor * tank = nullptr;
-      GameField gamefield();
-      
-      // Load Tanks
-      tank = new TankActor();
+      // Create Tank
+      SimpleActor * tank = nullptr;
+      tank = new SimpleActor();
       REQUIRE(tank != nullptr);
-      gamefield.addActor(tank)
-      
-         
-         
-      // Add map that looks like this:
-      // wwwwwwwwwww
-      // w         w
-      // w    t    w
-      // w         w
-      // wwwwwwwwwww
-      //
+
+      // Load Tanks
+      ActorInfo   tank_s(tank, 100, 1, 1, 1, 0);
+
+      std::vector<ActorInfo> actor_list = {tank_s};
+
+      // Load Map
+      std::vector<int> map = {
+
+
+
+      // Add a tank into a vector of actors
+
+      GameField gamefield(10, 10, actor_list);
 
       WHEN("The tank tries to move up")
       {
-         tank.up()
+         gamefield.
          THEN("The tank moves up")
          {
             //Compare map with the initial map
