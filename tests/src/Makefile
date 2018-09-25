@@ -1,13 +1,21 @@
 CXX = g++
-CXXFLAGS = -g -std=c++11 
+CXXFLAGS = -g -std=c++11
 INCS = -I./ -I../../src/ 
 TEST_FILES = catch.hpp
-TEST_FILES += main.cpp
+TEST_FILES += main.o
+TEST_FILES += GameFeildTests.o
+TEST_FILES += ../../src/GameField.o
+TEST_FILES += ../../src/SimpleActor.o
+TEST_FILES += SimpleActorTests.o
+#TEST_FILES += ActorTesting.o
+#TEST_FILES += ProjectileActorTest.o
 
+FILES = ../../src/Actor.o
+#FILES += ../../src/ProjectileActor.o
+TEST_FILES += ../../src/ActorInfo.o
 
-
-#FILES = ../../src/test.cpp
-
+%.o : %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
 
 testAll: $(FILES) $(TEST_FILES)
 	$(CXX) $(CXXFLAGS) $(INCS) -o testAll $(FILES) $(TEST_FILES)
@@ -16,4 +24,4 @@ testAll: $(FILES) $(TEST_FILES)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
 
 clean:
-	rm testAll 
+	rm -rf testAll *.o ../../src/*.o
