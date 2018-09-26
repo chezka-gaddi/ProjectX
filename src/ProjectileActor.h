@@ -6,6 +6,9 @@
 #define SLACKERS_PLATFORM_PROJECTILEACTOR_H
 
 #include "Actor.h"
+#include "MoveData.h"
+#include "AttackData.h"
+
 class ProjectileActor:public Actor{
 protected:
     int range;
@@ -13,27 +16,30 @@ protected:
     int startY;
     int endX;
     int endY;
+    int newX;
+    int newY;
 public:
-    MoveData move() override;
+    ProjectileActor();
+    ProjectileActor(int, int, int, int, int);
 
-    AttackData attack() override;
-    /*******************************/
-    /********constructors***********/
-    /*******************************/
+    direction move(MapData map, PositionData status);
 
+    AttackData attack(MapData map, PositionData status);
 
-
-
-    /*******************************/
-    /*************getters***********/
-    /*******************************/
-
-
-
-
-    /*******************************/
-    /************setters************/
-    /*******************************/
+    //Getters
+    int getRange();
+    int getStartX();
+    int getStartY();
+    int getEndX();
+    int getEndY();
+    int getNewX();
+    int getNewY();
+    //Setters
+    void setRange(int rangeUpdate);
+    void setStartX(int startXUpdate);
+    void setStartY(int startYUpdate);
+    void setEndX(int endXUpdate);
+    void setEndY(int endYUpdate);
 };
 
 
