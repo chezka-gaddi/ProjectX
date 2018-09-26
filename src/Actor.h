@@ -44,6 +44,5 @@ public:
     std::string getName();
     int getId();
     void setName(std::string newName);
-    void setId(int newId);
 };
 #endif //SLACKERS_PLATFORM_ACTOR_H
