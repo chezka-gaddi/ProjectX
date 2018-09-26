@@ -107,57 +107,80 @@ SCENARIO("The tank moves around the gamefied")
    }
 }
 
-/*
 SCENARIO("The tank encounters a wall")
 {
    GIVEN("A tank and a gamefield")
    {
-      //Init Game Field
-      //Platform()
-      //
-      //Add Tank
-      //Add Tank(tank)
-      //
-      // Make a map that looks like this
-      //    w
-      //   wtw
-      //    w
-      // load custom map array
-      // add_map(map)
-      //
+      // Create Tank
+      AsciiTankActor * tank = nullptr;
+      tank = new AsciiTankActor();
+      REQUIRE(tank != nullptr);
+
+      // Load Tanks
+      ActorInfo   tank_s(tank, 100, 0, 0, 0, 2);
+
+      std::vector<ActorInfo> actor_list = {tank_s};
+
+      // Load Map
+
+
+
+      // Add a tank into a vector of actors
+
+      GameField gamefield(1, 1, actor_list);
+
    
       WHEN("A tank hits a wall going up")
       {
+         tank->setMove('w');
+         gamefield.nextTurn();
          THEN("The tank cannot move up anymore")
          {
-            //REQUIRE(tank.up() == false);
+            std::vector<int> expected_map = { 2 };
+
+            std::vector<int> actual_map = gamefield.getMap();
+            REQUIRE(expected_map == actual_map);
          }
       }
 
       WHEN("A tank hits a wall going left")
       {
-         THEN("The tank cannot move left anymore")
+         tank->setMove('a');
+         gamefield.nextTurn();
+         THEN("The tank cannot move up anymore")
          {
-            //REQUIRE(tank.left() == false);
+            std::vector<int> expected_map = { 2 };
+
+            std::vector<int> actual_map = gamefield.getMap();
+            REQUIRE(expected_map == actual_map);
          }
       }
 
       WHEN("A tank hits a wall going right")
       {
-         THEN("The tank cannot move right anymore")
+         tank->setMove('d');
+         gamefield.nextTurn();
+         THEN("The tank cannot move up anymore")
          {
-            //REQUIRE(tank.right() == false);
+            std::vector<int> expected_map = { 2 };
+
+            std::vector<int> actual_map = gamefield.getMap();
+            REQUIRE(expected_map == actual_map);
          }
       }
 
       WHEN("A tank hits a wall going down")
       {
-         THEN("The tank cannot move down anymore")
+         tank->setMove('s');
+         gamefield.nextTurn();
+         THEN("The tank cannot move up anymore")
          {
-            //REQUIRE(tank.down() == false);
+            std::vector<int> expected_map = { 2 };
+
+            std::vector<int> actual_map = gamefield.getMap();
+            REQUIRE(expected_map == actual_map);
          }
       }
 
    }
 }
-*/
