@@ -11,6 +11,7 @@ class TankActor : public Actor{
 
 public:
 
+    TankActor();
 
     MoveData move() override;
 

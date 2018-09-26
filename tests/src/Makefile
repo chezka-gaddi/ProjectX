@@ -7,6 +7,8 @@ TEST_FILES += GameFeildTests.o
 TEST_FILES += ../../src/GameField.o
 TEST_FILES += ../../src/SimpleActor.o
 TEST_FILES += SimpleActorTests.o
+TEST_FILES += AsciiTankActorTest.o
+TEST_FILES += ../../src/AsciiTankActor.o
 #TEST_FILES += ActorTesting.o
 #TEST_FILES += ProjectileActorTest.o
 
