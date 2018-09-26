@@ -5,9 +5,37 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+void AsciiTankActor::setMove( char decision )
+{
+   switch (decision)
+   {
+	case 'w' :
+		actorMove = up;
+		break;
+	case 's' :
+		actorMove = down;
+		break;
+	case 'a' :
+		actorMove = left;
+		break;
+	case 'd' :
+		actorMove = right;
+		break;
+	case 'p' :
+		actorMove = stay;
+		break;
+	default:
+		cout << "Not a valid direction" << endl;
+		cout << "Your turn will be skipped" << endl;
+		actorMove = stay;
+   }
+   return;
+   
+}
 
 direction AsciiTankActor::move( MapData map, PositionData status)
 {
+   /*
    char decision = 0;
    direction movement = stay;
 
@@ -38,11 +66,22 @@ direction AsciiTankActor::move( MapData map, PositionData status)
 		cout << "Your turn will be skipped" << endl;
 		movement = stay;
    }
-   return movement;
+   */
+   return actorMove;
 }
 
-AttackData AsciiTankActor::attack( MapData ma, PositionData status)
+void AsciiTankActor::setAttackData( int xAttack, int yAttack, int numDamage)
 {
+   actorAttack.attack_x = xAttack;
+   actorAttack.attack_y = yAttack;
+   actorAttack.damage = numDamage;
+  
+   return;
+}
+
+AttackData AsciiTankActor::attack( MapData map, PositionData status)
+{
+   /*
    AttackData playerAttack;
 
    playerAttack.damage = 1;
@@ -51,6 +90,7 @@ AttackData AsciiTankActor::attack( MapData ma, PositionData status)
    cin >> playerAttack.attack_x;
    cout << "Enter an y coordinate for your attack:" << endl;
    cin >> playerAttack.attack_y;
+   */
+   return actorAttack;
    
-   return playerAttack;
 }

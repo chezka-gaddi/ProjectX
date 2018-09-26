@@ -5,9 +5,15 @@
 
 class AsciiTankActor : public Actor
 {
+
+      direction actorMove;
+      AttackData actorAttack;
 public:
       virtual direction move(MapData map, PositionData status);
       virtual AttackData attack(MapData map, PositionData status);
+      void setMove( char decision );
+      void setAttackData( int xAttack, int yAttack, int numDamage);
+
 };
 
 #endif
