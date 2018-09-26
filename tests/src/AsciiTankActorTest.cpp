@@ -35,7 +35,7 @@ TEST_CASE("Check if move() returns right directions")
    REQUIRE(tank.move(m,p) == 4);
 }
 
-/*
+
 TEST_CASE("Check if attack() will return entered coordinates")
 {
    AsciiTankActor tank;
@@ -43,10 +43,11 @@ TEST_CASE("Check if attack() will return entered coordinates")
    PositionData p;
    AttackData test1;
 
-   test1 = tank.attack(m,p);
+   tank.setAttackData( 1, 2, 3 );
+   test1=tank.attack(m,p);
    
    REQUIRE ( test1.attack_x == 1 );
-   REQUIRE ( test1.attack_y == 1 );
-   REQUIRE ( test1.damage == 1 );
+   REQUIRE ( test1.attack_y == 2 );
+   REQUIRE ( test1.damage == 3 );
 }
-*/
+
