@@ -5,7 +5,9 @@
 #ifndef SLACKERS_PLATFORM_PROJECTILEACTOR_H
 #define SLACKERS_PLATFORM_PROJECTILEACTOR_H
 
+#include <cmath>
 #include "Actor.h"
+#include "direction.h"
 #include "MoveData.h"
 #include "AttackData.h"
 
@@ -20,7 +22,8 @@ protected:
     int newY;
 public:
     ProjectileActor();
-    ProjectileActor(int, int, int, int, int);
+    ProjectileActor(int newRange, int newStartX, int newStartY, int newEndX,
+                    int newEndY);
 
     direction move(MapData map, PositionData status);
 

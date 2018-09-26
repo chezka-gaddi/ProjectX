@@ -29,13 +29,12 @@ ProjectileActor::ProjectileActor()
 ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
 				int newEndX, int newEndY)
 {
-        range = newRange;
+	range = newRange;
         startX = newStartX;
         startY = newStartY;
         endX = newEndX;
         endY = newEndY;
 }
-
 
 /******************************************************************************
  * @author Brad Peterson
@@ -52,26 +51,48 @@ ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
 MoveData ProjectileActor::move(MapData map, PositionData status)
 {
 	//temporary variables used for movement calculation in each direction
-	int xDiff, yDiff;
+	float xDiff, yDiff;
+	float degree, tangent;
+	float xDirection, yDirection;
 
 	//struct for projectile's coordinates
 	MoveData moveProjectile;
 	
 	//calculates how far to move each position
-	xDiff = endX - startX;
-        yDiff = endY - startY;
+	xDiff = abs(endX) - abs(status.game_x);
+        yDiff = abs(endY) - abs(status.game_y);
+	
+	//calculates the angle of projectile tan(x) = yDiff / xDiff
+	tangent = yDiff / xDiff;
+        degree = atan(tangent) * 180 / 3.14159;
+	//set incrementation of projectile based on angle
+	if(degree < 30) //moves horizontal
+	{
+		moveProjectile.new_x = 1;
+		moveProjectile.new_y = 0;
+	}
+	else if(degree > 60) //moves vertically
+	{
+		moveProjectile.new_x = 0;
+		moveProjectile.new_y = 1;
+	}
+	else //moves diagonally
+	{
+		moveProjectile.new_x = 1;
+		moveProjectile.new_y = 1;
+	}
 
-        //scaling movement to be less than maximum range
-        if(xDiff + yDiff > range)
-       	{
-            xDiff = float(xDiff / (xDiff + yDiff)) * range + 0.5;
-            yDiff = float(yDiff / (xDiff + yDiff)) * range + 0.5;
-        }
-	
-	//sets new coordinates for projectile 
-       	moveProjectile.new_x = startX + xDiff;
-       	moveProjectile.new_y = startY + yDiff;
-	
+	//account of direction of projectile
+	xDirection = endX - status.game_x;
+	yDirection = endY - status.game_y;
+
+	xDirection = xDirection / abs(xDirection);
+	yDirection = yDirection / abs(yDirection);
+
+	//multiplies by 1 or -1 depending on direction of movement
+	moveProjectile.new_x = moveProjectile.new_x * xDirection;
+	moveProjectile.new_y = moveProjectile.new_y * yDirection; 
+
 	return moveProjectile;
 }
 
@@ -90,8 +111,8 @@ AttackData ProjectileActor::attack(MapData map, PositionData status)
 	AttackData attackProjectile;
 
 	//Initialize variables
-	attackProjectile.attack_x = 1;
-	attackProjectile.attack_y = 1;
+	attackProjectile.attack_x = status.game_x;
+	attackProjectile.attack_y = status.game_y;
 	attackProjectile.damage = 1;
 	
 	return attackProjectile;

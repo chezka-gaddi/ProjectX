@@ -149,13 +149,18 @@ void GameField::nextTurn()
         }
 
         //Get the AI's desired attack
-        atk = a.act_p->attack(fieldMap, pos);
-        for (auto &t :actors)
-        {
-            //Check if anyone was hit
-            if (t.x == atk.attack_x && t.y == atk.attack_y && t.health > 0)
-                t.health--;
-        }
+        for(int i = 0; i < range; i++)
+	{
+	    a.x = a.x + moveProjectile.new_x;
+	    a.y = a.y + moveProjectile.new_y;
+            atk = a.act_p->attack(fieldMap, pos);
+            for (auto &t :actors)
+            {
+                //Check if anyone was hit
+                if (t.x == atk.attack_x && t.y == atk.attack_y && t.health > 0)
+                    t.health--;
+            }
+	}
     }
     cull();
     updateMap();
