@@ -10,8 +10,9 @@
 // Include(s)
 #include <catch.hpp>
 #include <GameField.h>
-#include <SimpleActor.h>
+#include <AsciiTankActor.h>
 #include <vector>
+#include <iostream>
 
 
 SCENARIO("The tank moves around the gamefied")
@@ -19,8 +20,8 @@ SCENARIO("The tank moves around the gamefied")
    GIVEN("A tank and a working gamefield")
    {
       // Create Tank
-      SimpleActor * tank = nullptr;
-      tank = new SimpleActor();
+      AsciiTankActor * tank = nullptr;
+      tank = new AsciiTankActor();
       REQUIRE(tank != nullptr);
 
       // Load Tanks
@@ -29,56 +30,80 @@ SCENARIO("The tank moves around the gamefied")
       std::vector<ActorInfo> actor_list = {tank_s};
 
       // Load Map
-      std::vector<int> map = {
 
 
 
       // Add a tank into a vector of actors
 
-      GameField gamefield(1, 2, actor_list);
+      GameField gamefield(3, 3, actor_list);
 
       WHEN("The tank tries to move up")
       {
-         gamefield.nextTurn()
+         tank->setMove('w');
+         gamefield.nextTurn();
          THEN("The tank moves up")
          {
             //Compare map with the initial map
-            std::vector<int> expected_map = { 2, 0 };
+            std::vector<int> expected_map = { 0, 2, 0, 0, 0, 0, 0, 0, 0 };
 
             std::vector<int> actual_map = gamefield.getMap();
             REQUIRE(expected_map == actual_map);
          }
       }
-/*
+
       WHEN("The tank tries to move down")
       {
-         //tank.down()
+         std::vector<int> expected_map = { 0, 0, 0, 0, 2, 0, 0, 0, 0 };
+
+         std::vector<int> actual_map = gamefield.getMap();
+         REQUIRE(expected_map == actual_map);
+         tank->setMove('s');
+         gamefield.nextTurn();
          THEN("The tank moves down")
          {
-            REQUIRE(true == true);
             //Compare map with the initial map
+            std::vector<int> expected_map = { 0, 0, 0, 0, 0, 0, 0, 2, 0 };
+
+            std::vector<int> actual_map = gamefield.getMap();
+            REQUIRE(expected_map == actual_map);
          }
       }
       
-      WHEN("The tank tries to move left")
-      {
-         //tank.left()
-         THEN("The tank moves left")
-         {
-            //Compare map with the initial map
-            REQUIRE(true == true);
-         }
-      }
-
       WHEN("The tank tries to move right")
       {
-         //tank.right()
+         std::vector<int> expected_map = { 0, 0, 0, 0, 2, 0, 0, 0, 0 };
+
+         std::vector<int> actual_map = gamefield.getMap();
+         REQUIRE(expected_map == actual_map);
+         tank->setMove('d');
+         gamefield.nextTurn();
          THEN("The tank moves right")
          {
             //Compare map with the initial map
-            REQUIRE(true == true);
+            std::vector<int> expected_map = { 0, 0, 0, 0, 0, 2, 0, 0, 0 };
+
+            std::vector<int> actual_map = gamefield.getMap();
+            REQUIRE(expected_map == actual_map);
          }
-      }*/
+      }
+
+      WHEN("The tank tries to move left")
+      {
+         std::vector<int> expected_map = { 0, 0, 0, 0, 2, 0, 0, 0, 0 };
+
+         std::vector<int> actual_map = gamefield.getMap();
+         REQUIRE(expected_map == actual_map);
+         tank->setMove('a');
+         gamefield.nextTurn();
+         THEN("The tank moves left")
+         {
+            //Compare map with the initial map
+            std::vector<int> expected_map = { 0, 0, 0, 2, 0, 0, 0, 0, 0 };
+
+            std::vector<int> actual_map = gamefield.getMap();
+            REQUIRE(expected_map == actual_map);
+         }
+      }
    }
 }
 

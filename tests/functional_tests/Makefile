@@ -8,8 +8,9 @@ TEST_FILES += movement_tests.cpp
 
 
 
-#FILES = ../../src/test.cpp
-
+FILES = ../../src/GameField.cpp
+FILES += ../../src/AsciiTankActor.cpp
+FILES += ../../src/Actor.cpp
 
 testAll: $(FILES) $(TEST_FILES)
 	$(CXX) $(CXXFLAGS) $(INCS) -o testAll  $(FILES) $(TEST_FILES)
