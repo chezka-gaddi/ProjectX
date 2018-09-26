@@ -15,6 +15,13 @@
 #include <iostream>
 
 ////////////////////////////////////////////////////////////////////////////////
+// FEATURE:
+//    The tanks can move around the game field and react with walls and
+//    other tanks.
+//
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
 // Single tank basic Movement
 ////////////////////////////////////////////////////////////////////////////////
 SCENARIO("The tank moves around the gamefied")
@@ -43,6 +50,7 @@ SCENARIO("The tank moves around the gamefied")
       {
          tank->setMove('w');
          gamefield.nextTurn();
+
          THEN("The tank moves up")
          {
             //Compare map with the initial map
@@ -61,6 +69,7 @@ SCENARIO("The tank moves around the gamefied")
          REQUIRE(expected_map == actual_map);
          tank->setMove('s');
          gamefield.nextTurn();
+
          THEN("The tank moves down")
          {
             //Compare map with the initial map
@@ -201,6 +210,9 @@ SCENARIO("Tanks drive right into each other")
    {
       AsciiTankActor * tank_1 = nullptr;
       AsciiTankActor * tank_2 = nullptr;
+
+      tank_1 = new AsciiTankActor();
+      tank_2 = new AsciiTankActor();
       
       ActorInfo tank_1_s(tank_1, 100, 0, 0, 0, 1);
       ActorInfo tank_2_s(tank_1, 100, 0, 0, 0, 2);
