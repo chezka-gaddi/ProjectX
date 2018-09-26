@@ -7,9 +7,6 @@ using namespace std;
 TEST_CASE("Create an AsciiTankActor object.")
 {
    AsciiTankActor tank;
-<<<<<<< HEAD
-   tank.move( 1, 9);
-=======
    REQUIRE( sizeof(tank) > 0 ); 
 }
 
@@ -36,7 +33,6 @@ TEST_CASE("Check if move() returns right directions")
 
    tank.setMove('j');
    REQUIRE(tank.move(m,p) == 4);
->>>>>>> b9c68709e507d092236334e4860117d0519788b3
 }
 
 

@@ -40,14 +40,9 @@ public:
     Actor();
     Actor(std::string newName, int newId);
     ~Actor();
-    int getFieldX();
-    int getFieldY();
-    int getHealth();
-    int getDamage();
 
     std::string getName();
     int getId();
     void setName(std::string newName);
-    void setName(string newName);
 };
 #endif //SLACKERS_PLATFORM_ACTOR_H
