@@ -14,7 +14,9 @@
 #include <vector>
 #include <iostream>
 
-
+////////////////////////////////////////////////////////////////////////////////
+// Single tank basic Movement
+////////////////////////////////////////////////////////////////////////////////
 SCENARIO("The tank moves around the gamefied")
 {
    GIVEN("A tank and a working gamefield")
@@ -107,6 +109,10 @@ SCENARIO("The tank moves around the gamefied")
    }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Hitting Wall Boundries
+////////////////////////////////////////////////////////////////////////////////
+
 SCENARIO("The tank encounters a wall")
 {
    GIVEN("A tank and a gamefield")
@@ -179,6 +185,39 @@ SCENARIO("The tank encounters a wall")
 
             std::vector<int> actual_map = gamefield.getMap();
             REQUIRE(expected_map == actual_map);
+         }
+      }
+
+   }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Tank Collision Test
+////////////////////////////////////////////////////////////////////////////////
+
+SCENARIO("Tanks drive right into each other")
+{
+   GIVEN("A 3 x 1 Game Field with two tanks")
+   {
+      AsciiTankActor * tank_1 = nullptr;
+      AsciiTankActor * tank_2 = nullptr;
+      
+      ActorInfo tank_1_s(tank_1, 100, 0, 0, 0, 1);
+      ActorInfo tank_2_s(tank_1, 100, 0, 0, 0, 2);
+
+      std::vector<ActorInfo> actor_list = {tank_1_s, tank_2_s};
+
+      GameField gamefield(1, 3, actor_list);
+
+      WHEN("Tanks try to move into the same spot")
+      {
+         tank_1->setMove('d');
+         tank_2->setMove('a');
+         gamefield.nextTurn();
+         THEN("Both tanks die!")
+         {
+            REQUIRE(tank_1_s.health == 0);
+            REQUIRE(tank_2_s.health == 0);
          }
       }
 
