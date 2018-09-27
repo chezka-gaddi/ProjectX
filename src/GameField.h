@@ -66,6 +66,8 @@ public:
     int getHeight();
     std::vector<int> getMap();
     std::vector<ActorInfo> getActors();
+    MapData getMapData();
+    
 
     /*******************************/
     /************setters************/
