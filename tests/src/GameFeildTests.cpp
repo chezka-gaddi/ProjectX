@@ -64,10 +64,12 @@ TEST_CASE("cull() removes only actors with health of 0")
     GameField g;
     ActorInfo a1 (NULL, 1, 0, 0, 0, 0);
     ActorInfo a2 (NULL, 0, 0, 0, 0, 0);
-    ActorInfo a3 (NULL, -1, 0, 0, 0, 0);
+    ActorInfo a3 (NULL, 0, 0, 0, 0, 0);
+    ActorInfo a4 (NULL, -1, 0, 0, 0, 0);
     g.addActor(a1);
     g.addActor(a2);
     g.addActor(a3);
+    g.addActor(a4);
     g.cull();
     REQUIRE(g.getActors().size() == 2);
 }
