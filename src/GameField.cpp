@@ -111,6 +111,8 @@ void GameField::nextTurn()
     direction dir;
     PositionData pos;
     AttackData atk;
+    std::vector<int> collisionVect;
+    int collisionDamage;
     for (auto &a : actors)
     {
         //PositionData to give the AI
@@ -118,45 +120,68 @@ void GameField::nextTurn()
         pos.game_y = a.y;
         pos.health = a.health;
         pos.id = a.id;
-        
         //get the AI's desired move
         dir = a.act_p->move(fieldMap, pos);
 
         //If it checks out, execute it
         switch (dir)
         {
-        case up:
+        case direction::up:
             if (a.y > 0)
                 a.y--;
             break;
             
-        case down:
+        case direction::down:
             if (a.y < fieldMap.height-1)
                 a.y++;
             break;
             
-        case left:
+        case direction::left:
             if (a.x > 0)
                 a.x--;
             break;
                 
-        case right:
+        case direction::right:
             if (a.x < fieldMap.width-1)
                 a.x++ ;
             break;
         default:
             break;
         }
+        collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
+        for (int i = 0; i < actors.size(); ++i ) //check each actor
+        {
+            if (actors[i].x == a.x && actors[i].y == a.y)
+                collisionVect.push_back(i);
+        }
 
+        if (collisionVect.size() > 1)
+        {
+            collisionDamage = 0;
+            for (auto i: collisionVect)
+            {
+                collisionDamage += actors[i].damage;
+            }
+            for (auto i: collisionVect) //apply the portion from the other actors
+            {
+                actors[i].health -= (collisionDamage - actors[i].damage);
+                if (actors[i].health < 0)
+                    actors[i].health = 0;
+            }
+        }
+        
+        
         //Get the AI's desired attack
         atk = a.act_p->attack(fieldMap, pos);
         for (auto &t :actors)
         {
             //Check if anyone was hit
-            if (t.x == atk.attack_x && t.y == atk.attack_y && t.health > 0)
+           if (t.x == atk.attack_x && t.y == atk.attack_y && t.health > 0)
                 t.health--;
-        }
+         }
+        
     }
+    
     cull();
     updateMap();
 }
@@ -208,7 +233,9 @@ void GameField::cull()
     for (int i = 0; i < actors.size(); ++i) //This is used instead of the c++11 version so that we can use the index.
     {
         if (actors[i].health == 0)
+        {
             actors.erase(actors.begin()+i);
+        }
     }
     
 }
