@@ -25,7 +25,7 @@ public:
     ProjectileActor(int newRange, int newStartX, int newStartY, int newEndX,
                     int newEndY);
 
-    direction move(MapData map, PositionData status);
+    MoveData moveProjectile(MapData map, PositionData status);
 
     AttackData attack(MapData map, PositionData status);
 

@@ -111,6 +111,8 @@ void GameField::nextTurn()
     direction dir;
     PositionData pos;
     AttackData atk;
+    MoveData projMove;
+    int projRange;
     for (auto &a : actors)
     {
         //PositionData to give the AI
@@ -149,10 +151,12 @@ void GameField::nextTurn()
         }
 
         //Get the AI's desired attack
-        for(int i = 0; i < range; i++)
+	projRange = getRange();
+        for(int i = 0; i < projRange; i++)
 	{
-	    a.x = a.x + moveProjectile.new_x;
-	    a.y = a.y + moveProjectile.new_y;
+            projMove = moveProjectile(fieldMap, pos);
+	    a.x = a.x + projMove.new_x; 
+	    a.y = a.y + projMove.new_y;
             atk = a.act_p->attack(fieldMap, pos);
             for (auto &t :actors)
             {
