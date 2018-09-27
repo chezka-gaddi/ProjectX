@@ -151,10 +151,10 @@ void GameField::nextTurn()
         }
 
         //Get the AI's desired attack
-	projRange = getRange();
-        for(int i = 0; i < projRange; i++)
+	projRange = ProjectileActor.getRange();
+        for(int i = 0; i < projRange; i++;)
 	{
-            projMove = moveProjectile(fieldMap, pos);
+            projMove = ProjectileActor.moveProjectile(fieldMap, pos);
 	    a.x = a.x + projMove.new_x; 
 	    a.y = a.y + projMove.new_y;
             atk = a.act_p->attack(fieldMap, pos);
