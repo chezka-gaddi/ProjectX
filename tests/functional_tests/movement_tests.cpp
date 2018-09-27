@@ -221,14 +221,15 @@ SCENARIO("Tanks drive right into each other")
 
       GameField gamefield(3, 1, actor_list);
 
-      // WHEN("Tanks try to move into the same spot")
+       WHEN("Tanks try to move into the same spot")
       {
          tank_1->setMove('d');
          tank_2->setMove('a');
          gamefield.nextTurn();
-         //THEN("Both tanks die!")
+         THEN("the first tank dies and the other takes a portion of the damage")
          {
              REQUIRE(gamefield.getActors()[0].health == 0);
+             REQUIRE(gamefield.getActors()[1].health != 100);
          }
       }
 
