@@ -14,7 +14,6 @@
 #include "MapData.h"
 #include "direction.h"
 #include "PositionData.h"
-#include "ProjectileActor.h"
 using namespace std;
 /*!
  * @brief This parent class will be inherited by every pojectile and tank

@@ -111,8 +111,6 @@ void GameField::nextTurn()
     direction dir;
     PositionData pos;
     AttackData atk;
-    MoveData projMove;
-    int projRange;
     for (auto &a : actors)
     {
         //PositionData to give the AI
@@ -151,20 +149,13 @@ void GameField::nextTurn()
         }
 
         //Get the AI's desired attack
-	projRange = a.act_p->getRange();
-        for(int i = 0; i < projRange; i++)
-	{
-            projMove = a.act_p->moveProjectile(fieldMap, pos);
-	    a.x = a.x + projMove.new_x; 
-	    a.y = a.y + projMove.new_y;
-            atk = a.act_p->attack(fieldMap, pos);
-            for (auto &t :actors)
-            {
-                //Check if anyone was hit
-                if (t.x == atk.attack_x && t.y == atk.attack_y && t.health > 0)
-                    t.health--;
-            }
-	}
+        atk = a.act_p->attack(fieldMap, pos);
+        for (auto &t :actors)
+        {
+            //Check if anyone was hit
+            if (t.x == atk.attack_x && t.y == atk.attack_y && t.health > 0)
+                t.health--;
+        }
     }
     cull();
     updateMap();
