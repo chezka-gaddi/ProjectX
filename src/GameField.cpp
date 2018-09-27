@@ -235,6 +235,7 @@ void GameField::cull()
         if (actors[i].health == 0)
         {
             actors.erase(actors.begin()+i);
+            --i; // go back one since everything just shifted back
         }
     }
     

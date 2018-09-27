@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <algorithm>
+#include "ProjectileActor.h"
 #include "PositionData.h"
 #include "Actor.h"
 #include "MapData.h"
