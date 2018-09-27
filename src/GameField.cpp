@@ -208,7 +208,10 @@ void GameField::cull()
     for (int i = 0; i < actors.size(); ++i) //This is used instead of the c++11 version so that we can use the index.
     {
         if (actors[i].health == 0)
+        {
             actors.erase(actors.begin()+i);
+            --i; // go back one since everything just shifted back
+        }
     }
     
 }
