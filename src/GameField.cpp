@@ -126,22 +126,22 @@ void GameField::nextTurn()
         //If it checks out, execute it
         switch (dir)
         {
-        case direction::up:
+        case up:
             if (a.y > 0)
                 a.y--;
             break;
             
-        case direction::down:
+        case down:
             if (a.y < fieldMap.height-1)
                 a.y++;
             break;
             
-        case direction::left:
+        case left:
             if (a.x > 0)
                 a.x--;
             break;
                 
-        case direction::right:
+        case right:
             if (a.x < fieldMap.width-1)
                 a.x++ ;
             break;

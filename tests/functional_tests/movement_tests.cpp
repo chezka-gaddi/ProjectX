@@ -36,14 +36,13 @@ SCENARIO("The tank moves around the gamefied")
       // Load Tanks
       ActorInfo   tank_s(tank, 100, 0, 1, 1, 2);
 
+      // Add a tank into a vector of actors
       std::vector<ActorInfo> actor_list = {tank_s};
 
-      // Load Map
-
-
-
-      // Add a tank into a vector of actors
-
+      // Generate the gamefield with a map that looks like this:
+      // 000
+      // 020
+      // 000
       GameField gamefield(3, 3, actor_list);
 
       WHEN("The tank tries to move up")
@@ -134,16 +133,14 @@ SCENARIO("The tank encounters a wall")
       // Load Tanks
       ActorInfo   tank_s(tank, 100, 0, 0, 0, 2);
 
+      // Add a tank into a vector of actors
       std::vector<ActorInfo> actor_list = {tank_s};
 
-      // Load Map
-
-
-
-      // Add a tank into a vector of actors
-
+      // Generate the gamefield with a map that looks like this:
+      // 000
+      // 020
+      // 000
       GameField gamefield(1, 1, actor_list);
-
    
       WHEN("A tank hits a wall going up")
       {
