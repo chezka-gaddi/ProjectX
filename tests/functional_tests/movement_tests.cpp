@@ -14,7 +14,16 @@
 #include <vector>
 #include <iostream>
 
+////////////////////////////////////////////////////////////////////////////////
+// FEATURE:
+//    The tanks can move around the game field and react with walls and
+//    other tanks.
+//
+////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////
+// Single tank basic Movement
+////////////////////////////////////////////////////////////////////////////////
 SCENARIO("The tank moves around the gamefied")
 {
    GIVEN("A tank and a working gamefield")
@@ -40,6 +49,7 @@ SCENARIO("The tank moves around the gamefied")
       {
          tank->setMove('w');
          gamefield.nextTurn();
+
          THEN("The tank moves up")
          {
             //Compare map with the initial map
@@ -58,6 +68,7 @@ SCENARIO("The tank moves around the gamefied")
          REQUIRE(expected_map == actual_map);
          tank->setMove('s');
          gamefield.nextTurn();
+
          THEN("The tank moves down")
          {
             //Compare map with the initial map
@@ -105,6 +116,10 @@ SCENARIO("The tank moves around the gamefied")
       }
    }
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Hitting Wall Boundries
+////////////////////////////////////////////////////////////////////////////////
 
 SCENARIO("The tank encounters a wall")
 {
@@ -176,6 +191,42 @@ SCENARIO("The tank encounters a wall")
 
             std::vector<int> actual_map = gamefield.getMap();
             REQUIRE(expected_map == actual_map);
+         }
+      }
+
+   }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Tank Collision Test
+////////////////////////////////////////////////////////////////////////////////
+
+SCENARIO("Tanks drive right into each other")
+{
+   GIVEN("A 3 x 1 Game Field with two tanks")
+   {
+      AsciiTankActor * tank_1 = nullptr;
+      AsciiTankActor * tank_2 = nullptr;
+
+      tank_1 = new AsciiTankActor();
+      tank_2 = new AsciiTankActor();
+      
+      ActorInfo tank_1_s(tank_1, 100, 1000, 0, 0, 1);
+      ActorInfo tank_2_s(tank_2, 100, 1000, 2, 0, 2);
+
+      std::vector<ActorInfo> actor_list = {tank_1_s, tank_2_s};
+
+      GameField gamefield(3, 1, actor_list);
+
+       WHEN("Tanks try to move into the same spot")
+      {
+         tank_1->setMove('d');
+         tank_2->setMove('a');
+         gamefield.nextTurn();
+         THEN("the first tank dies and the other takes a portion of the damage")
+         {
+             REQUIRE(gamefield.getActors()[0].health == 0);
+             REQUIRE(gamefield.getActors()[1].health != 100);
          }
       }
 
