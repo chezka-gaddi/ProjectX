@@ -215,3 +215,7 @@ void GameField::cull()
     }
     
 }
+MapData GameField::getMapData()
+{
+    return fieldMap;
+}

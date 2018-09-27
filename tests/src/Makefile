@@ -11,7 +11,7 @@ TEST_FILES += AsciiTankActorTest.o
 TEST_FILES += ../../src/AsciiTankActor.o
 #TEST_FILES += ActorTesting.o
 #TEST_FILES += ProjectileActorTest.o
-
+TEST_FILES += ../../src/MapData.o
 FILES = ../../src/Actor.o
 #FILES += ../../src/ProjectileActor.o
 TEST_FILES += ../../src/ActorInfo.o
