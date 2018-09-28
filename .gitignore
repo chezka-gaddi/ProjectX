@@ -19,8 +19,8 @@ src/.idea/
 #unignores testDox an optional doxygen file
 !testDox
 #ignores all directories created by doxygen
-/html/
-/latex/
+*/html/*
+*/latex/*
 
 # Compiled source #
 ###################

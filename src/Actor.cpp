@@ -1,7 +1,10 @@
-/******************************************************
- * This file contains the function definitions for all
- *    functions within the Actor Class
- ******************************************************/
+/**************************************************************************//**
+* @file
+*
+* @brief The source code for the Actor class
+*
+******************************************************************************/
+
 #include "Actor.h"
 
 /*************************************************************************//**
@@ -16,15 +19,19 @@ Actor::Actor()
    name = "";
    id = 0;
 }
+
 /*************************************************************************//**
- * @author David Donahue
+ * @author John Weatherhead
  *
  * @par Description:
  * Destructor as this is a base class and it is needed.
  *
  ****************************************************************************/
 Actor::~Actor()
-{}
+{
+
+}
+
 /*************************************************************************//**
  * @author John Weatherhead
  *
@@ -39,3 +46,19 @@ void Actor::setName(string newName)
 {
     name = newName;
 }
+
+/*************************************************************************//**
+ * @author John Weatherhead
+ *
+ * @par Description:
+ * This member function will set the member variable id to a new value 
+ *         contained in newId.
+ * 
+ * @param[in]        newId - The new id number that id will be
+ *
+****************************************************************************/
+void Actor::setId(int newId)
+{
+    name = newId;
+}
+
