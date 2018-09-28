@@ -13,6 +13,7 @@
 #include <AsciiTankActor.h>
 #include <vector>
 #include <iostream>
+#include <direction.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 // FEATURE:
@@ -24,13 +25,18 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Single tank basic Movement
 ////////////////////////////////////////////////////////////////////////////////
-SCENARIO("The tank moves around the gamefied")
+SCENARIO("The tank moves around the gamefield")
 {
    GIVEN("A tank and a working gamefield")
    {
       // Create Tank
       AsciiTankActor * tank = nullptr;
       tank = new AsciiTankActor();
+      direction moveUp = direction::up;
+      direction moveDown = direction::down;
+      direction moveLeft = direction::left;
+      direction moveRight = direction::right;
+      direction moveStay = direction::stay;
       REQUIRE(tank != nullptr);
 
       // Load Tanks
@@ -47,7 +53,7 @@ SCENARIO("The tank moves around the gamefied")
 
       WHEN("The tank tries to move up")
       {
-         tank->setMove('w');
+         tank->setMove(moveUp);
          gamefield.nextTurn();
 
          THEN("The tank moves up")
@@ -66,7 +72,7 @@ SCENARIO("The tank moves around the gamefied")
 
          std::vector<int> actual_map = gamefield.getMap();
          REQUIRE(expected_map == actual_map);
-         tank->setMove('s');
+         tank->setMove(moveDown);
          gamefield.nextTurn();
 
          THEN("The tank moves down")
@@ -85,7 +91,7 @@ SCENARIO("The tank moves around the gamefied")
 
          std::vector<int> actual_map = gamefield.getMap();
          REQUIRE(expected_map == actual_map);
-         tank->setMove('d');
+         tank->setMove(moveRight);
          gamefield.nextTurn();
          THEN("The tank moves right")
          {
@@ -103,7 +109,7 @@ SCENARIO("The tank moves around the gamefied")
 
          std::vector<int> actual_map = gamefield.getMap();
          REQUIRE(expected_map == actual_map);
-         tank->setMove('a');
+         tank->setMove(moveLeft);
          gamefield.nextTurn();
          THEN("The tank moves left")
          {
@@ -128,6 +134,11 @@ SCENARIO("The tank encounters a wall")
       // Create Tank
       AsciiTankActor * tank = nullptr;
       tank = new AsciiTankActor();
+      direction moveUp = direction::up;
+      direction moveDown = direction::down;
+      direction moveLeft = direction::left;
+      direction moveRight = direction::right;
+      direction moveStay = direction::stay;
       REQUIRE(tank != nullptr);
 
       // Load Tanks
@@ -144,7 +155,7 @@ SCENARIO("The tank encounters a wall")
    
       WHEN("A tank hits a wall going up")
       {
-         tank->setMove('w');
+         tank->setMove(moveUp);
          gamefield.nextTurn();
          THEN("The tank cannot move up anymore")
          {
@@ -157,7 +168,7 @@ SCENARIO("The tank encounters a wall")
 
       WHEN("A tank hits a wall going left")
       {
-         tank->setMove('a');
+         tank->setMove(moveLeft);
          gamefield.nextTurn();
          THEN("The tank cannot move up anymore")
          {
@@ -170,7 +181,7 @@ SCENARIO("The tank encounters a wall")
 
       WHEN("A tank hits a wall going right")
       {
-         tank->setMove('d');
+         tank->setMove(moveRight);
          gamefield.nextTurn();
          THEN("The tank cannot move up anymore")
          {
@@ -183,7 +194,7 @@ SCENARIO("The tank encounters a wall")
 
       WHEN("A tank hits a wall going down")
       {
-         tank->setMove('s');
+         tank->setMove(moveDown);
          gamefield.nextTurn();
          THEN("The tank cannot move up anymore")
          {
@@ -208,6 +219,9 @@ SCENARIO("Tanks drive right into each other")
       AsciiTankActor * tank_1 = nullptr;
       AsciiTankActor * tank_2 = nullptr;
 
+      direction moveRight = direction::right;
+      direction moveLeft = direction::left;
+
       tank_1 = new AsciiTankActor();
       tank_2 = new AsciiTankActor();
       
@@ -220,8 +234,8 @@ SCENARIO("Tanks drive right into each other")
 
        WHEN("Tanks try to move into the same spot")
       {
-         tank_1->setMove('d');
-         tank_2->setMove('a');
+         tank_1->setMove(moveRight);
+         tank_2->setMove(moveLeft);
          gamefield.nextTurn();
          THEN("the first tank dies and the other takes a portion of the damage")
          {

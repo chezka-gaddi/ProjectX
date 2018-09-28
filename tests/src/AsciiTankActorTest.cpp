@@ -2,7 +2,6 @@
 #include <AsciiTankActor.h>
 #include <Actor-Alternate.h>
 
-using namespace std;
 
 TEST_CASE("Create an AsciiTankActor object.")
 {
@@ -16,23 +15,21 @@ TEST_CASE("Check if move() returns right directions")
    MapData m;
    PositionData p;
 
-   tank.setMove('a');
+   tank.setMove(left);
    REQUIRE(tank.move(m,p) == 0);
    
-   tank.setMove('d');
+   tank.setMove(right);
    REQUIRE(tank.move(m,p) == 1);
 
-   tank.setMove('w');
+   tank.setMove(up);
    REQUIRE(tank.move(m,p) == 2);
 
-   tank.setMove('s');
+   tank.setMove(down);
    REQUIRE(tank.move(m,p) == 3);
 
-   tank.setMove('p');
+   tank.setMove(stay);
    REQUIRE(tank.move(m,p) == 4);
 
-   tank.setMove('j');
-   REQUIRE(tank.move(m,p) == 4);
 }
 
 
