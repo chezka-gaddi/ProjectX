@@ -1,7 +1,7 @@
 #ifndef	ASCIITANKACTOR_H
 #define ASCIITANKACTOR_H
 
-#include "Actor-Alternate.h"
+#include "Actor.h"
 
 class AsciiTankActor : public Actor
 {
