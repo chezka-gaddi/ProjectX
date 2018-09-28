@@ -29,7 +29,6 @@ TEST_CASE("addActor adds an actor to actors")
     ActorInfo ai( a, 1, 1, 0, 0, 1);
     g.addActor(ai);
     REQUIRE(g.getActors()[0].act_p == a);
-    delete a;
 }
 
 TEST_CASE("findActorByCoord() works with no actors")
@@ -89,11 +88,11 @@ TEST_CASE("getMap() returns valid map")
 
 TEST_CASE("GameField constructs with actors")
 {
-    SimpleActor a1;
-    SimpleActor a2;
+    Actor * a1 = new SimpleActor;
+    Actor * a2 = new SimpleActor;
     std::vector<ActorInfo> actors(2);
-    actors[0].act_p = &a1;
-    actors[1].act_p = &a2;
+    actors[0].act_p = a1;
+    actors[1].act_p = a2;
     GameField g (10, 10, actors);
     REQUIRE(g.getActors().size() == 2);
 }
@@ -101,9 +100,11 @@ TEST_CASE("GameField constructs with actors")
 TEST_CASE("GameField correctly places actors on the map at construction")
 {
     std::vector<ActorInfo> actorVect(2);
+    actorVect[0].act_p = NULL;
     actorVect[0].id = 1;
     actorVect[0].x = 1;
     actorVect[0].y = 0;
+    actorVect[1].act_p = NULL;
     actorVect[1].id = 2;
     actorVect[1].x = 0;
     actorVect[1].y = 1;
@@ -114,8 +115,8 @@ TEST_CASE("GameField correctly places actors on the map at construction")
 
 TEST_CASE("GameField correctly places actors on the map when added")
 {
-    SimpleActor a;
-    ActorInfo newAI(&a, 1, 1, 1, 0, 1);
+    Actor * a = new SimpleActor;
+    ActorInfo newAI(a, 1, 1, 1, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
@@ -123,8 +124,8 @@ TEST_CASE("GameField correctly places actors on the map when added")
 }
 TEST_CASE("Actor moves when nextTurn() is called")
 {
-    SimpleActor a;
-    ActorInfo newAI(&a, 1, 1, 1, 0, 1);
+    Actor * a = new SimpleActor;
+    ActorInfo newAI(a, 1, 1, 1, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
@@ -133,8 +134,8 @@ TEST_CASE("Actor moves when nextTurn() is called")
 }
 TEST_CASE("Actors are prevented from moving off the map")
 {
-    SimpleActor a;
-    ActorInfo newAI(&a, 1, 1, 1, 0, 1);
+    Actor * a = new SimpleActor;
+    ActorInfo newAI(a, 1, 1, 1, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
@@ -143,11 +144,14 @@ TEST_CASE("Actors are prevented from moving off the map")
 }
 TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are culled")
 {
-    SimpleActor a;
-    ActorInfo newAI(&a, 1, 1, 0, 0, 1);
+    Actor * a = new SimpleActor;
+    ActorInfo newAI(a, 1, 1, 0, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 0, 0, 0};
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }
+// TEST_CASE("Actors move until their range is depleted")
+// {
+// }

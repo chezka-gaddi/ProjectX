@@ -57,6 +57,7 @@ public:
     GameField(int width, int height);
     GameField(int width, int height, std::vector<ActorInfo> startActors);
 
+    ~GameField();
     /*******************************/
     /*************getters***********/
     /*******************************/
