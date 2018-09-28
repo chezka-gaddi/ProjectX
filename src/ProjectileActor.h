@@ -14,6 +14,7 @@ protected:
     int endX;
     int endY;
 public:
+
     MoveData move() override;
 
     AttackData attack() override;

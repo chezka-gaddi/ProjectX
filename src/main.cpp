@@ -10,7 +10,7 @@
 // Includes
 #include <iostream>
 #include "AsciiGameMisc.h"
-#include "TankActor.h"
+#include "AsciiTankActor.h"
 
 
 
@@ -25,8 +25,8 @@ int main(void)
    //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
    GameField gameField = GameField(10,10);
    //change tankactor here to what ever we have decided to call the ascii tank actor
-   TankActor * player1 = new TankActor();
-   TankActor * player2 = new TankActor();
+   AsciiTankActor * player1 = new TankActor();
+   AsciiTankActor * player2 = new TankActor();
    //tank actor pointers are made and then packaged into ActorInfo structs
    ActorInfo player1Info = ActorInfo();
    ActorInfo player2Info = ActorInfo();
