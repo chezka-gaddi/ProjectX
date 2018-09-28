@@ -152,6 +152,13 @@ TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }
-// TEST_CASE("Actors move until their range is depleted")
-// {
-// }
+TEST_CASE("Actors move until their range is depleted")
+{
+    Actor * a = new SimpleActor;
+    ActorInfo newAI(a, 1, 1, 0, 3, 1, 2);
+    GameField g (1,4);
+    g.addActor(newAI);
+    std::vector<int> ref = {0, 1, 0, 0};
+    g.nextTurn();
+    REQUIRE(g.getMap() == ref);
+}
