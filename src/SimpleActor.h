@@ -5,6 +5,8 @@
  *   -Attack 0,0
  */
 
+/** @file */
+
 #ifndef __SIMPLE_ACTOR_H
 #define __SIMPLE_ACTOR_H
 
