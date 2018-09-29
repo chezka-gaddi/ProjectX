@@ -10,6 +10,7 @@ TEST_FILES += movement_tests.o
 FILES = ../../src/GameField.o
 FILES += ../../src/AsciiTankActor.o
 FILES += ../../src/Actor.o
+FILES += ../../src/ProjectileActor.o
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
