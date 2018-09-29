@@ -30,8 +30,7 @@ GameField::~GameField()
     for (auto &a : actors)
     {
         if (a.act_p != NULL)
-            delete a.act_p;
-        
+            delete a.act_p;        
     }
 }
 
@@ -131,6 +130,7 @@ void GameField::nextTurn()
     std::vector<int> collisionVect;
     int collisionDamage;
     int rangeCount;
+    ActorInfo newProjectile;
     for (auto &a : actors)
     {
         rangeCount = a.range;
@@ -199,13 +199,25 @@ void GameField::nextTurn()
         
         //Get the AI's desired attack
         atk = a.act_p->attack(fieldMap, pos);
-        for (auto &t :actors)
+   
+        newProjectile.x = (atk.attack_x > a.x) ? a.x+1 : (atk.attack_x < a.x) ? a.x-1 : a.x;
+        newProjectile.y = (atk.attack_y > a.y) ? a.y+1 : (atk.attack_y < a.y) ? a.y-1 : a.y;
+
+        if (newProjectile.x < fieldMap.width && newProjectile.x >= 0 &&
+            newProjectile.y < fieldMap.height && newProjectile.y >= 0)
         {
-            //Check if anyone was hit
-           if (t.x == atk.attack_x && t.y == atk.attack_y && t.health > 0)
-                t.health--;
-         }
-        
+            ProjectileActor * proj = new ProjectileActor;
+            proj->setEndX(atk.attack_x);
+            proj->setEndY(atk.attack_y);
+            proj->setStartX(newProjectile.x);
+            proj->setStartY(newProjectile.y);
+            newProjectile.range = 5;
+            newProjectile.id = -a.id;
+            newProjectile.act_p = proj;
+            newProjectile.health = 1;
+            newProjectile.damage = 1;
+            addActor(newProjectile);
+        }
     }
     
     cull();
@@ -267,6 +279,11 @@ void GameField::cull()
     }
     
 }
+/**
+ * @author David Donahue
+ * @par Description:
+ * Returns the full fieldMap as a MapData struct
+ */
 MapData GameField::getMapData()
 {
     return fieldMap;

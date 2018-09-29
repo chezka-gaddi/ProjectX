@@ -48,7 +48,7 @@ ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
  *
  * @returns MoveProjectile - struct with new coordinates to move to
 ******************************************************************************/
-MoveData ProjectileActor::moveProjectile(MapData map, PositionData status)
+direction ProjectileActor::move(MapData map, PositionData status)
 {
 	//temporary variables used for movement calculation in each direction
 	float xDiff, yDiff;
@@ -93,7 +93,7 @@ MoveData ProjectileActor::moveProjectile(MapData map, PositionData status)
 	moveProjectile.new_x = moveProjectile.new_x * xDirection;
 	moveProjectile.new_y = moveProjectile.new_y * yDirection; 
 
-	return moveProjectile;
+	return up;
 }
 
 /******************************************************************************
@@ -293,4 +293,5 @@ void ProjectileActor::setEndY(int endYUpdate)
 {
     endY = endYUpdate;
 }
+
 

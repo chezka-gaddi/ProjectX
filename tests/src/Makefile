@@ -15,6 +15,7 @@ TEST_FILES += ../../src/MapData.o
 FILES = ../../src/Actor.o
 #FILES += ../../src/ProjectileActor.o
 TEST_FILES += ../../src/ActorInfo.o
+TEST_FILES += ../../src/ProjectileActor.o
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)

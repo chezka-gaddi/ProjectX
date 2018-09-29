@@ -162,3 +162,13 @@ TEST_CASE("Actors move until their range is depleted")
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }
+TEST_CASE("Actors spawn and move projectiles on attack")
+{
+    Actor * a = new SimpleActor;
+    ActorInfo newAI(a, 1, 1, 0, 6, 1, 0);
+    GameField g (1, 7);
+    g.addActor(newAI);
+    std::vector<int> ref = {0, -1, 0, 0, 0, 0, 1};
+    g.nextTurn();
+    REQUIRE(g.getMap() == ref);
+}
