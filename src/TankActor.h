@@ -1,3 +1,5 @@
+/** @file */
+
 //
 // Created by jlee on 9/8/18.
 //
@@ -13,9 +15,9 @@ public:
 
     TankActor();
 
-    MoveData move() override;
+    MoveData move() override; /*!<The override for the move function */
 
-    AttackData attack() override;
+    AttackData attack() override; /*!<The override for the attack function */
 
     /*******************************/
     /********constructors***********/

@@ -21,9 +21,9 @@
 class GameField{
    
 protected:
-    /** this is all of the actors on the field: tanks + projectiles */
+    /*!< this is all of the actors on the field: tanks + projectiles */
     std::vector<ActorInfo> actors;
-    int turnCount; /** The turn count number */
+    int turnCount; /*!< The turn count number */
     /** struct with width, height, and a vector of ints in
      row major order, 0 for empty tiles and actor id for nonempty. */
     MapData fieldMap;

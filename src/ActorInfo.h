@@ -21,7 +21,7 @@
 */
 struct ActorInfo
 {
-    Actor *act_p;       /*!< */
+    Actor *act_p;       /*!<A pointer to an Actor */
     int health;       /*!<The health value of the Actor */
     int damage;       /*!<The damage value of the Actor */
     int x;      /*!<The x corrdinate location of the Actor */

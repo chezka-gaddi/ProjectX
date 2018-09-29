@@ -1,3 +1,5 @@
+/** @file */
+
 //
 // Created by 7401123 on 9/12/18.
 //
@@ -7,8 +9,8 @@
 
 
 struct MoveData {
-    int new_x;
-    int new_y;
+    int new_x; /*!<The new desired x coordinate */
+    int new_y; /*!<The new desired y coordinate */
 };
 
 
