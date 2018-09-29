@@ -1,8 +1,8 @@
-//this file
+/*! \file */
 #include <ProjectileActor.h>
 
 using namespace std;
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -18,7 +18,7 @@ ProjectileActor::ProjectileActor()
 	endY = 0;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -36,7 +36,7 @@ ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
         endY = newEndY;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -96,7 +96,7 @@ MoveData ProjectileActor::moveProjectile(MapData map, PositionData status)
 	return moveProjectile;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -120,7 +120,7 @@ AttackData ProjectileActor::attack(MapData map, PositionData status)
 
 
 //Getters
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -134,7 +134,7 @@ int ProjectileActor::getRange()
     return range;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -148,7 +148,7 @@ int ProjectileActor::getStartX()
     return startX;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -162,7 +162,7 @@ int ProjectileActor::getStartY()
     return startY;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -176,7 +176,7 @@ int ProjectileActor::getEndX()
     return endX;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -190,7 +190,7 @@ int ProjectileActor::getEndY()
     return endY;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Riley Kopp
  * 
  * @par Description
@@ -204,7 +204,7 @@ int ProjectileActor::getNewX()
     return newX;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Riley Kopp
  * 
  * @par Description
@@ -219,7 +219,7 @@ int ProjectileActor::getNewY()
 }
 //Setters
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -234,7 +234,7 @@ void ProjectileActor::setRange(int rangeUpdate)
     range = rangeUpdate;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -249,7 +249,7 @@ void ProjectileActor::setStartX(int startXUpdate)
     startX = startXUpdate;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -264,7 +264,7 @@ void ProjectileActor::setStartY(int startYUpdate)
     startY = startYUpdate;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -279,7 +279,7 @@ void ProjectileActor::setEndX(int endXUpdate)
     endX = endXUpdate;
 }
 
-/******************************************************************************
+/**************************************************************************//**
  * @author Brad Peterson
  * 
  * @par Description
@@ -293,4 +293,3 @@ void ProjectileActor::setEndY(int endYUpdate)
 {
     endY = endYUpdate;
 }
-

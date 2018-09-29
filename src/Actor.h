@@ -18,7 +18,7 @@
 #include "PositionData.h"
 using namespace std;
 /*!
- * @brief This parent class will be inherited by every pojectile and tank
+ * @brief This parent class will be inherited by every projectile and tank
  */
 class Actor
 {
