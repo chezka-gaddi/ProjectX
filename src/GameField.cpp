@@ -148,24 +148,32 @@ void GameField::runMoves(ActorInfo &a)
         case direction::up:
             if (a.y > 0)
                 a.y--;
+            else
+                a.health--;
             a.heading=direction::up;
             break;
                 
         case direction::down:
             if (a.y < fieldMap.height-1)
                 a.y++;
+            else
+                a.health--;
             a.heading=direction::down;
             break;
                 
         case direction::left:
             if (a.x > 0)
                 a.x--;
+            else
+                a.health--;
             a.heading=direction::left;
             break;
                 
         case direction::right:
             if (a.x < fieldMap.width-1)
                 a.x++;
+            else
+                a.health--;
             a.heading=direction::right;
             break;
         default:

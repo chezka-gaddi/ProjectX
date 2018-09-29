@@ -125,7 +125,7 @@ TEST_CASE("GameField correctly places actors on the map when added")
 TEST_CASE("Actor moves when nextTurn() is called")
 {
     Actor * a = new SimpleActor;
-    ActorInfo newAI(a, 1, 1, 1, 0, 1);
+    ActorInfo newAI(a, 1, 1, 1, 1, 1);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
@@ -135,7 +135,7 @@ TEST_CASE("Actor moves when nextTurn() is called")
 TEST_CASE("Actors are prevented from moving off the map")
 {
     Actor * a = new SimpleActor;
-    ActorInfo newAI(a, 1, 1, 1, 0, 1);
+    ActorInfo newAI(a, 2, 1, 1, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
@@ -174,4 +174,13 @@ TEST_CASE("Actors spawn and move projectiles on attack")
     std::vector<int> ref = {0, -1, 0, 0, 0, 0, 0, 1};
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
+}
+TEST_CASE("Actors take 1 point of damage from the walls of the arena")
+{
+    Actor * a = new SimpleActor(up, 0);
+    ActorInfo newAI(a, 2, 1, 0, 0, 1, 1);
+    GameField g (1, 1);
+    g.addActor(newAI);
+    g.nextTurn();
+    REQUIRE(g.getActors().back().health == 1); //check for damage from the wall
 }
