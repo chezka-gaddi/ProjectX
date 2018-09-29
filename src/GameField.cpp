@@ -4,6 +4,7 @@
  */
 #include "GameField.h"
 #include <iostream>
+
 /**
  * @author David Donahue
  * @par Description:
@@ -118,92 +119,119 @@ void GameField::updateMap()
 /**
  * @author David Donahue
  * @par Description:
- * Executes the move and attack phase of each AI's turn and increments the turn counter.
+ * Executes the move phase of an AI's turn
  * AI's are culled
  */
-void GameField::nextTurn()
+void GameField::runMoves(ActorInfo &a)
 {
-    ++turnCount;
-    direction dir;
-    PositionData pos;
-    AttackData atk;
+
     std::vector<int> collisionVect;
     int collisionDamage;
     int rangeCount;
-    ActorInfo newProjectile;
-    for (auto &a : actors)
+    PositionData pos;
+    direction dir;
+    
+    rangeCount = a.range;
+    while (rangeCount)
     {
-        rangeCount = a.range;
-        while (rangeCount)
+        //PositionData to give the AI
+        pos.game_x = a.x;
+        pos.game_y = a.y;
+        pos.health = a.health;
+        pos.id = a.id;
+        //get the AI's desired move
+        dir = a.act_p->move(fieldMap, pos);
+            
+        //If it checks out, execute it
+        switch (dir)
         {
-            //PositionData to give the AI
-            pos.game_x = a.x;
-            pos.game_y = a.y;
-            pos.health = a.health;
-            pos.id = a.id;
-            //get the AI's desired move
-            dir = a.act_p->move(fieldMap, pos);
+        case direction::up:
+            if (a.y > 0)
+                a.y--;
+            a.heading=direction::up;
+            break;
+                
+        case direction::down:
+            if (a.y < fieldMap.height-1)
+                a.y++;
+            a.heading=direction::down;
+            break;
+                
+        case direction::left:
+            if (a.x > 0)
+                a.x--;
+            a.heading=direction::left;
+            break;
+                
+        case direction::right:
+            if (a.x < fieldMap.width-1)
+                a.x++;
+            a.heading=direction::right;
+            break;
+        default:
+            break;
+        }
+        collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
+        for (int i = 0; i < actors.size(); ++i ) //check each actor
+        {
+            if (actors[i].x == a.x && actors[i].y == a.y)
+                collisionVect.push_back(i);
+        }
             
-            //If it checks out, execute it
-            switch (dir)
+        if (collisionVect.size() > 1)
+        {
+            collisionDamage = 0;
+            for (auto i: collisionVect)
             {
-            case direction::up:
-                if (a.y > 0)
-                    a.y--;
-                a.heading=direction::up;
-                break;
-                
-            case direction::down:
-                if (a.y < fieldMap.height-1)
-                    a.y++;
-                a.heading=direction::down;
-                break;
-                
-            case direction::left:
-                if (a.x > 0)
-                    a.x--;
-                a.heading=direction::left;
-                break;
-                
-            case direction::right:
-                if (a.x < fieldMap.width-1)
-                    a.x++;
-                a.heading=direction::right;
-                break;
-            default:
-                break;
+                collisionDamage += actors[i].damage;
             }
-            collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
-            for (int i = 0; i < actors.size(); ++i ) //check each actor
+            for (auto i: collisionVect) //apply the portion from the other actors
             {
-                if (actors[i].x == a.x && actors[i].y == a.y)
-                    collisionVect.push_back(i);
-            }
-            
-            if (collisionVect.size() > 1)
-            {
-                collisionDamage = 0;
-                for (auto i: collisionVect)
-                {
-                    collisionDamage += actors[i].damage;
-                }
-                for (auto i: collisionVect) //apply the portion from the other actors
-                {
-                    actors[i].health -= (collisionDamage - actors[i].damage);
+                actors[i].health -= (collisionDamage - actors[i].damage);
                 if (actors[i].health < 0)
                     actors[i].health = 0;
-                }
             }
-            --rangeCount;
         }
-        
+        if (a.health == 0)
+            rangeCount = 0;
+        else
+            --rangeCount;
+    }
+}
+
+/**
+ * @author David Donahue
+ * @par Description:
+ * Executes the move and attack phase of each AI's turn and increments the turn counter.
+ * AI's are culled
+ */
+
+void GameField::nextTurn()
+{
+    ++turnCount;
+
+    AttackData atk;
+    ActorInfo newProjectile;
+    PositionData pos;
+    for (auto &a : actors)
+    {
+         
+        runMoves(a);
+
+        //PositionData to give the AI
+        pos.game_x = a.x;
+        pos.game_y = a.y;
+        pos.health = a.health;
+        pos.id = a.id;
+                
         //Get the AI's desired attack
         atk = a.act_p->attack(fieldMap, pos);
-   
+        
         newProjectile.x = (atk.attack_x > a.x) ? a.x+1 : (atk.attack_x < a.x) ? a.x-1 : a.x;
         newProjectile.y = (atk.attack_y > a.y) ? a.y+1 : (atk.attack_y < a.y) ? a.y-1 : a.y;
 
-        if (newProjectile.x < fieldMap.width && newProjectile.x >= 0 &&
+        if (atk.damage > 0 &&
+            newProjectile.x < fieldMap.width && newProjectile.x >= 0 &&
             newProjectile.y < fieldMap.height && newProjectile.y >= 0)
         {
             ProjectileActor * proj = new ProjectileActor;
@@ -216,8 +244,10 @@ void GameField::nextTurn()
             newProjectile.act_p = proj;
             newProjectile.health = 1;
             newProjectile.damage = 1;
-            addActor(newProjectile);
+            actors.push_back(newProjectile);
+            runMoves(*(actors.end()-1));
         }
+            
     }
     
     cull();

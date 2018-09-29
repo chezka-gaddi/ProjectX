@@ -144,11 +144,14 @@ TEST_CASE("Actors are prevented from moving off the map")
 }
 TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are culled")
 {
-    Actor * a = new SimpleActor;
-    ActorInfo newAI(a, 1, 1, 0, 0, 1);
-    GameField g (2, 2);
-    g.addActor(newAI);
-    std::vector<int> ref = {0, 0, 0, 0};
+    Actor * a1 = new SimpleActor(stay, 1);
+    Actor * a2 = new SimpleActor(up, 0);
+    ActorInfo newAI1(a1, 1, 1, 0, 2, 1);
+    ActorInfo newAI2(a2, 1, 1, 0, 0, 2);
+    GameField g (1, 3);
+    g.addActor(newAI1);
+    g.addActor(newAI2);
+    std::vector<int> ref = {0, 0, 1};
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }
@@ -164,11 +167,11 @@ TEST_CASE("Actors move until their range is depleted")
 }
 TEST_CASE("Actors spawn and move projectiles on attack")
 {
-    Actor * a = new SimpleActor;
-    ActorInfo newAI(a, 1, 1, 0, 6, 1, 0);
-    GameField g (1, 7);
+    Actor * a = new SimpleActor(stay, 1);
+    ActorInfo newAI(a, 1, 1, 0, 7, 1, 0);
+    GameField g (1, 8);
     g.addActor(newAI);
-    std::vector<int> ref = {0, -1, 0, 0, 0, 0, 1};
+    std::vector<int> ref = {0, -1, 0, 0, 0, 0, 0, 1};
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }

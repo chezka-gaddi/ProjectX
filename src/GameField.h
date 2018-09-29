@@ -28,6 +28,7 @@ protected:
     MapData fieldMap;
     
     void updateMap();
+    void runMoves(ActorInfo &a);
  
 public:
     /**
