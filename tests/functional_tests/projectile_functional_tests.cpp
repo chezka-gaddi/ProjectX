@@ -221,7 +221,7 @@ SCENARIO("The projectile collides with the actors on the gamefield")
       // 3,0,0,0,0,0,0,0,0,0,0,0,0,2
 
       GameField gamefield(13,0, actor_list);
-	GIVEN("A horizontal gamefeild and two tanks")
+	GIVEN("A horizontal gamefield and two tanks")
 	{
 		WHEN("Each tank tries to shoot a projectile")
 		{
@@ -231,7 +231,7 @@ SCENARIO("The projectile collides with the actors on the gamefield")
          	     tank2->setMove('p');
          	     gamefield.nextTurn();
 
-			THEN("The projectiles spawn and travle their range")
+			THEN("The projectiles spawn and travel their range")
 			{
 			     //Compare map with the initial map
             		     std::vector<int> expected_map = { 3, 0, 0, 0, 0, 0, -3, -2, 0, 0, 0, 0, 0, 2 };
