@@ -41,8 +41,6 @@ SCENARIO("The projectile moves around the gamefield")
       //Add a tank into a vector of actors
       std::vector<ActorInfo> actor_list = {tank_s};
      
-      // Add a projectile into a vector of actors
-      //std::vector<ActorInfo> actor_list = {projectile_s};
             	
       // Generate the gamefield with a map that looks like this:
       // 0
@@ -132,9 +130,6 @@ SCENARIO("The projectile moves around the gamefield")
       //Add a tank into a vector of actors
       std::vector<ActorInfo> actor_list = {tank_s};
      
-      // Add a projectile into a vector of actors
-      //std::vector<ActorInfo> actor_list = {projectile_s};
-            	
       // Generate the gamefield with a map that looks like this:
       // 0,0,0,0,0,0,2,0,0,0,0,0,0
       GameField gamefield(12,0, actor_list);
@@ -222,9 +217,6 @@ SCENARIO("The projectile collides with the actors on the gamefield")
       //Add a tank into a vector of actors
       std::vector<ActorInfo> actor_list = {tank_s,tank_q};
      
-      // Add a projectile into a vector of actors
-      //std::vector<ActorInfo> actor_list = {projectile_s};
-            	
       // Generate the gamefield with a map that looks like this:
       // 3,0,0,0,0,0,0,0,0,0,0,0,0,2
 
