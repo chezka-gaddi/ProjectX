@@ -81,7 +81,7 @@ void Actor::setId(int newId)
  * @return        id - The id number of the actor
  *
 *****************************************************************************/
-void Actor::getId()
+int Actor::getId()
 {
     return id;
 }
@@ -96,7 +96,7 @@ void Actor::getId()
  * @return        name - The name string of the actor
  *
 *****************************************************************************/
-void Actor::getName()
+std::string Actor::getName()
 {
     return name;
 }

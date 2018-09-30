@@ -16,8 +16,13 @@
 #include "ActorInfo.h"
 #include "direction.h"
 
+/***************************************************************************//**
+* @class GameField
+* @author David Donahue
+* @par Description
+* The class that will act as the manager of the gamefield
+* *****************************************************************************/
 
-//this will eventually be where we make the playing field, but for now to make everything as complete as possible it will be empty
 class GameField{
    
 protected:

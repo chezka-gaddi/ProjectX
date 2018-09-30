@@ -9,6 +9,15 @@
 #include <vector>
 #include <ostream>
 
+/*******************************************************************//**
+ * @author David Donahue
+ *
+ * @struct MapData
+ * @par Description:
+ * The map ADT for the platform
+ *
+ *
+ **********************************************************************/
 struct MapData
 {
     /** row-major-order list the ID's of anything on the tiles on the map (tanks, projectiles, and obstacles) */

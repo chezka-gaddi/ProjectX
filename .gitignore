@@ -21,7 +21,7 @@ src/.idea/
 #ignores all directories created by doxygen
 */html/*
 */latex/*
-
+!Doxyfile
 # Compiled source #
 ###################
 *.com

@@ -9,6 +9,13 @@
 
 #include "direction.h"
 #include "string"
+
+/***************************************************************************//**
+* @struct PositionData
+* @author Jacob Lee
+* @par Description
+* The position data for each actor
+*******************************************************************************/
 struct PositionData{
 
     std::string name; /*!<The name */  

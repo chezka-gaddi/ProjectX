@@ -11,7 +11,12 @@
 #define ASCIITANKACTOR_H
 
 #include "Actor.h"
-
+/***************************************************************************//**
+* @class AsciiTankActor
+* @author Youki Lewis
+* @par Description
+* The basic tank actor for testing
+******************************************************************************/
 class AsciiTankActor : public Actor
 {
 
