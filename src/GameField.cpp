@@ -240,6 +240,11 @@ void GameField::cull()
     }
     
 }
+/**
+ * @author David Donahue
+ * @par Description:
+ * Returns the fieldMap variable
+ */
 MapData GameField::getMapData()
 {
     return fieldMap;

@@ -1,3 +1,5 @@
+/** @file */
+
 #include "MapData.h"
 
 std::ostream& operator<<(std::ostream& os, const MapData& md)
