@@ -1,28 +1,40 @@
-//
-// Created by jlee on 8/25/18.
-//
-
+/**
+ * @file GameField.h
+ * @author David Donahue
+ * @brief GameField manages the play field and  actors.
+ */
+                            
 #ifndef SLACKERS_PLATFORM_GAMEFIELD_H
 #define SLACKERS_PLATFORM_GAMEFIELD_H
 
 #include <vector>
-#include "TankActor.h"
+#include <algorithm>
 #include "ProjectileActor.h"
 #include "PositionData.h"
 #include "Actor.h"
+#include "MapData.h"
+#include "ActorInfo.h"
+#include "direction.h"
 
+/***************************************************************************//**
+* @class GameField
+* @author David Donahue
+* @par Description
+* The class that will act as the manager of the gamefield
+* *****************************************************************************/
 
-//this will eventually be where we make the playing field, but for now to make everything as complete as possible it will be empty
 class GameField{
-    /**
-     * on construction of game field this should be set to 0
-     */
-    int idCount;//mostly for the creation of more actors, each actor needs an id and it would be best if each id was different
-
+   
 protected:
-    //this is all of the actors on the field: tanks + projectiles
-    std::vector<Actor *> actors;
-    int turn_count;
+    /*!< this is all of the actors on the field: tanks + projectiles */
+    std::vector<ActorInfo> actors;
+    int turnCount; /*!< The turn count number */
+    /** struct with width, height, and a vector of ints in
+     row major order, 0 for empty tiles and actor id for nonempty. */
+    MapData fieldMap;
+    
+    void updateMap();
+ 
 public:
     /**
      * Each turn will be as follows:
@@ -30,12 +42,7 @@ public:
      * it starts over again
      */
     void nextTurn();
-    /***
-     *
-     * returns a vector of the position of all of the actors on the game field
-     * @return vector<PositionData> the state of each actor on the field
-     */
-    std::vector<PositionData> currentGameState();
+    void addActor(ActorInfo);
 
     /**
      * removes all actors that have a health of 0 from the game (not actors with health less than 0)
@@ -46,21 +53,27 @@ public:
      * this will find all the actors in a single cell
      * @return vector of actors that all have the same position
      */
-    std::vector<Actor*> findActorsByCoord();
+    std::vector<ActorInfo> findActorsByCoord(int x, int y);
 
     /*******************************/
     /********constructors***********/
     /*******************************/
 
-
-
+    GameField();
+    GameField(int width, int height);
+    GameField(int width, int height, std::vector<ActorInfo> startActors);
 
     /*******************************/
     /*************getters***********/
     /*******************************/
 
-
-
+    int getTurnCount();
+    int getWidth();
+    int getHeight();
+    std::vector<int> getMap();
+    std::vector<ActorInfo> getActors();
+    MapData getMapData();
+    
 
     /*******************************/
     /************setters************/
