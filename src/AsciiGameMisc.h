@@ -29,4 +29,7 @@ bool isplayable(std::vector<ActorInfo> actorInfo);
  */
 void displayAscii(GameField gameField, std::vector<ActorInfo> actorInfo);
 
+
+void gameloop();
+
 #endif //SRC_ASCIIGAMEMISC_H
