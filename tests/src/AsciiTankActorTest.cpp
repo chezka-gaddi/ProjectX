@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include <AsciiTankActor.h>
-#include <Actor-Alternate.h>
+#include <Actor.h>
 
 
 TEST_CASE("Create an AsciiTankActor object.")
@@ -15,19 +15,19 @@ TEST_CASE("Check if move() returns right directions")
    MapData m;
    PositionData p;
 
-   tank.setMove(left);
+   tank.setMove(direction::left);
    REQUIRE(tank.move(m,p) == 0);
    
-   tank.setMove(right);
+   tank.setMove(direction::right);
    REQUIRE(tank.move(m,p) == 1);
 
-   tank.setMove(up);
+   tank.setMove(direction::up);
    REQUIRE(tank.move(m,p) == 2);
 
-   tank.setMove(down);
+   tank.setMove(direction::down);
    REQUIRE(tank.move(m,p) == 3);
 
-   tank.setMove(stay);
+   tank.setMove(direction::stay);
    REQUIRE(tank.move(m,p) == 4);
 
 }
