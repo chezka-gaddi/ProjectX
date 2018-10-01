@@ -8,8 +8,12 @@
 #include "AsciiTankActor.h"
 
 bool isplayable(std::vector<ActorInfo> actorInfo){
-    
-    return actorInfo.size() > 1;
+    int tankCount = 0;
+    for (auto a : actorInfo)
+    {
+        tankCount += (a.id > 0) ? 1 : 0; 
+    }
+    return (tankCount > 1);
 }
 void displayAscii(MapData map){
     std::cout << map;
