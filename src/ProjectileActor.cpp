@@ -119,9 +119,9 @@ direction ProjectileActor::move(MapData map, PositionData status)
 	moveProjectile.new_y = moveProjectile.new_y * yDirection;
 
         if (moveProjectile.new_x != 0)
-            return (moveProjectile.new_x < 0) ? direction::right : direction::left;
+            return (endX > status.game_x ) ? direction::right : direction::left;
         else if (moveProjectile.new_y != 0)
-            return (moveProjectile.new_y < 0) ? direction::down : direction::up;
+            return (endY > status.game_y ) ? direction::down : direction::up;
 
         return stay;
 	 
@@ -144,7 +144,7 @@ AttackData ProjectileActor::attack(MapData map, PositionData status)
 	//Initialize variables
 	attackProjectile.attack_x = status.game_x;
 	attackProjectile.attack_y = status.game_y;
-	attackProjectile.damage = 1;
+	attackProjectile.damage = 0;
 	
 	return attackProjectile;
 }

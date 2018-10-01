@@ -105,7 +105,16 @@ void AsciiTankActor::setAttackData( int xAttack, int yAttack, int numDamage)
  ****************************************************************************/
 AttackData AsciiTankActor::attack( MapData map, PositionData status)
 {
-   return actorAttack;
+    int x, y;
+    if (enableConsole)
+    {
+        cout << "Enter the X and Y cooridinates you want to attack as X Y: ";
+        cin >> x >> y;
+        actorAttack.damage = 1;
+        actorAttack.attack_x = x;
+        actorAttack.attack_y = y;
+    }
+    return actorAttack;
 }
 
 
