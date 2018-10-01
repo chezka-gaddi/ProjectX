@@ -8,6 +8,8 @@ FILES += AsciiGameMisc.o
 FILES += Actor.o
 FILES += AsciiTankActor.o
 FILES += MapData.o
+FILES += ProjectileActor.o
+
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
 

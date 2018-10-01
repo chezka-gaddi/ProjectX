@@ -35,6 +35,7 @@ protected:
     MapData fieldMap;
     
     void updateMap();
+    void runMoves(ActorInfo &a);
  
 public:
     /**
@@ -64,6 +65,7 @@ public:
     GameField(int width, int height);
     GameField(int width, int height, std::vector<ActorInfo> startActors);
 
+    ~GameField();
     /*******************************/
     /*************getters***********/
     /*******************************/
