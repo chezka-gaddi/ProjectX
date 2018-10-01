@@ -48,6 +48,11 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 
 // Includes
 #include <iostream>
+#include "AsciiGameMisc.h"
+#include "AsciiTankActor.h"
+
+
+
 
 
 
@@ -55,6 +60,9 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 
 int main(void)
 {
-   std::cout << "Hello World" << std::endl;
+
+   //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
+   gameloop();
+   std::cout << "\n\n\n\n\n game over \n\n\n\n\n\n";
    return 0;
 }
