@@ -126,28 +126,32 @@ void GameField::nextTurn()
         //If it checks out, execute it
         switch (dir)
         {
-        case up:
+        case direction::up:
             if (a.y > 0)
                 a.y--;
             break;
             
-        case down:
+        case direction::down:
             if (a.y < fieldMap.height-1)
                 a.y++;
             break;
             
-        case left:
+        case direction::left:
             if (a.x > 0)
                 a.x--;
             break;
                 
-        case right:
+        case direction::right:
             if (a.x < fieldMap.width-1)
                 a.x++ ;
             break;
         default:
             break;
         }
+
+        updateMap();
+        std::cout << fieldMap;
+        
         collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
         for (int i = 0; i < actors.size(); ++i ) //check each actor
         {
@@ -179,7 +183,8 @@ void GameField::nextTurn()
            if (t.x == atk.attack_x && t.y == atk.attack_y && t.health > 0)
                 t.health--;
          }
-        
+        updateMap();
+        std::cout << fieldMap;
     }
     
     cull();
@@ -239,4 +244,13 @@ void GameField::cull()
         }
     }
     
+}
+/**
+ * @author David Donahue
+ * @par Description:
+ * Returns the fieldMap variable
+ */
+MapData GameField::getMapData()
+{
+    return fieldMap;
 }

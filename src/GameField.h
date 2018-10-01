@@ -2,7 +2,8 @@
  * @file GameField.h
  * @author David Donahue
  * @brief GameField manages the play field and  actors.
- */                            
+ */
+                            
 #ifndef SLACKERS_PLATFORM_GAMEFIELD_H
 #define SLACKERS_PLATFORM_GAMEFIELD_H
 
@@ -14,17 +15,23 @@
 #include "MapData.h"
 #include "ActorInfo.h"
 #include "direction.h"
+#include <iostream>
 
+/***************************************************************************//**
+* @class GameField
+* @author David Donahue
+* @par Description
+* The class that will act as the manager of the gamefield
+* *****************************************************************************/
 
-//this will eventually be where we make the playing field, but for now to make everything as complete as possible it will be empty
 class GameField{
    
 protected:
-    //this is all of the actors on the field: tanks + projectiles
+    /*!< this is all of the actors on the field: tanks + projectiles */
     std::vector<ActorInfo> actors;
-    int turnCount;
-    //struct with width, height, and a vector of ints in
-    //row major order, 0 for empty tiles and actor id for nonempty.
+    int turnCount; /*!< The turn count number */
+    /** struct with width, height, and a vector of ints in
+     row major order, 0 for empty tiles and actor id for nonempty. */
     MapData fieldMap;
     
     void updateMap();
@@ -66,6 +73,8 @@ public:
     int getHeight();
     std::vector<int> getMap();
     std::vector<ActorInfo> getActors();
+    MapData getMapData();
+    
 
     /*******************************/
     /************setters************/
