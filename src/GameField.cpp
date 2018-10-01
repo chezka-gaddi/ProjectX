@@ -225,7 +225,7 @@ void GameField::runMoves(ActorInfo &a)
             rangeCount = 0;
         else
             --rangeCount;
-        cull();
+        
     }
 }
 
