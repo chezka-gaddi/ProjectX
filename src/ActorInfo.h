@@ -1,12 +1,25 @@
-/** ActorInfo.h
- * a struct to keep track of actors' stats so that they are not modifiable by the players
- */
+/***********************************************************
+ * @file
+ *
+ * @brief
+ * This is the header file for the ActorInfo structure.
+ * This structure will keep track of actors' stats so that 
+ *	they are not modifiable by the players
+ *
+ ***********************************************************/
+
 
 #ifndef __ACTOR_INFO_H
 #define __ACTOR_INFO_H
 
 #include "Actor.h"
 #include "ProjectileActor.h"
+
+/*! \struct ActorInfo
+    \brief A structure containing Actor stats and info
+
+    This structure will hold health, damage, x & y coordinates, id number, and range
+*/
 
 struct ActorInfo
 {
