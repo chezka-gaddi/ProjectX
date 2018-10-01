@@ -18,6 +18,7 @@ GameField::GameField()
     fieldMap.height = 10;
     fieldMap.map.resize(100);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    displayCallback = NULL;
 }
 
 /**
@@ -47,6 +48,7 @@ GameField::GameField(int width, int height)
     fieldMap.height = height;
     fieldMap.map.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    displayCallback = NULL;
 }
 /**
  * @author David Donahue
@@ -61,7 +63,20 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     fieldMap.map.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
     updateMap();
+    displayCallback = NULL;
 }
+
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData)) : actors(startActors)
+{
+    turnCount = 0;
+    fieldMap.width = width;
+    fieldMap.height = height;
+    fieldMap.map.resize(width * height);
+    std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    updateMap();
+    displayCallback = d_callback;
+}
+
 /**
  * @author David Donahue
  * @par Description:
@@ -181,9 +196,10 @@ void GameField::runMoves(ActorInfo &a)
         }
 
         updateMap();
-        #ifndef TESTING
-        std::cout << fieldMap;
-        #endif
+
+        if (displayCallback != NULL)
+            displayCallback(fieldMap);
+        
         collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
         for (int i = 0; i < actors.size(); ++i ) //check each actor
         {
