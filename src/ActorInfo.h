@@ -7,7 +7,6 @@
 
 #include "Actor.h"
 #include "ProjectileActor.h"
-#include "direction.h"
 
 struct ActorInfo
 {

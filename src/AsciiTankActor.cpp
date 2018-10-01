@@ -1,3 +1,10 @@
+/**************************************************************************//**
+* @file
+*
+* @brief The source code for the AsciiTankActor class
+*
+******************************************************************************/
+
 #include <iostream>
 #include "AsciiTankActor.h"
 
@@ -5,71 +12,78 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-void AsciiTankActor::setMove( char decision )
+/*************************************************************************//**
+ * @author Youki Lewis
+ *
+ * @par Description:
+ * This member function will set the variable actorMove as the value contained
+ *	within decision
+ * 
+ * @param[in]        decision - 
+ *
+ ****************************************************************************/
+
+void AsciiTankActor::setMove( direction decision )
 {
-   switch (decision)
-   {
-	case 'w' :
-		actorMove = up;
-		break;
-	case 's' :
-		actorMove = down;
-		break;
-	case 'a' :
-		actorMove = left;
-		break;
-	case 'd' :
-		actorMove = right;
-		break;
-	case 'p' :
-		actorMove = stay;
-		break;
-	default:
-		cout << "Not a valid direction" << endl;
-		cout << "Your turn will be skipped" << endl;
-		actorMove = stay;
-   }
+   actorMove = decision;
+
    return;
    
 }
 
+/*************************************************************************//**
+ * @author Youki Lewis
+ *
+ * @par Description:
+ * This member function will return the actorMove variable 
+ * 
+ * @param[in]        map - the map the tanks are on
+ * @param[in]        status - the current state of the ActorInfo's
+ *
+ ****************************************************************************/
+
 direction AsciiTankActor::move( MapData map, PositionData status)
 {
-   /*
-   char decision = 0;
-   direction movement = stay;
+    char c;
+    if (enableConsole) 
+    {
+        cout << "Move: ";
+        cin >> c;
 
-   cout << "Enter in a direction to move" << endl;
-   cout << "w (up) d (down) a (left) d (right) p (stay):" << endl;
-   
-   cin >> decision;
-
-   switch (decision)
-   {
-	case 'w' :
-		movement = up;
-		break;
-	case 's' :
-		movement = down;
-		break;
-	case 'a' :
-		movement = left;
-		break;
-	case 'd' :
-		movement = right;
-		break;
-	case 'p' :
-		movement = stay;
-		break;
-	default:
-		cout << "Not a valid direction" << endl;
-		cout << "Your turn will be skipped" << endl;
-		movement = stay;
-   }
-   */
-   return actorMove;
+        switch (c)
+        {
+        case 'u':
+            actorMove = up;
+            break;
+        case 'd':
+            actorMove = down;
+            break;
+        case 'l':
+            actorMove = left;
+            break;
+        case 'r':
+            actorMove = right;
+            break;
+        default:
+            actorMove = stay;
+            break;
+        }
+    }
+    return actorMove;
 }
 
+/*************************************************************************//**
+ * @author Youki Lewis
+ *
+ * @par Description:
+ * This member function will set the member variable id to a new value 
+ *         contained in newId.
+ * 
+ * @param[in]        xAttack - The value attack_x will be set as 
+ * @param[in]        yAttack - The value attack_y will be set as
+ * @param[in]        numDamage - The value damage will be set as 
+ *
+ ****************************************************************************/
 void AsciiTankActor::setAttackData( int xAttack, int yAttack, int numDamage)
 {
    actorAttack.attack_x = xAttack;
@@ -79,18 +93,22 @@ void AsciiTankActor::setAttackData( int xAttack, int yAttack, int numDamage)
    return;
 }
 
+/*************************************************************************//**
+ * @author Youki Lewis
+ *
+ * @par Description:
+ * This member function will return the actorAttack variable 
+ * 
+ * @param[in]        map - the map the tanks are on
+ * @param[in]        status - the current state of the ActorInfo's
+ *
+ ****************************************************************************/
 AttackData AsciiTankActor::attack( MapData map, PositionData status)
 {
-   /*
-   AttackData playerAttack;
-
-   playerAttack.damage = 1;
-
-   cout << "Enter an x coordinate for your attack:" << endl;
-   cin >> playerAttack.attack_x;
-   cout << "Enter an y coordinate for your attack:" << endl;
-   cin >> playerAttack.attack_y;
-   */
    return actorAttack;
-   
 }
+
+
+
+AsciiTankActor::AsciiTankActor() : enableConsole (false) {}
+AsciiTankActor::AsciiTankActor(bool cen) : enableConsole(cen) {}

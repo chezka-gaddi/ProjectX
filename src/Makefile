@@ -4,6 +4,11 @@ INCS = -I./
 
 FILES = main.o
 FILES += GameField.o
+FILES += AsciiGameMisc.o
+FILES += Actor.o
+FILES += AsciiTankActor.o
+FILES += MapData.o
+FILES += ProjectileActor.o
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)

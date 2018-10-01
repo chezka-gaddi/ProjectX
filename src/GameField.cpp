@@ -179,6 +179,11 @@ void GameField::runMoves(ActorInfo &a)
         default:
             break;
         }
+
+        updateMap();
+        #ifndef TESTING
+        std::cout << fieldMap;
+        #endif
         collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
         for (int i = 0; i < actors.size(); ++i ) //check each actor
         {
@@ -305,6 +310,7 @@ std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
  */
 void GameField::cull()
 {
+    
     for (int i = 0; i < actors.size(); ++i) //This is used instead of the c++11 version so that we can use the index.
     {
         if (actors[i].health == 0)

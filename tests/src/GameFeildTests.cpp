@@ -29,6 +29,7 @@ TEST_CASE("addActor adds an actor to actors")
     ActorInfo ai( a, 1, 1, 0, 0, 1);
     g.addActor(ai);
     REQUIRE(g.getActors()[0].act_p == a);
+    
 }
 
 TEST_CASE("findActorByCoord() works with no actors")
