@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include <GameField.h>
 #include <Actor.h>
-#include <SimpleActor.h>
+#include <AsciiTankActor.h>
 
 
 TEST_CASE("Instantiate GameField")
@@ -25,7 +25,7 @@ TEST_CASE("nextTurn increments turnCount")
 TEST_CASE("addActor adds an actor to actors")
 {
     GameField g;
-    Actor * a = new  SimpleActor;
+    Actor * a = new  AsciiTankActor;
     ActorInfo ai( a, 1, 1, 0, 0, 1);
     g.addActor(ai);
     REQUIRE(g.getActors()[0].act_p == a);
@@ -64,10 +64,12 @@ TEST_CASE("cull() removes only actors with health of 0")
     GameField g;
     ActorInfo a1 (NULL, 1, 0, 0, 0, 0);
     ActorInfo a2 (NULL, 0, 0, 0, 0, 0);
-    ActorInfo a3 (NULL, -1, 0, 0, 0, 0);
+    ActorInfo a3 (NULL, 0, 0, 0, 0, 0);
+    ActorInfo a4 (NULL, -1, 0, 0, 0, 0);
     g.addActor(a1);
     g.addActor(a2);
     g.addActor(a3);
+    g.addActor(a4);
     g.cull();
     REQUIRE(g.getActors().size() == 2);
 }
@@ -87,8 +89,8 @@ TEST_CASE("getMap() returns valid map")
 
 TEST_CASE("GameField constructs with actors")
 {
-    SimpleActor a1;
-    SimpleActor a2;
+    AsciiTankActor a1;
+    AsciiTankActor a2;
     std::vector<ActorInfo> actors(2);
     actors[0].act_p = &a1;
     actors[1].act_p = &a2;
@@ -112,7 +114,7 @@ TEST_CASE("GameField correctly places actors on the map at construction")
 
 TEST_CASE("GameField correctly places actors on the map when added")
 {
-    SimpleActor a;
+    AsciiTankActor a;
     ActorInfo newAI(&a, 1, 1, 1, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
@@ -121,27 +123,29 @@ TEST_CASE("GameField correctly places actors on the map when added")
 }
 TEST_CASE("Actor moves when nextTurn() is called")
 {
-    SimpleActor a;
+    AsciiTankActor a;
     ActorInfo newAI(&a, 1, 1, 1, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
+    a.setMove(direction::right);
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }
 TEST_CASE("Actors are prevented from moving off the map")
 {
-    SimpleActor a;
+    AsciiTankActor a;
     ActorInfo newAI(&a, 1, 1, 1, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
+    a.setMove(direction::up);
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }
 TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are culled")
 {
-    SimpleActor a;
+    AsciiTankActor a;
     ActorInfo newAI(&a, 1, 1, 0, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
