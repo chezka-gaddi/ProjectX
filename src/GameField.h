@@ -15,6 +15,7 @@
 #include "MapData.h"
 #include "ActorInfo.h"
 #include "direction.h"
+#include <iostream>
 
 /***************************************************************************//**
 * @class GameField

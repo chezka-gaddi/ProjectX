@@ -44,8 +44,29 @@ void AsciiTankActor::setMove( direction decision )
 
 direction AsciiTankActor::move( MapData map, PositionData status)
 {
-   
-   return actorMove;
+    char c;
+    
+    cout << "Move: ";
+    cin >> c;
+
+    switch (c)
+    {
+    case 'u':
+        actorMove = up;
+        break;
+    case 'd':
+        actorMove = down;
+        break;
+    case 'l':
+        actorMove = left;
+        break;
+    case 'r':
+        actorMove = right;
+        break;
+    default:
+        break;
+    }
+    return actorMove;
 }
 
 /*************************************************************************//**
