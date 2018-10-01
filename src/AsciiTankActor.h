@@ -20,13 +20,17 @@
 class AsciiTankActor : public Actor
 {
 
-      direction actorMove; 
-      AttackData actorAttack;
+    direction actorMove; 
+    AttackData actorAttack;
+    bool enableConsole;
 public:
-      virtual direction move(MapData map, PositionData status);    /*!<Returns the actorMove member variable */
-      virtual AttackData attack(MapData map, PositionData status); /*!<Returns the actorAttack member variable */
-      void setMove( direction decision );             /*!<Sets the actorMove object*/
-      void setAttackData( int xAttack, int yAttack, int numDamage); /*!<Set the actorAttack object */
+    virtual direction move(MapData map, PositionData status);    /*!<Returns the actorMove member variable */
+    virtual AttackData attack(MapData map, PositionData status); /*!<Returns the actorAttack member variable */
+    void setMove( direction decision );             /*!<Sets the actorMove object*/
+    void setAttackData( int xAttack, int yAttack, int numDamage); /*!<Set the actorAttack object */
+
+    AsciiTankActor();
+    AsciiTankActor(bool cen);
 };
 
 #endif

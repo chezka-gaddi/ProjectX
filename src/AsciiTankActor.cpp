@@ -45,26 +45,29 @@ void AsciiTankActor::setMove( direction decision )
 direction AsciiTankActor::move( MapData map, PositionData status)
 {
     char c;
-    
-    cout << "Move: ";
-    cin >> c;
-
-    switch (c)
+    if (enableConsole) 
     {
-    case 'u':
-        actorMove = up;
-        break;
-    case 'd':
-        actorMove = down;
-        break;
-    case 'l':
-        actorMove = left;
-        break;
-    case 'r':
-        actorMove = right;
-        break;
-    default:
-        break;
+        cout << "Move: ";
+        cin >> c;
+
+        switch (c)
+        {
+        case 'u':
+            actorMove = up;
+            break;
+        case 'd':
+            actorMove = down;
+            break;
+        case 'l':
+            actorMove = left;
+            break;
+        case 'r':
+            actorMove = right;
+            break;
+        default:
+            actorMove = stay;
+            break;
+        }
     }
     return actorMove;
 }
@@ -104,3 +107,8 @@ AttackData AsciiTankActor::attack( MapData map, PositionData status)
 {
    return actorAttack;
 }
+
+
+
+AsciiTankActor::AsciiTankActor() : enableConsole (false) {}
+AsciiTankActor::AsciiTankActor(bool cen) : enableConsole(cen) {}

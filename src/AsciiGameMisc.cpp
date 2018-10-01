@@ -20,8 +20,8 @@ void displayAscii(GameField gameField, std::vector<ActorInfo> actorInfo){
 void gameloop(){
     GameField gameField = GameField(10,10);
     //change tankactor here to what ever we have decided to call the ascii tank actor
-    AsciiTankActor * player1 = new AsciiTankActor();
-    AsciiTankActor * player2 = new AsciiTankActor();
+    AsciiTankActor * player1 = new AsciiTankActor(true);
+    AsciiTankActor * player2 = new AsciiTankActor(true);
     //tank actor pointers are made and then packaged into ActorInfo structs
     ActorInfo player1Info = ActorInfo(player1, 1,1,1,1,1);
     ActorInfo player2Info = ActorInfo(player2, 1,1,8,8,2);
