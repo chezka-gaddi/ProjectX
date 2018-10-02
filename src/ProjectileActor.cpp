@@ -48,7 +48,7 @@ ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
  *
  * @returns MoveProjectile - struct with new coordinates to move to
 ******************************************************************************/
-MoveData ProjectileActor::moveProjectile(MapData map, PositionData status)
+direction ProjectileActor::move(MapData map, PositionData status)
 {
 	//temporary variables used for movement calculation in each direction
 	float xDiff, yDiff;
@@ -59,41 +59,72 @@ MoveData ProjectileActor::moveProjectile(MapData map, PositionData status)
 	MoveData moveProjectile;
 	
 	//calculates how far to move each position
-	xDiff = abs(endX) - abs(status.game_x);
-        yDiff = abs(endY) - abs(status.game_y);
+	xDiff = abs(endX - status.game_x);
+        yDiff = abs(status.game_y - endY);
 	
-	//calculates the angle of projectile tan(x) = yDiff / xDiff
-	tangent = yDiff / xDiff;
-        degree = atan(tangent) * 180 / 3.14159;
-	//set incrementation of projectile based on angle
-	if(degree < 30) //moves horizontal
-	{
-		moveProjectile.new_x = 1;
-		moveProjectile.new_y = 0;
-	}
-	else if(degree > 60) //moves vertically
+	//to avoid division by 0, this is checked first
+	if(xDiff == 0)
 	{
 		moveProjectile.new_x = 0;
 		moveProjectile.new_y = 1;
 	}
-	else //moves diagonally
+	else
 	{
-		moveProjectile.new_x = 1;
-		moveProjectile.new_y = 1;
+		//calculates the angle of projectile tan(x) = yDiff / xDiff
+		tangent = yDiff / xDiff;
+        	degree = atan(tangent) * 180 / 3.14159;
+		//set incrementation of projectile based on angle
+		if(degree < 30) //moves horizontal
+		{
+			moveProjectile.new_x = 1;
+			moveProjectile.new_y = 0;
+		}
+		else if(degree > 60) //moves vertically
+		{
+			moveProjectile.new_x = 0;
+			moveProjectile.new_y = 1;
+		}
+		else //moves diagonally
+		{
+			moveProjectile.new_x = 1;
+			moveProjectile.new_y = 1;
+		}
 	}
 
 	//account of direction of projectile
 	xDirection = endX - status.game_x;
-	yDirection = endY - status.game_y;
+	yDirection = status.game_y - endY;
 
-	xDirection = xDirection / abs(xDirection);
-	yDirection = yDirection / abs(yDirection);
+	if(xDirection == 0 && yDirection != 0)
+	{
+		 yDirection = yDirection / abs(yDirection);
+	}
+	else if(yDirection == 0 && xDirection != 0)
+	{
+		xDirection = xDirection / abs(xDirection);
+	}
+	else if(xDirection == 0 && yDirection == 0)
+	{
+		moveProjectile.new_x = 0;
+		moveProjectile.new_y = 0;
+	}
+	else
+	{
+		xDirection = xDirection / abs(xDirection);
+		yDirection = yDirection / abs(yDirection);
+	}
 
 	//multiplies by 1 or -1 depending on direction of movement
 	moveProjectile.new_x = moveProjectile.new_x * xDirection;
-	moveProjectile.new_y = moveProjectile.new_y * yDirection; 
+	moveProjectile.new_y = moveProjectile.new_y * yDirection;
 
-	return moveProjectile;
+        if (moveProjectile.new_x != 0)
+            return (endX > status.game_x ) ? direction::right : direction::left;
+        else if (moveProjectile.new_y != 0)
+            return (endY > status.game_y ) ? direction::down : direction::up;
+
+        return stay;
+	 
 }
 
 /**************************************************************************//**
@@ -113,7 +144,7 @@ AttackData ProjectileActor::attack(MapData map, PositionData status)
 	//Initialize variables
 	attackProjectile.attack_x = status.game_x;
 	attackProjectile.attack_y = status.game_y;
-	attackProjectile.damage = 1;
+	attackProjectile.damage = 0;
 	
 	return attackProjectile;
 }
@@ -293,3 +324,4 @@ void ProjectileActor::setEndY(int endYUpdate)
 {
     endY = endYUpdate;
 }
+

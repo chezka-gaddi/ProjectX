@@ -44,8 +44,32 @@ void AsciiTankActor::setMove( direction decision )
 
 direction AsciiTankActor::move( MapData map, PositionData status)
 {
-   
-   return actorMove;
+    char c;
+    if (enableConsole) 
+    {
+        cout << "Move: ";
+        cin >> c;
+
+        switch (c)
+        {
+        case 'u':
+            actorMove = up;
+            break;
+        case 'd':
+            actorMove = down;
+            break;
+        case 'l':
+            actorMove = left;
+            break;
+        case 'r':
+            actorMove = right;
+            break;
+        default:
+            actorMove = stay;
+            break;
+        }
+    }
+    return actorMove;
 }
 
 /*************************************************************************//**
@@ -81,5 +105,19 @@ void AsciiTankActor::setAttackData( int xAttack, int yAttack, int numDamage)
  ****************************************************************************/
 AttackData AsciiTankActor::attack( MapData map, PositionData status)
 {
-   return actorAttack;
+    int x, y;
+    if (enableConsole)
+    {
+        cout << "Enter the X and Y cooridinates you want to attack as X Y: ";
+        cin >> x >> y;
+        actorAttack.damage = 1;
+        actorAttack.attack_x = x;
+        actorAttack.attack_y = y;
+    }
+    return actorAttack;
 }
+
+
+
+AsciiTankActor::AsciiTankActor() : enableConsole (false) {}
+AsciiTankActor::AsciiTankActor(bool cen) : enableConsole(cen) {}

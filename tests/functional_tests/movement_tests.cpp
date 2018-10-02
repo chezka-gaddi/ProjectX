@@ -236,6 +236,8 @@ SCENARIO("Tanks drive right into each other")
       {
          tank_1->setMove(moveRight);
          tank_2->setMove(moveLeft);
+         tank_1->setAttackData(0,0,0);
+         tank_2->setAttackData(0,0,0);
          gamefield.nextTurn();
          THEN("the first tank dies and the other takes a portion of the damage")
          {

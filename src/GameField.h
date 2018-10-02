@@ -15,6 +15,7 @@
 #include "MapData.h"
 #include "ActorInfo.h"
 #include "direction.h"
+#include <iostream>
 
 /***************************************************************************//**
 * @class GameField
@@ -32,8 +33,9 @@ protected:
     /** struct with width, height, and a vector of ints in
      row major order, 0 for empty tiles and actor id for nonempty. */
     MapData fieldMap;
-    
+    void (*displayCallback)(MapData);
     void updateMap();
+    void runMoves(ActorInfo &a);
  
 public:
     /**
@@ -62,7 +64,10 @@ public:
     GameField();
     GameField(int width, int height);
     GameField(int width, int height, std::vector<ActorInfo> startActors);
+    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData));
 
+
+    ~GameField();
     /*******************************/
     /*************getters***********/
     /*******************************/

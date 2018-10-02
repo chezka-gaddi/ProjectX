@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include <GameField.h>
 #include <Actor.h>
-#include <AsciiTankActor.h>
+#include <SimpleActor.h>
 
 
 TEST_CASE("Instantiate GameField")
@@ -25,11 +25,11 @@ TEST_CASE("nextTurn increments turnCount")
 TEST_CASE("addActor adds an actor to actors")
 {
     GameField g;
-    Actor * a = new  AsciiTankActor;
+    Actor * a = new  SimpleActor;
     ActorInfo ai( a, 1, 1, 0, 0, 1);
     g.addActor(ai);
     REQUIRE(g.getActors()[0].act_p == a);
-    delete a;
+    
 }
 
 TEST_CASE("findActorByCoord() works with no actors")
@@ -89,11 +89,11 @@ TEST_CASE("getMap() returns valid map")
 
 TEST_CASE("GameField constructs with actors")
 {
-    AsciiTankActor a1;
-    AsciiTankActor a2;
+    Actor * a1 = new SimpleActor;
+    Actor * a2 = new SimpleActor;
     std::vector<ActorInfo> actors(2);
-    actors[0].act_p = &a1;
-    actors[1].act_p = &a2;
+    actors[0].act_p = a1;
+    actors[1].act_p = a2;
     GameField g (10, 10, actors);
     REQUIRE(g.getActors().size() == 2);
 }
@@ -101,9 +101,11 @@ TEST_CASE("GameField constructs with actors")
 TEST_CASE("GameField correctly places actors on the map at construction")
 {
     std::vector<ActorInfo> actorVect(2);
+    actorVect[0].act_p = NULL;
     actorVect[0].id = 1;
     actorVect[0].x = 1;
     actorVect[0].y = 0;
+    actorVect[1].act_p = NULL;
     actorVect[1].id = 2;
     actorVect[1].x = 0;
     actorVect[1].y = 1;
@@ -114,8 +116,8 @@ TEST_CASE("GameField correctly places actors on the map at construction")
 
 TEST_CASE("GameField correctly places actors on the map when added")
 {
-    AsciiTankActor a;
-    ActorInfo newAI(&a, 1, 1, 1, 0, 1);
+    Actor * a = new SimpleActor;
+    ActorInfo newAI(a, 1, 1, 1, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
@@ -123,33 +125,63 @@ TEST_CASE("GameField correctly places actors on the map when added")
 }
 TEST_CASE("Actor moves when nextTurn() is called")
 {
-    AsciiTankActor a;
-    ActorInfo newAI(&a, 1, 1, 1, 0, 1);
+    Actor * a = new SimpleActor;
+    ActorInfo newAI(a, 1, 1, 1, 1, 1);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
-    a.setMove(direction::right);
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }
 TEST_CASE("Actors are prevented from moving off the map")
 {
-    AsciiTankActor a;
-    ActorInfo newAI(&a, 1, 1, 1, 0, 1);
+    Actor * a = new SimpleActor;
+    ActorInfo newAI(a, 2, 1, 1, 0, 1);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
-    a.setMove(direction::up);
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }
 TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are culled")
 {
-    AsciiTankActor a;
-    ActorInfo newAI(&a, 1, 1, 0, 0, 1);
-    GameField g (2, 2);
-    g.addActor(newAI);
-    std::vector<int> ref = {0, 0, 0, 0};
+    Actor * a1 = new SimpleActor(stay, 1);
+    Actor * a2 = new SimpleActor(up, 0);
+    ActorInfo newAI1(a1, 1, 1, 0, 2, 1);
+    ActorInfo newAI2(a2, 1, 1, 0, 0, 2);
+    GameField g (1, 3);
+    g.addActor(newAI1);
+    g.addActor(newAI2);
+    std::vector<int> ref = {0, 0, 1};
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
+}
+TEST_CASE("Actors move until their range is depleted")
+{
+    Actor * a = new SimpleActor;
+    ActorInfo newAI(a, 1, 1, 0, 3, 1, 2);
+    GameField g (1,4);
+    g.addActor(newAI);
+    std::vector<int> ref = {0, 1, 0, 0};
+    g.nextTurn();
+    REQUIRE(g.getMap() == ref);
+}
+TEST_CASE("Actors spawn and move projectiles on attack")
+{
+    Actor * a = new SimpleActor(stay, 1);
+    ActorInfo newAI(a, 1, 1, 0, 7, 1, 0);
+    GameField g (1, 8);
+    g.addActor(newAI);
+    std::vector<int> ref = {0, -1, 0, 0, 0, 0, 0, 1};
+    g.nextTurn();
+    REQUIRE(g.getMap() == ref);
+}
+TEST_CASE("Actors take 1 point of damage from the walls of the arena")
+{
+    Actor * a = new SimpleActor(up, 0);
+    ActorInfo newAI(a, 2, 1, 0, 0, 1, 1);
+    GameField g (1, 1);
+    g.addActor(newAI);
+    g.nextTurn();
+    REQUIRE(g.getActors().back().health == 1); //check for damage from the wall
 }
