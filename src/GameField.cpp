@@ -18,6 +18,7 @@ GameField::GameField()
     fieldMap.height = 10;
     fieldMap.map.resize(100);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    displayCallback = NULL;
 }
 
 /**
@@ -47,6 +48,7 @@ GameField::GameField(int width, int height)
     fieldMap.height = height;
     fieldMap.map.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    displayCallback = NULL;
 }
 /**
  * @author David Donahue
@@ -61,7 +63,20 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     fieldMap.map.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
     updateMap();
+    displayCallback = NULL;
 }
+
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData)) : actors(startActors)
+{
+    turnCount = 0;
+    fieldMap.width = width;
+    fieldMap.height = height;
+    fieldMap.map.resize(width * height);
+    std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    updateMap();
+    displayCallback = d_callback;
+}
+
 /**
  * @author David Donahue
  * @par Description:
@@ -181,9 +196,10 @@ void GameField::runMoves(ActorInfo &a)
         }
 
         updateMap();
-        #ifndef TESTING
-        std::cout << fieldMap;
-        #endif
+
+        if (displayCallback != NULL)
+            displayCallback(fieldMap);
+        
         collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
         for (int i = 0; i < actors.size(); ++i ) //check each actor
         {
@@ -209,6 +225,7 @@ void GameField::runMoves(ActorInfo &a)
             rangeCount = 0;
         else
             --rangeCount;
+        
     }
 }
 
@@ -226,41 +243,43 @@ void GameField::nextTurn()
     AttackData atk;
     ActorInfo newProjectile;
     PositionData pos;
-    for (auto &a : actors)
+    int numActive = actors.size();
+    for (int i = 0; i < numActive; ++i)
     {
-         
-        runMoves(a);
+        runMoves(actors[i]);
 
-        //PositionData to give the AI
-        pos.game_x = a.x;
-        pos.game_y = a.y;
-        pos.health = a.health;
-        pos.id = a.id;
-                
-        //Get the AI's desired attack
-        atk = a.act_p->attack(fieldMap, pos);
-        
-        newProjectile.x = (atk.attack_x > a.x) ? a.x+1 : (atk.attack_x < a.x) ? a.x-1 : a.x;
-        newProjectile.y = (atk.attack_y > a.y) ? a.y+1 : (atk.attack_y < a.y) ? a.y-1 : a.y;
-
-        if (atk.damage > 0 &&
-            newProjectile.x < fieldMap.width && newProjectile.x >= 0 &&
-            newProjectile.y < fieldMap.height && newProjectile.y >= 0)
+        if(actors[i].health != 0 && actors[i].id > 0)
         {
-            ProjectileActor * proj = new ProjectileActor;
-            proj->setEndX(atk.attack_x);
-            proj->setEndY(atk.attack_y);
-            proj->setStartX(newProjectile.x);
-            proj->setStartY(newProjectile.y);
-            newProjectile.range = 5;
-            newProjectile.id = -a.id;
-            newProjectile.act_p = proj;
-            newProjectile.health = 1;
-            newProjectile.damage = 1;
-            actors.push_back(newProjectile);
-            runMoves(*(actors.end()-1));
+            //PositionData to give the AI
+            pos.game_x = actors[i].x;
+            pos.game_y = actors[i].y;
+            pos.health = actors[i].health;
+            pos.id = actors[i].id;
+                
+            //Get the AI's desired attack
+            atk = actors[i].act_p->attack(fieldMap, pos);
+        
+            newProjectile.x = (atk.attack_x > actors[i].x) ? actors[i].x+1 : (atk.attack_x < actors[i].x) ? actors[i].x-1 : actors[i].x;
+            newProjectile.y = (atk.attack_y > actors[i].y) ? actors[i].y+1 : (atk.attack_y < actors[i].y) ? actors[i].y-1 : actors[i].y;
+
+            if (atk.damage > 0 &&
+                newProjectile.x < fieldMap.width && newProjectile.x >= 0 &&
+                newProjectile.y < fieldMap.height && newProjectile.y >= 0)
+            {
+                ProjectileActor * proj = new ProjectileActor;
+                proj->setEndX(atk.attack_x);
+                proj->setEndY(atk.attack_y);
+                proj->setStartX(newProjectile.x);
+                proj->setStartY(newProjectile.y);
+                newProjectile.range = 5;
+                newProjectile.id = -actors[i].id;
+                newProjectile.act_p = proj;
+                newProjectile.health = 1;
+                newProjectile.damage = 1;
+                actors.push_back(newProjectile);
+                runMoves(actors[actors.size()-1]);
+            }
         }
-            
     }
     
     cull();
