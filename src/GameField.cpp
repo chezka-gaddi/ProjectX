@@ -257,24 +257,22 @@ void GameField::nextTurn()
                 
             //Get the AI's desired attack
             atk = actors[i].act_p->attack(fieldMap, pos);
-        
-            newProjectile.x = (atk.attack_x > actors[i].x) ? actors[i].x+1 : (atk.attack_x < actors[i].x) ? actors[i].x-1 : actors[i].x;
-            newProjectile.y = (atk.attack_y > actors[i].y) ? actors[i].y+1 : (atk.attack_y < actors[i].y) ? actors[i].y-1 : actors[i].y;
 
-            if (atk.damage > 0 &&
-                newProjectile.x < fieldMap.width && newProjectile.x >= 0 &&
-                newProjectile.y < fieldMap.height && newProjectile.y >= 0)
+
+            if (atk.damage > 0)
             {
                 ProjectileActor * proj = new ProjectileActor;
                 proj->setEndX(atk.attack_x);
                 proj->setEndY(atk.attack_y);
-                proj->setStartX(newProjectile.x);
-                proj->setStartY(newProjectile.y);
-                newProjectile.range = 5;
+                proj->setStartX(actors[i].x);
+                proj->setStartY(actors[i].y);
+                newProjectile.range = 6;
                 newProjectile.id = -actors[i].id;
                 newProjectile.act_p = proj;
                 newProjectile.health = 1;
                 newProjectile.damage = 1;
+                newProjectile.x = actors[i].x;
+                newProjectile.y = actors[i].y;
                 actors.insert(actors.begin() + i + 1, newProjectile);
             }
         }
