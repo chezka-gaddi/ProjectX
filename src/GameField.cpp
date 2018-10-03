@@ -223,7 +223,7 @@ void GameField::runMoves(ActorInfo &a)
                 {
                     actors[i].damage = 0;
                     actors[i].id = 0;
-                    acotrs[i].range = 0;
+                    actors[i].range = 0;
                 }
             }
         }
