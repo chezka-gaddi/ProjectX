@@ -219,10 +219,20 @@ void GameField::runMoves(ActorInfo &a)
                 actors[i].health -= (collisionDamage - actors[i].damage);
                 if (actors[i].health < 0)
                     actors[i].health = 0;
+                if (actors[i].health == 0)
+                {
+                    actors[i].damage = 0;
+                    actors[i].id = 0;
+                    acotrs[i].range = 0;
+                }
             }
         }
         if (a.health == 0)
+        {
             rangeCount = 0;
+            a.damage = 0;
+            a.id = 0;
+        }
         else
             --rangeCount;
         
