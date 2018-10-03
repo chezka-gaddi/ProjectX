@@ -243,8 +243,7 @@ void GameField::nextTurn()
     AttackData atk;
     ActorInfo newProjectile;
     PositionData pos;
-    int numActive = actors.size();
-    for (int i = 0; i < numActive; ++i)
+    for (int i = 0; i < actors.size(); ++i)
     {
         runMoves(actors[i]);
 
@@ -276,8 +275,7 @@ void GameField::nextTurn()
                 newProjectile.act_p = proj;
                 newProjectile.health = 1;
                 newProjectile.damage = 1;
-                actors.push_back(newProjectile);
-                runMoves(actors[actors.size()-1]);
+                actors.insert(actors.begin() + i + 1, newProjectile);
             }
         }
     }
