@@ -235,3 +235,17 @@ TEST_CASE("Collision is checked when firing point-blank")
     REQUIRE(g.getMap() == ref);
 
 }
+
+TEST_CASE("Projectiles self destruct after reaching their target")
+{
+
+    Actor * a = new SimpleActor(stay, 1);
+    ActorInfo newAI(a, 1, 1, 0, 7, 1, 0);
+    GameField g (1, 8);
+    g.addActor(newAI);
+    std::vector<int> ref = {0, 0, 0, 0, 0, 0, 0, 1};
+    g.nextTurn();
+    g.nextTurn();
+    REQUIRE(g.getMap() == ref);
+
+}
