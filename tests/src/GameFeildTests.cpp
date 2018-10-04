@@ -185,3 +185,67 @@ TEST_CASE("Actors take 1 point of damage from the walls of the arena")
     g.nextTurn();
     REQUIRE(g.getActors().back().health == 1); //check for damage from the wall
 }
+TEST_CASE("Actors are culled and do not move after collision")
+{
+    Actor * t1 = new SimpleActor(stay, 1); //attacker tank
+    Actor * t2 = new SimpleActor(stay, 0); //target tanks
+    Actor * t3 = new SimpleActor(stay, 0);
+
+    ActorInfo t1i (t1, 1, 1, 0, 3, 1);
+    ActorInfo t2i (t2, 1, 1, 0, 1, 2);
+    ActorInfo t3i (t3, 1, 1, 0, 0, 3); //Initial map of {3, 2, 0 ,1}
+
+    std::vector<ActorInfo> tvect(3);
+    tvect[0] = t1i;
+    tvect[1] = t2i;
+    tvect[2] = t3i;
+
+    GameField g (1, 4, tvect);
+
+    g.nextTurn(); //tank 1 will fire up at the other tanks
+
+    std::vector<int> ref = {3, 0, 0, 1}; //Tank 2 hit, Tank 3 and 1 remain
+    REQUIRE(g.getMap() == ref);
+
+}
+
+
+TEST_CASE("Collision is checked when firing point-blank")
+{
+    Actor * t1 = new SimpleActor(stay, 1); //attacker tank
+    Actor * t2 = new SimpleActor(stay, 0); //target tanks
+    Actor * t3 = new SimpleActor(stay, 0);
+
+    ActorInfo t1i (t1, 1, 1, 0, 2, 1);
+    ActorInfo t2i (t2, 1, 1, 0, 1, 2);
+    ActorInfo t3i (t3, 1, 1, 0, 0, 3); //Initial map of {3, 2, 1}
+
+    std::vector<ActorInfo> tvect(3);
+    tvect[0] = t1i;
+    tvect[1] = t2i;
+    tvect[2] = t3i;
+
+    GameField g (1, 3, tvect);
+
+    g.nextTurn(); //tank 1 will fire up at the other tanks, point blank on t2
+
+    std::vector<int> ref = {3, 0, 1}; //Tank 2 hit, Tank 3 and 1 remain
+
+    //failure looks like {0, 2, 1}
+    REQUIRE(g.getMap() == ref);
+
+}
+
+TEST_CASE("Projectiles self destruct after reaching their target")
+{
+
+    Actor * a = new SimpleActor(stay, 1);
+    ActorInfo newAI(a, 1, 1, 0, 7, 1, 0);
+    GameField g (1, 8);
+    g.addActor(newAI);
+    std::vector<int> ref = {0, 0, 0, 0, 0, 0, 0, 1};
+    g.nextTurn();
+    g.nextTurn();
+    REQUIRE(g.getMap() == ref);
+
+}

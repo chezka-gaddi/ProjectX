@@ -144,7 +144,8 @@ AttackData ProjectileActor::attack(MapData map, PositionData status)
 	//Initialize variables
 	attackProjectile.attack_x = status.game_x;
 	attackProjectile.attack_y = status.game_y;
-	attackProjectile.damage = 0;
+        //self destruct if the target has been reached
+	attackProjectile.damage = (status.game_x == endX && status.game_y == endY) ? 1 : 0;
 	
 	return attackProjectile;
 }
