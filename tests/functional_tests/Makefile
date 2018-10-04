@@ -4,6 +4,7 @@ INCS = -I./ -I../../src/ -I../src
 #TEST_FILES = ../src/catch.hpp
 TEST_FILES = main.o
 TEST_FILES += movement_tests.o
+TEST_FILES += projectile_functional_tests.o
 
 
 
