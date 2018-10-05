@@ -239,13 +239,17 @@ TEST_CASE("Collision is checked when firing point-blank")
 TEST_CASE("Projectiles self destruct after reaching their target")
 {
 
-    Actor * a = new SimpleActor(stay, 1);
-    ActorInfo newAI(a, 1, 1, 0, 7, 1, 0);
-    GameField g (1, 8);
+    SimpleActor * a = new SimpleActor(stay, 1);
+    a->setAttack(0, 10, 1);
+    ActorInfo newAI(a, 1, 1, 0, 19, 1, 0);
+    GameField g (1, 20);
     g.addActor(newAI);
-    std::vector<int> ref = {0, 0, 0, 0, 0, 0, 0, 1};
+    std::vector<int> ref (20);
+    ref[19] = 1;
     g.nextTurn();
+    a->setAttack (0,0,0);
     g.nextTurn();
+
     REQUIRE(g.getMap() == ref);
 
 }

@@ -195,10 +195,7 @@ void GameField::runMoves(ActorInfo &a)
             break;
         }
 
-        updateMap();
-
-        if (displayCallback != NULL)
-            displayCallback(fieldMap);
+    
         
         collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
         for (int i = 0; i < actors.size(); ++i ) //check each actor
@@ -235,6 +232,11 @@ void GameField::runMoves(ActorInfo &a)
         }
         else
             --rangeCount;
+
+            updateMap();
+
+        if (displayCallback != NULL)
+            displayCallback(fieldMap);
         
     }
 }
@@ -257,7 +259,7 @@ void GameField::nextTurn()
     {
         runMoves(actors[i]);
 
-        if(actors[i].health != 0 && actors[i].id > 0)
+        if(actors[i].health != 0)
         {
             //PositionData to give the AI
             pos.game_x = actors[i].x;
@@ -271,19 +273,35 @@ void GameField::nextTurn()
 
             if (atk.damage > 0)
             {
-                ProjectileActor * proj = new ProjectileActor;
-                proj->setEndX(atk.attack_x);
-                proj->setEndY(atk.attack_y);
-                proj->setStartX(actors[i].x);
-                proj->setStartY(actors[i].y);
-                newProjectile.range = 6;
-                newProjectile.id = -actors[i].id;
-                newProjectile.act_p = proj;
-                newProjectile.health = 1;
-                newProjectile.damage = 1;
-                newProjectile.x = actors[i].x;
-                newProjectile.y = actors[i].y;
-                actors.insert(actors.begin() + i + 1, newProjectile);
+                if (actors[i].id > 0) //tanks attacking
+                {
+                    ProjectileActor * proj = new ProjectileActor;
+                    proj->setEndX(atk.attack_x);
+                    proj->setEndY(atk.attack_y);
+                    proj->setStartX(actors[i].x);
+                    proj->setStartY(actors[i].y);
+                    newProjectile.range = 6;
+                    newProjectile.id = -actors[i].id;
+                    newProjectile.act_p = proj;
+                    newProjectile.health = 1;
+                    newProjectile.damage = 1;
+                    newProjectile.x = actors[i].x;
+                    newProjectile.y = actors[i].y;
+                    actors.insert(actors.begin() + i + 1, newProjectile);
+                }
+                else //projectiles requesting a self destruct
+                {
+                    actors[i].health = 0;
+                    actors[i].id = 0;
+                    actors[i].range = 0;
+                    actors[i].damage = 0;
+
+                    //update the display
+                    updateMap();
+                    if (displayCallback != NULL)
+                        displayCallback(fieldMap);
+                }
+                
             }
         }
     }
