@@ -205,6 +205,10 @@ void GameField::runMoves(ActorInfo &a)
             collisionDamage = 0;
             for (auto i: collisionVect)
             {
+                if(!(actorInfoById(-actors[i].id) == nullActor))
+                {
+                    actorInfoById(-actors[i].id).hits++;
+                }
                 collisionDamage += actors[i].damage;
             }
             for (auto i: collisionVect) //apply the portion from the other actors
@@ -371,4 +375,14 @@ void GameField::cull()
 MapData GameField::getMapData()
 {
     return fieldMap;
+}
+
+ActorInfo & GameField::actorInfoById(int id)
+{
+    for (auto &a : actors)
+    {
+        if (a.id == id)
+            return a;
+    }
+    return nullActor;
 }

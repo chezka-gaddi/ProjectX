@@ -264,3 +264,48 @@ TEST_CASE("Actor shot counter incremented on attacking")
 
     REQUIRE(g.getActors().at(0).shots == 1);
 }
+TEST_CASE("Actor hit counter incremented on hiting an enemy")
+{
+    SimpleActor * a1 = new SimpleActor(stay, 1);
+    SimpleActor * a2 = new SimpleActor(stay, 0);
+
+    ActorInfo AI1(a1, 10, 1, 0, 1, 1, 0);
+    ActorInfo AI2(a2, 10, 1, 0, 0, 2, 0);
+
+    GameField g (1, 2);
+    g.addActor(AI1);
+    g.addActor(AI2);
+    g.nextTurn();
+
+    REQUIRE(g.actorInfoById(1).hits == 1);
+}
+
+TEST_CASE("GameField.actorInfoById returns a null actor (All fields 0) when ID not found")
+{
+    GameField g;
+    REQUIRE(g.actorInfoById(2) == ActorInfo (0,0,0,0,0,0));
+}
+TEST_CASE("GameField.actorInfoById returns a reference to the desired actor")
+{
+    GameField g;
+    SimpleActor * a = new SimpleActor;
+    ActorInfo newAI(a, 1, 1, 0, 0, 1, 0);
+
+    g.addActor(newAI);
+
+    REQUIRE(g.actorInfoById(1) == newAI);
+}
+TEST_CASE("GameField.actorInfoById references can be used to update actors on the field")
+{
+    GameField g;
+    SimpleActor * a = new SimpleActor;
+    ActorInfo newAI(a, 1, 1, 0, 0, 1, 0);
+
+    g.addActor(newAI);
+
+    g.actorInfoById(1).health = 10;
+    newAI.health = 10;
+
+    REQUIRE(g.actorInfoById(1) == newAI);
+}
+

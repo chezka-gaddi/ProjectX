@@ -36,6 +36,7 @@ protected:
     void (*displayCallback)(MapData, std::vector<ActorInfo>);
     void updateMap();
     void runMoves(ActorInfo &a);
+    ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
  
 public:
     /**
@@ -78,7 +79,7 @@ public:
     std::vector<int> getMap();
     std::vector<ActorInfo> getActors();
     MapData getMapData();
-    
+    ActorInfo & actorInfoById(int id);
 
     /*******************************/
     /************setters************/
