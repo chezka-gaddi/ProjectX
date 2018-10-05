@@ -11,7 +11,7 @@
 // Include(s)
 #include <catch.hpp>
 #include <GameField.h>
-#include <AsciiTankActor.h>
+#include <SimpleActor.h>
 #include <vector>
 #include <iostream>
 #include <catch.hpp>
@@ -31,8 +31,8 @@ SCENARIO("The projectile moves around the gamefield")
    GIVEN("A tank and a vertical gamefield")
    {
       // Create tank
-      AsciiTankActor * tank = nullptr;
-      tank = new AsciiTankActor();
+      SimpleActor * tank = nullptr;
+      tank = new SimpleActor();
       REQUIRE(tank != nullptr);
 
       // Load a tank
@@ -60,7 +60,7 @@ SCENARIO("The projectile moves around the gamefield")
       
       WHEN("The tank tries to shoot up")
 	{
-	    tank->setAttackData(0,0,1);
+	    tank->setAttack(0,0,1);
             tank->setMove(stay);
             gamefield.nextTurn();
       THEN("The projectile goes up")
@@ -89,7 +89,7 @@ SCENARIO("The projectile moves around the gamefield")
 
       WHEN("The tank tries attacks to down")
         {
-         tank->setAttackData(0,12,1);
+         tank->setAttack(0,12,1);
          tank->setMove(stay);
          gamefield.nextTurn();
 
@@ -120,8 +120,8 @@ SCENARIO("The projectile moves around the gamefield")
    GIVEN("A tank and a horizontal gamefield")
    {
       // Create tank
-      AsciiTankActor * tank = nullptr;
-      tank = new AsciiTankActor();
+      SimpleActor * tank = nullptr;
+      tank = new SimpleActor();
       REQUIRE(tank != nullptr);
 
       // Load a tank
@@ -136,7 +136,7 @@ SCENARIO("The projectile moves around the gamefield")
       
       WHEN("The tank tries to shoot left")
 	{
-	    tank->setAttackData(0,0,1);
+	    tank->setAttack(0,0,1);
             tank->setMove(stay);
             gamefield.nextTurn();
       THEN("The projectile goes left")
@@ -165,7 +165,7 @@ SCENARIO("The projectile moves around the gamefield")
 
       WHEN("The tank tries attacks to right")
         {
-         tank->setAttackData(12,1,1);
+         tank->setAttack(12,1,1);
          tank->setMove(stay);
          gamefield.nextTurn();
 
@@ -202,12 +202,12 @@ SCENARIO("The projectile moves around the gamefield")
 SCENARIO("The projectile collides with the actors on the gamefield")
 {
       // Create 2 tanks
-      AsciiTankActor * tank = nullptr;
-      tank = new AsciiTankActor();
+      SimpleActor * tank = nullptr;
+      tank = new SimpleActor();
       REQUIRE(tank != nullptr);
 
-      AsciiTankActor * tank2 = nullptr;
-      tank2 = new AsciiTankActor();
+      SimpleActor * tank2 = nullptr;
+      tank2 = new SimpleActor();
       REQUIRE(tank2 != nullptr);
 
       // Load a tank
@@ -225,9 +225,9 @@ SCENARIO("The projectile collides with the actors on the gamefield")
 	{
 		WHEN("Each tank tries to shoot a projectile")
 		{
-		     tank->setAttackData(0,0,1);//attack 2nd
+		     tank->setAttack(0,0,1);//attack 2nd
          	     tank->setMove(stay);
-		     tank2->setAttackData(13,0,1);//attack 1st
+		     tank2->setAttack(13,0,1);//attack 1st
          	     tank2->setMove(stay);
          	     gamefield.nextTurn();
 
@@ -253,16 +253,20 @@ SCENARIO("The projectile collides with the actors on the gamefield")
 		WHEN("One tank shoots at the other tank and the other tank does not move")
 		{
          	     tank->setMove(stay);//do not move
-		     tank2->setAttackData(13,0,1);//attack 1st
+		     tank2->setAttack(13,0,100);//attack 1st
          	     tank2->setMove(stay);
          	     gamefield.nextTurn();
+		     tank2->setAttack(1,0,100);//attack 1st
          	     gamefield.nextTurn();
          	     gamefield.nextTurn();
 		     gamefield.nextTurn();
 
 			THEN("The second tank is hit and the tank takes damage")
 			{
-				REQUIRE(gamefield.getActors().size() == 1);
+                              for (auto &a : gamefield.getActors())
+                              {
+				REQUIRE(a.id != 2);
+                              }
 			}
 		}
 	}

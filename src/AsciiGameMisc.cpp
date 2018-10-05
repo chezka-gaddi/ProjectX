@@ -26,13 +26,13 @@ void gameloop(){
     AsciiTankActor * player1 = new AsciiTankActor();
     AsciiTankActor * player2 = new AsciiTankActor();
     //tank actor pointers are made and then packaged into ActorInfo structs
-    ActorInfo player1Info = ActorInfo(player1, 1,1,1,1,1);
-    ActorInfo player2Info = ActorInfo(player2, 1,1,8,8,2);
+    ActorInfo player1Info = ActorInfo(player1, 1,1,2,2,1);
+    ActorInfo player2Info = ActorInfo(player2, 1,1,18,2,2);
     std::vector<ActorInfo> startActors;
     startActors.push_back(player1Info);
     startActors.push_back(player2Info);
     
-    GameField gameField (10,10, startActors, displayAscii);
+    GameField gameField (20,5, startActors, displayAscii);
    
     //the is the main game loop
     while(isplayable(gameField.getActors())){
