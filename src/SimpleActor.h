@@ -13,13 +13,14 @@
 
 class SimpleActor : public Actor
 {
-    int damage;
     direction dir;
+    AttackData atk;
 public:
     virtual direction move(MapData map, PositionData status);
     virtual AttackData attack(MapData map, PositionData status);
     SimpleActor();
     SimpleActor(direction mv, int d);
+    void setAttack(int x, int y, int d);
 };
 
 

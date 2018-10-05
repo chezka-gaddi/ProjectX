@@ -18,11 +18,14 @@ direction SimpleActor::move(MapData map, PositionData status)
  */
 AttackData SimpleActor::attack(MapData map, PositionData status)
 {
-    AttackData ret;
-    ret.attack_x = 0;
-    ret.attack_y = 0;
-    ret.damage = damage;
-    return ret;
+    return atk;
 }
-SimpleActor::SimpleActor() : damage (0), dir (up) {}
-SimpleActor::SimpleActor(direction mv, int d) : damage(d), dir(mv) {}
+SimpleActor::SimpleActor() : atk(0,0,0), dir (up) {}
+SimpleActor::SimpleActor(direction mv, int d) : atk(0, 0, d), dir(mv) {}
+
+void SimpleActor::setAttack(int x, int y, int d)
+{
+    atk.attack_x = x;
+    atk.attack_y = y;
+    atk.damage = d;
+}

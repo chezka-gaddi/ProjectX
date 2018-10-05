@@ -34,3 +34,16 @@ TEST_CASE("SimpleActor moves in the direction specified at construction")
     REQUIRE(a->move(m,p) == down);
     delete a;
 }
+TEST_CASE("SimpleActor.attack() attacks specified point with specified damage")
+{
+    SimpleActor* a = new SimpleActor(stay, 0);
+    MapData m;
+    PositionData p;
+    AttackData result;
+    a->setAttack(1, 1, 1);
+    result = a->attack(m,p);
+    REQUIRE(result.attack_x == 1);
+    REQUIRE( result.attack_y == 1);
+    REQUIRE( result.damage == 1 );
+    delete a;
+}
