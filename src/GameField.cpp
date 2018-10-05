@@ -66,7 +66,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     displayCallback = NULL;
 }
 
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>)) : actors(startActors)
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int)) : actors(startActors)
 {
     turnCount = 0;
     fieldMap.width = width;
@@ -236,7 +236,7 @@ void GameField::runMoves(ActorInfo &a)
             updateMap();
 
         if (displayCallback != NULL)
-            displayCallback(fieldMap, actors);
+            displayCallback(fieldMap, actors, turnCount);
         
     }
 }
@@ -300,7 +300,7 @@ void GameField::nextTurn()
                     //update the display
                     updateMap();
                     if (displayCallback != NULL)
-                        displayCallback(fieldMap, actors);
+                        displayCallback(fieldMap, actors, turnCount);
                 }
                 
             }

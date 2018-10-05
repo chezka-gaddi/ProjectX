@@ -27,7 +27,7 @@ bool isplayable(std::vector<ActorInfo> actorInfo);
  * @param gameField a gamefield
  * @param actorInfo actorInfo a vector of actorinfo structs
  */
-void displayAscii(MapData map);
+void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount);
 
 
 void gameloop();
