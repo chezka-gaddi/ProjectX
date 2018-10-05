@@ -14,6 +14,7 @@
 #include <vector>
 #include <iostream>
 #include <direction.h>
+#include <SimpleActor.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 // FEATURE:
@@ -30,8 +31,8 @@ SCENARIO("The tank moves around the gamefield")
    GIVEN("A tank and a working gamefield")
    {
       // Create Tank
-      AsciiTankActor * tank = nullptr;
-      tank = new AsciiTankActor();
+      SimpleActor * tank = nullptr;
+      tank = new SimpleActor();
       direction moveUp = direction::up;
       direction moveDown = direction::down;
       direction moveLeft = direction::left;
@@ -132,8 +133,8 @@ SCENARIO("The tank encounters a wall")
    GIVEN("A tank and a gamefield")
    {
       // Create Tank
-      AsciiTankActor * tank = nullptr;
-      tank = new AsciiTankActor();
+      SimpleActor * tank = nullptr;
+      tank = new SimpleActor();
       direction moveUp = direction::up;
       direction moveDown = direction::down;
       direction moveLeft = direction::left;
@@ -216,14 +217,14 @@ SCENARIO("Tanks drive right into each other")
 {
    GIVEN("A 3 x 1 Game Field with two tanks")
    {
-      AsciiTankActor * tank_1 = nullptr;
-      AsciiTankActor * tank_2 = nullptr;
+      SimpleActor * tank_1 = nullptr;
+      SimpleActor * tank_2 = nullptr;
 
       direction moveRight = direction::right;
       direction moveLeft = direction::left;
 
-      tank_1 = new AsciiTankActor();
-      tank_2 = new AsciiTankActor();
+      tank_1 = new SimpleActor();
+      tank_2 = new SimpleActor();
       
       ActorInfo tank_1_s(tank_1, 100, 1000, 0, 0, 1);
       ActorInfo tank_2_s(tank_2, 100, 1000, 2, 0, 2);
@@ -236,8 +237,8 @@ SCENARIO("Tanks drive right into each other")
       {
          tank_1->setMove(moveRight);
          tank_2->setMove(moveLeft);
-         tank_1->setAttackData(0,0,0);
-         tank_2->setAttackData(0,0,0);
+         tank_1->setAttack(0,0,0);
+         tank_2->setAttack(0,0,0);
          gamefield.nextTurn();
          THEN("the first tank dies and the other takes a portion of the damage")
          {

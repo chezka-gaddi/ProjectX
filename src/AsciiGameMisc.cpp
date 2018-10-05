@@ -23,8 +23,8 @@ void displayAscii(MapData map){
 void gameloop(){
     
     //change tankactor here to what ever we have decided to call the ascii tank actor
-    AsciiTankActor * player1 = new AsciiTankActor(true);
-    AsciiTankActor * player2 = new AsciiTankActor(true);
+    AsciiTankActor * player1 = new AsciiTankActor();
+    AsciiTankActor * player2 = new AsciiTankActor();
     //tank actor pointers are made and then packaged into ActorInfo structs
     ActorInfo player1Info = ActorInfo(player1, 1,1,1,1,1);
     ActorInfo player2Info = ActorInfo(player2, 1,1,8,8,2);

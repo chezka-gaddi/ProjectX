@@ -13,6 +13,7 @@ FILES += ../../src/AsciiTankActor.o
 FILES += ../../src/Actor.o
 FILES += ../../src/MapData.o
 FILES += ../../src/ProjectileActor.o
+FILES += ../../src/SimpleActor.o
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
