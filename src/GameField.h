@@ -33,7 +33,7 @@ protected:
     /** struct with width, height, and a vector of ints in
      row major order, 0 for empty tiles and actor id for nonempty. */
     MapData fieldMap;
-    void (*displayCallback)(MapData);
+    void (*displayCallback)(MapData, std::vector<ActorInfo>);
     void updateMap();
     void runMoves(ActorInfo &a);
  
@@ -64,7 +64,7 @@ public:
     GameField();
     GameField(int width, int height);
     GameField(int width, int height, std::vector<ActorInfo> startActors);
-    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData));
+    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>));
 
 
     ~GameField();
