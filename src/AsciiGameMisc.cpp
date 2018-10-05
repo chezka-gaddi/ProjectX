@@ -17,6 +17,14 @@ bool isplayable(std::vector<ActorInfo> actorInfo){
 }
 void displayAscii(MapData map, std::vector<ActorInfo> actors){
     std::cout << map;
+    for (auto a: actors)
+    {
+        if (a.id > 0)
+        {
+            std::cout << "Player " << a.id << " Health: " <<  a.health << std::endl;
+            //TODO output hits and shots taken
+        }
+    }
     system("sleep 0.25");
 }
 
