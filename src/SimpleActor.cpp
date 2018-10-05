@@ -29,3 +29,8 @@ void SimpleActor::setAttack(int x, int y, int d)
     atk.attack_y = y;
     atk.damage = d;
 }
+
+void SimpleActor::setMove(direction d)
+{
+    dir = d;
+}

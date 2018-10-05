@@ -47,3 +47,12 @@ TEST_CASE("SimpleActor.attack() attacks specified point with specified damage")
     REQUIRE( result.damage == 1 );
     delete a;
 }
+TEST_CASE("SimpleActor.setMove() changes the return of SimpleActor.move()")
+{
+    SimpleActor* a = new SimpleActor(up, 0);
+    MapData m;
+    PositionData p;
+    a->setMove(down);
+    REQUIRE(a->move(m,p) == down);
+    delete a;
+}
