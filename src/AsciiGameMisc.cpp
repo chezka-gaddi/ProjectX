@@ -21,8 +21,15 @@ void displayAscii(MapData map, std::vector<ActorInfo> actors){
     {
         if (a.id > 0)
         {
-            std::cout << "Player " << a.id << " Health: " <<  a.health
-                      << " Shots: " << a.shots << " Hits: " << a.hits
+            std::cout << "[7m" //Inverted Text Mode
+                      << "Player " << a.id
+                      << "[0(;31)m " //RED
+                      << "Health: " <<  a.health
+                      << "[0(;34)m " //BLUE
+                      << "Shots: " << a.shots
+                      << "[0(;32)m " //GREEN
+                      << "Hits: " << a.hits
+                      << "[0m"
                       << std::endl;
             
             //TODO output hits and shots taken
