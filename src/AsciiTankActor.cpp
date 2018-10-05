@@ -66,6 +66,15 @@ direction AsciiTankActor::move( MapData map, PositionData status)
 AttackData AsciiTankActor::attack( MapData map, PositionData status)
 {
     int x, y;
+    char c;
+    cin.clear();
+    cin.ignore(); //Ensure no characters are in the input buffer
+
+    cout << "Attack (y,n)? ";
+    cin >> c;
+
+    if (tolower(c) != 'y')
+        return AttackData(0,0,0);
 
     cin.clear();
     cin.ignore(); //Ensure no characters are in the input buffer
