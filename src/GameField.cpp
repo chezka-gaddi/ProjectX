@@ -165,7 +165,6 @@ void GameField::runMoves(ActorInfo &a)
                 a.y--;
             else
                 a.health--;
-            a.heading=direction::up;
             break;
                 
         case direction::down:
@@ -173,7 +172,6 @@ void GameField::runMoves(ActorInfo &a)
                 a.y++;
             else
                 a.health--;
-            a.heading=direction::down;
             break;
                 
         case direction::left:
@@ -181,7 +179,6 @@ void GameField::runMoves(ActorInfo &a)
                 a.x--;
             else
                 a.health--;
-            a.heading=direction::left;
             break;
                 
         case direction::right:
@@ -189,7 +186,6 @@ void GameField::runMoves(ActorInfo &a)
                 a.x++;
             else
                 a.health--;
-            a.heading=direction::right;
             break;
         default:
             break;
@@ -288,6 +284,7 @@ void GameField::nextTurn()
                     newProjectile.x = actors[i].x;
                     newProjectile.y = actors[i].y;
                     actors.insert(actors.begin() + i + 1, newProjectile);
+                    actors[i].shots++;
                 }
                 else //projectiles requesting a self destruct
                 {

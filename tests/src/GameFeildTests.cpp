@@ -253,3 +253,14 @@ TEST_CASE("Projectiles self destruct after reaching their target")
     REQUIRE(g.getMap() == ref);
 
 }
+
+TEST_CASE("Actor shot counter incremented on attacking")
+{
+    SimpleActor * a = new SimpleActor(stay, 1);
+    ActorInfo newAI(a, 1, 1, 0, 1, 1, 0);
+    GameField g (1, 2);
+    g.addActor(newAI);
+    g.nextTurn();
+
+    REQUIRE(g.getActors().at(0).shots == 1);
+}
