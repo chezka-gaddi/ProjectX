@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g 
+CXXFLAGS = -g -std=c++11 
 INCS = -I./  
 
 FILES = main.o
