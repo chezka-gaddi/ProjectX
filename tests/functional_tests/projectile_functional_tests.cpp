@@ -63,7 +63,7 @@ SCENARIO("The projectile moves around the gamefield")
 	    tank->setAttack(0,-1,1);
             tank->setMove(stay);
             gamefield.nextTurn();
-            //THEN("The projectile goes up")
+            THEN("The projectile goes up")
             {
                 //compare actual map to expected map
                 std::vector<int> expected_map = {-2, 0, 0, 0,
@@ -74,7 +74,7 @@ SCENARIO("The projectile moves around the gamefield")
                 REQUIRE(expected_map == actual_map);
             } 
 	    gamefield.nextTurn();
-            //THEN("The projectile hits the wall")
+            THEN("The projectile hits the wall")
             {
                 //compare actual map to expected map
                 std::vector<int> expected_map = { 0, 0, 0, 0,
@@ -93,7 +93,7 @@ SCENARIO("The projectile moves around the gamefield")
             tank->setMove(stay);
             gamefield.nextTurn();
 
-            //THEN("The tank shoots down")
+            THEN("The tank shoots down")
             {
                 //Compare map with the initial map
                 std::vector<int> expected_map = { 0, 0, 0, 0,
@@ -105,7 +105,7 @@ SCENARIO("The projectile moves around the gamefield")
 
             }
 	    gamefield.nextTurn();
-            //THEN("The projectile hits the wall")
+            THEN("The projectile hits the wall")
             {
                 //compare actual map to expected map
                 std::vector<int> expected_map = { 0, 0, 0, 0,
@@ -139,7 +139,7 @@ SCENARIO("The projectile moves around the gamefield")
 	    tank->setAttack(-1,0,1);
             tank->setMove(stay);
             gamefield.nextTurn();
-            //THEN("The projectile goes left")
+            THEN("The projectile goes left")
             {
                 //compare actual map to expected map
                 std::vector<int> expected_map = {-2, 0, 0, 0,
@@ -150,7 +150,7 @@ SCENARIO("The projectile moves around the gamefield")
                 REQUIRE(expected_map == actual_map);
             } 
             gamefield.nextTurn();
-            //THEN("The projectile hits the wall")
+            THEN("The projectile hits the wall")
             {
                 //compare actual map to expected map
                 std::vector<int> expected_map = { 0, 0, 0, 0,
@@ -169,7 +169,7 @@ SCENARIO("The projectile moves around the gamefield")
             tank->setMove(stay);
             gamefield.nextTurn();
 
-            //THEN("The projectile goes right")
+            THEN("The projectile goes right")
             {
                 //Compare map with the initial map
                 std::vector<int> expected_map = { 0, 0, 0, 0,
@@ -181,7 +181,7 @@ SCENARIO("The projectile moves around the gamefield")
 
             }
             gamefield.nextTurn();
-            //THEN("The projectile hits the wall")
+            THEN("The projectile hits the wall")
             {
                 //compare actual map to expected map
                 std::vector<int> expected_map = { 0, 0, 0, 0,
@@ -231,7 +231,7 @@ SCENARIO("The projectile collides with the actors on the gamefield")
             tank2->setMove(stay);
             gamefield.nextTurn();
 
-            //THEN("The projectiles spawn and travle their range")
+            THEN("The projectiles spawn and travle their range")
             {
                 //Compare map with the initial map
                 std::vector<int> expected_map = { 3, 0, 0, 0, 0, 0, -3, -2, 0, 0, 0, 0, 0, 2 };
@@ -242,7 +242,7 @@ SCENARIO("The projectile collides with the actors on the gamefield")
 
             gamefield.nextTurn();
 
-            //THEN("The projectiles collide and despawn")
+            THEN("The projectiles collide and despawn")
             {
                 std::vector<int> expected_map = { 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 };
                 std::vector<int> actual_map = gamefield.getMap();
