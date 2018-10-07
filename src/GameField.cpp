@@ -3,6 +3,7 @@
  * @author David Donahue
  */
 #include "GameField.h"
+#include <iostream>
 
 /**
  * @author David Donahue
@@ -17,7 +18,24 @@ GameField::GameField()
     fieldMap.height = 10;
     fieldMap.map.resize(100);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    displayCallback = NULL;
 }
+
+/**
+ * @author David Donahue
+ * @par Description:
+ * Destructor, deletes all actors left on the feild
+ */
+
+GameField::~GameField()
+{
+    for (auto &a : actors)
+    {
+        if (a.act_p != NULL)
+            delete a.act_p;        
+    }
+}
+
 /**
  * @author David Donahue
  * @par Description:
@@ -30,6 +48,7 @@ GameField::GameField(int width, int height)
     fieldMap.height = height;
     fieldMap.map.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    displayCallback = NULL;
 }
 /**
  * @author David Donahue
@@ -44,7 +63,20 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     fieldMap.map.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
     updateMap();
+    displayCallback = NULL;
 }
+
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int)) : actors(startActors)
+{
+    turnCount = 0;
+    fieldMap.width = width;
+    fieldMap.height = height;
+    fieldMap.map.resize(width * height);
+    std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    updateMap();
+    displayCallback = d_callback;
+}
+
 /**
  * @author David Donahue
  * @par Description:
@@ -102,18 +134,20 @@ void GameField::updateMap()
 /**
  * @author David Donahue
  * @par Description:
- * Executes the move and attack phase of each AI's turn and increments the turn counter.
+ * Executes the move phase of an AI's turn
  * AI's are culled
  */
-void GameField::nextTurn()
+void GameField::runMoves(ActorInfo &a)
 {
-    ++turnCount;
-    direction dir;
-    PositionData pos;
-    AttackData atk;
+
     std::vector<int> collisionVect;
     int collisionDamage;
-    for (auto &a : actors)
+    int rangeCount;
+    PositionData pos;
+    direction dir;
+    
+    rangeCount = a.range;
+    while (rangeCount)
     {
         //PositionData to give the AI
         pos.game_x = a.x;
@@ -122,35 +156,42 @@ void GameField::nextTurn()
         pos.id = a.id;
         //get the AI's desired move
         dir = a.act_p->move(fieldMap, pos);
-
+            
         //If it checks out, execute it
         switch (dir)
         {
         case direction::up:
             if (a.y > 0)
                 a.y--;
+            else
+                a.health--;
             break;
-            
+                
         case direction::down:
             if (a.y < fieldMap.height-1)
                 a.y++;
+            else
+                a.health--;
             break;
-            
+                
         case direction::left:
             if (a.x > 0)
                 a.x--;
+            else
+                a.health--;
             break;
                 
         case direction::right:
             if (a.x < fieldMap.width-1)
-                a.x++ ;
+                a.x++;
+            else
+                a.health--;
             break;
         default:
             break;
         }
 
-        updateMap();
-        std::cout << fieldMap;
+    
         
         collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
         for (int i = 0; i < actors.size(); ++i ) //check each actor
@@ -158,12 +199,16 @@ void GameField::nextTurn()
             if (actors[i].x == a.x && actors[i].y == a.y)
                 collisionVect.push_back(i);
         }
-
+            
         if (collisionVect.size() > 1)
         {
             collisionDamage = 0;
             for (auto i: collisionVect)
             {
+                if(!(actorInfoById(-actors[i].id) == nullActor))
+                {
+                    actorInfoById(-actors[i].id).hits++;
+                }
                 collisionDamage += actors[i].damage;
             }
             for (auto i: collisionVect) //apply the portion from the other actors
@@ -171,20 +216,95 @@ void GameField::nextTurn()
                 actors[i].health -= (collisionDamage - actors[i].damage);
                 if (actors[i].health < 0)
                     actors[i].health = 0;
+                if (actors[i].health == 0)
+                {
+                    actors[i].damage = 0;
+                    actors[i].id = 0;
+                    actors[i].range = 0;
+                }
             }
         }
-        
-        
-        //Get the AI's desired attack
-        atk = a.act_p->attack(fieldMap, pos);
-        for (auto &t :actors)
+        if (a.health == 0)
         {
-            //Check if anyone was hit
-           if (t.x == atk.attack_x && t.y == atk.attack_y && t.health > 0)
-                t.health--;
-         }
-        updateMap();
-        std::cout << fieldMap;
+            rangeCount = 0;
+            a.damage = 0;
+            a.id = 0;
+        }
+        else
+            --rangeCount;
+
+            updateMap();
+
+        if (displayCallback != NULL)
+            displayCallback(fieldMap, actors, turnCount);
+        
+    }
+}
+
+/**
+ * @author David Donahue
+ * @par Description:
+ * Executes the move and attack phase of each AI's turn and increments the turn counter.
+ * AI's are culled
+ */
+
+void GameField::nextTurn()
+{
+    ++turnCount;
+
+    AttackData atk;
+    ActorInfo newProjectile;
+    PositionData pos;
+    for (int i = 0; i < actors.size(); ++i)
+    {
+        runMoves(actors[i]);
+
+        if(actors[i].health != 0)
+        {
+            //PositionData to give the AI
+            pos.game_x = actors[i].x;
+            pos.game_y = actors[i].y;
+            pos.health = actors[i].health;
+            pos.id = actors[i].id;
+                
+            //Get the AI's desired attack
+            atk = actors[i].act_p->attack(fieldMap, pos);
+
+
+            if (atk.damage > 0)
+            {
+                if (actors[i].id > 0) //tanks attacking
+                {
+                    ProjectileActor * proj = new ProjectileActor;
+                    proj->setEndX(atk.attack_x);
+                    proj->setEndY(atk.attack_y);
+                    proj->setStartX(actors[i].x);
+                    proj->setStartY(actors[i].y);
+                    newProjectile.range = 6;
+                    newProjectile.id = -actors[i].id;
+                    newProjectile.act_p = proj;
+                    newProjectile.health = 1;
+                    newProjectile.damage = 1;
+                    newProjectile.x = actors[i].x;
+                    newProjectile.y = actors[i].y;
+                    actors.insert(actors.begin() + i + 1, newProjectile);
+                    actors[i].shots++;
+                }
+                else //projectiles requesting a self destruct
+                {
+                    actors[i].health = 0;
+                    actors[i].id = 0;
+                    actors[i].range = 0;
+                    actors[i].damage = 0;
+
+                    //update the display
+                    updateMap();
+                    if (displayCallback != NULL)
+                        displayCallback(fieldMap, actors, turnCount);
+                }
+                
+            }
+        }
     }
     
     cull();
@@ -239,6 +359,8 @@ void GameField::cull()
     {
         if (actors[i].health == 0)
         {
+            if (actors[i].act_p != NULL)
+                delete actors[i].act_p;
             actors.erase(actors.begin()+i);
             --i; // go back one since everything just shifted back
         }
@@ -248,9 +370,19 @@ void GameField::cull()
 /**
  * @author David Donahue
  * @par Description:
- * Returns the fieldMap variable
+ * Returns the full fieldMap as a MapData struct
  */
 MapData GameField::getMapData()
 {
     return fieldMap;
+}
+
+ActorInfo & GameField::actorInfoById(int id)
+{
+    for (auto &a : actors)
+    {
+        if (a.id == id)
+            return a;
+    }
+    return nullActor;
 }

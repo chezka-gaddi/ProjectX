@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -std=c++11
+CXXFLAGS = -g -std=c++11 -DTESTING
 INCS = -I./ -I../../src/ 
 TEST_FILES = catch.hpp
 TEST_FILES += main.o
@@ -13,7 +13,9 @@ TEST_FILES += ../../src/MapData.o
 FILES = ../../src/Actor.o
 #FILES += ../../src/ProjectileActor.o
 TEST_FILES += ../../src/ActorInfo.o
-
+TEST_FILES += ../../src/ProjectileActor.o
+TEST_FILES += ../../src/SimpleActor.o
+TEST_FILES += SimpleActorTests.o
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
 

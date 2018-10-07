@@ -55,7 +55,7 @@ ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
  *
  * @returns MoveProjectile - struct with new coordinates to move to
 ******************************************************************************/
-MoveData ProjectileActor::move(MapData map, PositionData status)
+direction ProjectileActor::move(MapData map, PositionData status)
 {
 	//temporary variables used for movement calculation in each direction
 	float xDiff, yDiff;
@@ -97,6 +97,7 @@ MoveData ProjectileActor::move(MapData map, PositionData status)
 			moveProjectile.new_y = 1;
 		}
 	}
+
 	//account of direction of projectile
 	xDirection = endX - status.game_x;
 	yDirection = status.game_y - endY;
@@ -113,7 +114,6 @@ MoveData ProjectileActor::move(MapData map, PositionData status)
 	{
 		moveProjectile.new_x = 0;
 		moveProjectile.new_y = 0;
-		return moveProjectile;
 	}
 	else
 	{
@@ -123,15 +123,21 @@ MoveData ProjectileActor::move(MapData map, PositionData status)
 
 	//multiplies by 1 or -1 depending on direction of movement
 	moveProjectile.new_x = moveProjectile.new_x * xDirection;
-	moveProjectile.new_y = moveProjectile.new_y * yDirection; 
+	moveProjectile.new_y = moveProjectile.new_y * yDirection;
 
-	return moveProjectile;
+        if (moveProjectile.new_x != 0)
+            return (endX > status.game_x ) ? direction::right : direction::left;
+        else if (moveProjectile.new_y != 0)
+            return (endY > status.game_y ) ? direction::down : direction::up;
+
+        return stay;
+	 
 }
 
 /**************************************************************************//**
  * @author Brad Peterson
  * 
- * @par Descript`ion
+ * @par Description
  * This function will declare an AttackData struct and initialize the values to
  * the current positon on the field and damage to 1. It then returns that
  * struct.
@@ -145,7 +151,8 @@ AttackData ProjectileActor::attack(MapData map, PositionData status)
 	//Initialize variables
 	attackProjectile.attack_x = status.game_x;
 	attackProjectile.attack_y = status.game_y;
-	attackProjectile.damage = 1;
+        //self destruct if the target has been reached
+	attackProjectile.damage = (status.game_x == endX && status.game_y == endY) ? 1 : 0;
 	
 	return attackProjectile;
 }
@@ -325,3 +332,4 @@ void ProjectileActor::setEndY(int endYUpdate)
 {
     endY = endYUpdate;
 }
+

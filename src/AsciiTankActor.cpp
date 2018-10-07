@@ -12,24 +12,6 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-/*************************************************************************//**
- * @author Youki Lewis
- *
- * @par Description:
- * This member function will set the variable actorMove as the value contained
- *	within decision
- * 
- * @param[in]        decision - 
- *
- ****************************************************************************/
-
-void AsciiTankActor::setMove( direction decision )
-{
-   actorMove = decision;
-
-   return;
-   
-}
 
 /*************************************************************************//**
  * @author Youki Lewis
@@ -45,53 +27,31 @@ void AsciiTankActor::setMove( direction decision )
 direction AsciiTankActor::move( MapData map, PositionData status)
 {
     char c;
-    if (enableConsole) 
-    {
-        cout << "Move: ";
-        cin >> c;
+    cout << "Player " << status.id<< ": Move (u d l r): ";
+    cin >> c;
 
-        switch (c)
-        {
-        case 'u':
-            actorMove = up;
-            break;
-        case 'd':
-            actorMove = down;
-            break;
-        case 'l':
-            actorMove = left;
-            break;
-        case 'r':
-            actorMove = right;
-            break;
-        default:
-            actorMove = stay;
-            break;
-        }
+    switch (tolower(c))
+    {
+    case 'u':
+        actorMove = up;
+        break;
+    case 'd':
+        actorMove = down;
+        break;
+    case 'l':
+        actorMove = left;
+        break;
+    case 'r':
+        actorMove = right;
+        break;
+    default:
+        actorMove = stay;
+        break;
     }
     return actorMove;
 }
 
-/*************************************************************************//**
- * @author Youki Lewis
- *
- * @par Description:
- * This member function will set the member variable id to a new value 
- *         contained in newId.
- * 
- * @param[in]        xAttack - The value attack_x will be set as 
- * @param[in]        yAttack - The value attack_y will be set as
- * @param[in]        numDamage - The value damage will be set as 
- *
- ****************************************************************************/
-void AsciiTankActor::setAttackData( int xAttack, int yAttack, int numDamage)
-{
-   actorAttack.attack_x = xAttack;
-   actorAttack.attack_y = yAttack;
-   actorAttack.damage = numDamage;
-  
-   return;
-}
+
 
 /*************************************************************************//**
  * @author Youki Lewis
@@ -105,10 +65,29 @@ void AsciiTankActor::setAttackData( int xAttack, int yAttack, int numDamage)
  ****************************************************************************/
 AttackData AsciiTankActor::attack( MapData map, PositionData status)
 {
-   return actorAttack;
+    int x, y;
+    char c;
+    cin.clear();
+    cin.ignore(); //Ensure no characters are in the input buffer
+
+    cout << "Attack (y,n)? ";
+    cin >> c;
+
+    if (tolower(c) != 'y')
+        return AttackData(0,0,0);
+
+    cin.clear();
+    cin.ignore(); //Ensure no characters are in the input buffer
+    
+    cout << "Player " << status.id << ": Enter the X and Y cooridinates you want to attack as X Y: ";
+    cin >> x >> y;
+
+    actorAttack.damage = 1;
+    actorAttack.attack_x = x;
+    actorAttack.attack_y = y;
+    return actorAttack;
 }
 
 
 
 AsciiTankActor::AsciiTankActor() : enableConsole (false) {}
-AsciiTankActor::AsciiTankActor(bool cen) : enableConsole(cen) {}
