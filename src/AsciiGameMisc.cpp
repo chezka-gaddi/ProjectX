@@ -15,8 +15,28 @@ bool isplayable(std::vector<ActorInfo> actorInfo){
     }
     return (tankCount > 1);
 }
-void displayAscii(MapData map){
-    std::cout << map;
+void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount)
+{
+    std::cout << map << std::endl;
+    std::cout << "Turn: " << turnCount << std::endl;
+                     
+    for (auto a: actors)
+    {
+        if (a.id > 0)
+        {
+            std::cout << "[7m" //Inverted Text Mode
+                      << "Player " << a.id
+                      << "[0(;31)m " //RED
+                      << "Health: " <<  a.health
+                      << "[0(;34)m " //BLUE
+                      << "Shots: " << a.shots
+                      << "[0(;32)m " //GREEN
+                      << "Hits: " << a.hits
+                      << "[0m"
+                      << std::endl;
+           
+        }
+    }
     system("sleep 0.25");
 }
 
@@ -37,11 +57,11 @@ void gameloop(){
     //the is the main game loop
     while(isplayable(gameField.getActors())){
         //displays the current game state
-        displayAscii(gameField.getMapData());
+        displayAscii(gameField.getMapData(), gameField.getActors(), gameField.getTurnCount());
         std::vector<ActorInfo> actors = gameField.getActors();
         //makes the next moves
         gameField.nextTurn();
     }
     //Final Field State
-    displayAscii(gameField.getMapData());
+    displayAscii(gameField.getMapData(), gameField.getActors(), gameField.getTurnCount());
 }

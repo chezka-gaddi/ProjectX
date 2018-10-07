@@ -30,9 +30,10 @@ struct ActorInfo
     int y;
     int id;
     int range;
-    direction heading;
-ActorInfo(Actor *a, int h, int d, int xpos, int ypos, int i, int r) : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), range(r), heading(up) {}
-    ActorInfo(Actor *a, int h, int d, int xpos, int ypos, int i) : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), range(1), heading(up) {}
+    int hits;
+    int shots;
+ActorInfo(Actor *a, int h, int d, int xpos, int ypos, int i, int r) : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), range(r), hits(0), shots(0) {}
+ActorInfo(Actor *a, int h, int d, int xpos, int ypos, int i) : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), range(1), hits(0), shots(0) {}
     ActorInfo(){}
 };
 

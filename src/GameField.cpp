@@ -66,7 +66,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     displayCallback = NULL;
 }
 
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData)) : actors(startActors)
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int)) : actors(startActors)
 {
     turnCount = 0;
     fieldMap.width = width;
@@ -165,7 +165,6 @@ void GameField::runMoves(ActorInfo &a)
                 a.y--;
             else
                 a.health--;
-            a.heading=direction::up;
             break;
                 
         case direction::down:
@@ -173,7 +172,6 @@ void GameField::runMoves(ActorInfo &a)
                 a.y++;
             else
                 a.health--;
-            a.heading=direction::down;
             break;
                 
         case direction::left:
@@ -181,7 +179,6 @@ void GameField::runMoves(ActorInfo &a)
                 a.x--;
             else
                 a.health--;
-            a.heading=direction::left;
             break;
                 
         case direction::right:
@@ -189,7 +186,6 @@ void GameField::runMoves(ActorInfo &a)
                 a.x++;
             else
                 a.health--;
-            a.heading=direction::right;
             break;
         default:
             break;
@@ -209,6 +205,10 @@ void GameField::runMoves(ActorInfo &a)
             collisionDamage = 0;
             for (auto i: collisionVect)
             {
+                if(!(actorInfoById(-actors[i].id) == nullActor))
+                {
+                    actorInfoById(-actors[i].id).hits++;
+                }
                 collisionDamage += actors[i].damage;
             }
             for (auto i: collisionVect) //apply the portion from the other actors
@@ -236,7 +236,7 @@ void GameField::runMoves(ActorInfo &a)
             updateMap();
 
         if (displayCallback != NULL)
-            displayCallback(fieldMap);
+            displayCallback(fieldMap, actors, turnCount);
         
     }
 }
@@ -288,6 +288,7 @@ void GameField::nextTurn()
                     newProjectile.x = actors[i].x;
                     newProjectile.y = actors[i].y;
                     actors.insert(actors.begin() + i + 1, newProjectile);
+                    actors[i].shots++;
                 }
                 else //projectiles requesting a self destruct
                 {
@@ -299,7 +300,7 @@ void GameField::nextTurn()
                     //update the display
                     updateMap();
                     if (displayCallback != NULL)
-                        displayCallback(fieldMap);
+                        displayCallback(fieldMap, actors, turnCount);
                 }
                 
             }
@@ -374,4 +375,14 @@ void GameField::cull()
 MapData GameField::getMapData()
 {
     return fieldMap;
+}
+
+ActorInfo & GameField::actorInfoById(int id)
+{
+    for (auto &a : actors)
+    {
+        if (a.id == id)
+            return a;
+    }
+    return nullActor;
 }

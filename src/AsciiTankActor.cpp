@@ -27,7 +27,7 @@ using std::endl;
 direction AsciiTankActor::move( MapData map, PositionData status)
 {
     char c;
-    cout << "Move (u d l r): ";
+    cout << "Player " << status.id<< ": Move (u d l r): ";
     cin >> c;
 
     switch (tolower(c))
@@ -66,11 +66,20 @@ direction AsciiTankActor::move( MapData map, PositionData status)
 AttackData AsciiTankActor::attack( MapData map, PositionData status)
 {
     int x, y;
+    char c;
+    cin.clear();
+    cin.ignore(); //Ensure no characters are in the input buffer
+
+    cout << "Attack (y,n)? ";
+    cin >> c;
+
+    if (tolower(c) != 'y')
+        return AttackData(0,0,0);
 
     cin.clear();
     cin.ignore(); //Ensure no characters are in the input buffer
     
-    cout << "Enter the X and Y cooridinates you want to attack as X Y: ";
+    cout << "Player " << status.id << ": Enter the X and Y cooridinates you want to attack as X Y: ";
     cin >> x >> y;
 
     actorAttack.damage = 1;
