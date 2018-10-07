@@ -40,11 +40,18 @@ ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
  * @author Brad Peterson
  * 
  * @par Description
- * This function will find the difference on each coordinate direction between
- * the start position and desired end position of a projectile. If the
- * difference is larger than the projectile's range, it is scaled down to fit
- * within that maximum range per movement. Then the MoveData struct is set
- * to the calculated values to actually move the projectile.
+ * This function will find the difference between the current projectile location
+ * and it's desired end position on each coordinate axis. It will use this
+ * difference to determine the angle at which the projectile will be moving
+ * using the arc tangent of the triangle produced by those two differences.
+ * Then, if the angle is less than 30 degrees the projectile movement is set
+ * as one unit to horizontally, if between 30 and 60 the projectile movement
+ * is set as one unit both horizontal and vertical, and if over 60 degrees
+ * the movement is set as one unit vertically. At this point we refer to the
+ * original difference along each axis and scale that distance by the absolute
+ * value of itself, yeilding a 1, 0, or -1 to be used as a scalar multiplier 
+ * for controlling the direction of the movement. The product of this scalar
+ * multiplier and the set movement is the final movement command returned.
  *
  * @returns MoveProjectile - struct with new coordinates to move to
 ******************************************************************************/
