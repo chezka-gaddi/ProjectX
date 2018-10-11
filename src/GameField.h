@@ -33,6 +33,7 @@ protected:
     /** struct with width, height, and a vector of ints in
      row major order, 0 for empty tiles and actor id for nonempty. */
     MapData fieldMap;
+    std::vector<bool> obstacleMap;
 
     //callback function to update the dispaly with the map, actors, and turn count
     void (*displayCallback)(MapData, std::vector<ActorInfo>, int);
@@ -48,7 +49,7 @@ public:
      */
     void nextTurn();
     void addActor(ActorInfo);
-
+    void addObstacle(int x, int y);
     /**
      * removes all actors that have a health of 0 from the game (not actors with health less than 0)
      */
@@ -82,7 +83,8 @@ public:
     std::vector<ActorInfo> getActors();
     MapData getMapData();
     ActorInfo & actorInfoById(int id);
-
+    bool obstacleAt(int x, int y);
+    
     /*******************************/
     /************setters************/
     /*******************************/

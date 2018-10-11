@@ -309,3 +309,15 @@ TEST_CASE("GameField.actorInfoById references can be used to update actors on th
     REQUIRE(g.actorInfoById(1) == newAI);
 }
 
+
+TEST_CASE("Obstacles can be added to the gamefield")
+{
+    GameField g; //10x10 empty gamefield
+
+    REQUIRE(g.obstacleAt(1, 1) == false); //make sure the space starts empty
+    
+    g.addObstacle(1, 1);
+
+    REQUIRE(g.obstacleAt(1, 1) == true); //check to make sure the obstacle was added
+}
+
