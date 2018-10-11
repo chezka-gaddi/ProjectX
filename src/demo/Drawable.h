@@ -27,21 +27,21 @@ class Drawable{
 
 //public:
 
-    virtual void draw() = 0; /*!<A pure virtual function to ensure drawable objects define how they are drew */ 
+    virtual void draw() = 0; /*!<A pure virtual function to ensure drawable objects define how they are drew */
 };
 
 
-class GameField : public Drawable
+class GameFieldDrawable : public Drawable
 {
     public:
         int gameTurn;
 
-        GameField()
+        GameFieldDrawable()
         {
             gameTurn = 0;
         }
-        
-        ~GameField(){}
+
+        ~GameFieldDrawable(){}
 
         void updateTurn( int );
         void draw();
@@ -66,7 +66,7 @@ class Menu : public Drawable
         /**
          * Will be replaced by the Actor constructor
          **/
-        
+
         /**
          * @brief The destructor for the TankDrawable class
          * @author Chezka Gaddi
@@ -84,7 +84,7 @@ class Menu : public Drawable
  **/
 class Obstacles : public Drawable
 {
-    
+
     public:
         int angle;
         int tex;
@@ -92,15 +92,15 @@ class Obstacles : public Drawable
          * Will be replaced by the Actor constructor
          **/
         Obstacles( int ID, GLfloat x, GLfloat y);
-        
-        
+
+
         /**
          * @brief The destructor for the Obstacles class
          * @author Chezka Gaddi
          **/
         ~Obstacles(){}
-        
-        
+
+
         /**
         * @brief Draws the tank according to the texture associated with the tank.
         * @return Void
@@ -126,8 +126,8 @@ class Projectile : public Drawable
          * Will be replaced by the Actor constructor
          **/
         Projectile( int ID, GLfloat x, GLfloat y);
-        
-        
+
+
         /**
          * @brief The destructor for the TankDrawable class
          * @author Chezka Gaddi
@@ -153,8 +153,8 @@ class TankDrawable : public Drawable
          * Will be replaced by the Actor constructor
          **/
         TankDrawable( int ID, GLfloat x, GLfloat y);
-        
-        
+
+
         /**
          * @brief The destructor for the TankDrawable class
          * @author Chezka Gaddi

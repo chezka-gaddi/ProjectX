@@ -1,10 +1,10 @@
 #include "util.h"
 
-int main(int argc, char** argv)
+int main(void)
 {
-    initOpenGL(argc, argv, 1000, 800);
+    initOpenGL(1, nullptr, 1000, 800);
 
     glutMainLoop();
-   
+
     return 0;
 }
