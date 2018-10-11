@@ -19,3 +19,4 @@ TEST_CASE("SimpleAI does not attack when no other actors are present")
     
     REQUIRE(ai.attack(map, pos).damage == 0);
 }
+
