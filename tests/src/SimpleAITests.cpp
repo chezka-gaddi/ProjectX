@@ -58,3 +58,14 @@ TEST_CASE("SimpleAI stays in place if only projectiles are present")
     
     REQUIRE(ai.move(map, pos) == stay);
 }
+TEST_CASE("SimpleAI does not crash into other actors")
+{
+    SimpleAI ai;
+    MapData map(1,3); //1x3 map
+    PositionData pos(1, 1, 0, 0); //ID of 1, health of 1, position 0,0
+    map.map[0] = 1; //place AI on the map
+    map.map[1] = 2; //enemy projectile
+    
+    REQUIRE(ai.move(map, pos) == stay);
+}
+
