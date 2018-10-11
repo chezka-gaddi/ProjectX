@@ -6,7 +6,8 @@
 #include <cmath>
 
 class SimpleAI : public Actor{
-    
+    int calcDist(int x1, int y1, int x2, int y2);
+
 public:
     #ifndef testing
 
@@ -30,8 +31,7 @@ public:
      * @param[in] y2 - end point y coordinate
      * @return distance to the target
      */
-    int calcDist(int x1, int y1, int x2, int y2);
-
+    
     SimpleAI();
     ~SimpleAI();
     #endif
