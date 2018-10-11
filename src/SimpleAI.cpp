@@ -12,7 +12,7 @@ direction SimpleAI::move(MapData map, PositionData status)
         for (int y = 0; y < map.height; ++y)
         {
             //If an enemy is encountered closer than previously encountered
-            if ( map.map[x + y*map.width] &&
+            if ( map.map[x + y*map.width] > 0 &&
                  map.map[x + y*map.width] != status.id &&
                  calcDist(status.game_x, status.game_y, x, y) < min_dist)
             {
