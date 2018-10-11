@@ -3,7 +3,7 @@
 
 #include "Actor.h"
 #include "direction.h"
-
+#include <cmath>
 
 class SimpleAI : public Actor{
     
@@ -22,6 +22,15 @@ public:
      */
     virtual AttackData attack(MapData map, PositionData status);
 
+    /**
+     * calculates how many moves it will take to reach a given coordinate
+     * @param[in] x1 - starting point x coordinate
+     * @param[in] y1 - starting point y coordinate
+     * @param[in] x2 - end point x coordinate
+     * @param[in] y2 - end point y coordinate
+     * @return distance to the target
+     */
+    int calcDist(int x1, int y1, int x2, int y2);
 
     SimpleAI();
     ~SimpleAI();
