@@ -330,4 +330,15 @@ TEST_CASE("Obstacles can be removed from the gamefield")
 
     REQUIRE(g.obstacleAt(1, 1) == false); //check to make sure the obstacle was added
 }
+TEST_CASE("Actors take 1 point of damage from hitting obstacles")
+{
+    Actor * a = new SimpleActor(up, 0);
+    ActorInfo newAI(a, 2, 1, 0, 2, 1, 1);
+    GameField g (1, 3);
+    g.addActor(newAI);
+    g.addObstacle(0, 1);
+    g.nextTurn();
+    REQUIRE(g.actorInfoById(1).health== 1); //check for damage from the obstacle
+}
+
 

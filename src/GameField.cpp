@@ -169,28 +169,28 @@ void GameField::runMoves(ActorInfo &a)
         switch (dir)
         {
         case direction::up:
-            if (a.y > 0)
+            if (a.y > 0 && !obstacleAt(a.x, a.y - 1))
                 a.y--;
             else
                 a.health--;
             break;
                 
         case direction::down:
-            if (a.y < fieldMap.height-1)
+            if (a.y < fieldMap.height-1 && !obstacleAt(a.x, a.y + 1))
                 a.y++;
             else
                 a.health--;
             break;
                 
         case direction::left:
-            if (a.x > 0)
+            if (a.x > 0 && !obstacleAt(a.x - 1, a.y))
                 a.x--;
             else
                 a.health--;
             break;
                 
         case direction::right:
-            if (a.x < fieldMap.width-1)
+            if (a.x < fieldMap.width-1 && !obstacleAt(a.x + 1, a.y))
                 a.x++;
             else
                 a.health--;
