@@ -5,7 +5,31 @@ SimpleAI::~SimpleAI() {}
 
 direction SimpleAI::move(MapData map, PositionData status)
 {
-    return stay;
+    int min_dist = map.width * map.height + 1;
+    direction ret = stay;
+    for (int x = 0; x < map.width; ++x)
+    {
+        for (int y = 0; y < map.height; ++y)
+        {
+            //If an enemy is encountered closer than previously encountered
+            if ( map.map[x + y*map.width] &&
+                 map.map[x + y*map.width] != status.id &&
+                 calcDist(status.game_x, status.game_y, x, y) < min_dist)
+            {
+                min_dist = calcDist(status.game_x, status.game_y, x, y);
+
+                if (std::abs(status.game_x - x) > std::abs(status.game_y - y)) //more horizontal distance
+                {
+                    ret = (status.game_x > x) ? left : right;
+                }
+                else
+                {
+                    ret = (status.game_y > y) ? up : down;
+                }
+            }
+        }
+    }
+    return ret;
 }
 
 AttackData SimpleAI::attack(MapData map, PositionData status)
