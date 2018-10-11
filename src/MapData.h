@@ -22,6 +22,8 @@ struct MapData
 {
     /** row-major-order list the ID's of anything on the tiles on the map (tanks, projectiles, and obstacles) */
     std::vector<int> map;
+    /*!< row-major-order map of obstacles, true means that an obstacle is present */
+    std::vector<bool> obstacleMap;
     int width;  /*!< The width value of the map */
     int height; /*!< The height value of the map */
 };

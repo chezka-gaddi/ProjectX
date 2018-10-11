@@ -17,9 +17,9 @@ GameField::GameField()
     fieldMap.width = 10;
     fieldMap.height = 10;
     fieldMap.map.resize(100);
-    obstacleMap.resize(100);
+    fieldMap.obstacleMap.resize(100);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
-    std::fill(obstacleMap.begin(), obstacleMap.end(), false);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
     displayCallback = NULL;
 }
 
@@ -49,9 +49,9 @@ GameField::GameField(int width, int height)
     fieldMap.width = width;
     fieldMap.height = height;
     fieldMap.map.resize(width * height);
-    obstacleMap.resize(width * height);
+    fieldMap.obstacleMap.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
-    std::fill(obstacleMap.begin(), obstacleMap.end(), false);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
     displayCallback = NULL;
 }
 /**
@@ -65,9 +65,9 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     fieldMap.width = width;
     fieldMap.height = height;
     fieldMap.map.resize(width * height);
-    obstacleMap.resize(width * height);
+    fieldMap.obstacleMap.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
-    std::fill(obstacleMap.begin(), obstacleMap.end(), false);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
     updateMap();
     displayCallback = NULL;
 }
@@ -78,9 +78,9 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
     fieldMap.width = width;
     fieldMap.height = height;
     fieldMap.map.resize(width * height);
-    obstacleMap.resize(width * height);
+    fieldMap.obstacleMap.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
-    std::fill(obstacleMap.begin(), obstacleMap.end(), false);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
     updateMap();
     displayCallback = d_callback;
 }
@@ -340,7 +340,7 @@ void GameField::addActor(ActorInfo a)
 
 void GameField::addObstacle(int x, int y)
 {
-    obstacleMap[x + fieldMap.width * y] = true;
+    fieldMap.obstacleMap[x + fieldMap.width * y] = true;
 }
 
 /**
@@ -354,7 +354,7 @@ void GameField::addObstacle(int x, int y)
 
 void GameField::removeObstacle(int x, int y)
 {
-    obstacleMap[x + fieldMap.width * y] = false;
+    fieldMap.obstacleMap[x + fieldMap.width * y] = false;
 }
 
 /**
@@ -447,5 +447,5 @@ ActorInfo & GameField::actorInfoById(int id)
  */
 bool GameField::obstacleAt(int x, int y)
 {
-    return obstacleMap[x + y * fieldMap.width];
+    return fieldMap.obstacleMap[x + y * fieldMap.width];
 }

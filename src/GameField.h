@@ -33,7 +33,6 @@ protected:
     /** struct with width, height, and a vector of ints in
      row major order, 0 for empty tiles and actor id for nonempty. */
     MapData fieldMap;
-    std::vector<bool> obstacleMap;
 
     //callback function to update the dispaly with the map, actors, and turn count
     void (*displayCallback)(MapData, std::vector<ActorInfo>, int);
