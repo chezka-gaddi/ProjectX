@@ -29,7 +29,7 @@ Game::Game() : turn(0)
           , 100
           , 13
           , 5
-          , 1
+          , 2
           , 1);
 
     actors.push_back(player_1);
