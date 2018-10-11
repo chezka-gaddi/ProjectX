@@ -14,7 +14,8 @@ direction SimpleAI::move(MapData map, PositionData status)
             //If an enemy is encountered closer than previously encountered
             if ( map.map[x + y*map.width] > 0 &&
                  map.map[x + y*map.width] != status.id &&
-                 calcDist(status.game_x, status.game_y, x, y) < min_dist)
+                 calcDist(status.game_x, status.game_y, x, y) < min_dist &&
+                 calcDist(status.game_x, status.game_y, x, y) > 1)
             {
                 min_dist = calcDist(status.game_x, status.game_y, x, y);
 
