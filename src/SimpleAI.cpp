@@ -3,6 +3,14 @@
 SimpleAI::SimpleAI() {}
 SimpleAI::~SimpleAI() {}
 
+/**
+ * @author David Donahue
+ * @par Description: 
+ * Calculates how many moves it will take to reach a given coordinate
+ * @param[in] map - The current state of the playfield
+ * @param[in] status - The AI's tank's location, health and ID
+ * @return direction to move
+ */
 direction SimpleAI::move(MapData map, PositionData status)
 {
     int min_dist = map.width * map.height + 1;
@@ -33,6 +41,14 @@ direction SimpleAI::move(MapData map, PositionData status)
     return ret;
 }
 
+/**
+ * @author David Donahue
+ * @par Description: 
+ * Calculates how many moves it will take to reach a given coordinate
+ * @param[in] map - The current state of the playfield
+ * @param[in] status - The AI's tank's location, health and ID
+ * @return Location to attack and whether to attack
+ */
 AttackData SimpleAI::attack(MapData map, PositionData status)
 {
     AttackData ret(0,0,0);
