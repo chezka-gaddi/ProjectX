@@ -11,11 +11,13 @@ TEST_FILES += ../../src/AsciiTankActor.o
 #TEST_FILES += ProjectileActorTest.o
 TEST_FILES += ../../src/MapData.o
 FILES = ../../src/Actor.o
+FILES += ../../src/SimpleAI.o
 #FILES += ../../src/ProjectileActor.o
 TEST_FILES += ../../src/ActorInfo.o
 TEST_FILES += ../../src/ProjectileActor.o
 TEST_FILES += ../../src/SimpleActor.o
 TEST_FILES += SimpleActorTests.o
+TEST_FILES += SimpleAITests.o
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
 
