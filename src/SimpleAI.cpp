@@ -1,4 +1,5 @@
 #include "SimpleAI.h"
+
 SimpleAI::SimpleAI() {}
 SimpleAI::~SimpleAI() {}
 
@@ -10,14 +11,15 @@ direction SimpleAI::move(MapData map, PositionData status)
 AttackData SimpleAI::attack(MapData map, PositionData status)
 {
     AttackData ret(0,0,0);
-    int min_dist = map.width * map.height; //Garenteed to be greater than any real distance
+    int min_dist = map.width * map.height + 1; //Guaranteed to be greater than any real distance
     for (int x = 0; x < map.width; ++x)
     {
         for (int y = 0; y < map.height; ++y)
         {
             //If an enemy is encountered closer than previously encountered
-            if ( map.map[x + y * map.height] != status.id && calcDist(status.game_x, status.game_y, x, y)
-                 < min_dist)
+            if ( map.map[x + y*map.width] &&
+                 map.map[x + y*map.width] != status.id &&
+                 calcDist(status.game_x, status.game_y, x, y) < min_dist)
             {
                 min_dist = calcDist(status.game_x, status.game_y, x, y);
                 ret = AttackData(x, y, 1);
