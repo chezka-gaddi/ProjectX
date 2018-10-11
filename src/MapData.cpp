@@ -91,3 +91,12 @@ std::ostream& operator<<(std::ostream& os, const MapData& md)
 
     return os;
 }
+
+MapData::MapData(int w, int h) : width(w), height(h)
+{
+    map.resize(w * h);
+    obstacleMap.resize(w * h);
+    std::fill(map.begin(), map.end(), 0);
+    std::fill(obstacleMap.begin(), obstacleMap.end(), false);
+}
+MapData::MapData() {}
