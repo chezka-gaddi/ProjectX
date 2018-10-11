@@ -346,6 +346,20 @@ void GameField::addObstacle(int x, int y)
 /**
  * @author David Donahue
  * @par Description:
+ * Removes an obstacle from the map
+ *
+ * @param[in] x - the x value of the obstacle
+ * @param[in] y - the y value of the obstacle
+ */
+
+void GameField::removeObstacle(int x, int y)
+{
+    obstacleMap[x + fieldMap.width * y] = false;
+}
+
+/**
+ * @author David Donahue
+ * @par Description:
  * Get the current set of actors
  */
 std::vector<ActorInfo> GameField::getActors()
@@ -418,6 +432,8 @@ ActorInfo & GameField::actorInfoById(int id)
     }
     return nullActor;
 }
+
+
 
 /**
  * @author David Donahue

@@ -321,3 +321,13 @@ TEST_CASE("Obstacles can be added to the gamefield")
     REQUIRE(g.obstacleAt(1, 1) == true); //check to make sure the obstacle was added
 }
 
+TEST_CASE("Obstacles can be removed from the gamefield")
+{
+    GameField g; //10x10 empty gamefield
+    
+    g.addObstacle(1, 1);
+    g.removeObstacle(1, 1);
+
+    REQUIRE(g.obstacleAt(1, 1) == false); //check to make sure the obstacle was added
+}
+
