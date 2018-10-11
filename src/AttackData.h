@@ -17,5 +17,7 @@ AttackData(int x, int y, int d) : attack_x(x), attack_y(y), damage(d) {}
     AttackData() {}
 };
 
+bool operator==(AttackData lhs, AttackData rhs);
+
 
 #endif //SRC_ATTACKDATA_H
