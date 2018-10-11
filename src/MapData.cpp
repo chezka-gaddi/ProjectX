@@ -30,11 +30,15 @@ std::ostream& operator<<(std::ostream& os, const MapData& md)
             os << "      |";
         }
         os <<"\n |";
-        for (j = 0; j < md.width; ++j) // top of the tank 'sprite'
+        for (j = 0; j < md.width; ++j) // top of the 'sprite'
         {
             if (md.map[j+i*md.width] > 0) //tank actor
             {
                 os << "  o-o |";
+            }
+            else if (md.obstacleMap[j + i*md.width]) //Obstacle
+            {
+                os << "******|";
             }
             else
             {
@@ -52,17 +56,25 @@ std::ostream& operator<<(std::ostream& os, const MapData& md)
             {
                 os << "   *  |";
             }
+            else if (md.obstacleMap[j + i*md.width]) //Obstacle
+            {
+                os << "******|";
+            }
             else
             {
                 os << "      |";
             }
         }
         os <<"\n" << " |";
-        for (j = 0; j < md.width; ++j) //bottom of tank 'sprite
+        for (j = 0; j < md.width; ++j) //bottom of 'sprite'
         {
             if (md.map[j+i*md.width] > 0) //tank actor
             {
                 os << "  o-o |";
+            }
+            else if (md.obstacleMap[j + i*md.width]) //Obstacle
+            {
+                os << "******|";
             }
             else
             {

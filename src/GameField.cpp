@@ -17,7 +17,9 @@ GameField::GameField()
     fieldMap.width = 10;
     fieldMap.height = 10;
     fieldMap.map.resize(100);
+    fieldMap.obstacleMap.resize(100);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
     displayCallback = NULL;
 }
 
@@ -47,7 +49,9 @@ GameField::GameField(int width, int height)
     fieldMap.width = width;
     fieldMap.height = height;
     fieldMap.map.resize(width * height);
+    fieldMap.obstacleMap.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
     displayCallback = NULL;
 }
 /**
@@ -61,7 +65,9 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     fieldMap.width = width;
     fieldMap.height = height;
     fieldMap.map.resize(width * height);
+    fieldMap.obstacleMap.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
     updateMap();
     displayCallback = NULL;
 }
@@ -72,7 +78,9 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
     fieldMap.width = width;
     fieldMap.height = height;
     fieldMap.map.resize(width * height);
+    fieldMap.obstacleMap.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
     updateMap();
     displayCallback = d_callback;
 }
@@ -158,31 +166,32 @@ void GameField::runMoves(ActorInfo &a)
         dir = a.act_p->move(fieldMap, pos);
             
         //If it checks out, execute it
+        //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
         switch (dir)
         {
         case direction::up:
-            if (a.y > 0)
+            if (a.y > 0 && !obstacleAt(a.x, a.y - 1))
                 a.y--;
             else
                 a.health--;
             break;
                 
         case direction::down:
-            if (a.y < fieldMap.height-1)
+            if (a.y < fieldMap.height-1 && !obstacleAt(a.x, a.y + 1))
                 a.y++;
             else
                 a.health--;
             break;
                 
         case direction::left:
-            if (a.x > 0)
+            if (a.x > 0 && !obstacleAt(a.x - 1, a.y))
                 a.x--;
             else
                 a.health--;
             break;
                 
         case direction::right:
-            if (a.x < fieldMap.width-1)
+            if (a.x < fieldMap.width-1 && !obstacleAt(a.x + 1, a.y))
                 a.x++;
             else
                 a.health--;
@@ -324,6 +333,34 @@ void GameField::addActor(ActorInfo a)
 /**
  * @author David Donahue
  * @par Description:
+ * Adds an obstacle to the map
+ *
+ * @param[in] x - the x value of the obstacle
+ * @param[in] y - the y value of the obstacle
+ */
+
+void GameField::addObstacle(int x, int y)
+{
+    fieldMap.obstacleMap[x + fieldMap.width * y] = true;
+}
+
+/**
+ * @author David Donahue
+ * @par Description:
+ * Removes an obstacle from the map
+ *
+ * @param[in] x - the x value of the obstacle
+ * @param[in] y - the y value of the obstacle
+ */
+
+void GameField::removeObstacle(int x, int y)
+{
+    fieldMap.obstacleMap[x + fieldMap.width * y] = false;
+}
+
+/**
+ * @author David Donahue
+ * @par Description:
  * Get the current set of actors
  */
 std::vector<ActorInfo> GameField::getActors()
@@ -377,6 +414,16 @@ MapData GameField::getMapData()
     return fieldMap;
 }
 
+/**
+ * @author David Donahue
+ * @par Description:
+ * Finds an actor by its ID and returns a reference to it
+ *
+ * @param[in] id - the ID of the actor
+ * @return Reference to the desired actor or a reference to a 'null' actor
+ * 
+ */
+
 ActorInfo & GameField::actorInfoById(int id)
 {
     for (auto &a : actors)
@@ -385,4 +432,21 @@ ActorInfo & GameField::actorInfoById(int id)
             return a;
     }
     return nullActor;
+}
+
+
+
+/**
+ * @author David Donahue
+ * @par Description:
+ * Determines whether a space has an obstacle on it
+ *
+ * @param[in] x - the X coordinate of the tile
+ * @param[in] y - the Y coordinate of the tile
+ * @return true if an obstacle exists at a tile, false if not
+ * 
+ */
+bool GameField::obstacleAt(int x, int y)
+{
+    return fieldMap.obstacleMap[x + y * fieldMap.width];
 }

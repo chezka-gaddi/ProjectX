@@ -48,7 +48,8 @@ public:
      */
     void nextTurn();
     void addActor(ActorInfo);
-
+    void addObstacle(int x, int y);
+    void removeObstacle(int x, int y);
     /**
      * removes all actors that have a health of 0 from the game (not actors with health less than 0)
      */
@@ -82,7 +83,8 @@ public:
     std::vector<ActorInfo> getActors();
     MapData getMapData();
     ActorInfo & actorInfoById(int id);
-
+    bool obstacleAt(int x, int y);
+    
     /*******************************/
     /************setters************/
     /*******************************/
