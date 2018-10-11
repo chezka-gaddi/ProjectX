@@ -166,6 +166,7 @@ void GameField::runMoves(ActorInfo &a)
         dir = a.act_p->move(fieldMap, pos);
             
         //If it checks out, execute it
+        //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
         switch (dir)
         {
         case direction::up:
