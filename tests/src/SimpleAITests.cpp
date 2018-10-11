@@ -68,4 +68,15 @@ TEST_CASE("SimpleAI does not crash into other actors")
     
     REQUIRE(ai.move(map, pos) == stay);
 }
+TEST_CASE("SimpleAI avoids obstacles")
+{
+    SimpleAI ai;
+    MapData map(3,3); //3x3 map
+    PositionData pos(1, 1, 1, 0); //ID of 1, health of 1, position 1,0
+    map.map[1] = 1; //place AI on the map at 1,0
+    map.map[7] = 2; //enemy at 1,2
+    map.obstacleMap[4] = true; //obstacle at 1,1
+    
+    REQUIRE((ai.move(map, pos) == left || ai.move(map,pos) == right));
+}
 
