@@ -6,15 +6,12 @@
 
 #include "Drawable.h"
 
-Obstacles::Obstacles( int ID, GLfloat x_coor, GLfloat y_coor )
+Obstacles::Obstacles(GLfloat x_coor, GLfloat y_coor )
 {
     screen_x = x_coor;
     screen_y = y_coor;
 
-    tex = 5;
-    
-    if( ID == 2 )
-        tex = 6;
+
 }
 
 
@@ -29,20 +26,20 @@ void Obstacles::draw()
     glEnable(GL_TEXTURE_2D);
     glColor4ub(255,255,255,255);
     glPushMatrix();
-    
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
-    glTranslatef(screen_x, screen_y, -5.0f);  
-    glBindTexture(GL_TEXTURE_2D, texture[tex]);
-	
+    glTranslatef(screen_x, screen_y, -5.0f);
+    glBindTexture(GL_TEXTURE_2D, texture[5]);
+
     glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.15f, -0.15f,  1.0f);
         glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.15f, -0.15f,  1.0f);
         glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.15f,  0.15f,  1.0f);
         glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.15f,  0.15f,  1.0f);
 	glEnd();
-    
+
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }

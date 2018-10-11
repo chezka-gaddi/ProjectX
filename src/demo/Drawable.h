@@ -87,11 +87,10 @@ class Obstacles : public Drawable
 
     public:
         int angle;
-        int tex;
         /**
          * Will be replaced by the Actor constructor
          **/
-        Obstacles( int ID, GLfloat x, GLfloat y);
+        Obstacles( GLfloat x, GLfloat y);
 
 
         /**

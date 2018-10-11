@@ -18,6 +18,7 @@ class Game
         int turn;
         vector <Drawable *> objects;
 
+        GameField * game_m;
         Game();
 
         void executeTurn();
