@@ -23,7 +23,7 @@ struct PositionData{
     int health; /*!<The health */
     int game_x; /*!<The x coordinate */
     int game_y; /*!<The y coordinate */
-    direction heading; /*!<The heading direction */
-
+    PositionData() {}
+    PositionData(int i, int h, int x, int y) : id(i), health(h), game_x(x), game_y(y) {}
 };
 #endif //SLACKERS_PLATFORM_POSITIONDATA_H
