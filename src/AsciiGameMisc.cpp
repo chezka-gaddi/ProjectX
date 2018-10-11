@@ -53,6 +53,9 @@ void gameloop(){
     startActors.push_back(player2Info);
     
     GameField gameField (20,5, startActors, displayAscii);
+
+    gameField.addObstacle(6,2); //add some obstacles to make things more fun
+    gameField.addObstacle(14,2); 
    
     //the is the main game loop
     while(isplayable(gameField.getActors())){
