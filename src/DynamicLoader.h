@@ -5,7 +5,6 @@
 #ifndef SRC_DYNAMICLOADER_H
 #define SRC_DYNAMICLOADER_H
 
-#include "AsciiGameMisc.h"
 #include <iostream>
 #include <map>
 #include <list>
@@ -14,8 +13,9 @@
 #include <dlfcn.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "Actor.h"
 
-typedef Actor* makeTank_Fptr();
+typedef void* makeTank_Fptr;
 /**
  * singleton to hold the libraries file handles
  * @return

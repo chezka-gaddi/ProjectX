@@ -50,6 +50,8 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 #include <iostream>
 #include "AsciiGameMisc.h"
 #include "AsciiTankActor.h"
+#include "DynamicAsciiGame.h"
+#include "DynamicLoader.h"
 
 
 
@@ -58,22 +60,13 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 
 // Main
 
-int main(int argc, char **argv)
+int main(void)
 {
 
-    //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
-    gameMode mode;
-    if (argc == 1 || argv[1][0] == 'a')
-    {
-        mode = ai;
-    }
-    else if (argv[1][0] == 's')
-    {
-        mode = sp;
-    }
-    else
-        mode = mp;
-    gameloop(mode);
-    std::cout << "\n\n\n\n\n game over \n\n\n\n\n\n";
-    return 0;
+    dynamicLoader("./tanks/objects/ExampleSetFile");
+   //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
+   DL_gameloop();
+    closeLibs();
+   std::cout << "\n\n\n\n\n game over \n\n\n\n\n\n";
+   return 0;
 }

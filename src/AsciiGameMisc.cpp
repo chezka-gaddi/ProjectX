@@ -8,6 +8,7 @@
 #include "SimpleAI.h"
 #include "AsciiTankActor.h"
 
+
 bool isplayable(std::vector<ActorInfo> actorInfo){
     int tankCount = 0;
     for (auto a : actorInfo)
