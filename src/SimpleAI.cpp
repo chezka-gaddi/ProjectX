@@ -15,7 +15,7 @@ SimpleAI::~SimpleAI() {}
 direction SimpleAI::move(MapData map, PositionData status)
 {
     int min_dist = map.width * map.height + 1;
-    direction ret = stay;
+    direction ret = STAY;
     for (int x = 0; x < map.width; ++x)
     {
         for (int y = 0; y < map.height; ++y)
@@ -34,22 +34,22 @@ direction SimpleAI::move(MapData map, PositionData status)
                     {
                         if(!map.obstacleMap[status.game_x - 1 + status.game_y * map.width]) //check for obstacle
                         {
-                            ret = left;
+                            ret = LEFT;
                         }
                         else //obstacle in the way
                         {
-                            ret = (status.game_y > y) ? up : down; //avoid it up or down
+                            ret = (status.game_y > y) ? UP : DOWN; //avoid it up or down
                         }
                     }
                     else
                     {
                         if(!map.obstacleMap[status.game_x + 1 + status.game_y * map.width]) //check for obstacle
                         {
-                            ret = right;
+                            ret = RIGHT;
                         }
                         else //obstacle in the way
                         {
-                            ret = (status.game_y > y) ? up : down; //avoid it up or down
+                            ret = (status.game_y > y) ? UP : DOWN; //avoid it up or down
                         }
                     }
                         
@@ -60,22 +60,22 @@ direction SimpleAI::move(MapData map, PositionData status)
                     {
                         if(!map.obstacleMap[status.game_x + (status.game_y - 1)*map.width]) //check for obstacle
                         {
-                            ret = up;
+                            ret = UP;
                         }
                         else //obstacle in the way
                         {
-                            ret = (status.game_x > x) ? left : right; //avoid it left or right
+                            ret = (status.game_x > x) ? LEFT : RIGHT; //avoid it left or right
                         }
                     }
                     else
                     {
                         if(!map.obstacleMap[status.game_x + (status.game_y + 1)*map.width]) //check for obstacle
                         {
-                            ret = down;
+                            ret = DOWN;
                         }
                         else //obstacle in the way
                         {
-                            ret = (status.game_x > x) ? left : right; //avoid it left or right
+                            ret = (status.game_x > x) ? LEFT : RIGHT; //avoid it left or right
                         }
                     }
                 }

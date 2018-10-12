@@ -190,9 +190,9 @@ TEST_CASE("Actors take 1 point of damage from the walls of the arena")
 
 TEST_CASE("Actors are culled and do not move after collision")
 {
-    Actor * t1 = new SimpleActor(stay, 1); //attacker tank
-    Actor * t2 = new SimpleActor(stay, 0); //target tanks
-    Actor * t3 = new SimpleActor(stay, 0);
+    Actor * t1 = new SimpleActor(STAY, 1); //attacker tank
+    Actor * t2 = new SimpleActor(STAY, 0); //target tanks
+    Actor * t3 = new SimpleActor(STAY, 0);
 
     ActorInfo t1i (t1, 1, 1, 0, 3, 1);
     ActorInfo t2i (t2, 1, 1, 0, 1, 2);
@@ -215,9 +215,9 @@ TEST_CASE("Actors are culled and do not move after collision")
 
 TEST_CASE("Collision is checked when firing point-blank")
 {
-    Actor * t1 = new SimpleActor(stay, 1); //attacker tank
-    Actor * t2 = new SimpleActor(stay, 0); //target tanks
-    Actor * t3 = new SimpleActor(stay, 0);
+    Actor * t1 = new SimpleActor(STAY, 1); //attacker tank
+    Actor * t2 = new SimpleActor(STAY, 0); //target tanks
+    Actor * t3 = new SimpleActor(STAY, 0);
 
     ActorInfo t1i (t1, 1, 1, 0, 2, 1);
     ActorInfo t2i (t2, 1, 1, 0, 1, 2);
@@ -242,7 +242,7 @@ TEST_CASE("Collision is checked when firing point-blank")
 TEST_CASE("Projectiles self destruct after reaching their target")
 {
 
-    SimpleActor * a = new SimpleActor(stay, 1);
+    SimpleActor * a = new SimpleActor(STAY, 1);
     a->setAttack(0, 10, 1);
     ActorInfo newAI(a, 1, 1, 0, 19, 1, 0);
     GameField g (1, 20);
@@ -259,7 +259,7 @@ TEST_CASE("Projectiles self destruct after reaching their target")
 
 TEST_CASE("Actor shot counter incremented on attacking")
 {
-    SimpleActor * a = new SimpleActor(stay, 1);
+    SimpleActor * a = new SimpleActor(STAY, 1);
     ActorInfo newAI(a, 1, 1, 0, 1, 1, 0);
     GameField g (1, 2);
     g.addActor(newAI);
@@ -269,8 +269,8 @@ TEST_CASE("Actor shot counter incremented on attacking")
 }
 TEST_CASE("Actor hit counter incremented on hiting an enemy")
 {
-    SimpleActor * a1 = new SimpleActor(stay, 1);
-    SimpleActor * a2 = new SimpleActor(stay, 0);
+    SimpleActor * a1 = new SimpleActor(STAY, 1);
+    SimpleActor * a2 = new SimpleActor(STAY, 0);
 
     ActorInfo AI1(a1, 10, 1, 0, 1, 1, 0);
     ActorInfo AI2(a2, 10, 1, 0, 0, 2, 0);
@@ -335,7 +335,7 @@ TEST_CASE("Obstacles can be removed from the gamefield")
 }
 TEST_CASE("Actors take 1 point of damage from hitting obstacles")
 {
-    Actor * a = new SimpleActor(up, 0);
+    Actor * a = new SimpleActor(UP, 0);
     ActorInfo newAI(a, 2, 1, 0, 2, 1, 1);
     GameField g (1, 3);
     g.addActor(newAI);
@@ -345,7 +345,7 @@ TEST_CASE("Actors take 1 point of damage from hitting obstacles")
 }
 TEST_CASE("Actors do not take damage when shooting an obstacle point-blank")
 {
-    Actor * a = new SimpleActor(stay, 1);
+    Actor * a = new SimpleActor(STAY, 1);
     ActorInfo newAI(a, 2, 1, 0, 1, 1, 1);
     GameField g (1, 2);
     g.addActor(newAI);

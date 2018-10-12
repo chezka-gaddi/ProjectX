@@ -206,7 +206,6 @@ void GameField::runMoves(ActorInfo &a)
             }
             else
                 a.health--;
-            a.heading=UPLEFT;
             break;
              
         case UPRIGHT:
@@ -217,7 +216,6 @@ void GameField::runMoves(ActorInfo &a)
             }
             else
                 a.health--;
-            a.heading=UPRIGHT;
             break;
 
         case DOWNLEFT:
@@ -228,7 +226,6 @@ void GameField::runMoves(ActorInfo &a)
             }
             else
                 a.health--;
-            a.heading=DOWNLEFT;
             break;
 
         case DOWNRIGHT:
@@ -239,7 +236,6 @@ void GameField::runMoves(ActorInfo &a)
             }
             else
                 a.health--;
-            a.heading=DOWNRIGHT;
             break;
 
         default:

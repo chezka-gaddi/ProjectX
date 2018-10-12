@@ -37,7 +37,7 @@ TEST_CASE("SimpleAI moves toward the nearest enemy tank")
     map.map[0] = 1; //place AI on the map
     map.map[2] = 2; //place enemy tank on map
     
-    REQUIRE(ai.move(map, pos) == down);
+    REQUIRE(ai.move(map, pos) == DOWN);
 }
 TEST_CASE("SimpleAI stays in place if no other tanks are present")
 {
@@ -46,7 +46,7 @@ TEST_CASE("SimpleAI stays in place if no other tanks are present")
     PositionData pos(1, 1, 0, 0); //ID of 1, health of 1, position 0,0
     map.map[0] = 1; //place AI on the map
     
-    REQUIRE(ai.move(map, pos) == stay);
+    REQUIRE(ai.move(map, pos) == STAY);
 }
 TEST_CASE("SimpleAI stays in place if only projectiles are present")
 {
@@ -56,7 +56,7 @@ TEST_CASE("SimpleAI stays in place if only projectiles are present")
     map.map[0] = 1; //place AI on the map
     map.map[2] = -2; //enemy projectile
     
-    REQUIRE(ai.move(map, pos) == stay);
+    REQUIRE(ai.move(map, pos) == STAY);
 }
 TEST_CASE("SimpleAI does not crash into other actors")
 {
@@ -66,7 +66,7 @@ TEST_CASE("SimpleAI does not crash into other actors")
     map.map[0] = 1; //place AI on the map
     map.map[1] = 2; //enemy projectile
     
-    REQUIRE(ai.move(map, pos) == stay);
+    REQUIRE(ai.move(map, pos) == STAY);
 }
 TEST_CASE("SimpleAI avoids obstacles below")
 {
@@ -76,7 +76,7 @@ TEST_CASE("SimpleAI avoids obstacles below")
     map.map[1] = 1; //place AI on the map at 1,0
     map.map[7] = 2; //enemy at 1,2
     map.obstacleMap[4] = true; //obstacle at 1,1
-    REQUIRE((ai.move(map, pos) == left || ai.move(map,pos) == right));
+    REQUIRE((ai.move(map, pos) == LEFT || ai.move(map,pos) == RIGHT));
 }
 TEST_CASE("SimpleAI avoids obstacles to the left")
 {
@@ -86,7 +86,7 @@ TEST_CASE("SimpleAI avoids obstacles to the left")
     map.map[5] = 1; //place AI on the map at 2,1
     map.map[3] = 2; //enemy at 0,1
     map.obstacleMap[4] = true; //obstacle at 1,1
-    REQUIRE((ai.move(map, pos) == up || ai.move(map,pos) == down));
+    REQUIRE((ai.move(map, pos) == UP || ai.move(map,pos) == DOWN));
 }
 TEST_CASE("SimpleAI avoids obstacles above")
 {
@@ -96,7 +96,7 @@ TEST_CASE("SimpleAI avoids obstacles above")
     map.map[7] = 1; //place AI on the map at 1,2
     map.map[1] = 2; //enemy at 1,0
     map.obstacleMap[4] = true; //obstacle at 1,1
-    REQUIRE((ai.move(map, pos) == right || ai.move(map,pos) == left));
+    REQUIRE((ai.move(map, pos) == RIGHT || ai.move(map,pos) == LEFT));
 }
 TEST_CASE("SimpleAI avoids obstacles to the right")
 {
@@ -106,5 +106,5 @@ TEST_CASE("SimpleAI avoids obstacles to the right")
     map.map[3] = 1; //place AI on the map at 0, 1 
     map.map[5] = 2; //enemy at 2, 1
     map.obstacleMap[4] = true; //obstacle at 1,1
-    REQUIRE((ai.move(map, pos) == up || ai.move(map,pos) == down));
+    REQUIRE((ai.move(map, pos) == UP || ai.move(map,pos) == DOWN));
 }

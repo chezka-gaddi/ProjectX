@@ -33,19 +33,19 @@ direction AsciiTankActor::move( MapData map, PositionData status)
     switch (tolower(c))
     {
     case 'u':
-        actorMove = up;
+        actorMove = UP;
         break;
     case 'd':
-        actorMove = down;
+        actorMove = DOWN;
         break;
     case 'l':
-        actorMove = left;
+        actorMove = LEFT;
         break;
     case 'r':
-        actorMove = right;
+        actorMove = RIGHT;
         break;
     default:
-        actorMove = stay;
+        actorMove = STAY;
         break;
     }
     return actorMove;
@@ -90,5 +90,4 @@ AttackData AsciiTankActor::attack( MapData map, PositionData status)
 
 
 
-AsciiTankActor::AsciiTankActor() : enableConsole (false) {}
-AsciiTankActor::AsciiTankActor(bool cen) : enableConsole(cen) {}
+AsciiTankActor::AsciiTankActor() {}
