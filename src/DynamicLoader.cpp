@@ -5,6 +5,7 @@
 #include "DynamicLoader.h"
 #include <dlfcn.h>
 #include <fstream>
+#include <iostream>
 
 std::vector<void*>* dl_List(){
 
@@ -27,9 +28,10 @@ void dynamicLoader(std::string TankSetFileName){
 
     std::vector<std::string> files = std::vector<std::string>();
     std::string line;
-
+    std::cout<< "in dynamic loader about to load file names\n";
     //gets all of the library file names
-    while(getline(SetFile,line)){
+    while(!getline(SetFile,line).eof()){
+        std::cout << line << std::endl;
         files.push_back(line);
     }
     //dont need the Set file open anymore
@@ -37,12 +39,15 @@ void dynamicLoader(std::string TankSetFileName){
 
     //populate dl_List and tank makers
     for(std::string s: files){
-        std::string relativePath = "./tanks/objects/";
+        std::string relativePath = "./tanks/";
 
         relativePath += s;
 
         //gets a handle to the shared library and loads the library
         dl_List()->push_back(dlopen( relativePath.c_str(), RTLD_NOW));
+
+        std::cout << "relative path" << relativePath << std::endl;
+
         //makes sure the handle isnt null
         if( dl_List()->at(dl_List()->size() -1) != nullptr){
             makeTank_Fptr temp = static_cast<makeTank_Fptr>(dlsym(dl_List()->at(dl_List()->size()-1),"makeTank"));

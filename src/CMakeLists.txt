@@ -35,4 +35,12 @@ add_executable(src
         AsciiTankActor.cpp
         AsciiTankActor.h
         MapData.cpp
-        ProjectileActor.cpp DynamicLoader.h tanks/RandomDynamicTank.cpp tanks/RandomDynamicTank.h DynamicLoader.cpp tanks/LeftDynamicTank.cpp tanks/LeftDynamicTank.h DynamicAsciiGame.cpp DynamicAsciiGame.h)
+        ProjectileActor.cpp DynamicLoader.h
+
+        tanks/RandomDynamicTank.cpp
+        tanks/RandomDynamicTank.h
+        DynamicLoader.cpp
+        tanks/LeftDynamicTank.cpp
+        tanks/LeftDynamicTank.h
+        DynamicAsciiGame.cpp
+        DynamicAsciiGame.h)
