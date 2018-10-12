@@ -13,7 +13,7 @@ TEST_CASE("default SimpleActor.move() returns up")
     SimpleActor* a = new SimpleActor; //Apparently the constructor does not run when delcaring directly.
     MapData m;
     PositionData p;
-    REQUIRE(a->move(m,p) == up);
+    REQUIRE(a->move(m,p) == UP);
     delete a;
 }
 TEST_CASE("default SimpleActor.attack() attacks 0,0 with 0 damage")
@@ -28,15 +28,15 @@ TEST_CASE("default SimpleActor.attack() attacks 0,0 with 0 damage")
 }
 TEST_CASE("SimpleActor moves in the direction specified at construction")
 {
-    SimpleActor* a = new SimpleActor(down, 0);
+    SimpleActor* a = new SimpleActor(DOWN, 0);
     MapData m;
     PositionData p;
-    REQUIRE(a->move(m,p) == down);
+    REQUIRE(a->move(m,p) == DOWN);
     delete a;
 }
 TEST_CASE("SimpleActor.attack() attacks specified point with specified damage")
 {
-    SimpleActor* a = new SimpleActor(stay, 0);
+    SimpleActor* a = new SimpleActor(STAY, 0);
     MapData m;
     PositionData p;
     AttackData result;
@@ -49,10 +49,10 @@ TEST_CASE("SimpleActor.attack() attacks specified point with specified damage")
 }
 TEST_CASE("SimpleActor.setMove() changes the return of SimpleActor.move()")
 {
-    SimpleActor* a = new SimpleActor(up, 0);
+    SimpleActor* a = new SimpleActor(UP, 0);
     MapData m;
     PositionData p;
-    a->setMove(down);
-    REQUIRE(a->move(m,p) == down);
+    a->setMove(DOWN);
+    REQUIRE(a->move(m,p) == DOWN);
     delete a;
 }
