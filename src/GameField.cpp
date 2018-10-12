@@ -209,7 +209,7 @@ void GameField::runMoves(ActorInfo &a)
                 collisionVect.push_back(i);
         }
             
-        if (collisionVect.size() > 1)
+        if (collisionVect.size() > 1 && a.health > 0)
         {
             collisionDamage = 0;
             for (auto i: collisionVect)

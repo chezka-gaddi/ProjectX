@@ -340,5 +340,14 @@ TEST_CASE("Actors take 1 point of damage from hitting obstacles")
     g.nextTurn();
     REQUIRE(g.actorInfoById(1).health== 1); //check for damage from the obstacle
 }
-
+TEST_CASE("Actors do not take damage when shooting an obstacle point-blank")
+{
+    Actor * a = new SimpleActor(stay, 1);
+    ActorInfo newAI(a, 2, 1, 0, 1, 1, 1);
+    GameField g (1, 2);
+    g.addActor(newAI);
+    g.addObstacle(0, 0);
+    g.nextTurn();
+    REQUIRE(g.actorInfoById(1).health== 2); //check for damage from the obstacle
+}
 
