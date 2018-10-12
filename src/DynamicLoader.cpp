@@ -3,7 +3,7 @@
 //
 
 #include "DynamicLoader.h"
-
+#include <dlfcn.h>
 #include <fstream>
 
 std::vector<void*>* dl_List(){
@@ -45,7 +45,7 @@ void dynamicLoader(std::string TankSetFileName){
         dl_List()->push_back(dlopen( relativePath.c_str(), RTLD_NOW));
         //makes sure the handle isnt null
         if( dl_List()->at(dl_List()->size() -1) != nullptr){
-            makeTank_Fptr temp = (makeTank_Fptr) dlsym(dl_List()->at(dl_List()->size()-1),"makeTank");
+            makeTank_Fptr temp = static_cast<makeTank_Fptr>(dlsym(dl_List()->at(dl_List()->size()-1),"makeTank"));
             TankMakers()->insert(std::pair<std::string,makeTank_Fptr>(s, temp));
             temp = nullptr;
         }
