@@ -170,32 +170,54 @@ void GameField::runMoves(ActorInfo &a)
         //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
         switch (dir)
         {
-        case direction::up:
+        case UP:
             if (a.y > 0 && !obstacleAt(a.x, a.y - 1))
                 a.y--;
             else
                 a.health--;
             break;
                 
-        case direction::down:
+        case DOWN:
             if (a.y < fieldMap.height-1 && !obstacleAt(a.x, a.y + 1))
                 a.y++;
             else
                 a.health--;
             break;
                 
-        case direction::left:
+        case LEFT:
             if (a.x > 0 && !obstacleAt(a.x - 1, a.y))
                 a.x--;
             else
                 a.health--;
             break;
                 
-        case direction::right:
+        case RIGHT:
             if (a.x < fieldMap.width-1 && !obstacleAt(a.x + 1, a.y))
                 a.x++;
             else
                 a.health--;
+            break;
+
+        case UPLEFT:
+            if (a.y > 0 && a.x > 0)
+            {
+                a.y--;
+                a.x--;
+            }
+            else
+                a.health--;
+            a.heading=UPLEFT;
+            break;
+             
+        case UPRIGHT:
+            if (a.y > 0 && a.x < fieldMap.width-1)
+            {
+                a.y--;
+                a.y++;
+            }
+            else
+                a.health--;
+            a.heading=UPRIGHT;
             break;
         default:
             break;

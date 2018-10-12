@@ -119,11 +119,11 @@ direction ProjectileActor::move(MapData map, PositionData status)
 	moveProjectile.new_y = moveProjectile.new_y * yDirection;
 
         if (moveProjectile.new_x != 0)
-            return (endX > status.game_x ) ? direction::right : direction::left;
+            return (endX > status.game_x ) ? RIGHT : LEFT;
         else if (moveProjectile.new_y != 0)
-            return (endY > status.game_y ) ? direction::down : direction::up;
+            return (endY > status.game_y ) ? DOWN : UP;
 
-        return stay;
+        return STAY;
 	 
 }
 

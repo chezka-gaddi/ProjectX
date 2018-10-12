@@ -91,3 +91,4 @@ AttackData AsciiTankActor::attack( MapData map, PositionData status)
 
 
 AsciiTankActor::AsciiTankActor() : enableConsole (false) {}
+AsciiTankActor::AsciiTankActor(bool cen) : enableConsole(cen) {}

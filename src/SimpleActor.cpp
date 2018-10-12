@@ -31,7 +31,7 @@ AttackData SimpleActor::attack(MapData map, PositionData status)
  * @par Description:
  * Default constructor, sets default move to up and attack to 0,0
  */
-SimpleActor::SimpleActor() : atk(0,0,0), dir (up) {}
+SimpleActor::SimpleActor() : atk(0,0,0), dir (UP) {}
 
 /**
  * @author David Donahue
