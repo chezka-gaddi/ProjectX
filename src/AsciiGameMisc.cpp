@@ -5,6 +5,7 @@
 #include <iostream>
 #include "AsciiGameMisc.h"
 #include "Actor.h"
+#include "SimpleAI.h"
 #include "AsciiTankActor.h"
 
 bool isplayable(std::vector<ActorInfo> actorInfo){
@@ -40,11 +41,28 @@ void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount)
     system("sleep 0.25");
 }
 
-void gameloop(){
+void gameloop(gameMode mode){
     
     //change tankactor here to what ever we have decided to call the ascii tank actor
-    AsciiTankActor * player1 = new AsciiTankActor();
-    AsciiTankActor * player2 = new AsciiTankActor();
+    Actor * player1;
+    Actor * player2;
+    switch (mode)
+    {
+    case ai:
+        player1 = new SimpleAI;
+        player2 = new SimpleAI;
+        break;
+    case sp:
+        player1 = new AsciiTankActor;
+        player2 = new SimpleAI;
+        break;
+    case mp:
+        player1 = new AsciiTankActor;
+        player2 = new AsciiTankActor;
+        break;
+    default:
+        break;
+    }
     //tank actor pointers are made and then packaged into ActorInfo structs
     ActorInfo player1Info = ActorInfo(player1, 1,1,2,2,1);
     ActorInfo player2Info = ActorInfo(player2, 1,1,18,2,2);
