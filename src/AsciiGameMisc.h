@@ -29,7 +29,9 @@ bool isplayable(std::vector<ActorInfo> actorInfo);
  */
 void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount);
 
+enum gameMode {ai, sp, mp};
 
-void gameloop();
+void gameloop(gameMode mode);
+
 
 #endif //SRC_ASCIIGAMEMISC_H

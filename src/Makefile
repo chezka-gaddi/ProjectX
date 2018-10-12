@@ -10,6 +10,7 @@ FILES += AsciiTankActor.o
 FILES += MapData.o
 FILES += ProjectileActor.o
 FILES += ActorInfo.o
+FILES += SimpleAI.o
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
