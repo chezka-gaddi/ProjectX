@@ -24,5 +24,5 @@ AttackData SimpleActor::attack(MapData map, PositionData status)
     ret.damage = damage;
     return ret;
 }
-SimpleActor::SimpleActor() : damage (0), dir (up) {}
+SimpleActor::SimpleActor() : damage (0), dir (UP) {}
 SimpleActor::SimpleActor(direction mv, int d) : damage(d), dir(mv) {}

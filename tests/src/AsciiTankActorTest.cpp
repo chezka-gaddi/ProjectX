@@ -15,19 +15,19 @@ TEST_CASE("Check if move() returns right directions")
    MapData m;
    PositionData p;
 
-   tank.setMove(direction::left);
+   tank.setMove(LEFT);
    REQUIRE(tank.move(m,p) == 0);
    
-   tank.setMove(direction::right);
+   tank.setMove(RIGHT);
    REQUIRE(tank.move(m,p) == 1);
 
-   tank.setMove(direction::up);
+   tank.setMove(UP);
    REQUIRE(tank.move(m,p) == 2);
 
-   tank.setMove(direction::down);
+   tank.setMove(DOWN);
    REQUIRE(tank.move(m,p) == 3);
 
-   tank.setMove(direction::stay);
+   tank.setMove(STAY);
    REQUIRE(tank.move(m,p) == 4);
 
 }

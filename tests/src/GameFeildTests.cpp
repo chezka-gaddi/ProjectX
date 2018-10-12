@@ -145,8 +145,8 @@ TEST_CASE("Actors are prevented from moving off the map")
 }
 TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are culled")
 {
-    Actor * a1 = new SimpleActor(stay, 1);
-    Actor * a2 = new SimpleActor(up, 0);
+    Actor * a1 = new SimpleActor(STAY, 1);
+    Actor * a2 = new SimpleActor(UP, 0);
     ActorInfo newAI1(a1, 1, 1, 0, 2, 1);
     ActorInfo newAI2(a2, 1, 1, 0, 0, 2);
     GameField g (1, 3);
@@ -168,7 +168,7 @@ TEST_CASE("Actors move until their range is depleted")
 }
 TEST_CASE("Actors spawn and move projectiles on attack")
 {
-    Actor * a = new SimpleActor(stay, 1);
+    Actor * a = new SimpleActor(STAY, 1);
     ActorInfo newAI(a, 1, 1, 0, 7, 1, 0);
     GameField g (1, 8);
     g.addActor(newAI);
@@ -178,10 +178,35 @@ TEST_CASE("Actors spawn and move projectiles on attack")
 }
 TEST_CASE("Actors take 1 point of damage from the walls of the arena")
 {
-    Actor * a = new SimpleActor(up, 0);
+    Actor * a = new SimpleActor(UP, 0);
     ActorInfo newAI(a, 2, 1, 0, 0, 1, 1);
     GameField g (1, 1);
     g.addActor(newAI);
     g.nextTurn();
     REQUIRE(g.getActors().back().health == 1); //check for damage from the wall
+}
+TEST_CASE("Actors take 1 point of damage from the wall trying to move up/left")
+{
+    Actor *a = new SimpleActor(UPLEFT, 0);
+    ActorInfo newAI(a, 2, 1, 1, 0, 1, 1); // set up to hit upper wall
+    GameField g (2, 2);
+    g.addActor(newAI);
+    g.nextTurn();
+    REQUIRE(g.getActors().back().health == 1);
+    Actor *a2 = new SimpleActor(UPLEFT, 0);
+    ActorInfo newAI2(a2, 2, 1, 0, 1, 1, 1); // setup to hit left wall
+    GameField g2 (2, 2);
+    g.addActor(newAI2);
+    g.nextTurn();
+    REQUIRE(g.getActors().back().health == 1);
+}
+TEST_CASE("Actor moves diagonal up/left and changes postion")
+{
+    Actor *a = new SimpleActor(UPLEFT, 0);
+    ActorInfo newAI(a, 2, 1, 1, 1, 1, 1);
+    GameField g (2, 2);
+    g.addActor(newAI);
+    g.nextTurn();
+    REQUIRE(g.getActors().back().x == 0);
+    REQUIRE(g.getActors().back().y == 0);
 }

@@ -160,36 +160,58 @@ void GameField::runMoves(ActorInfo &a)
         //If it checks out, execute it
         switch (dir)
         {
-        case direction::up:
+        case UP:
             if (a.y > 0)
                 a.y--;
             else
                 a.health--;
-            a.heading=direction::up;
+            a.heading=UP;
             break;
                 
-        case direction::down:
+        case DOWN:
             if (a.y < fieldMap.height-1)
                 a.y++;
             else
                 a.health--;
-            a.heading=direction::down;
+            a.heading=DOWN;
             break;
                 
-        case direction::left:
+        case LEFT:
             if (a.x > 0)
                 a.x--;
             else
                 a.health--;
-            a.heading=direction::left;
+            a.heading=LEFT;
             break;
                 
-        case direction::right:
+        case RIGHT:
             if (a.x < fieldMap.width-1)
                 a.x++;
             else
                 a.health--;
-            a.heading=direction::right;
+            a.heading=RIGHT;
+            break;
+
+        case UPLEFT:
+            if (a.y > 0 && a.x > 0)
+            {
+                a.y--;
+                a.x--;
+            }
+            else
+                a.health--;
+            a.heading=UPLEFT;
+            break;
+             
+        case UPRIGHT:
+            if (a.y > 0 && a.x < fieldMap.width-1)
+            {
+                a.y--;
+                a.y++;
+            }
+            else
+                a.health--;
+            a.heading=UPRIGHT;
             break;
         default:
             break;

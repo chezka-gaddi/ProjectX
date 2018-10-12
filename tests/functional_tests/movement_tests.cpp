@@ -32,11 +32,11 @@ SCENARIO("The tank moves around the gamefield")
       // Create Tank
       AsciiTankActor * tank = nullptr;
       tank = new AsciiTankActor();
-      direction moveUp = direction::up;
-      direction moveDown = direction::down;
-      direction moveLeft = direction::left;
-      direction moveRight = direction::right;
-      direction moveStay = direction::stay;
+      direction moveUp = UP;
+      direction moveDown = DOWN;
+      direction moveLeft = LEFT;
+      direction moveRight = RIGHT;
+      direction moveStay = STAY;
       REQUIRE(tank != nullptr);
 
       // Load Tanks
@@ -134,11 +134,11 @@ SCENARIO("The tank encounters a wall")
       // Create Tank
       AsciiTankActor * tank = nullptr;
       tank = new AsciiTankActor();
-      direction moveUp = direction::up;
-      direction moveDown = direction::down;
-      direction moveLeft = direction::left;
-      direction moveRight = direction::right;
-      direction moveStay = direction::stay;
+      direction moveUp = UP;
+      direction moveDown = DOWN;
+      direction moveLeft = LEFT;
+      direction moveRight = RIGHT;
+      direction moveStay = STAY;
       REQUIRE(tank != nullptr);
 
       // Load Tanks
@@ -219,8 +219,8 @@ SCENARIO("Tanks drive right into each other")
       AsciiTankActor * tank_1 = nullptr;
       AsciiTankActor * tank_2 = nullptr;
 
-      direction moveRight = direction::right;
-      direction moveLeft = direction::left;
+      direction moveRight = RIGHT;
+      direction moveLeft = LEFT;
 
       tank_1 = new AsciiTankActor();
       tank_2 = new AsciiTankActor();

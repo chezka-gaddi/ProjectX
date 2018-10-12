@@ -53,19 +53,19 @@ direction AsciiTankActor::move( MapData map, PositionData status)
         switch (c)
         {
         case 'u':
-            actorMove = up;
+            actorMove = UP;
             break;
         case 'd':
-            actorMove = down;
+            actorMove = DOWN;
             break;
         case 'l':
-            actorMove = left;
+            actorMove = LEFT;
             break;
         case 'r':
-            actorMove = right;
+            actorMove = RIGHT;
             break;
         default:
-            actorMove = stay;
+            actorMove = STAY;
             break;
         }
     }
