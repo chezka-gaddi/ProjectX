@@ -414,11 +414,37 @@ TEST_CASE("Actor moves diagonal down/left and changes position")
     REQUIRE(g.getActors().back().y == 1);
 }
 TEST_CASE("Actor moves diagonal down/left and collides with wall")
-{
-    
+{    
     Actor *a = new SimpleActor(DOWNLEFT, 0);
     Actor *a2 = new SimpleActor(DOWNLEFT, 0);
     ActorInfo AI(a, 2, 1, 0, 0, 1, 1); // setup to hit left wall
+    ActorInfo AI2(a2, 2, 1, 0, 1, 1, 1); // setup to hit lower wall
+    GameField g (2, 2);
+    GameField g2 (2, 2);
+    g.addActor(AI);
+    g2.addActor(AI2);
+    g.nextTurn();
+    g2.nextTurn();
+    REQUIRE(g.getActors().back().health == 1);
+    REQUIRE(g2.getActors().back().health == 1);
+}
+TEST_CASE("Actor moves diagonal down/right and changes position")
+{
+    
+    Actor *a = new SimpleActor(DOWNRIGHT, 0);
+    ActorInfo AI(a, 2, 1, 0, 0, 1, 1);
+    GameField g (2, 2);
+    g.addActor(AI);
+    g.nextTurn();
+    REQUIRE(g.getActors().back().x == 1);
+    REQUIRE(g.getActors().back().y == 1);
+}
+TEST_CASE("Actor moves diagonal down/right and collides with wall")
+{
+
+    Actor *a = new SimpleActor(DOWNRIGHT, 0);
+    Actor *a2 = new SimpleActor(DOWNRIGHT, 0);
+    ActorInfo AI(a, 2, 1, 1, 0, 1, 1); // setup to hit right wall
     ActorInfo AI2(a2, 2, 1, 0, 1, 1, 1); // setup to hit lower wall
     GameField g (2, 2);
     GameField g2 (2, 2);

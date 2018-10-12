@@ -231,6 +231,17 @@ void GameField::runMoves(ActorInfo &a)
             a.heading=DOWNLEFT;
             break;
 
+        case DOWNRIGHT:
+            if (a.y < fieldMap.height-1 && a.x < fieldMap.width-1)
+            {
+                a.y++;
+                a.x++;
+            }
+            else
+                a.health--;
+            a.heading=DOWNRIGHT;
+            break;
+
         default:
             break;
         }
