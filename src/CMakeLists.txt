@@ -4,8 +4,8 @@ project(src)
 set(CMAKE_CXX_STANDARD 11)
 
 add_executable(src
-        Actor-Alternate.cpp
-        Actor-Alternate.h
+        #Actor-Alternate.cpp
+        #Actor-Alternate.h
         Actor.cpp
         Actor.h
         ActorInfo.cpp
@@ -25,8 +25,14 @@ add_executable(src
         ProjectileDrawable.h
         SimpleActor.cpp
         SimpleActor.h
-        TankActor.h
+        #TankActor.h
         TankDrawable.h
         TurnData.cpp
         TurnData.h
-        Window.h AsciiGameMisc.h AsciiGameMisc.cpp)
+        #Window.h
+        AsciiGameMisc.h
+        AsciiGameMisc.cpp
+        AsciiTankActor.cpp
+        AsciiTankActor.h
+        MapData.cpp
+        ProjectileActor.cpp DynamicLoader.h tanks/RandomDynamicTank.cpp tanks/RandomDynamicTank.h DynamicLoader.cpp tanks/LeftDynamicTank.cpp tanks/LeftDynamicTank.h)

@@ -38,9 +38,9 @@ public:
 
     Actor();
     ~Actor();
-    Actor(std::string newName, int newId); 
+    Actor(std::string newName, int newId);
 
-    //Getters
+    virtual //Getters
     std::string getName();    /*!< Returns the value within name */  
     int getId(); /*!< Returns the value within id */  
     //Setters   
