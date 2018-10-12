@@ -135,7 +135,8 @@ void GameField::updateMap()
     for (auto a : actors)
     {
         //for each actor fill in its id on the map
-        fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
+        if (a.health > 0)
+            fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
     }
     
 }

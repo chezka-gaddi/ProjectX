@@ -38,7 +38,7 @@ void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount)
            
         }
     }
-    system("sleep 0.25");
+    system("sleep 0.4");
 }
 
 void gameloop(gameMode mode){
