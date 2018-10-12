@@ -1,6 +1,7 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 
-INCS = -I./  
+INCS = -I./
+LIBS = -ldl
 
 FILES = main.o
 FILES += GameField.o
@@ -18,7 +19,7 @@ FILES += SimpleAI.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
 
 platform: $(FILES) $(TEST_FILES)
-	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES) $(TEST_FILES)
+	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES) $(TEST_FILES) $(LIBS)
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
