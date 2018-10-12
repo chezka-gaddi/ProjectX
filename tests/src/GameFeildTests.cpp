@@ -105,10 +105,12 @@ TEST_CASE("GameField correctly places actors on the map at construction")
     actorVect[0].id = 1;
     actorVect[0].x = 1;
     actorVect[0].y = 0;
+    actorVect[0].health = 1;
     actorVect[1].act_p = NULL;
     actorVect[1].id = 2;
     actorVect[1].x = 0;
     actorVect[1].y = 1;
+    actorVect[1].health = 1;
     GameField g (2, 2, actorVect);
     std::vector<int> ref = {0, 1, 2, 0};
     REQUIRE(g.getMap() == ref);
