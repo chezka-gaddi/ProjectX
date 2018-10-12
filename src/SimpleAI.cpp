@@ -1,4 +1,5 @@
 #include "SimpleAI.h"
+#include <iostream>
 
 SimpleAI::SimpleAI() {}
 SimpleAI::~SimpleAI() {}
@@ -31,7 +32,7 @@ direction SimpleAI::move(MapData map, PositionData status)
                 {
                     if (status.game_x > x)
                     {
-                        if(!map.obstacleMap[status.game_x - 1 + y * map.width]) //check for obstacle
+                        if(!map.obstacleMap[status.game_x - 1 + status.game_y * map.width]) //check for obstacle
                         {
                             ret = left;
                         }
@@ -42,7 +43,7 @@ direction SimpleAI::move(MapData map, PositionData status)
                     }
                     else
                     {
-                        if(!map.obstacleMap[status.game_x + 1 + y * map.width]) //check for obstacle
+                        if(!map.obstacleMap[status.game_x + 1 + status.game_y * map.width]) //check for obstacle
                         {
                             ret = right;
                         }
