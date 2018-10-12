@@ -368,7 +368,7 @@ TEST_CASE("Actors take 1 point of damage from the wall trying to move up/left")
     g.nextTurn();
     REQUIRE(g.getActors().back().health == 1);
 }
-TEST_CASE("Actor moves diagonal up/left and changes postion")
+TEST_CASE("Actor moves diagonal up/left and changes position")
 {
     Actor *a = new SimpleActor(UPLEFT, 0);
     ActorInfo newAI(a, 2, 1, 1, 1, 1, 1);
@@ -377,4 +377,29 @@ TEST_CASE("Actor moves diagonal up/left and changes postion")
     g.nextTurn();
     REQUIRE(g.getActors().back().x == 0);
     REQUIRE(g.getActors().back().y == 0);
+}
+TEST_CASE("Actor moves diagonal up/right and changes position")
+{
+    Actor *a = new SimpleActor(UPRIGHT, 0);
+    ActorInfo AI(a, 2, 1, 0, 1, 1, 1);
+    GameField g (2, 2);
+    g.addActor(AI);
+    g.nextTurn();
+    REQUIRE(g.getActors().back().x == 1);
+    REQUIRE(g.getActors().back().y == 0);
+}
+TEST_CASE("Actors moves diagonal up/right into a wall and takes damage")
+{
+    Actor *a = new SimpleActor(UPRIGHT, 0);
+    Actor *a2 = new SimpleActor(UPRIGHT, 0);
+    ActorInfo AI(a, 2, 1, 1, 1, 1, 1); // setup to hit right wall
+    ActorInfo AI2(a2, 2, 1, 0, 0, 1, 1); // setup to hit upper wall
+    GameField g (2, 2);
+    GameField g2 (2, 2);
+    g.addActor(AI);
+    g2.addActor(AI2);
+    g.nextTurn();
+    g2.nextTurn();
+    REQUIRE(g.getActors().back().health == 1);
+    REQUIRE(g2.getActors().back().health == 1);
 }
