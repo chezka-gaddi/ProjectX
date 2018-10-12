@@ -20,4 +20,8 @@ public:
 };
 
 
+extern "C" Actor * makeTank(){
+    return new LeftDynamicTank();
+}
+
 #endif //SRC_LEFTDYNAMICTANK_H
