@@ -8,7 +8,7 @@
 #define __MAP_DATA_H
 #include <vector>
 #include <ostream>
-
+#include <algorithm>
 /*******************************************************************//**
  * @author David Donahue
  *
@@ -26,6 +26,9 @@ struct MapData
     std::vector<bool> obstacleMap;
     int width;  /*!< The width value of the map */
     int height; /*!< The height value of the map */
+
+    MapData(int w, int h);
+    MapData();
 };
 /** overload << to display to console */
 std::ostream & operator<<(std::ostream& os, const MapData& md);

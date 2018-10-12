@@ -135,7 +135,8 @@ void GameField::updateMap()
     for (auto a : actors)
     {
         //for each actor fill in its id on the map
-        fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
+        if (a.health > 0)
+            fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
     }
     
 }
@@ -209,7 +210,7 @@ void GameField::runMoves(ActorInfo &a)
                 collisionVect.push_back(i);
         }
             
-        if (collisionVect.size() > 1)
+        if (collisionVect.size() > 1 && a.health > 0)
         {
             collisionDamage = 0;
             for (auto i: collisionVect)
