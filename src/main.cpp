@@ -63,7 +63,7 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 int main(void)
 {
 
-    dynamicLoader("./tanks/objects/ExampleSetFile");
+    dynamicLoader("./tanks/ExampleTankSetFile.txt");
    //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
    DL_gameloop();
     closeLibs();
