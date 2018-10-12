@@ -207,7 +207,7 @@ void GameField::runMoves(ActorInfo &a)
             if (a.y > 0 && a.x < fieldMap.width-1)
             {
                 a.y--;
-                a.y++;
+                a.x++;
             }
             else
                 a.health--;
