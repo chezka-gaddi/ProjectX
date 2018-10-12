@@ -16,7 +16,7 @@ void DL_gameloop(){
     for(auto a: *TankMakers()){
 
         void* p = a.second;
-        Actor * actor = static_cast<Actor*()> (p)();
+        Actor * actor = static_cast<Actor*> (p);
         startActors.push_back(ActorInfo(actor,1,2,rand() % x, rand()% y,2,i));
         i++;
     }
