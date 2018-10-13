@@ -4,6 +4,8 @@ INCS = -I../../src/
 
 LIBS = -ldl
 
+SOFLAGS = -DDYNAMIC
+
 TEST_FILES = catch.hpp
 TEST_FILES += main.o
 TEST_FILES += GameFeildTests.o
@@ -29,13 +31,14 @@ TEST_FILES += SimpleAITests.o
 TEST_FILES += DynamicLoaderTests.o
 
 TANK_PATH= ./tanks/
-TANKS = ../../src/SimpleAI_Dynamic.so
-TANKS += ../../src/AsciiTankActor_Dynamic.so
+TANKS = ../../src/SimpleAI.so
+TANKS += ../../src/AsciiTankActor.so
 
 TANKS_LINK = ../../src/Actor.o #need to link in the base class for the .so to have everything.
 
-%.so: %.o
-	$(CXX) -shared $< $(TANKS_LINK) -o $@
+
+%.so: %.cpp
+	$(CXX) $(CXXFLAGS) -shared $< $(TANKS_LINK) -o $@ $(SOFLAGS)
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)

@@ -3,6 +3,8 @@ CXXFLAGS = -g -std=c++11 -fPIC
 INCS = -I./
 LIBS = -ldl
 
+SOFLAGS = -DDYNAMIC
+
 FILES = main.o
 FILES += GameField.o
 FILES += AsciiGameMisc.o
@@ -20,8 +22,8 @@ TANKS = SimpleAI.so
 
 TANKS_LINK = Actor.o #need to link in the base class for the .so to have everything.
 
-%.so: %.o
-	$(CXX) -shared $< $(TANKS_LINK) -o $@
+%.so: %.cpp
+	$(CXX) $(CXXFLAGS) -shared $< $(TANKS_LINK) -o $@ $(SOFLAGS)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCS) -c $< -o $@ $(INCS)
