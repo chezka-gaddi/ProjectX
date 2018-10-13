@@ -51,8 +51,12 @@ ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
  * original difference along each axis and scale that distance by the absolute
  * value of itself, yeilding a 1, 0, or -1 to be used as a scalar multiplier 
  * for controlling the direction of the movement. The product of this scalar
- * multiplier and the set movement is the final movement command returned.
+ * multiplier and the set movement is the final movement command returned in
+ * form of our direction enum.
  *
+ * @param[in] map - data for size of our gamefield
+ * @param[in] status - data with location of actors
+ * 
  * @returns MoveProjectile - struct with new coordinates to move to
 ******************************************************************************/
 direction ProjectileActor::move(MapData map, PositionData status)
@@ -124,7 +128,8 @@ direction ProjectileActor::move(MapData map, PositionData status)
 	//multiplies by 1 or -1 depending on direction of movement
 	moveProjectile.new_x = moveProjectile.new_x * xDirection;
 	moveProjectile.new_y = moveProjectile.new_y * yDirection;
-
+	
+	//determine what enums to return
         if (moveProjectile.new_x != 0 && moveProjectile.new_y == 0)
             return (endX > status.game_x ) ? direction::right : direction::left;
         else if (moveProjectile.new_y != 0 && moveProjectile.new_x == 0)
@@ -149,6 +154,9 @@ direction ProjectileActor::move(MapData map, PositionData status)
  * the current positon on the field and damage to 1. It then returns that
  * struct.
  * 
+ * @param[in] map - the data for our current gamefield dimensions
+ * @param[in[ status - the data containing actor position
+ *
  * @returns attackProjectile - struct with data on where to attack and damage
 ******************************************************************************/
 AttackData ProjectileActor::attack(MapData map, PositionData status)
