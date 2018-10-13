@@ -57,3 +57,6 @@ tanks:	$(TANKS)
 
 clean:
 	rm -rf testAll *.o ../../src/*.o
+
+cleanTanks:
+	rm -rf $(TANK_PATH)
