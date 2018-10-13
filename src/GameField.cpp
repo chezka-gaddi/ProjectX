@@ -187,7 +187,43 @@ void GameField::runMoves(ActorInfo &a)
             else
                 a.health--;
             break;
-        default:
+	case direction::upLeft:
+	    if (a.x > 0 && a.y > 0)
+	    {
+		    a.x--;
+		    a.y--;
+	    }
+	    else
+	    	a.health--;
+	    break;
+	case direction::upRight:
+	    if (a.x < fieldMap.width-1 && a.y > 0)
+	    {
+		a.x++;
+		a.y--;
+	    }
+	    else
+		a.health--;
+	    break;
+	case direction::downLeft:
+	    if (a.x > 0 && a.y < fieldMap.height-1)
+		{
+		    a.x--;
+		    a.y++;
+		}
+	    else
+		a.health--;
+	    break;
+	case direcion::downRight:
+	    if (a.x < fieldMap.width-1 && a.y < fieldMap.height-1)
+		{
+		    a.x++;
+		    a.y++;
+		}
+	    else
+		a.health--;
+	    break;
+	default:
             break;
         }
 
