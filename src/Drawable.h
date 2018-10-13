@@ -58,21 +58,22 @@ class GameFieldDrawable : public Drawable
 class Menu : public Drawable
 {
     public:
-        int angle;
-        GLfloat target_x, target_y;
-        int distance;
+        char name[9];
+        int health;
+        int bullet;
+        GLfloat screen_x;
+        GLfloat screen_y;
 
         Menu(){};
-        /**
-         * Will be replaced by the Actor constructor
-         **/
+        Menu( int, int, int );
 
         /**
-         * @brief The destructor for the TankDrawable class
+         * @brief The destructor for the Menu class
          * @author Chezka Gaddi
          **/
         ~Menu(){}
 
+        void drawPlayerStats();
         void draw();
 };
 
@@ -119,6 +120,7 @@ class Projectile : public Drawable
         int angle;
         GLfloat target_x, target_y;
         int distance;
+        int tex;
 
         Projectile(){};
         /**
