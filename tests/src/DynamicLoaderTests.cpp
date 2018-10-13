@@ -32,5 +32,4 @@ TEST_CASE("The dynamically loaded tanks actually work")
     std::vector<std::string> actNames = {"SimpleActor"};
     std::vector<Actor *> actors = dynamicTankLoader(actNames);
     REQUIRE(actors[0]->move(MapData(), PositionData()) == UP); //SimpleActor returns UP by default
-    
 }

@@ -5,23 +5,22 @@
 #include "DynamicAsciiGame.h"
 #include "DynamicLoader.h"
 
-void DL_gameloop(){
+void DL_gameloop(std::vector<Actor *> actors){
 
     std::vector<ActorInfo> startActors;
 
     int x = 20;
     int y = 5;
-    int i = 0;
+    int i = 1;
 
-    /*
-    for(auto a: *TankMakers()){
+   
+    for(auto a:  actors)
+    {
 
-        void* p = a.second;
-        Actor * actor = static_cast<Actor*> (p);
-        startActors.push_back(ActorInfo(actor,1,2,rand() % x, rand()% y,2,i));
+        startActors.push_back(ActorInfo(a,1,2,rand() % x, rand()% y,i));
         i++;
     }
-    */
+    
     GameField gameField (x,y, startActors, displayAscii);
 
     //the is the main game loop

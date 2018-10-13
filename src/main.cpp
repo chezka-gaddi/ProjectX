@@ -71,7 +71,7 @@ int main(void)
         return -1;
     
     //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
-    DL_gameloop();
+    DL_gameloop(actors);
     std::cout << "\n\n\n\n\n game over \n\n\n\n\n\n";
     return 0;
 }

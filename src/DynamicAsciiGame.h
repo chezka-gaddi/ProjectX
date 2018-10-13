@@ -8,7 +8,7 @@
 #include "AsciiGameMisc.h"
 
 
-void DL_gameloop();
+void DL_gameloop(std::vector<Actor *>);
 
 
 
