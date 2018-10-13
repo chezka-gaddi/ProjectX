@@ -5,7 +5,7 @@ GLuint texture[7];
 int LoadGLTextures()     
 {
     texture[0] = SOIL_load_OGL_texture(
-            "tank1.png", 
+            "images/tank1.png", 
             SOIL_LOAD_AUTO, 
             SOIL_CREATE_NEW_ID, 
             SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
@@ -17,7 +17,7 @@ int LoadGLTextures()
     
     
     texture[1] = SOIL_load_OGL_texture(
-            "tank3.png", 
+            "images/tank3.png", 
             SOIL_LOAD_AUTO, 
             SOIL_CREATE_NEW_ID, 
             SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
@@ -28,7 +28,7 @@ int LoadGLTextures()
     glBindTexture(GL_TEXTURE_2D, texture[1]);
     
     texture[2] = SOIL_load_OGL_texture(
-            "green.jpg",
+            "images/green.jpg",
             SOIL_LOAD_AUTO, 
             SOIL_CREATE_NEW_ID, 
             SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
@@ -40,7 +40,7 @@ int LoadGLTextures()
    
  
     texture[3] = SOIL_load_OGL_texture(
-            "tree.png", 
+            "images/tree.png", 
             SOIL_LOAD_AUTO, 
             SOIL_CREATE_NEW_ID, 
             SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
@@ -52,7 +52,7 @@ int LoadGLTextures()
     
     
     texture[4] = SOIL_load_OGL_texture(
-            "bullet1.png", 
+            "images/bullet1.png", 
             SOIL_LOAD_AUTO, 
             SOIL_CREATE_NEW_ID, 
             SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
@@ -64,7 +64,7 @@ int LoadGLTextures()
    
  
     texture[5] = SOIL_load_OGL_texture(
-            "bullet2.png", 
+            "images/bullet2.png", 
             SOIL_LOAD_AUTO, 
             SOIL_CREATE_NEW_ID, 
             SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
@@ -76,7 +76,7 @@ int LoadGLTextures()
     
     
     texture[6] = SOIL_load_OGL_texture(
-            "heart.png", 
+            "images/heart.png", 
             SOIL_LOAD_AUTO, 
             SOIL_CREATE_NEW_ID, 
             SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
