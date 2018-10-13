@@ -33,6 +33,7 @@ platform: $(FILES) $(TEST_FILES)
 	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES) $(TEST_FILES) $(LIBS)
 
 tanks:	$(TANKS)
+	mkdir -p $(TANK_PATH)
 	mv $^ $(TANK_PATH)
 
 .cpp.o:
