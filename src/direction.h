@@ -5,7 +5,8 @@
 #ifndef __DIRECTION_H
 #define __DIRECTION_H
 
-enum direction {left, right, up, down, stay
-		upLeft, upRight, downLeft, downRight};
+
+enum direction {LEFT, RIGHT, UP, DOWN, STAY, UPLEFT, UPRIGHT, DOWNLEFT,
+		DOWNRIGHT};
 
 #endif

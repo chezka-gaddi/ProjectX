@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -std=c++11 
+CXXFLAGS = -g -std=c++11
 INCS = -I./  
 
 FILES = main.o
@@ -10,6 +10,7 @@ FILES += AsciiTankActor.o
 FILES += MapData.o
 FILES += ProjectileActor.o
 FILES += ActorInfo.o
+FILES += SimpleAI.o
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)

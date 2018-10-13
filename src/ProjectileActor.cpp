@@ -131,18 +131,18 @@ direction ProjectileActor::move(MapData map, PositionData status)
 	
 	//determine what enums to return
         if (moveProjectile.new_x != 0 && moveProjectile.new_y == 0)
-            return (endX > status.game_x ) ? direction::right : direction::left;
+            return (endX > status.game_x ) ? direction:: RIGHT : direction::LEFT;
         else if (moveProjectile.new_y != 0 && moveProjectile.new_x == 0)
-            return (endY > status.game_y ) ? direction::down : direction::up;
+            return (endY > status.game_y ) ? direction::DOWN : direction::UP;
 	else if (moveProjectile.new_x != 0 && moveProjectile.new_y != 0)
 	{
     	    if (moveProjectile.new_x == 1)
-		return (endY > status.game_y) ? direction::downRight : direction::upRight;
+		return (endY > status.game_y) ? direction::DOWNRIGHT : direction::UPRIGHT;
 	    else
-		return (endY > status.game_y) ? direction::downLeft : direction::upLeft;
+		return (endY > status.game_y) ? direction::DOWNLEFT : direction::UPLEFT;
 	}
 
-        return stay;
+        return STAY;
 	 
 }
 

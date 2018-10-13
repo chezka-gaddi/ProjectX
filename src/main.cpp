@@ -58,11 +58,22 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 
 // Main
 
-int main(void)
+int main(int argc, char **argv)
 {
 
-   //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
-   gameloop();
-   std::cout << "\n\n\n\n\n game over \n\n\n\n\n\n";
-   return 0;
+    //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
+    gameMode mode;
+    if (argc == 1 || argv[1][0] == 'a')
+    {
+        mode = ai;
+    }
+    else if (argv[1][0] == 's')
+    {
+        mode = sp;
+    }
+    else
+        mode = mp;
+    gameloop(mode);
+    std::cout << "\n\n\n\n\n game over \n\n\n\n\n\n";
+    return 0;
 }
