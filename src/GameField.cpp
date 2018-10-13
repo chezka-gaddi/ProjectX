@@ -365,8 +365,9 @@ void GameField::nextTurn()
 
                     //update the display
                     updateMap();
+                    if(displayCallback != NULL)
+                        displayCallback();
                 }
-                
             }
         }
     }

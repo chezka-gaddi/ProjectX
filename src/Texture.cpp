@@ -90,4 +90,3 @@ int LoadGLTextures()
 
 	return true;
 }
-
