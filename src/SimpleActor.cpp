@@ -71,7 +71,13 @@ void SimpleActor::setMove(direction d)
     dir = d;
 }
 
-Actor* SimpleActor::maker()
+
+#ifdef DYNAMIC
+extern "C" //required for runtime linking
 {
-    return new SimpleActor;
+    Actor * maker()
+    {
+        return new SimpleActor;
+    }
 }
+#endif
