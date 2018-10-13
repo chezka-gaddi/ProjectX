@@ -41,3 +41,6 @@ tanks:	$(TANKS)
 
 clean:
 	rm -rf platform *.o
+
+cleanTanks:
+	rm -rf $(TANK_PATH)
