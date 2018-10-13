@@ -21,7 +21,7 @@ class Game
     public:
         int turn;
         vector <Drawable *> objects;
-        vector <Drawable *> obstacles;
+        vector <Drawable *> constants;
         GameField *tankGame;
         gameMode g_mode;
 

@@ -50,9 +50,11 @@ void Menu::drawPlayerStats()
     strcat(strHealth, hp);
     drawBitmapText(strHealth, screen_x, screen_y - 0.05);
     
+    char strAmmo[10] = "Ammo: ";
     char ammo[4];
     sprintf(ammo, "%d", bullet);
-    drawBitmapText(ammo, screen_x, screen_y - 0.10);
+    strcat(strAmmo, ammo);
+    drawBitmapText(strAmmo, screen_x, screen_y - 0.10);
 }
 
 

@@ -33,7 +33,7 @@ void updateDrawables(Game &game)
 
     vector <ActorInfo> actors = game.tankGame->getActors();
     
-    for( auto obs : game.obstacles )
+    for( auto obs : game.constants )
         game.objects.push_back( obs );
     
     for( auto act : actors )

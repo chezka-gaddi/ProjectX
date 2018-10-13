@@ -1,25 +1,59 @@
+/***************************************************************************//**
+* @file game.cpp
+* @author Chezka Gaddi
+* @brief Contains all functions that maintains Game class.
+*******************************************************************************/
+
 #include "game.h"
 #include "callbacks.h"
 
 /***************************************************************************//**
+* @author Chezka Gaddi
 * @brief Constructor
-*
-* Here's where you handle things that should happen during a turn
-* - Ask each of the tanks for their action
-* - Update the game state
-* - Issue a call to repaint the playfield, projectiles, tanks, etc.
-*
-*
+* 
+* Default constructor, sets turn = 0
 *******************************************************************************/
 Game::Game() : turn(0) {}
 
 
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief Constructor
+* 
+* Constructor that sets the game mode, sets turn = 0
+* 
+* @param[in] mode - type of game to be played
+*******************************************************************************/
 Game::Game(gameMode mode) : turn(0)
 {
     g_mode = mode;
 }
 
 
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief Destructor
+*
+* Frees up the memory allocated to the drawables and the GameField.
+*******************************************************************************/
+Game::~Game()
+{
+    for( auto temp : objects )
+        delete temp;
+
+    delete tankGame;
+}
+
+
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief convertGLXCoordinate
+* 
+* Converts the coordinates to GLfloat to be displayed correctly on the screen.
+* 
+* @param[in] x - integer to be converted
+* @return x_gl - GLfloat conversion of x
+*******************************************************************************/
 float Game::convertGLXCoordinate( int x )
 {
     GLfloat x_gl = (x - 10.) / 4.;
@@ -32,6 +66,15 @@ float Game::convertGLXCoordinate( int x )
 }
 
 
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief convertGLYCoordinate
+* 
+* Converts the coordinates to GLfloat to be displayed correctly on the screen.
+* 
+* @param[in] y - integer to be converted
+* @return y_gl - GLfloat conversion of y
+*******************************************************************************/
 float Game::convertGLYCoordinate( int y )
 {
     GLfloat y_gl = (y - 2.5) / 4.;
@@ -44,20 +87,15 @@ float Game::convertGLYCoordinate( int y )
 }
 
 
-Game::~Game()
-{
-    for( auto temp : objects )
-        delete temp;
-
-    for( auto temp : obstacles )
-        delete temp;
-
-    delete tankGame;
-}
-
-
-
-
+/***************************************************************************//**
+* @author Jacob Lee
+* @brief isplayable
+* 
+* Determines the end of the game by the count of the tanks on the field.
+* 
+* @param[in] actorInfo - list of all the active actors
+* @return boolean of whether or not more than one tank is still active
+*******************************************************************************/
 static bool isplayable(std::vector<ActorInfo> actorInfo)
 {
     int tankCount = 0;
@@ -69,28 +107,13 @@ static bool isplayable(std::vector<ActorInfo> actorInfo)
 }
 
 
-void Game::makeDrawables()
-{
-    Drawable *temp_draw = nullptr;
-    
-    tankGame->getActors(); 
-    vector <ActorInfo> actors = tankGame->getActors();
-    
-    for( auto act : actors )
-    {
-        temp_draw = new TankDrawable( act.id, convertGLXCoordinate( act.x ), convertGLYCoordinate( act.y) );
-        objects.push_back( temp_draw );
-    }
-}
-
 
 /***************************************************************************//**
+* @author Chezka Gaddi
 * @brief executeTurn
 *
-* Here's where you handle things that should happen during a turn
-* - Ask each of the tanks for their action
-* - Update the game state
-* - Issue a call to repaint the playfield, projectiles, tanks, etc.
+* While the game is still playable, execute a turn from each of the tanks,
+* otherwise return back to main and destroy the GUI.
 *
 *******************************************************************************/
 void Game::executeTurn()
@@ -100,7 +123,7 @@ void Game::executeTurn()
     
     if(isplayable(tankGame->getActors()))
     {
-        glutPostRedisplay();
+        //glutPostRedisplay();
         tankGame->nextTurn();
         turn++;
     }
@@ -110,11 +133,22 @@ void Game::executeTurn()
 }
 
 
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief initGameState
+*
+* Initialize the main GameField and all the Drawables needed to start the game.
+*******************************************************************************/
 void Game::initGameState()
 {
+    Drawable *temp = nullptr;
+    
     std::cout << "Game::Loading playfield\n";
+    temp = new GameFieldDrawable();
+    constants.push_back(temp);
+   
+
     std::cout << "Game::Loading tanks\n";
-    std::cout << "Game::Setting turn counter\n";
 
     //change tankactor here to what ever we have decided to call the ascii tank actor
     Actor *player1;
@@ -153,33 +187,31 @@ void Game::initGameState()
     tankGame = new GameField(18,5, startActors, display);
     
 
-    tankGame->addObstacle(6,2);     //add some obstacles to make things more fun
+    // Add obstacles to the gamefield
+    tankGame->addObstacle(6,2);
     tankGame->addObstacle(14,2); 
-   
-    Drawable *temp = nullptr;
+    temp = new Obstacles( convertGLXCoordinate( 6 ), convertGLYCoordinate( 2 ) );
+    constants.push_back(temp);
     
+    temp = new Obstacles( convertGLXCoordinate( 14 ), convertGLYCoordinate( 2 ) );
+    constants.push_back(temp);
+   
+    
+    // Create a stats menu for both tanks
     for( auto actTemp : startActors)
     {
         temp = new Menu( actTemp.id, actTemp.health, actTemp.shots );
-        obstacles.push_back(temp);
+        constants.push_back(temp);
     }
-    
-    temp = new GameFieldDrawable();
-    obstacles.push_back(temp);
-    
-    temp = new Obstacles( convertGLXCoordinate( 6 ), convertGLYCoordinate( 2 ) );
-    obstacles.push_back(temp);
-    
-    temp = new Obstacles( convertGLXCoordinate( 14 ), convertGLYCoordinate( 2 ) );
-    obstacles.push_back(temp);
-    
-
-    glutPostRedisplay();
 }
 
 
+/***************************************************************************//**
+* @brief closeDown
+*
+* Prints out debugging info.
+*******************************************************************************/
 void Game::closeDown()
 {
     std::cout << "Game::Closing game, cleaning up memory\n";
-    std::cout << "Game::Writing results file\n";
 }
