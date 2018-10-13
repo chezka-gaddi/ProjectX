@@ -238,7 +238,6 @@ void GameField::runMoves(ActorInfo &a)
             break;
 
         default:
->>>>>>> e3b01b1b3ca327a0117d4f7f3a652c028711af8c
             break;
         }
 
