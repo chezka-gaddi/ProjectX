@@ -5,6 +5,7 @@
 #ifndef SRC_ASCIIGAMEMISC_H
 #define SRC_ASCIIGAMEMISC_H
 #include "ActorInfo.h"
+#include <GL/glut.h>
 #include "GameField.h"
 #include <vector>
 
