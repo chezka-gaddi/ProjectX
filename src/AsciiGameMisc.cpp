@@ -16,6 +16,7 @@ bool isplayable(std::vector<ActorInfo> actorInfo){
     }
     return (tankCount > 1);
 }
+
 void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount)
 {
     std::cout << map << std::endl;
@@ -44,28 +45,34 @@ void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount)
 void gameloop(gameMode mode){
     
     //change tankactor here to what ever we have decided to call the ascii tank actor
-    Actor * player1;
-    Actor * player2;
+    Actor *player1;
+    Actor *player2;
+    
     switch (mode)
     {
-    case ai:
-        player1 = new SimpleAI;
-        player2 = new SimpleAI;
-        break;
-    case sp:
-        player1 = new AsciiTankActor;
-        player2 = new SimpleAI;
-        break;
-    case mp:
-        player1 = new AsciiTankActor;
-        player2 = new AsciiTankActor;
-        break;
-    default:
-        break;
+        case ai:
+            player1 = new SimpleAI;
+            player2 = new SimpleAI;
+            break;
+        
+        case sp:
+            player1 = new AsciiTankActor;
+            player2 = new SimpleAI;
+            break;
+        
+        case mp:
+            player1 = new AsciiTankActor;
+            player2 = new AsciiTankActor;
+            break;
+        
+        default:
+            break;
     }
+    
     //tank actor pointers are made and then packaged into ActorInfo structs
     ActorInfo player1Info = ActorInfo(player1, 1,1,2,2,1);
     ActorInfo player2Info = ActorInfo(player2, 1,1,18,2,2);
+    
     std::vector<ActorInfo> startActors;
     startActors.push_back(player1Info);
     startActors.push_back(player2Info);
@@ -76,13 +83,15 @@ void gameloop(gameMode mode){
     gameField.addObstacle(14,2); 
    
     //the is the main game loop
-    while(isplayable(gameField.getActors())){
+    while(isplayable(gameField.getActors()))
+    {
         //displays the current game state
         displayAscii(gameField.getMapData(), gameField.getActors(), gameField.getTurnCount());
         std::vector<ActorInfo> actors = gameField.getActors();
         //makes the next moves
         gameField.nextTurn();
     }
+    
     //Final Field State
     displayAscii(gameField.getMapData(), gameField.getActors(), gameField.getTurnCount());
 }

@@ -7,6 +7,7 @@
 #ifndef SLACKERS_PLATFORM_GAMEFIELD_H
 #define SLACKERS_PLATFORM_GAMEFIELD_H
 
+#include <GL/glut.h>
 #include <vector>
 #include <algorithm>
 #include "ProjectileActor.h"
@@ -35,7 +36,8 @@ protected:
     MapData fieldMap;
 
     //callback function to update the dispaly with the map, actors, and turn count
-    void (*displayCallback)(MapData, std::vector<ActorInfo>, int);
+    void (*displayCallback)();
+    //void (*displayCallback)(MapData, std::vector<ActorInfo>, int);
     void updateMap();
     void runMoves(ActorInfo &a);
     ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
@@ -68,7 +70,7 @@ public:
     GameField();
     GameField(int width, int height);
     GameField(int width, int height, std::vector<ActorInfo> startActors);
-    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int));
+    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)());
 
 
     ~GameField();

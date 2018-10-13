@@ -5,12 +5,12 @@
 #include "GameField.h"
 #include <iostream>
 
+
 /**
  * @author David Donahue
  * @par Description:
  * Default constructor, makes a 10x10 empty map
  */
-
 GameField::GameField()
 {
     turnCount = 0;
@@ -20,15 +20,16 @@ GameField::GameField()
     fieldMap.obstacleMap.resize(100);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
     std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
+    updateMap();
     displayCallback = NULL;
 }
+
 
 /**
  * @author David Donahue
  * @par Description:
  * Destructor, deletes all actors left on the feild
  */
-
 GameField::~GameField()
 {
     for (auto &a : actors)
@@ -37,6 +38,7 @@ GameField::~GameField()
             delete a.act_p;        
     }
 }
+
 
 /**
  * @author David Donahue
@@ -52,8 +54,11 @@ GameField::GameField(int width, int height)
     fieldMap.obstacleMap.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
     std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
+    updateMap();
     displayCallback = NULL;
 }
+
+
 /**
  * @author David Donahue
  * @par Description:
@@ -72,7 +77,8 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     displayCallback = NULL;
 }
 
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int)) : actors(startActors)
+
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)()) : actors(startActors)
 {
     turnCount = 0;
     fieldMap.width = width;
@@ -85,6 +91,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
     displayCallback = d_callback;
 }
 
+
 /**
  * @author David Donahue
  * @par Description:
@@ -94,6 +101,8 @@ int GameField::getTurnCount()
 {
     return turnCount;
 }
+
+
 /**
  * @author David Donahue
  * @par Description:
@@ -103,6 +112,8 @@ int GameField::getWidth()
 {
     return fieldMap.width;
 }
+
+
 /**
  * @author David Donahue
  * @par Description:
@@ -114,6 +125,7 @@ int GameField::getHeight()
     return fieldMap.height;
 }
 
+
 /**
  * @author David Donahue
  * @par Description:
@@ -123,6 +135,8 @@ std::vector<int> GameField::getMap()
 {
     return fieldMap.map;
 }
+
+
 /**
  * @author David Donahue
  * @par Description:
@@ -138,8 +152,9 @@ void GameField::updateMap()
         if (a.health > 0)
             fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
     }
-    
 }
+
+
 /**
  * @author David Donahue
  * @par Description:
@@ -284,13 +299,13 @@ void GameField::runMoves(ActorInfo &a)
         else
             --rangeCount;
 
-            updateMap();
+        updateMap();
 
         if (displayCallback != NULL)
-            displayCallback(fieldMap, actors, turnCount);
-        
+            displayCallback();
     }
 }
+
 
 /**
  * @author David Donahue
@@ -298,7 +313,6 @@ void GameField::runMoves(ActorInfo &a)
  * Executes the move and attack phase of each AI's turn and increments the turn counter.
  * AI's are culled
  */
-
 void GameField::nextTurn()
 {
     ++turnCount;
@@ -326,6 +340,7 @@ void GameField::nextTurn()
             {
                 if (actors[i].id > 0) //tanks attacking
                 {
+                    std::cout << "Attack!!\n\n";
                     ProjectileActor * proj = new ProjectileActor;
                     proj->setEndX(atk.attack_x);
                     proj->setEndY(atk.attack_y);
@@ -341,6 +356,7 @@ void GameField::nextTurn()
                     actors.insert(actors.begin() + i + 1, newProjectile);
                     actors[i].shots++;
                 }
+                
                 else //projectiles requesting a self destruct
                 {
                     actors[i].health = 0;
@@ -350,8 +366,8 @@ void GameField::nextTurn()
 
                     //update the display
                     updateMap();
-                    if (displayCallback != NULL)
-                        displayCallback(fieldMap, actors, turnCount);
+                    //if (displayCallback != NULL)
+                        //displayCallback();
                 }
                 
             }

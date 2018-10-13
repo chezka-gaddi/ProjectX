@@ -44,36 +44,34 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
  @endverbatim
  ******************************************************************************/
 
-
-
 // Includes
 #include <iostream>
-#include "AsciiGameMisc.h"
-#include "AsciiTankActor.h"
-
-
-
-
-
+#include "util.h"
 
 // Main
-
 int main(int argc, char **argv)
 {
-
-    //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
     gameMode mode;
+    
     if (argc == 1 || argv[1][0] == 'a')
     {
         mode = ai;
     }
+    
     else if (argv[1][0] == 's')
     {
         mode = sp;
     }
+    
     else
         mode = mp;
-    gameloop(mode);
+    
+    //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
+    initOpenGL( argc, argv, 1100, 800, mode );
+
+    glutMainLoop();
+
     std::cout << "\n\n\n\n\n game over \n\n\n\n\n\n";
+    
     return 0;
 }
