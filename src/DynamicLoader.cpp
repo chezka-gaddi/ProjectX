@@ -23,13 +23,6 @@ std::vector<Actor *> dynamicTankLoader(std::vector<std::string> objectNames)
         soPath.append(s);
         soPath.append(".so");
 
-        //C++ is nice enough to scramble all the symbol names, and there is no way to get them at runtime...
-        //Fun! this should predict the scrambled name based on my testing, but it is likely extraordinarily
-        //fragile. TODO: find a way to read the symbol list into the program and search for maker
-        symName = "_ZN8";
-        symName.append(s);
-        symName.append("5makerEv");
-            
         
         void * handle = dlopen(soPath.c_str(), RTLD_LAZY); //open the .so
         if (handle == NULL) //make sure it opened
@@ -39,7 +32,7 @@ std::vector<Actor *> dynamicTankLoader(std::vector<std::string> objectNames)
         }
         else
         {
-            Actor* (*maker)() = (Actor* (*)()) dlsym(handle, symName.c_str()); //get the maker() symbol
+            Actor* (*maker)() = (Actor* (*)()) dlsym(handle, "maker"); //get the maker() symbol
             if (maker == NULL)
             {
                 std::cout << "Failed to load symbol " << symName << '\n';

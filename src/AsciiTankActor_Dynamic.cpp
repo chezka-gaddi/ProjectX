@@ -92,4 +92,10 @@ AttackData AsciiTankActor::attack( MapData map, PositionData status)
 
 AsciiTankActor::AsciiTankActor() {}
 
-
+extern "C"
+{
+    Actor *maker()
+    {
+        return new AsciiTankActor;
+    }
+}

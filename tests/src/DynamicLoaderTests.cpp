@@ -14,7 +14,13 @@ TEST_CASE("DynamicTankLoader returns a vector of Actor *")
 
 TEST_CASE("DynamicTankLoader can load a tank")
 {
-    std::vector<std::string> actNames = {"SimpleAI"};
+    std::vector<std::string> actNames = {"SimpleAI_Dynamic"};
+    std::vector<Actor *> actors = dynamicTankLoader(actNames);
+    REQUIRE(actors.size() == 1);
+}
+TEST_CASE("DynamicTankLoader can load a non-SimpleAI tank")
+{
+    std::vector<std::string> actNames = {"AsciiTankActor_Dynamic"};
     std::vector<Actor *> actors = dynamicTankLoader(actNames);
     REQUIRE(actors.size() == 1);
 }

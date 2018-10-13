@@ -35,10 +35,7 @@ public:
     virtual AttackData attack(MapData map, PositionData status) = 0;
 
 
-    /**
-     * Returns a pointer to the class, needed for the dynamic linking
-     */
-    virtual Actor *maker() = 0;
+
     #endif
 
     Actor();

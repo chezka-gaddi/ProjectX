@@ -29,7 +29,8 @@ TEST_FILES += SimpleAITests.o
 TEST_FILES += DynamicLoaderTests.o
 
 TANK_PATH= ./tanks/
-TANKS = ../../src/SimpleAI.so
+TANKS = ../../src/SimpleAI_Dynamic.so
+TANKS += ../../src/AsciiTankActor_Dynamic.so
 
 TANKS_LINK = ../../src/Actor.o #need to link in the base class for the .so to have everything.
 
