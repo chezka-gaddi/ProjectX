@@ -8,7 +8,14 @@
 #include "SimpleAI.h"
 #include "AsciiTankActor.h"
 
-
+/**
+ * @author David Donahue
+ * @par Description:
+ * Checks if 2 or more tanks are on the field 
+ *
+ * @param[in] actorInfo - vector of the current active actors
+ * @return true if there are 2 or more tanks on the field
+ */
 bool isplayable(std::vector<ActorInfo> actorInfo){
     int tankCount = 0;
     for (auto a : actorInfo)
@@ -17,6 +24,17 @@ bool isplayable(std::vector<ActorInfo> actorInfo){
     }
     return (tankCount > 1);
 }
+
+
+/**
+ * @author David Donahue
+ * @par Description: 
+ * displays the field to stdout.
+ *
+ * @param[in] map - the current field map, which has a << overload to display
+ * @param[in] actors - vector of the current active actors
+ * @param[in] turnCoutnt - the current turn counter
+ */
 void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount)
 {
     std::cout << map << std::endl;
@@ -42,6 +60,15 @@ void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount)
     system("sleep 0.3");
 }
 
+
+/**
+ * @author David Donahue
+ * @par Description:
+ * Sets up the game field, then loops, running 1 turn per loop
+ * until there are no longer 2 tanks on the field.
+ *
+ * @param[in] actors - vector of pointers to the actors to use for the game
+ */
 void gameloop(std::vector<Actor *> actors){
 
     std::vector<ActorInfo> startActors;
