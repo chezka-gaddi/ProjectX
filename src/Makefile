@@ -12,7 +12,7 @@ FILES += MapData.o
 FILES += ProjectileActor.o
 FILES += ActorInfo.o
 FILES += DynamicLoader.o
-Files += DynamicAsciiGame.o
+FILES += DynamicAsciiGame.o
 FILES += SimpleAI.o
 
 %.o: %.cpp
