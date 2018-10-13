@@ -19,7 +19,7 @@ Obstacles::Obstacles(GLfloat x_coor, GLfloat y_coor )
 {
     screen_x = x_coor;
     screen_y = y_coor;
-    tex = 6;
+    tex = 3;
 }
 
 

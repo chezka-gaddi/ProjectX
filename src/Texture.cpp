@@ -76,7 +76,7 @@ int LoadGLTextures()
     
     
     texture[6] = SOIL_load_OGL_texture(
-            "rock.png", 
+            "heart.png", 
             SOIL_LOAD_AUTO, 
             SOIL_CREATE_NEW_ID, 
             SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );

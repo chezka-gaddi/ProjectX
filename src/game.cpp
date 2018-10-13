@@ -174,8 +174,8 @@ void Game::initGameState()
     }
     
     //tank actor pointers are made and then packaged into ActorInfo structs
-    ActorInfo player1Info = ActorInfo(player1, 1,1,2,2,1);
-    ActorInfo player2Info = ActorInfo(player2, 1,1,16,2,2);
+    ActorInfo player1Info = ActorInfo(player1, 3,1,2,2,1);
+    ActorInfo player2Info = ActorInfo(player2, 3,1,16,2,2);
     
     std::vector<ActorInfo> startActors;
     startActors.push_back(player1Info);
