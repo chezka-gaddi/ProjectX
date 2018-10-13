@@ -15,10 +15,10 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor )
     screen_x = x_coor;
     screen_y = y_coor;
     id = ID;
-    distance = 0;
 
     tex = 4;
     angle = 0;
+
     if( -ID == 2 )
     {
         angle = 180;
