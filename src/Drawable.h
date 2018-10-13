@@ -60,8 +60,9 @@ class Menu : public Drawable
         char name[9];       /*!<Name of the player to be displayed */
         int health;         /*!<Player's health */
         int bullet;         /*!<Current bullet count */
+        int score;          /*!<Current score */
 
-        Menu( int, int, int );
+        Menu( int, int, int, int );
 
         void drawPlayerStats();
         void draw();

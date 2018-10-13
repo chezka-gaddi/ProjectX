@@ -122,7 +122,6 @@ void Game::executeTurn()
     
     if(isplayable(tankGame->getActors()))
     {
-        //glutPostRedisplay();
         tankGame->nextTurn();
         turn++;
     }
@@ -185,7 +184,7 @@ void Game::initGameState()
     // Create a stats menu for both tanks
     for( auto actTemp : startActors)
     {
-        temp = new Menu( actTemp.id, actTemp.health, actTemp.shots );
+        temp = new Menu( actTemp.id, actTemp.health, actTemp.shots, actTemp.hits );
         constants.push_back(temp);
     }
 

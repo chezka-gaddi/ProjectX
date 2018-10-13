@@ -21,23 +21,24 @@ void drawBitmapText( char *string, float x, float y );
 * @param[in] hp - health
 * @param[in] ammo - ammo count
 * *****************************************************************************/
-Menu::Menu( int id, int hp, int ammo )
+Menu::Menu( int id, int hp, int ammo, int hits )
 {
     if( id == 1 )
     {
         strncpy(name, "Player 1", 9);
-        screen_x = -0.8;
+        screen_x = -0.7;
     }
     
     else
     {
         strncpy(name, "Player 2", 9);
-        screen_x = 0.5;
+        screen_x = 0.55;
     }
 
     screen_y = 0.7;
     health = hp;
     bullet = ammo;
+    score = hits;
 }
 
 
@@ -81,6 +82,10 @@ void Menu::drawPlayerStats()
     sprintf(ammo, "%d", bullet);
     strcat(strAmmo, ammo);
     drawBitmapText(strAmmo, screen_x, screen_y - 0.10);
+    
+    char hits[4];
+    sprintf(hits, "%d", score);
+    drawBitmapText(hits, screen_x - 0.1, screen_y - 0.05);
 }
 
 
