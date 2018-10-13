@@ -19,9 +19,4 @@ typedef void* makeTank_Fptr;
 
 std::vector<Actor *> dynamicTankLoader(std::vector<std::string> objectNames);
 
-/**
- * closes all open libraries should be used when done with libraries
- */
-void closeLibs();
-
 #endif //SRC_DYNAMICLOADER_H

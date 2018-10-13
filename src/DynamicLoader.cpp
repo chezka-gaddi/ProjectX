@@ -11,6 +11,16 @@
 #include <string>
 
 
+/**
+ * @author David Donahue
+ * @par Description:
+ * Loads all of the given actors from ./tanks/<name>.so.
+ * It works by loading the maker() function from each .so and running it
+ * to get a pointer to an instance of the class.
+ *
+ * @param[in] objectNames - names of the actors to load.
+ * @return vector of pointers to the loaded actors
+ */
 std::vector<Actor *> dynamicTankLoader(std::vector<std::string> objectNames)
 {
     std::vector<Actor *> ret;
@@ -48,7 +58,4 @@ std::vector<Actor *> dynamicTankLoader(std::vector<std::string> objectNames)
     
 }
 
-void closeLibs()
-{
-    return;
-}
+
