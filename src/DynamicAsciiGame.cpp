@@ -13,6 +13,7 @@ void DL_gameloop(){
     int y = 5;
     int i = 0;
 
+    /*
     for(auto a: *TankMakers()){
 
         void* p = a.second;
@@ -20,7 +21,7 @@ void DL_gameloop(){
         startActors.push_back(ActorInfo(actor,1,2,rand() % x, rand()% y,2,i));
         i++;
     }
-
+    */
     GameField gameField (x,y, startActors, displayAscii);
 
     //the is the main game loop

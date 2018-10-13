@@ -70,3 +70,8 @@ void SimpleActor::setMove(direction d)
 {
     dir = d;
 }
+
+Actor* SimpleActor::maker()
+{
+    return new SimpleActor;
+}

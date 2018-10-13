@@ -23,6 +23,7 @@ public:
      */
     virtual AttackData attack(MapData map, PositionData status);
 
+    virtual Actor * maker();
     /**
      * calculates how many moves it will take to reach a given coordinate
      * @param[in] x1 - starting point x coordinate

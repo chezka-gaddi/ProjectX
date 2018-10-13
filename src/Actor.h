@@ -34,13 +34,18 @@ public:
      */
     virtual AttackData attack(MapData map, PositionData status) = 0;
 
+
+    /**
+     * Returns a pointer to the class, needed for the dynamic linking
+     */
+    virtual Actor *maker() = 0;
     #endif
 
     Actor();
     ~Actor();
     Actor(std::string newName, int newId);
 
-    virtual //Getters
+    //Getters
     std::string getName();    /*!< Returns the value within name */  
     int getId(); /*!< Returns the value within id */  
     //Setters   

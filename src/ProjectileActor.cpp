@@ -326,3 +326,8 @@ void ProjectileActor::setEndY(int endYUpdate)
     endY = endYUpdate;
 }
 
+
+Actor *ProjectileActor::maker()
+{
+    return new ProjectileActor;
+}

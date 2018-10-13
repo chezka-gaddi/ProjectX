@@ -52,8 +52,10 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 #include "AsciiTankActor.h"
 #include "DynamicAsciiGame.h"
 #include "DynamicLoader.h"
+#include "Actor.h"
 
-
+#include <vector>
+#include <string>
 
 
 
@@ -62,11 +64,14 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 
 int main(void)
 {
+    std::vector<std::string> tanks = {"SimpleAI", "SimpleAI"};
+    std::vector<Actor *> actors = dynamicTankLoader(tanks);
 
-    dynamicLoader("./tanks/ExampleTankSetFile.txt");
-   //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
-   DL_gameloop();
-    closeLibs();
-   std::cout << "\n\n\n\n\n game over \n\n\n\n\n\n";
-   return 0;
+    if(actors.size() < 2)
+        return -1;
+    
+    //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
+    DL_gameloop();
+    std::cout << "\n\n\n\n\n game over \n\n\n\n\n\n";
+    return 0;
 }

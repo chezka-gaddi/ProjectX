@@ -2,66 +2,49 @@
 // Created by jlee on 10/12/18.
 //
 
+
 #include "DynamicLoader.h"
 #include <dlfcn.h>
 #include <fstream>
 #include <iostream>
+#include <Actor.h>
+#include <string>
 
-std::vector<void*>* dl_List(){
 
-    static std::vector<void*> * handleList = new std::vector<void*>();
-
-    return handleList;
-}
-
-std::map<std::string,makeTank_Fptr > * TankMakers(){
-    static std::map<std::string,makeTank_Fptr > * Makers = new std::map<std::string,makeTank_Fptr >();
-
-    return Makers;
-};
-
-void dynamicLoader(std::string TankSetFileName){
-
-    std::ifstream SetFile;
-
-    SetFile.open(TankSetFileName, std::ifstream::in);
-
-    std::vector<std::string> files = std::vector<std::string>();
-    std::string line;
-    std::cout<< "in dynamic loader about to load file names\n";
-    //gets all of the library file names
-    while(!getline(SetFile,line).eof()){
-        std::cout << line << std::endl;
-        files.push_back(line);
-    }
-    //dont need the Set file open anymore
-    SetFile.close();
-
-    //populate dl_List and tank makers
-    for(std::string s: files){
-        std::string relativePath = "./tanks/";
-
-        relativePath += s;
-
-        //gets a handle to the shared library and loads the library
-        dl_List()->push_back(dlopen( relativePath.c_str(), RTLD_NOW));
-
-        std::cout << "relative path" << relativePath << std::endl;
-
-        //makes sure the handle isnt null
-        if( dl_List()->at(dl_List()->size() -1) != nullptr){
-            makeTank_Fptr temp = static_cast<makeTank_Fptr>(dlsym(dl_List()->at(dl_List()->size()-1),"makeTank"));
-            TankMakers()->insert(std::pair<std::string,makeTank_Fptr>(s, temp));
-            temp = nullptr;
+std::vector<Actor *> dynamicTankLoader(std::vector<std::string> objectNames)
+{
+    std::vector<Actor *> ret;
+    std::string relPath ("./tanks/");
+    for (auto s : objectNames)
+    {
+        s.insert(0, relPath);
+        s.append(".so");
+        void * handle = dlopen(s.c_str(), RTLD_LAZY);
+        if (handle == NULL)
+        {
+            std::cout << "Failed to open " << s << "\n";
+            std::cout << dlerror() << std::endl;
+        }
+        else
+        {
+            Actor* (*maker)() = (Actor* (*)()) dlsym(handle, "_ZN8SimpleAI5makerEv");
+            if (maker == NULL)
+            {
+                std::cout << "Failed to load symbol\n";
+            }
+            else
+            {
+                std::cout << maker() << std::endl;
+                ret.push_back(maker());
+            }
         }
 
-        //TankMakers should be populated now
     }
-
+    return ret;
+    
 }
 
-void closeLibs(){
-    for(void * handle: *dl_List()){
-        dlclose(handle);
-    }
+void closeLibs()
+{
+    return;
 }

@@ -22,6 +22,7 @@ public:
     SimpleActor(direction mv, int d);
     void setAttack(int x, int y, int d);
     void setMove  (direction d);
+    Actor *maker();
 };
 
 
