@@ -22,13 +22,11 @@ Game::Game(gameMode mode) : turn(0)
 
 float Game::convertGLXCoordinate( int x )
 {
-    cout << "start x: " << x;
     GLfloat x_gl = (x - 10.) / 4.;
     if( x_gl > 0 )
         x_gl -= 0.3;
     else
         x_gl += 0.3;
-    cout << "\tend x: " << x_gl << endl;
 
     return x_gl;
 }
@@ -36,13 +34,11 @@ float Game::convertGLXCoordinate( int x )
 
 float Game::convertGLYCoordinate( int y )
 {
-    cout << "start y: " << y;
     GLfloat y_gl = (y - 2.5) / 4.;
     if( y_gl > 0 )
         y_gl -= 0.3;
     else
         y_gl += 0.3;
-    cout << "\tend y: " << y_gl << endl;
 
     return y_gl;
 }

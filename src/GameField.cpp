@@ -340,7 +340,6 @@ void GameField::nextTurn()
             {
                 if (actors[i].id > 0) //tanks attacking
                 {
-                    std::cout << "Attack!!\n\n";
                     ProjectileActor * proj = new ProjectileActor;
                     proj->setEndX(atk.attack_x);
                     proj->setEndY(atk.attack_y);
@@ -366,8 +365,6 @@ void GameField::nextTurn()
 
                     //update the display
                     updateMap();
-                    //if (displayCallback != NULL)
-                        //displayCallback();
                 }
                 
             }
@@ -377,6 +374,8 @@ void GameField::nextTurn()
     cull();
     updateMap();
 }
+
+
 /**
  * @author David Donahue
  * @par Description:
@@ -388,6 +387,7 @@ void GameField::addActor(ActorInfo a)
     updateMap();
 }
 
+
 /**
  * @author David Donahue
  * @par Description:
@@ -396,11 +396,11 @@ void GameField::addActor(ActorInfo a)
  * @param[in] x - the x value of the obstacle
  * @param[in] y - the y value of the obstacle
  */
-
 void GameField::addObstacle(int x, int y)
 {
     fieldMap.obstacleMap[x + fieldMap.width * y] = true;
 }
+
 
 /**
  * @author David Donahue
@@ -410,11 +410,11 @@ void GameField::addObstacle(int x, int y)
  * @param[in] x - the x value of the obstacle
  * @param[in] y - the y value of the obstacle
  */
-
 void GameField::removeObstacle(int x, int y)
 {
     fieldMap.obstacleMap[x + fieldMap.width * y] = false;
 }
+
 
 /**
  * @author David Donahue
@@ -425,6 +425,8 @@ std::vector<ActorInfo> GameField::getActors()
 {
     return actors;
 }
+
+
 /**
  * @author David Donahue
  * @par Description:
@@ -442,6 +444,8 @@ std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
     return hits;
     
 }
+
+
 /**
  * @author David Donahue
  * @par Description:
@@ -462,6 +466,8 @@ void GameField::cull()
     }
     
 }
+
+
 /**
  * @author David Donahue
  * @par Description:

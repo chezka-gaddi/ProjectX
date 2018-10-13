@@ -27,15 +27,8 @@ void InitEvent::doAction(Game &game)
 
 void updateDrawables(Game &game)
 {
-    cout << "\tREDRAWING\t\n";
     Drawable *temp_draw = nullptr;
     
-    /*for( int i = 0; i < game.objects.size(); i++ )
-    {
-        Drawable *temp = game.objects.at(i);
-        delete temp;
-    }*/
-   
     game.objects.clear();
 
     vector <ActorInfo> actors = game.tankGame->getActors();
