@@ -185,7 +185,7 @@ void Game::initGameState()
     for( auto actTemp : startActors)
     {
         temp = new Menu( actTemp.id, actTemp.health, actTemp.shots, actTemp.hits );
-        constants.push_back(temp);
+        objects.push_back(temp);
     }
 
     tankGame = new GameField(18,5, startActors, display);

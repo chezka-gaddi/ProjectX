@@ -1,12 +1,19 @@
-/**
+/***************************************************************************//**
  * @file event.cpp
- * @brief Contains the functions of all events.
  * @author Chezka Gaddi
- **/
+ * @brief Contains all of the maintenace functions for Event class and all of its
+ * subclasses.
+ ******************************************************************************/
 
 #include "event.h"
 
 
+/***************************************************************************//**
+ * @author Chezka Gaddi
+ * @brief Destructor
+ *
+ * Destructor for Event class
+ ******************************************************************************/
 Event::~Event() {}
 
 
@@ -18,6 +25,15 @@ Event::~Event() {}
  ******************************************************************************/
 InitEvent::InitEvent(int c, int r) : columns(c), rows(r) {}
 
+
+/***************************************************************************//**
+ * @author Chezka Gaddi
+ * @brief doAction
+ *
+ * Initializes the game state.
+ *
+ * @param[in] game - game manager
+ ******************************************************************************/
 void InitEvent::doAction(Game &game)
 {
    glClear(GL_COLOR_BUFFER_BIT);
@@ -25,6 +41,14 @@ void InitEvent::doAction(Game &game)
 }
 
 
+/***************************************************************************//**
+ * @author Chezka Gaddi
+ * @brief updateDrawables
+ *
+ * Remakes the objects vector to have the most current object coordinates.
+ *
+ * @param[in] game - game manager
+ ******************************************************************************/
 void updateDrawables(Game &game)
 {
     Drawable *temp_draw = nullptr;
@@ -43,6 +67,8 @@ void updateDrawables(Game &game)
         {
             temp_draw = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y) );
             game.objects.push_back( temp_draw );
+            temp_draw = new Menu( act.id, act.health, act.shots, act.hits );
+            game.objects.push_back( temp_draw );
         }
 
         else if( act.id < 0 )
@@ -54,12 +80,14 @@ void updateDrawables(Game &game)
 }
 
 
-/**
+/***************************************************************************//**
  * @author Chezka Gaddi
- * @brief Draws the menu, player stats, gamefield, and tanks.
- * 
- * @param[in] game - game object
- **/
+ * @brief doAction
+ *
+ * Draw all of the objects to the screen.
+ *
+ * @param[in] game - game manager
+ ******************************************************************************/
 void DisplayEvent::doAction(Game &game)
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -88,6 +116,15 @@ void DisplayEvent::doAction(Game &game)
  ******************************************************************************/
 ReshapeEvent::ReshapeEvent(int w, int h) : width(w), height(h) {}
 
+
+/***************************************************************************//**
+ * @author Chezka Gaddi
+ * @brief doAction
+ *
+ * Re-adjust the view of the port when the window gets resized.
+ *
+ * @param[in] game - game manager
+ ******************************************************************************/
 void ReshapeEvent::doAction(Game &game)
 {
     const float ar = width / height;
@@ -110,6 +147,16 @@ void ReshapeEvent::doAction(Game &game)
  ******************************************************************************/
 TimerEvent::TimerEvent(int value) : tick(value) {}
 
+
+/***************************************************************************//**
+ * @author Chezka Gaddi
+ * @brief doAction
+ *
+ * Waits until the timer to execute a turn so the movement of the objects can be
+ * seen.
+ *
+ * @param[in] game - game manager
+ ******************************************************************************/
 void TimerEvent::doAction(Game &game)
 {
     game.executeTurn();
@@ -121,6 +168,15 @@ void TimerEvent::doAction(Game &game)
  ******************************************************************************/
 CloseEvent::CloseEvent() {}
 
+
+/***************************************************************************//**
+ * @author Chezka Gaddi
+ * @brief doAction
+ *
+ * Calls the closeDown function when the window is exited.
+ *
+ * @param[in] game - game manager
+ ******************************************************************************/
 void CloseEvent::doAction(Game &game)
 {
     game.closeDown();
