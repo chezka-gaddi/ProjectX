@@ -1,6 +1,6 @@
 #include "Texture.h"
 
-GLuint texture[7];
+GLuint texture[8];
 
 int LoadGLTextures()     
 {
@@ -84,9 +84,23 @@ int LoadGLTextures()
     if(texture[6] == 0)
         return false;
     
-    glBindTexture(GL_TEXTURE_2D, texture[6]);
+    
+    texture[7] = SOIL_load_OGL_texture(
+            "images/rock.png", 
+            SOIL_LOAD_AUTO, 
+            SOIL_CREATE_NEW_ID, 
+            SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+    
+    glBindTexture(GL_TEXTURE_2D, texture[7]);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
-	return true;
+    if(texture[7] == 0)
+        return false;
+    
+    glBindTexture(GL_TEXTURE_2D, texture[7]);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	
+    return true;
 }

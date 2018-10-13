@@ -56,12 +56,7 @@ Game::~Game()
 *******************************************************************************/
 float Game::convertGLXCoordinate( int x )
 {
-    GLfloat x_gl = (x - 10.) / 4.;
-    if( x_gl > 0 )
-        x_gl -= 0.3;
-    else
-        x_gl += 0.3;
-
+    GLfloat x_gl = -1.77 + (x * 0.25);
     return x_gl;
 }
 
@@ -77,12 +72,7 @@ float Game::convertGLXCoordinate( int x )
 *******************************************************************************/
 float Game::convertGLYCoordinate( int y )
 {
-    GLfloat y_gl = (y - 2.5) / 4.;
-    if( y_gl > 0 )
-        y_gl -= 0.3;
-    else
-        y_gl += 0.3;
-
+    GLfloat y_gl = 0.75 - ( y * 0.3 );
     return y_gl;
 }
 
@@ -174,8 +164,8 @@ void Game::initGameState()
     }
     
     //tank actor pointers are made and then packaged into ActorInfo structs
-    ActorInfo player1Info = ActorInfo(player1, 3,1,2,2,1);
-    ActorInfo player2Info = ActorInfo(player2, 3,1,16,2,2);
+    ActorInfo player1Info = ActorInfo(player1, 3,1,2,0,1);
+    ActorInfo player2Info = ActorInfo(player2, 3,1,14,5,2);
     
     std::vector<ActorInfo> startActors;
     startActors.push_back(player1Info);
@@ -188,15 +178,31 @@ void Game::initGameState()
         objects.push_back(temp);
     }
 
-    tankGame = new GameField(18,5, startActors, display);
+    tankGame = new GameField(15,9, startActors, display);
     
     // Add obstacles to the gamefield
-    tankGame->addObstacle(6,2);
-    tankGame->addObstacle(14,2); 
-    temp = new Obstacles( convertGLXCoordinate( 6 ), convertGLYCoordinate( 2 ) );
+    tankGame->addObstacle(3,0);
+    tankGame->addObstacle(13,4); 
+    tankGame->addObstacle(7,2); 
+    tankGame->addObstacle(4,7); 
+    tankGame->addObstacle(10,5); 
+    tankGame->addObstacle(14,1); 
+    tankGame->addObstacle(2,5); 
+   
+
+    temp = new Obstacles( 1, convertGLXCoordinate( 3 ), convertGLYCoordinate( 0 ) );
     constants.push_back(temp);
-    
-    temp = new Obstacles( convertGLXCoordinate( 14 ), convertGLYCoordinate( 2 ) );
+    temp = new Obstacles( 2, convertGLXCoordinate( 13 ), convertGLYCoordinate( 4 ) );
+    constants.push_back(temp);
+    temp = new Obstacles( 2, convertGLXCoordinate( 7 ), convertGLYCoordinate( 2 ) );
+    constants.push_back(temp);
+    temp = new Obstacles( 1, convertGLXCoordinate( 4 ), convertGLYCoordinate( 7 ) );
+    constants.push_back(temp);
+    temp = new Obstacles( 1, convertGLXCoordinate( 10 ), convertGLYCoordinate( 5 ) );
+    constants.push_back(temp);
+    temp = new Obstacles( 1, convertGLXCoordinate( 14 ), convertGLYCoordinate( 1 ) );
+    constants.push_back(temp);
+    temp = new Obstacles( 1, convertGLXCoordinate( 2 ), convertGLYCoordinate( 5 ) );
     constants.push_back(temp);
 }
 

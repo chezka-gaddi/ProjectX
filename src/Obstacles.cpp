@@ -15,11 +15,14 @@
 * @param[in] x_coor - coordinate to spawn obstacle
 * @param[in] y_coor - coordinate to spawn obstacle
 * *****************************************************************************/
-Obstacles::Obstacles(GLfloat x_coor, GLfloat y_coor )
+Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor )
 {
     screen_x = x_coor;
     screen_y = y_coor;
+    
     tex = 3;
+    if(id == 2)
+        tex = 7;
 }
 
 

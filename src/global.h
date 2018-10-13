@@ -5,6 +5,6 @@
 #include <vector>
 
 //extern vector <GLuint> texture;
-extern GLuint texture[7];
+extern GLuint texture[8];
 
 #endif

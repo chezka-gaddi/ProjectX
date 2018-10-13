@@ -79,7 +79,7 @@ class Menu : public Drawable
 class Obstacles : public Drawable
 {
     public:
-        Obstacles( GLfloat x, GLfloat y);
+        Obstacles( int, GLfloat, GLfloat);
 
         void draw();
 };
