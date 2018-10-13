@@ -42,6 +42,7 @@ class Drawable{
 class GameFieldDrawable : public Drawable
 {
     public:
+        GLuint tex;
         GameFieldDrawable();
 
         void draw();

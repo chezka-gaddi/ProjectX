@@ -1,15 +1,23 @@
-/**
- * @file Projectile.cpp
- * @brief Contains the functions to construct and draw the TankDrawable.
- * @author Chezka Gaddi
- **/
+/***************************************************************************//**
+* @file Projectile.cpp
+* @author Chezka Gaddi
+* @brief Contains all maintenance functions for Projectile class.
+* *****************************************************************************/
 
 #include "Drawable.h"
 
 
-/**
- * Will no be used in actual program. Actor class constructor will be used instead
- **/
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief Constructor
+*
+* Initiates the coordinates of where projectile is to be drawn and from whom the
+* projectile came from.
+*
+* @param[in] ID - indicates who fired the projectile
+* @param[in] x_coor - coordinate to spawn projectile
+* @param[in] y_coor - coordinate to spawn projectile
+* *****************************************************************************/
 Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor )
 {
     screen_x = x_coor;
@@ -27,12 +35,12 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor )
 }
 
 
-/**
- * @author Chezka Gaddi
- * @brief Draws the tank according to the texture associated with the tank.
- *
- * @return Void
- **/
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief draw
+*
+* Draws the projectile in the gamefield
+* *****************************************************************************/
 void Projectile::draw()
 {
     glEnable(GL_TEXTURE_2D);

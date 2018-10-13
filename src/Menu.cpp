@@ -1,12 +1,26 @@
-#include "Drawable.h"
-#include <iostream>
-#include <cstring>
+/***************************************************************************//**
+* @file Menu.cpp
+* @author Chezka Gaddi
+* @brief Contains all maintenance functions for the Menu class.
+* *****************************************************************************/
 
-using namespace std;
+#include "Drawable.h"
+
 
 void drawBitmapText( char *string, float x, float y );
 
 
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief Constructor
+*
+* Initializes the menu with the player the menu is being made for and the stats
+* to be printed.
+*
+* @param[in] id - player id
+* @param[in] hp - health
+* @param[in] ammo - ammo count
+* *****************************************************************************/
 Menu::Menu( int id, int hp, int ammo )
 {
     if( id == 1 )
@@ -27,6 +41,12 @@ Menu::Menu( int id, int hp, int ammo )
 }
 
 
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief draw
+*
+* Draws the player stats up in the menu bar.
+* *****************************************************************************/
 void Menu::draw()
 {
     glEnable(GL_TEXTURE_2D);
@@ -40,6 +60,12 @@ void Menu::draw()
 }
 
 
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief drawPlayerStats
+*
+* Edits and displays all of the statistics to the screen.
+* *****************************************************************************/
 void Menu::drawPlayerStats()
 {
     drawBitmapText(name, screen_x, screen_y);
@@ -58,6 +84,12 @@ void Menu::drawPlayerStats()
 }
 
 
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief drawBitmapText
+*
+* Generates all of the string statistics to the screen.
+* *****************************************************************************/
 void drawBitmapText( char *string, float x, float y )
 {
     glDisable(GL_TEXTURE_2D);

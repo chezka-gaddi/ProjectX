@@ -1,14 +1,23 @@
-/**
- * @file TankDrawable.cpp
- * @brief Contains the functions to construct and draw the TankDrawable.
- * @author Chezka Gaddi
- **/
+/***************************************************************************//**
+* @file TankDrawable.cpp
+* @author Chezka Gaddi
+* @brief Contains all maintenance functions for TankDrawable class.
+* *****************************************************************************/
 
 #include "Drawable.h"
 
-/**
- * Will no be used in actual program. Actor class constructor will be used instead
- **/
+
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief Constructor
+*
+* Initiates the coordinates of where tank is to be drawn and what it will look
+* like.
+*
+* @param[in] ID - tank id
+* @param[in] x_coor - coordinate to spawn tank
+* @param[in] y_coor - coordinate to spawn tank
+* *****************************************************************************/
 TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor )
 {
     screen_x = x_coor;
@@ -25,12 +34,12 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor )
 }
 
 
-/**
- * @author Chezka Gaddi
- * @brief Draws the tank according to the texture associated with the tank.
- *
- * @return Void
- **/
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief draw
+*
+* Generates the tank onto the gamefield
+* *****************************************************************************/
 void TankDrawable::draw()
 {
     glEnable(GL_TEXTURE_2D);

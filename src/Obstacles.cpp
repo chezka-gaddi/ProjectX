@@ -1,24 +1,34 @@
-/**
- * @file TankDrawable.cpp
- * @brief Contains the functions to construct and draw the TankDrawable.
- * @author Chezka Gaddi
- **/
+/***************************************************************************//**
+* @file Obstacles.cpp
+* @author Chezka Gaddi
+* @brief Contains all maintenance functions for the Obstacles class.
+* *****************************************************************************/
 
 #include "Drawable.h"
 
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief Constructor
+* 
+* Initializes the x and y coordinates where the obstacle will be spawned.
+*
+* @param[in] x_coor - coordinate to spawn obstacle
+* @param[in] y_coor - coordinate to spawn obstacle
+* *****************************************************************************/
 Obstacles::Obstacles(GLfloat x_coor, GLfloat y_coor )
 {
     screen_x = x_coor;
     screen_y = y_coor;
+    tex = 6;
 }
 
 
-/**
- * @author Chezka Gaddi
- * @brief Draws the obstacle according to the texture associated with the tank.
- *
- * @return Void
- **/
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief draw
+* 
+* Draws the obstacle will be into the gamefield.
+* *****************************************************************************/
 void Obstacles::draw()
 {
     glEnable(GL_TEXTURE_2D);
@@ -29,13 +39,13 @@ void Obstacles::draw()
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
     glTranslatef(screen_x, screen_y, -5.0f);
-    glBindTexture(GL_TEXTURE_2D, texture[3]);
+    glBindTexture(GL_TEXTURE_2D, texture[tex]);
 
     glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.18f, -0.23f,  1.0f);
-        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.18f, -0.23f,  1.0f);
-        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.18f,  0.23f,  1.0f);
-        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.18f,  0.23f,  1.0f);
+        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.18f, -0.20f,  1.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.18f, -0.20f,  1.0f);
+        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.18f,  0.20f,  1.0f);
+        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.18f,  0.20f,  1.0f);
 	glEnd();
 
     glPopMatrix();

@@ -6,9 +6,22 @@
 
 #include "Drawable.h"
 
+
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief Constructor
+* 
+* Default constructor, sets tex = 0
+*******************************************************************************/
 GameFieldDrawable::GameFieldDrawable() : tex(2) {}
 
 
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief draw
+* 
+* Overloaded draw function that creates the gamefield
+*******************************************************************************/
 void GameFieldDrawable::draw()
 {
     glDisable(GL_TEXTURE_2D);
