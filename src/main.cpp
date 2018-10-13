@@ -62,9 +62,15 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 
 // Main
 
-int main(void)
+int main(int argc, char **argv) //command line arguments are the tanks to load.
 {
-    std::vector<std::string> tanks = {"SimpleAI", "SimpleAI"};
+    std::vector<std::string> tanks (argc - 1);
+
+    for (int i = 1; i < argc; ++i)
+    {
+        tanks[i - 1] = argv[i];
+    }
+    
     std::vector<Actor *> actors = dynamicTankLoader(tanks);
 
     if(actors.size() < 2)

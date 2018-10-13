@@ -19,6 +19,7 @@ FILES += SimpleAI.o
 
 TANK_PATH= ./tanks/
 TANKS = SimpleAI.so
+TANKS += AsciiTankActor.so
 
 TANKS_LINK = Actor.o #need to link in the base class for the .so to have everything.
 
