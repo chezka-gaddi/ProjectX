@@ -182,10 +182,15 @@ void Game::initGameState()
     startActors.push_back(player1Info);
     startActors.push_back(player2Info);
     
+    // Create a stats menu for both tanks
+    for( auto actTemp : startActors)
+    {
+        temp = new Menu( actTemp.id, actTemp.health, actTemp.shots );
+        constants.push_back(temp);
+    }
 
     tankGame = new GameField(18,5, startActors, display);
     
-
     // Add obstacles to the gamefield
     tankGame->addObstacle(6,2);
     tankGame->addObstacle(14,2); 
@@ -194,14 +199,6 @@ void Game::initGameState()
     
     temp = new Obstacles( convertGLXCoordinate( 14 ), convertGLYCoordinate( 2 ) );
     constants.push_back(temp);
-   
-    
-    // Create a stats menu for both tanks
-    for( auto actTemp : startActors)
-    {
-        temp = new Menu( actTemp.id, actTemp.health, actTemp.shots );
-        constants.push_back(temp);
-    }
 }
 
 

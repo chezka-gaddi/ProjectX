@@ -29,7 +29,8 @@ void updateDrawables(Game &game)
 {
     Drawable *temp_draw = nullptr;
     
-    game.objects.clear();
+    if(!game.objects.empty())
+        game.objects.clear();
 
     vector <ActorInfo> actors = game.tankGame->getActors();
     
