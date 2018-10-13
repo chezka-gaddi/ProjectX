@@ -49,7 +49,6 @@ public:
     void setEndX(int endXUpdate);    
     void setEndY(int endYUpdate);
 
-    virtual Actor *maker();
 };
 
 
