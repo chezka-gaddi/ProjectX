@@ -118,7 +118,6 @@ static bool isplayable(std::vector<ActorInfo> actorInfo)
 *******************************************************************************/
 void Game::executeTurn()
 {
-    std::cout << "Game Turn [" << turn << "] executed\n";
     std::cout << "Repainting game objects\n";
     
     if(isplayable(tankGame->getActors()))

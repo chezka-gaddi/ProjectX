@@ -1,6 +1,12 @@
+/***************************************************************************//**
+* @file game.h
+* @author Chezka Gaddi
+* @brief Contains all functions prototypes that maintains Game class.
+*******************************************************************************/
 #ifndef __GAME_H
 #define __GAME_H
 
+//Includes
 #include <iostream>
 #include <vector>
 #include <GL/glut.h>
@@ -14,16 +20,24 @@
 
 using namespace std;
 
+
+/*!<Enum class for the gameMode */
 enum gameMode {ai, sp, mp};
 
+
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief Class
+*
+* Game is an interface for the GameField class and openGl application
+*******************************************************************************/
 class Game
 {
     public:
-        int turn;
-        vector <Drawable *> objects;
-        vector <Drawable *> constants;
-        GameField *tankGame;
-        gameMode g_mode;
+        vector <Drawable *> objects;        /*!<Holds all of the current actors */
+        vector <Drawable *> constants;      /*!<Holds the GameFieldDrawable and menus */
+        GameField *tankGame;                /*!<Pointer to the game manager */
+        gameMode g_mode;                    /*!<Type of game to be ran */
 
         Game();
         Game(gameMode mode);
@@ -35,7 +49,6 @@ class Game
         void closeDown();
         float convertGLXCoordinate( int );
         float convertGLYCoordinate( int );
-
 };
 
-#endif
+#endif //__GAME_H
