@@ -14,7 +14,6 @@ FILES += MapData.o
 FILES += ProjectileActor.o
 FILES += ActorInfo.o
 FILES += DynamicLoader.o
-FILES += DynamicAsciiGame.o
 FILES += SimpleAI.o
 
 TANK_PATH= ./tanks/

@@ -39,6 +39,7 @@
  *
  *
  * @par Revision History
+ * 2018-10-13 Changed main to use dynamic linking
  * @verbatim
 https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
  @endverbatim
@@ -50,7 +51,6 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 #include <iostream>
 #include "AsciiGameMisc.h"
 #include "AsciiTankActor.h"
-#include "DynamicAsciiGame.h"
 #include "DynamicLoader.h"
 #include "Actor.h"
 
@@ -68,16 +68,19 @@ int main(int argc, char **argv) //command line arguments are the tanks to load.
 
     for (int i = 1; i < argc; ++i)
     {
+        //get the tank names from the CLI
         tanks[i - 1] = argv[i];
     }
-    
+
+    //get the actor pointers from the loader
     std::vector<Actor *> actors = dynamicTankLoader(tanks);
 
+    //if there aren't 2 actors, there is no game to play.
     if(actors.size() < 2)
         return -1;
     
     //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
-    DL_gameloop(actors);
+    gameloop(actors);
     std::cout << "\n\n\n\n\n game over \n\n\n\n\n\n";
     return 0;
 }

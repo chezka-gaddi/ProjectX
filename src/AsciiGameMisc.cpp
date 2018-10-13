@@ -42,40 +42,23 @@ void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount)
     system("sleep 0.3");
 }
 
-void gameloop(gameMode mode){
-    
-    //change tankactor here to what ever we have decided to call the ascii tank actor
-    Actor * player1;
-    Actor * player2;
-    switch (mode)
-    {
-    case ai:
-        player1 = new SimpleAI;
-        player2 = new SimpleAI;
-        break;
-    case sp:
-        player1 = new AsciiTankActor;
-        player2 = new SimpleAI;
-        break;
-    case mp:
-        player1 = new AsciiTankActor;
-        player2 = new AsciiTankActor;
-        break;
-    default:
-        break;
-    }
-    //tank actor pointers are made and then packaged into ActorInfo structs
-    ActorInfo player1Info = ActorInfo(player1, 1,1,2,2,1);
-    ActorInfo player2Info = ActorInfo(player2, 1,1,18,2,2);
-    std::vector<ActorInfo> startActors;
-    startActors.push_back(player1Info);
-    startActors.push_back(player2Info);
-    
-    GameField gameField (20,5, startActors, displayAscii);
+void gameloop(std::vector<Actor *> actors){
 
-    gameField.addObstacle(6,2); //add some obstacles to make things more fun
-    gameField.addObstacle(14,2); 
-   
+    std::vector<ActorInfo> startActors;
+
+    int x = 20;
+    int y = 5;
+    int i = 1;
+
+    //generate a start postion and ActorInfo for all actors in the game
+    for(auto a:  actors)
+    {
+        startActors.push_back(ActorInfo(a,1,2,rand() % x, rand()% y,i));
+        i++;
+    }
+    
+    GameField gameField (x,y, startActors, displayAscii);
+
     //the is the main game loop
     while(isplayable(gameField.getActors())){
         //displays the current game state
@@ -84,6 +67,7 @@ void gameloop(gameMode mode){
         //makes the next moves
         gameField.nextTurn();
     }
+
     //Final Field State
     displayAscii(gameField.getMapData(), gameField.getActors(), gameField.getTurnCount());
 }
