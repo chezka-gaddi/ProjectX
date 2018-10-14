@@ -17,7 +17,6 @@
 #include "Actor.h"
 #include "AsciiTankActor.h"
 #include "SimpleAI.h"
-#include "DynamicLoader.h"
 
 using namespace std;
 

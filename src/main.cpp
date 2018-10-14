@@ -44,14 +44,12 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
  @endverbatim
  ******************************************************************************/
 
-
-
 // Includes
 #include <iostream>
 #include "util.h"
 
-// Main
 
+// Main
 int main(int argc, char **argv)
 {
     gameMode mode;
@@ -74,7 +72,7 @@ int main(int argc, char **argv)
 
     glutMainLoop();
 
-    std::cout << "\n\n\n\n\n game over \n\n\n\n\n\n";
+    std::cout << "\n\n\n\n\n GAME OVER \n\n\n\n\n\n";
     
     return 0;
 }

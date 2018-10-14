@@ -20,9 +20,9 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor )
     screen_x = x_coor;
     screen_y = y_coor;
     
-    tex = 3;
+    tex = 2;
     if(id == 2)
-        tex = 7;
+        tex = 3;
 }
 
 
@@ -42,7 +42,7 @@ void Obstacles::draw()
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
     glTranslatef(screen_x, screen_y, -5.0f);
-    glBindTexture(GL_TEXTURE_2D, texture[tex]);
+    glBindTexture(GL_TEXTURE_2D, gameTex[tex]);
 
     glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.18f, -0.20f,  1.0f);

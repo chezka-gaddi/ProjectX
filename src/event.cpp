@@ -36,8 +36,8 @@ InitEvent::InitEvent(int c, int r) : columns(c), rows(r) {}
  ******************************************************************************/
 void InitEvent::doAction(Game &game)
 {
-   glClear(GL_COLOR_BUFFER_BIT);
-   game.initGameState();
+    glClear(GL_COLOR_BUFFER_BIT);
+    game.initGameState();
 }
 
 
@@ -103,7 +103,7 @@ void DisplayEvent::doAction(Game &game)
         stuff->draw();
     }
 
-    system("sleep 0.5");
+    system("sleep 0.2");
     glutSwapBuffers();
 }
 

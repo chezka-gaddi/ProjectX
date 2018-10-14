@@ -65,7 +65,7 @@ class Menu : public Drawable
 
         Menu( int, int, int, int );
 
-        void drawHeart( GLfloat, GLfloat );
+        void drawTextBox( GLfloat, GLfloat );
         void drawPlayerStats();
         void draw();
 };

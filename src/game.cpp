@@ -100,6 +100,34 @@ static bool isplayable(std::vector<ActorInfo> actorInfo)
 
 /***************************************************************************//**
 * @author Chezka Gaddi
+* @brief gameOver
+*
+* Display the screen that reads game over
+*******************************************************************************/
+void gameOver()
+{
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glLoadIdentity();
+    glEnable(GL_TEXTURE_2D);
+
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, -5.0f);
+	glBindTexture(GL_TEXTURE_2D, gameTex[7]);
+	glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.5f,  1.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.5f, -0.5f,  1.0f);
+        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.5f,  0.5f,  1.0f);
+        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f,  0.5f,  1.0f);
+	glEnd();
+    glPopMatrix();
+
+    system("sleep 1");
+    glutSwapBuffers();
+}
+
+
+/***************************************************************************//**
+* @author Chezka Gaddi
 * @brief executeTurn
 *
 * While the game is still playable, execute a turn from each of the tanks,
@@ -108,8 +136,6 @@ static bool isplayable(std::vector<ActorInfo> actorInfo)
 *******************************************************************************/
 void Game::executeTurn()
 {
-    std::cout << "Repainting game objects\n";
-    
     if(isplayable(tankGame->getActors()))
     {
         tankGame->nextTurn();
@@ -117,18 +143,12 @@ void Game::executeTurn()
     }
     
     else
+    {
+        gameOver();
         glutLeaveMainLoop();
+    }
 }
-/**
- * @author David Donahue
- * @par Description:
- * Wrapper to display() that acts as the GameField display callback
- */
 
-void displayWrapper(MapData map, std::vector<ActorInfo> actors, int turnCount)
-{
-    display();
-}
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -140,17 +160,42 @@ void Game::initGameState()
 {
     Drawable *temp = nullptr;
     
-    std::cout << "Game::Loading playfield\n";
+    // Load game field
     temp = new GameFieldDrawable();
     constants.push_back(temp);
-    std::cout << "Game::Loading tanks\n";
-    std::vector<string> AINames = {"SimpleAI", "SimpleAI"};
-    std::vector<Actor*> StartActorPointers = dynamicTankLoader(AINames);
+   
+    // Load tank actors
+    Actor *player1;
+    Actor *player2;
+    
+    switch (g_mode)
+    {
+        case ai:
+            player1 = new SimpleAI;
+            player2 = new SimpleAI;
+            break;
+        
+        case sp:
+            player1 = new AsciiTankActor;
+            player2 = new SimpleAI;
+            break;
+        
+        case mp:
+            player1 = new AsciiTankActor;
+            player2 = new AsciiTankActor;
+            break;
+        
+        default:
+            break;
+    }
+    
+    //tank actor pointers are made and then packaged into ActorInfo structs
+    ActorInfo player1Info = ActorInfo(player1, 3,1,2,0,1);
+    ActorInfo player2Info = ActorInfo(player2, 3,1,14,5,2);
     
     std::vector<ActorInfo> startActors;
-    startActors.push_back(ActorInfo (StartActorPointers[0], 3, 1, 2, 0, 1));
-    startActors.push_back(ActorInfo (StartActorPointers[1], 3, 1, 14, 5, 2));
-
+    startActors.push_back(player1Info);
+    startActors.push_back(player2Info);
     
     // Create a stats menu for both tanks
     for( auto actTemp : startActors)
@@ -159,7 +204,7 @@ void Game::initGameState()
         objects.push_back(temp);
     }
 
-    tankGame = new GameField(15,9, startActors, displayWrapper);
+    tankGame = new GameField(15,9, startActors, display);
     
     // Add obstacles to the gamefield
     tankGame->addObstacle(3,0);
