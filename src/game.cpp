@@ -136,7 +136,6 @@ void gameOver()
 *******************************************************************************/
 void Game::executeTurn()
 {
- 
     if(isplayable(tankGame->getActors()))
     {
         tankGame->nextTurn();
