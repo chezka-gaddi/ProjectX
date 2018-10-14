@@ -143,42 +143,14 @@ void Game::initGameState()
     std::cout << "Game::Loading playfield\n";
     temp = new GameFieldDrawable();
     constants.push_back(temp);
-   
-
     std::cout << "Game::Loading tanks\n";
-
-    //change tankactor here to what ever we have decided to call the ascii tank actor
-    Actor *player1;
-    Actor *player2;
-    
-    switch (g_mode)
-    {
-        case ai:
-            player1 = new SimpleAI;
-            player2 = new SimpleAI;
-            break;
-        
-        case sp:
-            player1 = new AsciiTankActor;
-            player2 = new SimpleAI;
-            break;
-        
-        case mp:
-            player1 = new AsciiTankActor;
-            player2 = new AsciiTankActor;
-            break;
-        
-        default:
-            break;
-    }
-    
-    //tank actor pointers are made and then packaged into ActorInfo structs
-    ActorInfo player1Info = ActorInfo(player1, 3,1,2,0,1);
-    ActorInfo player2Info = ActorInfo(player2, 3,1,14,5,2);
+    std::vector<string> AINames = {"SimpleAI", "SimpleAI"};
+    std::vector<Actor*> StartActorPointers = dynamicTankLoader(AINames);
     
     std::vector<ActorInfo> startActors;
-    startActors.push_back(player1Info);
-    startActors.push_back(player2Info);
+    startActors.push_back(ActorInfo (StartActorPointers[0], 3, 1, 2, 0, 1));
+    startActors.push_back(ActorInfo (StartActorPointers[1], 3, 1, 14, 5, 2));
+
     
     // Create a stats menu for both tanks
     for( auto actTemp : startActors)
