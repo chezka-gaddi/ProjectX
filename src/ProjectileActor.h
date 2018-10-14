@@ -47,7 +47,8 @@ public:
     void setStartX(int startXUpdate);
     void setStartY(int startYUpdate);
     void setEndX(int endXUpdate);    
-    void setEndY(int endYUpdate);    
+    void setEndY(int endYUpdate);
+
 };
 
 

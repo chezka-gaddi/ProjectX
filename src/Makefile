@@ -7,9 +7,7 @@ SOFLAGS = -DDYNAMIC
 
 FILES = main.o
 FILES += GameField.o
-FILES += AsciiGameMisc.o
 FILES += Actor.o
-FILES += AsciiTankActor.o
 FILES += MapData.o
 FILES += ProjectileActor.o
 FILES += ActorInfo.o
@@ -23,7 +21,6 @@ FILES += Obstacles.o
 FILES += game.o
 FILES += callbacks.o
 FILES += DynamicLoader.o
-FILES += SimpleAI.o
 FILES += Menu.o
 
 TANK_PATH= ./tanks/
