@@ -136,6 +136,8 @@ void gameOver()
 *******************************************************************************/
 void Game::executeTurn()
 {
+   
+    
     if(isplayable(tankGame->getActors()))
     {
         tankGame->nextTurn();
@@ -233,10 +235,10 @@ void Game::initGameState()
         }
     }
     
-    std::cout << "Game::Loading tanks\n";
     std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
     
     std::vector<ActorInfo> startActors;
+   
 
     for (int i = 0; i < startActorPointers.size(); ++i)
     {
