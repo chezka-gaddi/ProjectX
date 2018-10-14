@@ -83,7 +83,7 @@ void gameloop(std::vector<Actor *> actors){
         startActors.push_back(ActorInfo(a,1,2,rand() % x, rand()% y,i));
         i++;
     }
-
+   
     
     GameField gameField (x,y, startActors, displayAscii);
 
@@ -99,7 +99,7 @@ void gameloop(std::vector<Actor *> actors){
         //makes the next moves
         gameField.nextTurn();
     }
-
+    
     //Final Field State
     displayAscii(gameField.getMapData(), gameField.getActors(), gameField.getTurnCount());
 }

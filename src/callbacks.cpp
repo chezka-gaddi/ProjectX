@@ -1,6 +1,8 @@
 /***************************************************************************//**
- * @file callbacks.cpp
- ******************************************************************************/
+* @file callbacks.h
+* @author Paul Hinker
+* @brief Contain all callback function prototypes.
+*******************************************************************************/
 #include "callbacks.h"
 
 // OpenGL thinks the y = 0 coordinate is at the top of the screen.  Flip it over

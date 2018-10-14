@@ -1,15 +1,13 @@
 /***************************************************************************//**
- * @file
- ******************************************************************************/
+* @file callbacks.h
+* @author Paul Hinker
+* @brief Contain all callback function prototypes.
+*******************************************************************************/
 #ifndef CALLBACKS_H
 #define CALLBACKS_H
 
-#include <iostream>
-
 #include "event.h"
 #include "util.h"
-
-using namespace std;
 
 /// Callback for the display event
 void display();
