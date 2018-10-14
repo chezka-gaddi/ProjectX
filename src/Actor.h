@@ -33,7 +33,6 @@ public:
      * @return Attack data the desired attack to be made, if possible the gamefield will do the move
      */
     virtual AttackData attack(MapData map, PositionData status) = 0;
-
     #endif
 
     Actor();

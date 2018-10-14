@@ -91,3 +91,13 @@ AttackData AsciiTankActor::attack( MapData map, PositionData status)
 
 
 AsciiTankActor::AsciiTankActor() {}
+
+#ifdef DYNAMIC
+extern "C" //required for runtime linking
+{
+    Actor * maker()
+    {
+        return new AsciiTankActor;
+    }
+}
+#endif
