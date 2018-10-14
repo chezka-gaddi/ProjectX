@@ -151,6 +151,17 @@ void Game::executeTurn()
         glutLeaveMainLoop();
     }
 }
+/**
+ * @author David Donahue
+ * @par Description:
+ * Wrapper to display() that acts as the GameField display callback
+ */
+
+void displayWrapper(MapData map, std::vector<ActorInfo> actors, int turnCount)
+{
+    display();
+}
+
 
 
 /***************************************************************************//**
@@ -253,7 +264,7 @@ void Game::initGameState()
         objects.push_back(temp);
     }
 
-    tankGame = new GameField(width, height, startActors, display);
+    tankGame = new GameField(width, height, startActors, displayWrapper);
     
     // Add obstacles to the gamefield
     for (auto o : obstacleLocations)
