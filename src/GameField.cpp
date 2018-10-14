@@ -241,13 +241,18 @@ void GameField::runMoves(ActorInfo &a)
             break;
         }
 
-    
+        bool tankInCollision = false;
         
         collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
         for (int i = 0; i < actors.size(); ++i ) //check each actor
         {
             if (actors[i].x == a.x && actors[i].y == a.y)
+            {
                 collisionVect.push_back(i);
+                if (actors[i].id > 0)
+                    tankInCollision = true;
+            }
+            
         }
             
         if (collisionVect.size() > 1 && a.health > 0)
@@ -255,7 +260,7 @@ void GameField::runMoves(ActorInfo &a)
             collisionDamage = 0;
             for (auto i: collisionVect)
             {
-                if(!(actorInfoById(-actors[i].id) == nullActor))
+                if(!(actorInfoById(-actors[i].id) == nullActor) && tankInCollision)
                 {
                     actorInfoById(-actors[i].id).hits++;
                 }
