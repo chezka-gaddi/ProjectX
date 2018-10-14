@@ -103,7 +103,7 @@ void DisplayEvent::doAction(Game &game)
         stuff->draw();
     }
 
-    system("sleep 0.5");
+    system("sleep 0.2");
     glutSwapBuffers();
 }
 

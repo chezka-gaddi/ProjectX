@@ -28,8 +28,8 @@ GameField::GameField()
  * @par Description:
  * Destructor, deletes all actors left on the feild
  */
- 
- GameField::~GameField()
+
+GameField::~GameField()
 {
     for (auto &a : actors)
     {
@@ -138,8 +138,8 @@ void GameField::updateMap()
         if (a.health > 0)
             fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
     }
+    
 }
-
 /**
  * @author David Donahue
  * @par Description:
@@ -198,7 +198,7 @@ void GameField::runMoves(ActorInfo &a)
                 a.health--;
             break;
         case UPLEFT:
-            if (a.y > 0 && a.x > 0 && !obstacleAt(a.x-1,a.y-1))            
+            if (a.y > 0 && a.x > 0 && !obstacleAt(a.x-1,a.y-1))
             {
                 a.y--;
                 a.x--;
@@ -208,7 +208,7 @@ void GameField::runMoves(ActorInfo &a)
             break;
              
         case UPRIGHT:
-            if (a.y > 0 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y-1))       
+            if (a.y > 0 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y-1))
             {
                 a.y--;
                 a.x++;
@@ -283,11 +283,11 @@ void GameField::runMoves(ActorInfo &a)
         else
             --rangeCount;
 
-        updateMap();
+            updateMap();
 
         if (displayCallback != NULL)
             displayCallback(fieldMap, actors, turnCount);
-
+        
     }
 }
 
@@ -352,7 +352,7 @@ void GameField::nextTurn()
                     if (displayCallback != NULL)
                         displayCallback(fieldMap, actors, turnCount);
                 }
-
+                
             }
         }
     }
@@ -393,8 +393,8 @@ void GameField::addObstacle(int x, int y)
  * @param[in] x - the x value of the obstacle
  * @param[in] y - the y value of the obstacle
  */
- 
- void GameField::removeObstacle(int x, int y)
+
+void GameField::removeObstacle(int x, int y)
 {
     fieldMap.obstacleMap[x + fieldMap.width * y] = false;
 }
