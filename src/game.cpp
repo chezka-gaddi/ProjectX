@@ -120,6 +120,10 @@ void Game::executeTurn()
         glutLeaveMainLoop();
 }
 
+void displayWrapper(MapData map, std::vector<ActorInfo> actors, int turnCount)
+{
+    display();
+}
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -178,7 +182,7 @@ void Game::initGameState()
         objects.push_back(temp);
     }
 
-    tankGame = new GameField(15,9, startActors);
+    tankGame = new GameField(15,9, startActors, displayWrapper);
     
     // Add obstacles to the gamefield
     tankGame->addObstacle(3,0);
