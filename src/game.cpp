@@ -136,6 +136,8 @@ void gameOver()
 *******************************************************************************/
 void Game::executeTurn()
 {
+   
+    
     if(isplayable(tankGame->getActors()))
     {
         tankGame->nextTurn();
@@ -163,40 +165,84 @@ void Game::initGameState()
     // Load game field
     temp = new GameFieldDrawable();
     constants.push_back(temp);
-   
-    // Load tank actors
-    Actor *player1;
-    Actor *player2;
-    
-    switch (g_mode)
+    std::vector<string> AINames;
+    std::cout << "Game::Loading config.txt\n";
+    ifstream fin("config.txt");
+    std::string configLine;
+    int width = 10;
+    int  height = 10;
+    int damage = 1;
+    int  health = 3;
+    int range = 1;
+    std::vector<std::pair<int,int>> obstacleLocations;
+    std::vector<std::pair<int,int>> tankLocations;
+
+    if (!fin)
+        cout << "FAILED TO LOAD CONFIG\n";
+        
+    while (!fin.eof())
     {
-        case ai:
-            player1 = new SimpleAI;
-            player2 = new SimpleAI;
-            break;
-        
-        case sp:
-            player1 = new AsciiTankActor;
-            player2 = new SimpleAI;
-            break;
-        
-        case mp:
-            player1 = new AsciiTankActor;
-            player2 = new AsciiTankActor;
-            break;
-        
-        default:
-            break;
+        getline(fin, configLine);
+        if (configLine[0] != '#') //ignore comment lines
+        {
+            int i = configLine.find(' '); //index of first space
+            std::string id = configLine.substr(0, i); //separate the identefier from the argumets
+            std::string args = configLine.substr(i+1);
+
+            //AI settings
+            if (id == "AI") //AI to load
+            {
+                int x, y;
+                i = args.find(' ');
+                AINames.push_back(args.substr(0, i));
+                std::stringstream(args.substr(i+1)) >> x >> y;
+                tankLocations.push_back(std::pair<int,int>(x,y));
+            }
+            //field params
+            else if (id == "WIDTH")
+            {
+                stringstream(args) >> width;
+            }
+            else if (id == "HEIGHT")
+            {
+                stringstream(args) >> height;
+            }
+            else if (id == "OBSTACLE")
+            {
+                int x,y;
+                stringstream(args) >> x >> y;
+                obstacleLocations.push_back(std::pair<int,int> (x, y));
+            }
+            else if (id == "DAMAGE")
+            {
+                stringstream(args) >> damage;
+            }
+            else if (id == "HEALTH")
+            {
+                stringstream(args) >> health;
+            }
+            else if (id == "RANGE")
+            {
+                stringstream(args) >> range;
+            }
+            else if (id != "")
+            {
+                std::cout << "BAD ARGUMENT: " << id << '\n';
+            }
+                
+        }
     }
     
-    //tank actor pointers are made and then packaged into ActorInfo structs
-    ActorInfo player1Info = ActorInfo(player1, 3,1,2,0,1);
-    ActorInfo player2Info = ActorInfo(player2, 3,1,14,5,2);
+    
+    std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
     
     std::vector<ActorInfo> startActors;
-    startActors.push_back(player1Info);
-    startActors.push_back(player2Info);
-    
+
+    for (int i = 0; i < startActorPointers.size(); ++i)
+    {
+        startActors.push_back(ActorInfo(startActorPointers[i], health, damage, tankLocations[i].first,
+                                        tankLocations[i].second, i + 1, range));
+    }
     // Create a stats menu for both tanks
     for( auto actTemp : startActors)
     {
@@ -204,17 +250,13 @@ void Game::initGameState()
         objects.push_back(temp);
     }
 
-    tankGame = new GameField(15,9, startActors, display);
+    tankGame = new GameField(width, height, startActors, display);
     
     // Add obstacles to the gamefield
-    tankGame->addObstacle(3,0);
-    tankGame->addObstacle(13,4); 
-    tankGame->addObstacle(7,2); 
-    tankGame->addObstacle(4,7); 
-    tankGame->addObstacle(10,5); 
-    tankGame->addObstacle(14,1); 
-    tankGame->addObstacle(2,5); 
-   
+    for (auto o : obstacleLocations)
+    {
+        tankGame->addObstacle(o.first, o.second);
+    }
 
     temp = new Obstacles( 1, convertGLXCoordinate( 3 ), convertGLYCoordinate( 0 ) );
     constants.push_back(temp);
