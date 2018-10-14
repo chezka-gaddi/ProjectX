@@ -178,7 +178,7 @@ void Game::initGameState()
         objects.push_back(temp);
     }
 
-    tankGame = new GameField(15,9, startActors, display);
+    tankGame = new GameField(15,9, startActors);
     
     // Add obstacles to the gamefield
     tankGame->addObstacle(3,0);
