@@ -150,6 +150,18 @@ void Game::executeTurn()
 }
 
 
+/**
+ * @author David Donahue
+ * @par Description:
+ * Wrapper to display() that acts as the GameField display callback
+ */
+
+void displayWrapper(MapData map, std::vector<ActorInfo> actors, int turnCount)
+{
+    display();
+}
+
+
 /***************************************************************************//**
 * @author Chezka Gaddi
 * @brief initGameState
@@ -163,40 +175,15 @@ void Game::initGameState()
     // Load game field
     temp = new GameFieldDrawable();
     constants.push_back(temp);
-   
-    // Load tank actors
-    Actor *player1;
-    Actor *player2;
-    
-    switch (g_mode)
-    {
-        case ai:
-            player1 = new SimpleAI;
-            player2 = new SimpleAI;
-            break;
-        
-        case sp:
-            player1 = new AsciiTankActor;
-            player2 = new SimpleAI;
-            break;
-        
-        case mp:
-            player1 = new AsciiTankActor;
-            player2 = new AsciiTankActor;
-            break;
-        
-        default:
-            break;
-    }
-    
-    //tank actor pointers are made and then packaged into ActorInfo structs
-    ActorInfo player1Info = ActorInfo(player1, 3,1,2,0,1);
-    ActorInfo player2Info = ActorInfo(player2, 3,1,14,5,2);
+    std::cout << "Game::Loading tanks\n";
+    std::vector<string> AINames = {"SimpleAI", "SimpleAI"};
+    std::vector<Actor*> StartActorPointers = dynamicTankLoader(AINames);
     
     std::vector<ActorInfo> startActors;
-    startActors.push_back(player1Info);
-    startActors.push_back(player2Info);
+    startActors.push_back(ActorInfo (StartActorPointers[0], 3, 1, 2, 0, 1));
+    startActors.push_back(ActorInfo (StartActorPointers[1], 3, 1, 14, 5, 2));
     
+
     // Create a stats menu for both tanks
     for( auto actTemp : startActors)
     {
@@ -204,7 +191,7 @@ void Game::initGameState()
         objects.push_back(temp);
     }
 
-    tankGame = new GameField(15,9, startActors, display);
+    tankGame = new GameField(15,9, startActors, displayWrapper);
     
     // Add obstacles to the gamefield
     tankGame->addObstacle(3,0);
