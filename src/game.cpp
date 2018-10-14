@@ -155,6 +155,7 @@ void Game::executeTurn()
 * @brief initGameState
 *
 * Initialize the main GameField and all the Drawables needed to start the game.
+* Reads settings from the file "config.txt"
 *******************************************************************************/
 void Game::initGameState()
 {
