@@ -1,10 +1,13 @@
 CXX = g++
-CXXFLAGS = -g -std=c++11
-LIBS = -lglut -lGL -lGLU -lpthread -lSOIL
-INCS = -I./  
+CXXFLAGS = -g -std=c++11 -fPIC
+INCS = -I./
+LIBS = -ldl
+LIBS += -lglut -lGL -lGLU -lpthread -lSOIL
+SOFLAGS = -DDYNAMIC
 
 FILES = main.o
 FILES += GameField.o
+FILES += AsciiGameMisc.o
 FILES += Actor.o
 FILES += AsciiTankActor.o
 FILES += MapData.o

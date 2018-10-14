@@ -16,7 +16,6 @@
  * @param[in] actorInfo - vector of the current active actors
  * @return true if there are 2 or more tanks on the field
  */
- 
 bool isplayable(std::vector<ActorInfo> actorInfo){
     int tankCount = 0;
     for (auto a : actorInfo)
