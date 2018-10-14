@@ -72,7 +72,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     displayCallback = NULL;
 }
 
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfor>, int)) : actors(startActors)
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int)) : actors(startActors)
 {
     turnCount = 0;
     fieldMap.width = width;
