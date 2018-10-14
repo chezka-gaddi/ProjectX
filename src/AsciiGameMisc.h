@@ -31,7 +31,7 @@ void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount);
 
 enum gameMode {ai, sp, mp};
 
-void gameloop(gameMode mode);
+void gameloop(std::vector<Actor *> actors);
 
 
 #endif //SRC_ASCIIGAMEMISC_H

@@ -26,10 +26,9 @@ class AsciiTankActor : public Actor
 public:
     virtual direction move(MapData map, PositionData status);    /*!<Returns the actorMove member variable */
     virtual AttackData attack(MapData map, PositionData status); /*!<Returns the actorAttack member variable */
-
-
+    
     AsciiTankActor();
 
 };
-
+        
 #endif
