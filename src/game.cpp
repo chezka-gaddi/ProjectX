@@ -239,6 +239,7 @@ void Game::initGameState()
     std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
     
     std::vector<ActorInfo> startActors;
+   
 
     for (int i = 0; i < startActorPointers.size(); ++i)
     {
@@ -252,7 +253,7 @@ void Game::initGameState()
         objects.push_back(temp);
     }
 
-    tankGame = new GameField(width, height, startActors, display);
+    tankGame = new GameField(15,9, startActors, display);
     
     // Add obstacles to the gamefield
     for (auto o : obstacleLocations)
