@@ -45,15 +45,19 @@ void Projectile::draw()
 {
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
-    glTranslatef(screen_x, screen_y, -5.0f);  
-	glRotatef(angle,0,0,1);
+    glTranslatef(screen_x, screen_y, -5.0f);
+    glRotatef(angle,0,0,1);
     glBindTexture(GL_TEXTURE_2D, tankTex[tex]);
-	glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.07f, -0.07f,  1.0f);
-        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.07f, -0.07f,  1.0f);
-        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.07f,  0.07f,  1.0f);
-        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.07f,  0.07f,  1.0f);
-	glEnd();
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.07f, -0.07f,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( 0.07f, -0.07f,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( 0.07f,  0.07f,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.07f,  0.07f,  1.0f);
+    glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }

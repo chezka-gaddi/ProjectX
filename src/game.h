@@ -37,23 +37,23 @@ enum gameMode {ai, sp, mp};
 *******************************************************************************/
 class Game
 {
-    public:
-        vector <Drawable *> objects;        /*!<Holds all of the current actors */
-        vector <Drawable *> constants;      /*!<Holds the GameFieldDrawable and menus */
-        GameField *tankGame;                /*!<Pointer to the game manager */
-        gameMode g_mode;                    /*!<Type of game to be ran */
-        int turn;
+public:
+    vector <Drawable *> objects;        /*!<Holds all of the current actors */
+    vector <Drawable *> constants;      /*!<Holds the GameFieldDrawable and menus */
+    GameField *tankGame;                /*!<Pointer to the game manager */
+    gameMode g_mode;                    /*!<Type of game to be ran */
+    int turn;
 
-        Game();
-        Game(gameMode mode);
-        ~Game();
+    Game();
+    Game(gameMode mode);
+    ~Game();
 
-        void makeDrawables();
-        void executeTurn();
-        void initGameState();
-        void closeDown();
-        float convertGLXCoordinate( int );
-        float convertGLYCoordinate( int );
+    void makeDrawables();
+    void executeTurn();
+    void initGameState();
+    void closeDown();
+    float convertGLXCoordinate( int );
+    float convertGLYCoordinate( int );
 };
 
 #endif //__GAME_H

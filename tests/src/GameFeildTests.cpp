@@ -29,7 +29,7 @@ TEST_CASE("addActor adds an actor to actors")
     ActorInfo ai( a, 1, 1, 0, 0, 1);
     g.addActor(ai);
     REQUIRE(g.getActors()[0].act_p == a);
-    
+
 }
 
 TEST_CASE("findActorByCoord() works with no actors")
@@ -44,9 +44,9 @@ TEST_CASE("findActorByCoord() returns correct actors")
     ActorInfo a1 (NULL, 1, 1, 0, 0, 1);
     ActorInfo a2 (NULL, 2, 1, 0, 0, 1);
     ActorInfo a3 (NULL, 3, 1, 1, 1, 1);
-    
-    
-    
+
+
+
     g.addActor(a1);
     g.addActor(a2);
     g.addActor(a3);
@@ -56,7 +56,7 @@ TEST_CASE("findActorByCoord() returns correct actors")
     REQUIRE((hits.size() == 2
              && (hits[0] == a1 || hits[1] == a1)
              && (hits[0] == a2 || hits[1] == a2) ));
-    
+
 }
 
 TEST_CASE("cull() removes only actors with health of 0")
@@ -318,7 +318,7 @@ TEST_CASE("Obstacles can be added to the gamefield")
     GameField g; //10x10 empty gamefield
 
     REQUIRE(g.obstacleAt(1, 1) == false); //make sure the space starts empty
-    
+
     g.addObstacle(1, 1);
 
     REQUIRE(g.obstacleAt(1, 1) == true); //check to make sure the obstacle was added
@@ -327,7 +327,7 @@ TEST_CASE("Obstacles can be added to the gamefield")
 TEST_CASE("Obstacles can be removed from the gamefield")
 {
     GameField g; //10x10 empty gamefield
-    
+
     g.addObstacle(1, 1);
     g.removeObstacle(1, 1);
 
@@ -414,7 +414,7 @@ TEST_CASE("Actor moves diagonal down/left and changes position")
     REQUIRE(g.getActors().back().y == 1);
 }
 TEST_CASE("Actor moves diagonal down/left and collides with wall")
-{    
+{
     Actor *a = new SimpleActor(DOWNLEFT, 0);
     Actor *a2 = new SimpleActor(DOWNLEFT, 0);
     ActorInfo AI(a, 2, 1, 0, 0, 1, 1); // setup to hit left wall
@@ -430,7 +430,7 @@ TEST_CASE("Actor moves diagonal down/left and collides with wall")
 }
 TEST_CASE("Actor moves diagonal down/right and changes position")
 {
-    
+
     Actor *a = new SimpleActor(DOWNRIGHT, 0);
     ActorInfo AI(a, 2, 1, 0, 0, 1, 1);
     GameField g (2, 2);

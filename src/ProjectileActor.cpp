@@ -4,41 +4,41 @@
 using namespace std;
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This constructor will initialize start/end variables to 0 and range to 10.
  *
 ******************************************************************************/
 ProjectileActor::ProjectileActor()
 {
-	range = 10;
-	startX = 0;
-	startY = 0;
-	endX = 0;
-	endY = 0;
+    range = 10;
+    startX = 0;
+    startY = 0;
+    endX = 0;
+    endY = 0;
 }
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This constructor will set the member values of ProjectileActor to passed in
  * values.
  *
 ******************************************************************************/
 ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
-				int newEndX, int newEndY)
+                                 int newEndX, int newEndY)
 {
-	range = newRange;
-        startX = newStartX;
-        startY = newStartY;
-        endX = newEndX;
-        endY = newEndY;
+    range = newRange;
+    startX = newStartX;
+    startY = newStartY;
+    endX = newEndX;
+    endY = newEndY;
 }
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This function will find the difference between the current projectile location
  * and it's desired end position on each coordinate axis. It will use this
@@ -49,111 +49,111 @@ ProjectileActor::ProjectileActor(int newRange, int newStartX, int newStartY,
  * is set as one unit both horizontal and vertical, and if over 60 degrees
  * the movement is set as one unit vertically. At this point we refer to the
  * original difference along each axis and scale that distance by the absolute
- * value of itself, yeilding a 1, 0, or -1 to be used as a scalar multiplier 
+ * value of itself, yeilding a 1, 0, or -1 to be used as a scalar multiplier
  * for controlling the direction of the movement. The product of this scalar
  * multiplier and the set movement is the final movement command returned in
  * form of our direction enum.
  *
  * @param[in] map - data for size of our gamefield
  * @param[in] status - data with location of actors
- * 
+ *
  * @returns MoveProjectile - struct with new coordinates to move to
 ******************************************************************************/
 direction ProjectileActor::move(MapData map, PositionData status)
 {
-	//temporary variables used for movement calculation in each direction
-	float xDiff, yDiff;
-	float degree, tangent;
-	float xDirection, yDirection;
+    //temporary variables used for movement calculation in each direction
+    float xDiff, yDiff;
+    float degree, tangent;
+    float xDirection, yDirection;
 
-	//struct for projectile's coordinates
-	MoveData moveProjectile;
-	
-	//calculates how far to move each position
-	xDiff = abs(endX - status.game_x);
-        yDiff = abs(status.game_y - endY);
-	
-	//to avoid division by 0, this is checked first
-	if(xDiff == 0)
-	{
-		moveProjectile.new_x = 0;
-		moveProjectile.new_y = 1;
-	}
-	else
-	{
-		//calculates the angle of projectile tan(x) = yDiff / xDiff
-		tangent = yDiff / xDiff;
-        	degree = atan(tangent) * 180 / 3.14159;
-		//set incrementation of projectile based on angle
-		if(degree < 30) //moves horizontal
-		{
-			moveProjectile.new_x = 1;
-			moveProjectile.new_y = 0;
-		}
-		else if(degree > 60) //moves vertically
-		{
-			moveProjectile.new_x = 0;
-			moveProjectile.new_y = 1;
-		}
-		else //moves diagonally
-		{
-			moveProjectile.new_x = 1;
-			moveProjectile.new_y = 1;
-		}
-	}
+    //struct for projectile's coordinates
+    MoveData moveProjectile;
 
-	//account of direction of projectile
-	xDirection = endX - status.game_x;
-	yDirection = status.game_y - endY;
+    //calculates how far to move each position
+    xDiff = abs(endX - status.game_x);
+    yDiff = abs(status.game_y - endY);
 
-	if(xDirection == 0 && yDirection != 0)
-	{
-		 yDirection = yDirection / abs(yDirection);
-	}
-	else if(yDirection == 0 && xDirection != 0)
-	{
-		xDirection = xDirection / abs(xDirection);
-	}
-	else if(xDirection == 0 && yDirection == 0)
-	{
-		moveProjectile.new_x = 0;
-		moveProjectile.new_y = 0;
-	}
-	else
-	{
-		xDirection = xDirection / abs(xDirection);
-		yDirection = yDirection / abs(yDirection);
-	}
+    //to avoid division by 0, this is checked first
+    if(xDiff == 0)
+    {
+        moveProjectile.new_x = 0;
+        moveProjectile.new_y = 1;
+    }
+    else
+    {
+        //calculates the angle of projectile tan(x) = yDiff / xDiff
+        tangent = yDiff / xDiff;
+        degree = atan(tangent) * 180 / 3.14159;
+        //set incrementation of projectile based on angle
+        if(degree < 30) //moves horizontal
+        {
+            moveProjectile.new_x = 1;
+            moveProjectile.new_y = 0;
+        }
+        else if(degree > 60) //moves vertically
+        {
+            moveProjectile.new_x = 0;
+            moveProjectile.new_y = 1;
+        }
+        else //moves diagonally
+        {
+            moveProjectile.new_x = 1;
+            moveProjectile.new_y = 1;
+        }
+    }
 
-	//multiplies by 1 or -1 depending on direction of movement
-	moveProjectile.new_x = moveProjectile.new_x * xDirection;
-	moveProjectile.new_y = moveProjectile.new_y * yDirection;
-	
-	//determine what enums to return
-        if (moveProjectile.new_x != 0 && moveProjectile.new_y == 0)
-            return (endX > status.game_x ) ? direction:: RIGHT : direction::LEFT;
-        else if (moveProjectile.new_y != 0 && moveProjectile.new_x == 0)
-            return (endY > status.game_y ) ? direction::DOWN : direction::UP;
-	else if (moveProjectile.new_x != 0 && moveProjectile.new_y != 0)
-	{
-    	    if (moveProjectile.new_x == 1)
-		return (endY > status.game_y) ? direction::DOWNRIGHT : direction::UPRIGHT;
-	    else
-		return (endY > status.game_y) ? direction::DOWNLEFT : direction::UPLEFT;
-	}
+    //account of direction of projectile
+    xDirection = endX - status.game_x;
+    yDirection = status.game_y - endY;
 
-        return STAY;
-	 
+    if(xDirection == 0 && yDirection != 0)
+    {
+        yDirection = yDirection / abs(yDirection);
+    }
+    else if(yDirection == 0 && xDirection != 0)
+    {
+        xDirection = xDirection / abs(xDirection);
+    }
+    else if(xDirection == 0 && yDirection == 0)
+    {
+        moveProjectile.new_x = 0;
+        moveProjectile.new_y = 0;
+    }
+    else
+    {
+        xDirection = xDirection / abs(xDirection);
+        yDirection = yDirection / abs(yDirection);
+    }
+
+    //multiplies by 1 or -1 depending on direction of movement
+    moveProjectile.new_x = moveProjectile.new_x * xDirection;
+    moveProjectile.new_y = moveProjectile.new_y * yDirection;
+
+    //determine what enums to return
+    if (moveProjectile.new_x != 0 && moveProjectile.new_y == 0)
+        return (endX > status.game_x ) ? direction:: RIGHT : direction::LEFT;
+    else if (moveProjectile.new_y != 0 && moveProjectile.new_x == 0)
+        return (endY > status.game_y ) ? direction::DOWN : direction::UP;
+    else if (moveProjectile.new_x != 0 && moveProjectile.new_y != 0)
+    {
+        if (moveProjectile.new_x == 1)
+            return (endY > status.game_y) ? direction::DOWNRIGHT : direction::UPRIGHT;
+        else
+            return (endY > status.game_y) ? direction::DOWNLEFT : direction::UPLEFT;
+    }
+
+    return STAY;
+
 }
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This function will declare an AttackData struct and initialize the values to
  * the current positon on the field and damage to 1. It then returns that
  * struct.
- * 
+ *
  * @param[in] map - the data for our current gamefield dimensions
  * @param[in[ status - the data containing actor position
  *
@@ -161,22 +161,22 @@ direction ProjectileActor::move(MapData map, PositionData status)
 ******************************************************************************/
 AttackData ProjectileActor::attack(MapData map, PositionData status)
 {
-	AttackData attackProjectile;
+    AttackData attackProjectile;
 
-	//Initialize variables
-	attackProjectile.attack_x = status.game_x;
-	attackProjectile.attack_y = status.game_y;
-        //self destruct if the target has been reached
-	attackProjectile.damage = (status.game_x == endX && status.game_y == endY) ? 1 : 0;
-	
-	return attackProjectile;
+    //Initialize variables
+    attackProjectile.attack_x = status.game_x;
+    attackProjectile.attack_y = status.game_y;
+    //self destruct if the target has been reached
+    attackProjectile.damage = (status.game_x == endX && status.game_y == endY) ? 1 : 0;
+
+    return attackProjectile;
 }
 
 
 //Getters
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This function will get the value of member variable range in ProjectileActor
  *
@@ -190,7 +190,7 @@ int ProjectileActor::getRange()
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This function will get the value of member variable startX in ProjectileActor
  *
@@ -204,7 +204,7 @@ int ProjectileActor::getStartX()
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This function will get the value of member variable startY in ProjectileActor
  *
@@ -218,7 +218,7 @@ int ProjectileActor::getStartY()
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This function will get the value of member variable endX in ProjectileActor
  *
@@ -232,7 +232,7 @@ int ProjectileActor::getEndX()
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This function will get the value of member variable endY in ProjectileActor
  *
@@ -246,7 +246,7 @@ int ProjectileActor::getEndY()
 
 /**************************************************************************//**
  * @author Riley Kopp
- * 
+ *
  * @par Description
  * This function will get the value of member variable newX in ProjectileActor
  *
@@ -260,7 +260,7 @@ int ProjectileActor::getNewX()
 
 /**************************************************************************//**
  * @author Riley Kopp
- * 
+ *
  * @par Description
  * This function will get the value of member variable newY in ProjectileActor
  *
@@ -275,7 +275,7 @@ int ProjectileActor::getNewY()
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This function will set the value of member variable range in ProjectileActor
  * to the new value passed in.
@@ -290,7 +290,7 @@ void ProjectileActor::setRange(int rangeUpdate)
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This function will set the value of member variable startX in ProjectileActor
  * to the new value passed in.
@@ -305,7 +305,7 @@ void ProjectileActor::setStartX(int startXUpdate)
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This function will set the value of member variable startY in ProjectileActor
  * to the new value passed in.
@@ -320,7 +320,7 @@ void ProjectileActor::setStartY(int startYUpdate)
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This function will set the value of member variable endX in ProjectileActor
  * to the new value passed in.
@@ -335,7 +335,7 @@ void ProjectileActor::setEndX(int endXUpdate)
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * This function will set the value of member variable endY in ProjectileActor
  * to the new value passed in.

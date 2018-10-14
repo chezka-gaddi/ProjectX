@@ -34,7 +34,7 @@ GameField::~GameField()
     for (auto &a : actors)
     {
         if (a.act_p != NULL)
-            delete a.act_p;        
+            delete a.act_p;
     }
 }
 
@@ -118,7 +118,7 @@ int GameField::getHeight()
  * @author David Donahue
  * @par Description:
  * Gets just the map as a vector of ints
- */ 
+ */
 std::vector<int> GameField::getMap()
 {
     return fieldMap.map;
@@ -138,7 +138,7 @@ void GameField::updateMap()
         if (a.health > 0)
             fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
     }
-    
+
 }
 /**
  * @author David Donahue
@@ -154,7 +154,7 @@ void GameField::runMoves(ActorInfo &a)
     int rangeCount;
     PositionData pos;
     direction dir;
-    
+
     rangeCount = a.range;
     while (rangeCount)
     {
@@ -165,7 +165,7 @@ void GameField::runMoves(ActorInfo &a)
         pos.id = a.id;
         //get the AI's desired move
         dir = a.act_p->move(fieldMap, pos);
-            
+
         //If it checks out, execute it
         //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
         switch (dir)
@@ -176,21 +176,21 @@ void GameField::runMoves(ActorInfo &a)
             else
                 a.health--;
             break;
-                
+
         case DOWN:
             if (a.y < fieldMap.height-1 && !obstacleAt(a.x, a.y + 1))
                 a.y++;
             else
                 a.health--;
             break;
-                
+
         case LEFT:
             if (a.x > 0 && !obstacleAt(a.x - 1, a.y))
                 a.x--;
             else
                 a.health--;
             break;
-                
+
         case RIGHT:
             if (a.x < fieldMap.width-1 && !obstacleAt(a.x + 1, a.y))
                 a.x++;
@@ -206,7 +206,7 @@ void GameField::runMoves(ActorInfo &a)
             else
                 a.health--;
             break;
-             
+
         case UPRIGHT:
             if (a.y > 0 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y-1))
             {
@@ -242,7 +242,7 @@ void GameField::runMoves(ActorInfo &a)
         }
 
         bool tankInCollision = false;
-        
+
         collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
         for (int i = 0; i < actors.size(); ++i ) //check each actor
         {
@@ -252,9 +252,9 @@ void GameField::runMoves(ActorInfo &a)
                 if (actors[i].id > 0)
                     tankInCollision = true;
             }
-            
+
         }
-            
+
         if (collisionVect.size() > 1 && a.health > 0)
         {
             collisionDamage = 0;
@@ -288,11 +288,11 @@ void GameField::runMoves(ActorInfo &a)
         else
             --rangeCount;
 
-            updateMap();
+        updateMap();
 
         if (displayCallback != NULL)
             displayCallback(fieldMap, actors, turnCount);
-        
+
     }
 }
 
@@ -321,7 +321,7 @@ void GameField::nextTurn()
             pos.game_y = actors[i].y;
             pos.health = actors[i].health;
             pos.id = actors[i].id;
-                
+
             //Get the AI's desired attack
             atk = actors[i].act_p->attack(fieldMap, pos);
 
@@ -357,11 +357,11 @@ void GameField::nextTurn()
                     if (displayCallback != NULL)
                         displayCallback(fieldMap, actors, turnCount);
                 }
-                
+
             }
         }
     }
-    
+
     cull();
     updateMap();
 }
@@ -420,7 +420,7 @@ std::vector<ActorInfo> GameField::getActors()
  */
 std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
 {
-    
+
     std::vector<ActorInfo> hits;
     for (auto a : actors) //check each actor
     {
@@ -428,7 +428,7 @@ std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
             hits.push_back(a);
     }
     return hits;
-    
+
 }
 /**
  * @author David Donahue
@@ -437,7 +437,7 @@ std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
  */
 void GameField::cull()
 {
-    
+
     for (int i = 0; i < actors.size(); ++i) //This is used instead of the c++11 version so that we can use the index.
     {
         if (actors[i].health == 0)
@@ -448,7 +448,7 @@ void GameField::cull()
             --i; // go back one since everything just shifted back
         }
     }
-    
+
 }
 /**
  * @author David Donahue
@@ -467,7 +467,7 @@ MapData GameField::getMapData()
  *
  * @param[in] id - the ID of the actor
  * @return Reference to the desired actor or a reference to a 'null' actor
- * 
+ *
  */
 
 ActorInfo & GameField::actorInfoById(int id)
@@ -490,7 +490,7 @@ ActorInfo & GameField::actorInfoById(int id)
  * @param[in] x - the X coordinate of the tile
  * @param[in] y - the Y coordinate of the tile
  * @return true if an obstacle exists at a tile, false if not
- * 
+ *
  */
 bool GameField::obstacleAt(int x, int y)
 {

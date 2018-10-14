@@ -10,10 +10,10 @@ std::ostream& operator<<(std::ostream& os, const MapData& md)
     os << " ";
     for	(j = 0; j < md.width; ++j)
     {
-	if ( j < 10 )
-	    os << "   " << j << "   ";
-	else 
-	    os << "   " << j << "  ";
+        if ( j < 10 )
+            os << "   " << j << "   ";
+        else
+            os << "   " << j << "  ";
     }
     os << '\n';
     os << ' ';

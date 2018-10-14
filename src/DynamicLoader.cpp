@@ -56,7 +56,7 @@ std::vector<Actor *> dynamicTankLoader(std::vector<std::string> objectNames)
 
     }
     return ret;
-    
+
 }
 
 

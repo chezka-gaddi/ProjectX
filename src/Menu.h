@@ -6,9 +6,9 @@
 
 class Menu : public Drawable
 {
-    public:
-        Menu(){}
-        ~Menu(){}
+public:
+    Menu() {}
+    ~Menu() {}
 };
 
 void drawBitmapText( char *string, float x, float y );

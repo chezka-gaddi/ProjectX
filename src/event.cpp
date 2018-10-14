@@ -52,15 +52,15 @@ void InitEvent::doAction(Game &game)
 void updateDrawables(Game &game)
 {
     Drawable *temp_draw = nullptr;
-    
+
     if(!game.objects.empty())
         game.objects.clear();
 
     vector <ActorInfo> actors = game.tankGame->getActors();
-    
+
     for( auto obs : game.constants )
         game.objects.push_back( obs );
-    
+
     for( auto act : actors )
     {
         if( act.health > 0 && act.id > 0 )
@@ -92,12 +92,12 @@ void DisplayEvent::doAction(Game &game)
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glLoadIdentity();
-    
-    updateDrawables(game);    
-    
+
+    updateDrawables(game);
+
     Drawable *stuff;
-    
-    for( int i = 0; i < game.objects.size(); i++ )  
+
+    for( int i = 0; i < game.objects.size(); i++ )
     {
         stuff = game.objects[i];
         stuff->draw();

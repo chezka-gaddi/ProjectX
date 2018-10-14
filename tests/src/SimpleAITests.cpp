@@ -16,7 +16,7 @@ TEST_CASE("SimpleAI does not attack when no other actors are present")
     MapData map(1,1); //1x1 map
     PositionData pos(1, 1, 0, 0); //ID of 1, health of 1, position 0,0
     map.map[0] = 1; //place tank on the map
-    
+
     REQUIRE(ai.attack(map, pos).damage == 0);
 }
 TEST_CASE("SimpleAI attacks the nearest actor")
@@ -26,7 +26,7 @@ TEST_CASE("SimpleAI attacks the nearest actor")
     PositionData pos(1, 1, 0, 0); //ID of 1, health of 1, position 0,0
     map.map[0] = 1; //place AI on the map
     map.map[1] = 2; //place enemy tank on map
-    
+
     REQUIRE(ai.attack(map, pos) == AttackData(0,1,1));
 }
 TEST_CASE("SimpleAI moves toward the nearest enemy tank")
@@ -36,7 +36,7 @@ TEST_CASE("SimpleAI moves toward the nearest enemy tank")
     PositionData pos(1, 1, 0, 0); //ID of 1, health of 1, position 0,0
     map.map[0] = 1; //place AI on the map
     map.map[2] = 2; //place enemy tank on map
-    
+
     REQUIRE(ai.move(map, pos) == DOWN);
 }
 TEST_CASE("SimpleAI stays in place if no other tanks are present")
@@ -45,7 +45,7 @@ TEST_CASE("SimpleAI stays in place if no other tanks are present")
     MapData map(1,3); //1x3 map
     PositionData pos(1, 1, 0, 0); //ID of 1, health of 1, position 0,0
     map.map[0] = 1; //place AI on the map
-    
+
     REQUIRE(ai.move(map, pos) == STAY);
 }
 TEST_CASE("SimpleAI stays in place if only projectiles are present")
@@ -55,7 +55,7 @@ TEST_CASE("SimpleAI stays in place if only projectiles are present")
     PositionData pos(1, 1, 0, 0); //ID of 1, health of 1, position 0,0
     map.map[0] = 1; //place AI on the map
     map.map[2] = -2; //enemy projectile
-    
+
     REQUIRE(ai.move(map, pos) == STAY);
 }
 TEST_CASE("SimpleAI does not crash into other actors")
@@ -65,7 +65,7 @@ TEST_CASE("SimpleAI does not crash into other actors")
     PositionData pos(1, 1, 0, 0); //ID of 1, health of 1, position 0,0
     map.map[0] = 1; //place AI on the map
     map.map[1] = 2; //enemy projectile
-    
+
     REQUIRE(ai.move(map, pos) == STAY);
 }
 TEST_CASE("SimpleAI avoids obstacles below")
@@ -103,7 +103,7 @@ TEST_CASE("SimpleAI avoids obstacles to the right")
     SimpleAI ai;
     MapData map(3,3); //3x3 map
     PositionData pos(1, 1, 0, 1); //ID of 1, health of 1, position 0, 1
-    map.map[3] = 1; //place AI on the map at 0, 1 
+    map.map[3] = 1; //place AI on the map at 0, 1
     map.map[5] = 2; //enemy at 2, 1
     map.obstacleMap[4] = true; //obstacle at 1,1
     REQUIRE((ai.move(map, pos) == UP || ai.move(map,pos) == DOWN));

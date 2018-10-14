@@ -37,7 +37,7 @@ SimpleActor::SimpleActor() : atk(0,0,0), dir (UP) {}
  * @author David Donahue
  * @par Description:
  * Constructor with desired direction and damage to attack 0,0 with
- * 
+ *
  * @param[in] mv : the desired default move
  * @param[in] d : the desired attack damage
  */
@@ -64,7 +64,7 @@ void SimpleActor::setAttack(int x, int y, int d)
  * @par Description:
  * Set the desired direction to move on the next turn
  *
- * @param[in] d - direction to move 
+ * @param[in] d - direction to move
  */
 void SimpleActor::setMove(direction d)
 {

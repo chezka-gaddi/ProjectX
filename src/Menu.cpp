@@ -29,7 +29,7 @@ Menu::Menu( int id, int hp, int ammo, int hits )
         strncpy(name, "Player 1", 9);
         screen_x = -0.70;
     }
-    
+
     else
     {
         strncpy(name, "Player 2", 9);
@@ -55,9 +55,9 @@ void Menu::draw()
     glEnable(GL_TEXTURE_2D);
     glColor4ub(255,255,255,255);
     glPushMatrix();
-    
+
     drawPlayerStats();
-    
+
     glPopMatrix();
 }
 
@@ -73,14 +73,18 @@ void drawIcon(GLfloat x, GLfloat y, GLuint icon)
 {
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
-    glTranslatef(x - 0.85, y + 0.65, -5.0f);  
+    glTranslatef(x - 0.85, y + 0.65, -5.0f);
     glBindTexture(GL_TEXTURE_2D, gameTex[icon]);
-	glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.06f, -0.06f,  1.0f);
-        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.06f, -0.06f,  1.0f);
-        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.06f,  0.06f,  1.0f);
-        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.06f,  0.06f,  1.0f);
-	glEnd();
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.06f, -0.06f,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( 0.06f, -0.06f,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( 0.06f,  0.06f,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.06f,  0.06f,  1.0f);
+    glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }
@@ -101,12 +105,16 @@ void Menu::drawTextBox(GLfloat x, GLfloat y)
     if(id==2)
         glScalef(-1, 1, 1);
     glBindTexture(GL_TEXTURE_2D, gameTex[5]);
-	glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.22f,  1.0f);
-        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.5f, -0.22f,  1.0f);
-        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.5f,  0.22f,  1.0f);
-        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f,  0.22f,  1.0f);
-	glEnd();
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, -0.22f,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( 0.5f, -0.22f,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( 0.5f,  0.22f,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f,  0.22f,  1.0f);
+    glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }
@@ -122,21 +130,21 @@ void Menu::drawPlayerStats()
 {
     // Create text box player stats will go in
     drawTextBox(screen_x, screen_y);
-    
-    
+
+
     // Output name of the player
     if( id == 1 )
         drawBitmapText(name, screen_x - 0.1, screen_y + 0.066);
     else
         drawBitmapText(name, screen_x - 1.03, screen_y + 0.066);
 
-    
+
     // Draw health points
     for( int i = 0; i < health ; i++ )
     {
         if( id == 1 )
             drawIcon(screen_x + 0.14 * i, screen_y - 0.02, 4 );
-        
+
         else
             drawIcon(screen_x + 0.7 - 0.14 * i, screen_y - 0.02, 4 );
     }
@@ -147,7 +155,7 @@ void Menu::drawPlayerStats()
     {
         if( id == 1 )
             drawIcon((screen_x - 0.08) + 0.1 * i, screen_y - 0.18, 6 );
-        
+
         else
             drawIcon(screen_x + 0.77 - 0.1 * i, screen_y - 0.18, 6 );
     }
@@ -166,8 +174,8 @@ void drawBitmapText( char *string, GLfloat x, GLfloat y )
     char *c;
     glColor3f( 250, 250, 250 );
     glRasterPos3f( x, y, -2.0 );
-    
+
     for( c = string; *c != '\0'; c++ )
         glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *c );
-        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, *c );
+    glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, *c );
 }

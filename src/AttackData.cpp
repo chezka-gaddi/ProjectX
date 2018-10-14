@@ -8,7 +8,7 @@
  * @author David Donahue
  * @par Description:
  * overload of the == operator to compare 2 AttackData structs
- * 
+ *
  * @param[in] lhs - left hand operand
  * @param[in] rhs - right had operand
  * @return true if the AttackDatas' fields are equal

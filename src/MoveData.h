@@ -13,7 +13,8 @@
 * @par description
 * The movement data for tanks
 *******************************************************************************/
-struct MoveData {
+struct MoveData
+{
     int new_x; /*!<The new desired x coordinate */
     int new_y; /*!<The new desired y coordinate */
 };

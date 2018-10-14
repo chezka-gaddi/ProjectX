@@ -8,16 +8,16 @@
 // OpenGL thinks the y = 0 coordinate is at the top of the screen.  Flip it over
 int actualY(int y)
 {
-   return glutGet(GLUT_WINDOW_HEIGHT) - y;
+    return glutGet(GLUT_WINDOW_HEIGHT) - y;
 }
 
 
 /***************************************************************************//**
  * @brief A callback function for refreshing the display
  ******************************************************************************/
-void display() 
+void display()
 {
-   utilityCentral(ai,new DisplayEvent());
+    utilityCentral(ai,new DisplayEvent());
 }
 
 
@@ -46,13 +46,13 @@ void reshape(const int w, const int h)
  ******************************************************************************/
 void ticktock(int value)
 {
-   // Dispatch the timer event to the central control function
-   utilityCentral(ai,new TimerEvent(value));
-   // Set the next timer event elapsed time and function to call
-   glutTimerFunc(value, ticktock, value);
+    // Dispatch the timer event to the central control function
+    utilityCentral(ai,new TimerEvent(value));
+    // Set the next timer event elapsed time and function to call
+    glutTimerFunc(value, ticktock, value);
 }
 
 void onClose()
 {
-   utilityCentral(ai,new CloseEvent());
+    utilityCentral(ai,new CloseEvent());
 }

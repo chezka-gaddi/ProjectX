@@ -11,16 +11,17 @@
 /**
  * @author David Donahue
  * @par Description:
- * Checks if 2 or more tanks are on the field 
+ * Checks if 2 or more tanks are on the field
  *
  * @param[in] actorInfo - vector of the current active actors
  * @return true if there are 2 or more tanks on the field
  */
-bool isplayable(std::vector<ActorInfo> actorInfo){
+bool isplayable(std::vector<ActorInfo> actorInfo)
+{
     int tankCount = 0;
     for (auto a : actorInfo)
     {
-        tankCount += (a.id > 0) ? 1 : 0; 
+        tankCount += (a.id > 0) ? 1 : 0;
     }
     return (tankCount > 1);
 }
@@ -28,7 +29,7 @@ bool isplayable(std::vector<ActorInfo> actorInfo){
 
 /**
  * @author David Donahue
- * @par Description: 
+ * @par Description:
  * displays the field to stdout.
  *
  * @param[in] map - the current field map, which has a << overload to display
@@ -39,7 +40,7 @@ void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount)
 {
     std::cout << map << std::endl;
     std::cout << "Turn: " << turnCount << std::endl;
-                     
+
     for (auto a: actors)
     {
         if (a.id > 0)
@@ -54,7 +55,7 @@ void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount)
                       << "Hits: " << a.hits
                       << "[0m"
                       << std::endl;
-           
+
         }
     }
     system("sleep 0.3");
@@ -69,7 +70,8 @@ void displayAscii(MapData map, std::vector<ActorInfo> actors, int turnCount)
  *
  * @param[in] actors - vector of pointers to the actors to use for the game
  */
-void gameloop(std::vector<Actor *> actors){
+void gameloop(std::vector<Actor *> actors)
+{
 
     std::vector<ActorInfo> startActors;
 
@@ -83,13 +85,13 @@ void gameloop(std::vector<Actor *> actors){
         startActors.push_back(ActorInfo(a,1,2,rand() % x, rand()% y,i));
         i++;
     }
-   
-    
+
+
     GameField gameField (x,y, startActors, displayAscii);
 
     gameField.addObstacle(6,2); //add some obstacles to make things more fun
-    gameField.addObstacle(14,2); 
-   
+    gameField.addObstacle(14,2);
+
     //the is the main game loop
     while(isplayable(gameField.getActors()))
     {
@@ -99,7 +101,7 @@ void gameloop(std::vector<Actor *> actors){
         //makes the next moves
         gameField.nextTurn();
     }
-    
+
     //Final Field State
     displayAscii(gameField.getMapData(), gameField.getActors(), gameField.getTurnCount());
 }

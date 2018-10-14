@@ -15,9 +15,9 @@
 void utilityCentral(gameMode mode, Event *event)
 {
     static Game gameloop(mode);
-    
+
     event->doAction(gameloop);
-    
+
     delete event;
 }
 
@@ -51,9 +51,9 @@ void initOpenGL(int argc, char** argv, int wCols, int wRows, gameMode mode)
     glutDisplayFunc(display);
 
     glEnable(GL_TEXTURE_2D);
-    
+
     LoadGLTextures();
-    
+
     glShadeModel(GL_SMOOTH);
 
     glutReshapeFunc(reshape);
@@ -65,14 +65,14 @@ void initOpenGL(int argc, char** argv, int wCols, int wRows, gameMode mode)
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
     glClearDepth(1.0f);
-    
+
     glEnable(GL_DEPTH_TEST);
-    
+
     glDepthFunc(GL_LEQUAL);
-    
+
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    
+
     glDisable(GL_TEXTURE_2D);
-    
+
     utilityCentral( mode, new InitEvent(wCols, wRows));
 }

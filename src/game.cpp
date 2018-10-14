@@ -10,7 +10,7 @@
 /***************************************************************************//**
 * @author Chezka Gaddi
 * @brief Constructor
-* 
+*
 * Default constructor, sets turn = 0
 *******************************************************************************/
 Game::Game() : turn(0) {}
@@ -19,9 +19,9 @@ Game::Game() : turn(0) {}
 /***************************************************************************//**
 * @author Chezka Gaddi
 * @brief Constructor
-* 
+*
 * Constructor that sets the game mode, sets turn = 0
-* 
+*
 * @param[in] mode - type of game to be played
 *******************************************************************************/
 Game::Game(gameMode mode) : turn(0)
@@ -48,9 +48,9 @@ Game::~Game()
 /***************************************************************************//**
 * @author Chezka Gaddi
 * @brief convertGLXCoordinate
-* 
+*
 * Converts the coordinates to GLfloat to be displayed correctly on the screen.
-* 
+*
 * @param[in] x - integer to be converted
 * @return x_gl - GLfloat conversion of x
 *******************************************************************************/
@@ -64,9 +64,9 @@ float Game::convertGLXCoordinate( int x )
 /***************************************************************************//**
 * @author Chezka Gaddi
 * @brief convertGLYCoordinate
-* 
+*
 * Converts the coordinates to GLfloat to be displayed correctly on the screen.
-* 
+*
 * @param[in] y - integer to be converted
 * @return y_gl - GLfloat conversion of y
 *******************************************************************************/
@@ -80,19 +80,19 @@ float Game::convertGLYCoordinate( int y )
 /***************************************************************************//**
 * @author Jacob Lee
 * @brief isplayable
-* 
+*
 * Determines the end of the game by the count of the tanks on the field.
-* 
+*
 * @param[in] actorInfo - list of all the active actors
 * @return boolean of whether or not more than one tank is still active
 *******************************************************************************/
 static bool isplayable(std::vector<ActorInfo> actorInfo)
 {
     int tankCount = 0;
-    
+
     for (auto a : actorInfo)
         tankCount += (a.id > 0) ? 1 : 0;
-    
+
     return (tankCount > 1);
 }
 
@@ -112,13 +112,17 @@ void gameOver()
 
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, -5.0f);
-	glBindTexture(GL_TEXTURE_2D, gameTex[7]);
-	glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.5f,  1.0f);
-        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.5f, -0.5f,  1.0f);
-        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.5f,  0.5f,  1.0f);
-        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f,  0.5f,  1.0f);
-	glEnd();
+    glBindTexture(GL_TEXTURE_2D, gameTex[7]);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( 0.5f, -0.5f,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( 0.5f,  0.5f,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f,  0.5f,  1.0f);
+    glEnd();
     glPopMatrix();
 
     system("sleep 1.");
@@ -137,14 +141,14 @@ void gameOver()
 *******************************************************************************/
 void Game::executeTurn()
 {
-   
-    
+
+
     if(isplayable(tankGame->getActors()))
     {
         tankGame->nextTurn();
         turn++;
     }
-    
+
     else
     {
         gameOver();
@@ -174,7 +178,7 @@ void displayWrapper(MapData map, std::vector<ActorInfo> actors, int turnCount)
 void Game::initGameState()
 {
     Drawable *temp = nullptr;
-    
+
     // Load game field
     temp = new GameFieldDrawable();
     constants.push_back(temp);
@@ -192,7 +196,7 @@ void Game::initGameState()
 
     if (!fin)
         cout << "FAILED TO LOAD CONFIG\n";
-        
+
     while (!fin.eof())
     {
         getline(fin, configLine);
@@ -243,14 +247,14 @@ void Game::initGameState()
             {
                 std::cout << "BAD ARGUMENT: " << id << '\n';
             }
-                
+
         }
     }
-    
+
     std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
-    
+
     std::vector<ActorInfo> startActors;
-   
+
 
     for (int i = 0; i < startActorPointers.size(); ++i)
     {
@@ -265,7 +269,7 @@ void Game::initGameState()
     }
 
     tankGame = new GameField(width, height, startActors, displayWrapper);
-    
+
     // Add obstacles to the gamefield
     for (auto o : obstacleLocations)
     {

@@ -3,7 +3,7 @@
  *
  * @brief
  * This is the header file for the ActorInfo structure.
- * This structure will keep track of actors' stats so that 
+ * This structure will keep track of actors' stats so that
  *	they are not modifiable by the players
  *
  ***********************************************************/
@@ -36,8 +36,8 @@ struct ActorInfo
     ActorInfo(Actor *a, int h, int d, int xpos, int ypos, int i, int r) : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), range(r), hits(0), shots(0) {}
 
     ActorInfo(Actor *a, int h, int d, int xpos, int ypos, int i) : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), range(1), hits(0), shots(0) {}
-    
-    ActorInfo(){}
+
+    ActorInfo() {}
 };
 
 bool operator==(const ActorInfo& lhs, const ActorInfo& rhs);
