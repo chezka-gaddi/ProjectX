@@ -134,8 +134,6 @@ void ReshapeEvent::doAction(Game &game)
     glFrustum(-ar, ar, -1.0, 1.0, 2.0, 90.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
-    std::cout << "Reshaping window to [" << width << ", " << height << "]\n";
 }
 
 
