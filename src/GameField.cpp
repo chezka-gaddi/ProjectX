@@ -197,9 +197,8 @@ void GameField::runMoves(ActorInfo &a)
             else
                 a.health--;
             break;
-
         case UPLEFT:
-            if (a.y > 0 && a.x > 0)
+            if (a.y > 0 && a.x > 0 && !obstacleAt(a.x-1,a.y-1))
             {
                 a.y--;
                 a.x--;
@@ -209,7 +208,7 @@ void GameField::runMoves(ActorInfo &a)
             break;
              
         case UPRIGHT:
-            if (a.y > 0 && a.x < fieldMap.width-1)
+            if (a.y > 0 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y-1))
             {
                 a.y--;
                 a.x++;
@@ -219,7 +218,7 @@ void GameField::runMoves(ActorInfo &a)
             break;
 
         case DOWNLEFT:
-            if (a.y < fieldMap.height-1 && a.x > 0)
+            if (a.y < fieldMap.height-1 && a.x > 0 && !obstacleAt(a.x-1,a.y+1))
             {
                 a.y++;
                 a.x--;
@@ -229,7 +228,7 @@ void GameField::runMoves(ActorInfo &a)
             break;
 
         case DOWNRIGHT:
-            if (a.y < fieldMap.height-1 && a.x < fieldMap.width-1)
+            if (a.y < fieldMap.height-1 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y+1))
             {
                 a.y++;
                 a.x++;
