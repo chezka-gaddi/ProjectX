@@ -61,7 +61,6 @@ class Menu : public Drawable
         int health;         /*!<Player's health */
         int bullet;         /*!<Current bullet count */
         int score;          /*!<Current score */
-        GLuint tex;
 
         Menu( int, int, int, int );
 

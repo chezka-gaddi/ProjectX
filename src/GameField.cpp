@@ -5,12 +5,12 @@
 #include "GameField.h"
 #include <iostream>
 
-
 /**
  * @author David Donahue
  * @par Description:
  * Default constructor, makes a 10x10 empty map
  */
+
 GameField::GameField()
 {
     turnCount = 0;
@@ -20,17 +20,16 @@ GameField::GameField()
     fieldMap.obstacleMap.resize(100);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
     std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
-    updateMap();
     displayCallback = NULL;
 }
-
 
 /**
  * @author David Donahue
  * @par Description:
  * Destructor, deletes all actors left on the feild
  */
-GameField::~GameField()
+ 
+ GameField::~GameField()
 {
     for (auto &a : actors)
     {
@@ -54,11 +53,8 @@ GameField::GameField(int width, int height)
     fieldMap.obstacleMap.resize(width * height);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
     std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
-    updateMap();
     displayCallback = NULL;
 }
-
-
 /**
  * @author David Donahue
  * @par Description:
@@ -76,8 +72,6 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     updateMap();
     displayCallback = NULL;
 }
-
-
 GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)()) : actors(startActors)
 {
     turnCount = 0;
@@ -91,7 +85,6 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
     displayCallback = d_callback;
 }
 
-
 /**
  * @author David Donahue
  * @par Description:
@@ -101,8 +94,6 @@ int GameField::getTurnCount()
 {
     return turnCount;
 }
-
-
 /**
  * @author David Donahue
  * @par Description:
@@ -112,8 +103,6 @@ int GameField::getWidth()
 {
     return fieldMap.width;
 }
-
-
 /**
  * @author David Donahue
  * @par Description:
@@ -125,7 +114,6 @@ int GameField::getHeight()
     return fieldMap.height;
 }
 
-
 /**
  * @author David Donahue
  * @par Description:
@@ -135,8 +123,6 @@ std::vector<int> GameField::getMap()
 {
     return fieldMap.map;
 }
-
-
 /**
  * @author David Donahue
  * @par Description:
@@ -153,8 +139,6 @@ void GameField::updateMap()
             fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
     }
 }
-
-
 /**
  * @author David Donahue
  * @par Description:
@@ -212,9 +196,8 @@ void GameField::runMoves(ActorInfo &a)
             else
                 a.health--;
             break;
-
         case UPLEFT:
-            if (a.y > 0 && a.x > 0)
+            if (a.y > 0 && a.x > 0 && !obstacleAt(a.x-1,a.y-1))            
             {
                 a.y--;
                 a.x--;
@@ -224,7 +207,7 @@ void GameField::runMoves(ActorInfo &a)
             break;
              
         case UPRIGHT:
-            if (a.y > 0 && a.x < fieldMap.width-1)
+            if (a.y > 0 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y-1))       
             {
                 a.y--;
                 a.x++;
@@ -234,7 +217,7 @@ void GameField::runMoves(ActorInfo &a)
             break;
 
         case DOWNLEFT:
-            if (a.y < fieldMap.height-1 && a.x > 0)
+            if (a.y < fieldMap.height-1 && a.x > 0 && !obstacleAt(a.x-1,a.y+1))
             {
                 a.y++;
                 a.x--;
@@ -244,7 +227,7 @@ void GameField::runMoves(ActorInfo &a)
             break;
 
         case DOWNRIGHT:
-            if (a.y < fieldMap.height-1 && a.x < fieldMap.width-1)
+            if (a.y < fieldMap.height-1 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y+1))
             {
                 a.y++;
                 a.x++;
