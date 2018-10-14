@@ -34,13 +34,11 @@ public:
      */
     virtual AttackData attack(MapData map, PositionData status) = 0;
 
-
-
     #endif
 
     Actor();
     ~Actor();
-    Actor(std::string newName, int newId);
+    Actor(std::string newName, int newId); 
 
     //Getters
     std::string getName();    /*!< Returns the value within name */  

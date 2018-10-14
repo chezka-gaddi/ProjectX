@@ -100,6 +100,34 @@ static bool isplayable(std::vector<ActorInfo> actorInfo)
 
 /***************************************************************************//**
 * @author Chezka Gaddi
+* @brief gameOver
+*
+* Display the screen that reads game over
+*******************************************************************************/
+void gameOver()
+{
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glLoadIdentity();
+    glEnable(GL_TEXTURE_2D);
+
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, -5.0f);
+	glBindTexture(GL_TEXTURE_2D, gameTex[7]);
+	glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.5f,  1.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.5f, -0.5f,  1.0f);
+        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.5f,  0.5f,  1.0f);
+        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f,  0.5f,  1.0f);
+	glEnd();
+    glPopMatrix();
+
+    system("sleep 1");
+    glutSwapBuffers();
+}
+
+
+/***************************************************************************//**
+* @author Chezka Gaddi
 * @brief executeTurn
 *
 * While the game is still playable, execute a turn from each of the tanks,
@@ -108,8 +136,7 @@ static bool isplayable(std::vector<ActorInfo> actorInfo)
 *******************************************************************************/
 void Game::executeTurn()
 {
-    std::cout << "Repainting game objects\n";
-    
+ 
     if(isplayable(tankGame->getActors()))
     {
         tankGame->nextTurn();
@@ -117,31 +144,24 @@ void Game::executeTurn()
     }
     
     else
+    {
+        gameOver();
         glutLeaveMainLoop();
+    }
 }
-/**
- * @author David Donahue
- * @par Description:
- * Wrapper to display() that acts as the GameField display callback
- */
 
-void displayWrapper(MapData map, std::vector<ActorInfo> actors, int turnCount)
-{
-    display();
-}
 
 /***************************************************************************//**
 * @author Chezka Gaddi
 * @brief initGameState
 *
 * Initialize the main GameField and all the Drawables needed to start the game.
-* Reads settings from the file "config.txt"
 *******************************************************************************/
 void Game::initGameState()
 {
     Drawable *temp = nullptr;
     
-    std::cout << "Game::Loading playfield\n";
+    // Load game field
     temp = new GameFieldDrawable();
     constants.push_back(temp);
     std::vector<string> AINames;
@@ -230,7 +250,7 @@ void Game::initGameState()
         objects.push_back(temp);
     }
 
-    tankGame = new GameField(width, height, startActors, displayWrapper);
+    tankGame = new GameField(width, height, startActors, display);
     
     // Add obstacles to the gamefield
     for (auto o : obstacleLocations)

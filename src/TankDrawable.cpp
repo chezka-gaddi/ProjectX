@@ -29,7 +29,7 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor )
     if( ID == 2 )
     {
         angle = 180;
-        tex = 1;
+        tex = 2;
     }
 }
 
@@ -51,7 +51,7 @@ void TankDrawable::draw()
     glLoadIdentity();
     glTranslatef(screen_x, screen_y, -5.0f);  
 	glRotatef(angle,0,0,1);
-    glBindTexture(GL_TEXTURE_2D, texture[tex]);
+    glBindTexture(GL_TEXTURE_2D, tankTex[tex]);
 	
     glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.13f, -0.1f,  1.0f);
