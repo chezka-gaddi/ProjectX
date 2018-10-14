@@ -135,6 +135,7 @@ void displayWrapper(MapData map, std::vector<ActorInfo> actors, int turnCount)
 * @brief initGameState
 *
 * Initialize the main GameField and all the Drawables needed to start the game.
+* Reads settings from the file "config.txt"
 *******************************************************************************/
 void Game::initGameState()
 {
@@ -191,6 +192,7 @@ void Game::initGameState()
                 stringstream(args) >> x >> y;
                 obstacleLocations.push_back(std::pair<int,int> (x, y));
             }
+            //Tank params
             else if (id == "DAMAGE")
             {
                 stringstream(args) >> damage;
