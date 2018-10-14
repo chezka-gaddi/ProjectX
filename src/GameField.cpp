@@ -28,8 +28,8 @@ GameField::GameField()
  * @par Description:
  * Destructor, deletes all actors left on the feild
  */
- 
- GameField::~GameField()
+
+GameField::~GameField()
 {
     for (auto &a : actors)
     {
@@ -37,7 +37,6 @@ GameField::GameField()
             delete a.act_p;        
     }
 }
-
 
 /**
  * @author David Donahue
@@ -72,7 +71,8 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     updateMap();
     displayCallback = NULL;
 }
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)()) : actors(startActors)
+
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int)) : actors(startActors)
 {
     turnCount = 0;
     fieldMap.width = width;
@@ -138,6 +138,7 @@ void GameField::updateMap()
         if (a.health > 0)
             fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
     }
+    
 }
 /**
  * @author David Donahue
@@ -197,7 +198,7 @@ void GameField::runMoves(ActorInfo &a)
                 a.health--;
             break;
         case UPLEFT:
-            if (a.y > 0 && a.x > 0 && !obstacleAt(a.x-1,a.y-1))            
+            if (a.y > 0 && a.x > 0 && !obstacleAt(a.x-1,a.y-1))
             {
                 a.y--;
                 a.x--;
@@ -207,7 +208,7 @@ void GameField::runMoves(ActorInfo &a)
             break;
              
         case UPRIGHT:
-            if (a.y > 0 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y-1))       
+            if (a.y > 0 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y-1))
             {
                 a.y--;
                 a.x++;
@@ -282,13 +283,13 @@ void GameField::runMoves(ActorInfo &a)
         else
             --rangeCount;
 
-        updateMap();
+            updateMap();
 
         if (displayCallback != NULL)
-            displayCallback();
+            displayCallback(fieldMap, actors, turnCount);
+        
     }
 }
-
 
 /**
  * @author David Donahue
@@ -296,6 +297,7 @@ void GameField::runMoves(ActorInfo &a)
  * Executes the move and attack phase of each AI's turn and increments the turn counter.
  * AI's are culled
  */
+
 void GameField::nextTurn()
 {
     ++turnCount;
@@ -338,7 +340,6 @@ void GameField::nextTurn()
                     actors.insert(actors.begin() + i + 1, newProjectile);
                     actors[i].shots++;
                 }
-                
                 else //projectiles requesting a self destruct
                 {
                     actors[i].health = 0;
@@ -348,9 +349,10 @@ void GameField::nextTurn()
 
                     //update the display
                     updateMap();
-                    if(displayCallback != NULL)
-                        displayCallback();
+                    if (displayCallback != NULL)
+                        displayCallback(fieldMap, actors, turnCount);
                 }
+                
             }
         }
     }
@@ -358,8 +360,6 @@ void GameField::nextTurn()
     cull();
     updateMap();
 }
-
-
 /**
  * @author David Donahue
  * @par Description:
@@ -371,7 +371,6 @@ void GameField::addActor(ActorInfo a)
     updateMap();
 }
 
-
 /**
  * @author David Donahue
  * @par Description:
@@ -380,11 +379,11 @@ void GameField::addActor(ActorInfo a)
  * @param[in] x - the x value of the obstacle
  * @param[in] y - the y value of the obstacle
  */
+
 void GameField::addObstacle(int x, int y)
 {
     fieldMap.obstacleMap[x + fieldMap.width * y] = true;
 }
-
 
 /**
  * @author David Donahue
@@ -394,11 +393,11 @@ void GameField::addObstacle(int x, int y)
  * @param[in] x - the x value of the obstacle
  * @param[in] y - the y value of the obstacle
  */
+
 void GameField::removeObstacle(int x, int y)
 {
     fieldMap.obstacleMap[x + fieldMap.width * y] = false;
 }
-
 
 /**
  * @author David Donahue
@@ -409,8 +408,6 @@ std::vector<ActorInfo> GameField::getActors()
 {
     return actors;
 }
-
-
 /**
  * @author David Donahue
  * @par Description:
@@ -428,8 +425,6 @@ std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
     return hits;
     
 }
-
-
 /**
  * @author David Donahue
  * @par Description:
@@ -450,8 +445,6 @@ void GameField::cull()
     }
     
 }
-
-
 /**
  * @author David Donahue
  * @par Description:

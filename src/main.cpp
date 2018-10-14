@@ -44,12 +44,14 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
  @endverbatim
  ******************************************************************************/
 
+
+
 // Includes
 #include <iostream>
 #include "util.h"
 
-
 // Main
+
 int main(int argc, char **argv)
 {
     gameMode mode;

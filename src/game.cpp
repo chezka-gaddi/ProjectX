@@ -121,8 +121,9 @@ void gameOver()
 	glEnd();
     glPopMatrix();
 
-    system("sleep 1");
+    system("sleep 1.");
     glutSwapBuffers();
+    system("sleep 1.");
 }
 
 
