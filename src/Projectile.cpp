@@ -1,0 +1,59 @@
+/***************************************************************************//**
+* @file Projectile.cpp
+* @author Chezka Gaddi
+* @brief Contains all maintenance functions for Projectile class.
+* *****************************************************************************/
+
+#include "Drawable.h"
+
+
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief Constructor
+*
+* Initiates the coordinates of where projectile is to be drawn and from whom the
+* projectile came from.
+*
+* @param[in] ID - indicates who fired the projectile
+* @param[in] x_coor - coordinate to spawn projectile
+* @param[in] y_coor - coordinate to spawn projectile
+* *****************************************************************************/
+Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor )
+{
+    screen_x = x_coor;
+    screen_y = y_coor;
+    id = ID;
+
+    tex = 4;
+    angle = 0;
+
+    if( -ID == 2 )
+    {
+        angle = 180;
+        tex = 5;
+    }
+}
+
+
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief draw
+*
+* Draws the projectile in the gamefield
+* *****************************************************************************/
+void Projectile::draw()
+{
+    glEnable(GL_TEXTURE_2D);
+    glPushMatrix();
+    glTranslatef(screen_x, screen_y, -5.0f);  
+	glRotatef(angle,0,0,1);
+    glBindTexture(GL_TEXTURE_2D, texture[tex]);
+	glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.07f, -0.07f,  1.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.07f, -0.07f,  1.0f);
+        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.07f,  0.07f,  1.0f);
+        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.07f,  0.07f,  1.0f);
+	glEnd();
+    glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
+}

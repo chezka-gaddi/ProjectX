@@ -83,11 +83,16 @@ void gameloop(std::vector<Actor *> actors){
         startActors.push_back(ActorInfo(a,1,2,rand() % x, rand()% y,i));
         i++;
     }
+
     
     GameField gameField (x,y, startActors, displayAscii);
 
+    gameField.addObstacle(6,2); //add some obstacles to make things more fun
+    gameField.addObstacle(14,2); 
+   
     //the is the main game loop
-    while(isplayable(gameField.getActors())){
+    while(isplayable(gameField.getActors()))
+    {
         //displays the current game state
         displayAscii(gameField.getMapData(), gameField.getActors(), gameField.getTurnCount());
         std::vector<ActorInfo> actors = gameField.getActors();
