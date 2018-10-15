@@ -26,7 +26,7 @@ class AsciiTankActor : public Actor
     bool enableConsole;
 public:
     virtual direction move(MapData map, PositionData status);    /*!<Returns the actorMove member variable */
-    virtual AttackData attack(MapData map, PositionData status); /*!<Returns the actorAttack member variable */
+    virtual direction attack(MapData map, PositionData status); /*!<Returns the actorAttack member variable */
     
     virtual attributes setAttribute(int pointsAvailable);
 

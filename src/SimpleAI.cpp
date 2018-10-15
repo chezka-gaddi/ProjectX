@@ -93,9 +93,9 @@ direction SimpleAI::move(MapData map, PositionData status)
  * @param[in] status - The AI's tank's location, health and ID
  * @return Location to attack and whether to attack
  */
-AttackData SimpleAI::attack(MapData map, PositionData status)
+direction SimpleAI::attack(MapData map, PositionData status)
 {
-    AttackData ret(0,0,0);
+    direction ret = STAY;
     int min_dist = map.width * map.height + 1; //Guaranteed to be greater than any real distance
     for (int x = 0; x < map.width; ++x)
     {
@@ -106,8 +106,28 @@ AttackData SimpleAI::attack(MapData map, PositionData status)
                  map.map[x + y*map.width] != status.id &&
                  calcDist(status.game_x, status.game_y, x, y) < min_dist)
             {
-                min_dist = calcDist(status.game_x, status.game_y, x, y);
-                ret = AttackData(x, y, 1);
+                if (x == status.game_x || y == status.game_y ||(
+                        abs(x - status.game_x) == abs(status.game_y - y)));
+                {
+                    min_dist = calcDist(status.game_x, status.game_y, x, y);
+                    if (status.game_x == x)
+                    {
+                        ret = (y > status.game_y) ? DOWN : UP;
+                    }
+                    else if (status.game_y == y)
+                    {
+                        ret = (x > status.game_x) ? RIGHT : LEFT;
+                    }
+                    else if (status.game_x > x) //to the upright or downright
+                    {
+                        ret = (y > status.game_y) ? DOWNLEFT : UPLEFT;
+                    }
+                    else
+                    {
+                        ret = (y > status.game_y) ? DOWNRIGHT : UPRIGHT;
+                    }
+                }
+            
             }
         }
     }

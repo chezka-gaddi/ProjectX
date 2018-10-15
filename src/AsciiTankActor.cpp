@@ -63,7 +63,7 @@ direction AsciiTankActor::move( MapData map, PositionData status)
  * @param[in]        status - the current state of the ActorInfo's
  *
  ****************************************************************************/
-AttackData AsciiTankActor::attack( MapData map, PositionData status)
+direction AsciiTankActor::attack( MapData map, PositionData status)
 {
     int x, y;
     char c;
@@ -74,18 +74,32 @@ AttackData AsciiTankActor::attack( MapData map, PositionData status)
     cin >> c;
 
     if (tolower(c) != 'y')
-        return AttackData(0,0,0);
+        return STAY;
 
     cin.clear();
     cin.ignore(); //Ensure no characters are in the input buffer
 
-    cout << "Player " << status.id << ": Enter the X and Y cooridinates you want to attack as X Y: ";
-    cin >> x >> y;
+    cout << "Player " << status.id << "Direction to Attack:  ";
+    cin >> c;
+     switch (tolower(c))
+    {
+    case 'u':
+        return UP;
+        break;
+    case 'd':
+        return DOWN;
+        break;
+    case 'l':
+        return LEFT;
+        break;
+    case 'r':
+        return RIGHT;
+        break;
+    default:
+        return STAY;
+        break;
+    }
 
-    actorAttack.damage = 1;
-    actorAttack.attack_x = x;
-    actorAttack.attack_y = y;
-    return actorAttack;
 }
 
 

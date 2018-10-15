@@ -1,3 +1,4 @@
+
 /**
  * SimpleActor.h
  * a simple actor class with an 'AI' of:
@@ -14,15 +15,15 @@
 class SimpleActor : public Actor
 {
     direction dir;
-    AttackData atk;
+    direction atk;
     
     public:
         virtual direction move(MapData map, PositionData status);
-        virtual AttackData attack(MapData map, PositionData status);
+        virtual direction attack(MapData map, PositionData status);
         virtual attributes setAttribute(int pointsAvailable);
         SimpleActor();
-        SimpleActor(direction mv, int d);
-        void setAttack(int x, int y, int d);
+        SimpleActor(direction mv, direction d);
+        void setAttack(direction d);
         void setMove  (direction d);
 };
 

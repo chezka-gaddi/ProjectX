@@ -60,7 +60,7 @@ SCENARIO("The projectile moves around the gamefield")
 
         WHEN("The tank tries to shoot up")
         {
-            tank->setAttack(0,-1,1);
+            tank->setAttack(UP);
             tank->setMove(STAY);
             gamefield.nextTurn();
             THEN("The projectile goes up")
@@ -91,7 +91,7 @@ SCENARIO("The projectile moves around the gamefield")
 
         WHEN("The tank tries attacks to down")
         {
-            tank->setAttack(0,13,1);
+            tank->setAttack(DOWN);
             tank->setMove(STAY);
             gamefield.nextTurn();
 
@@ -140,7 +140,7 @@ SCENARIO("The projectile moves around the gamefield")
 
         WHEN("The tank tries to shoot left")
         {
-            tank->setAttack(-1,0,1);
+            tank->setAttack(LEFT);
             tank->setMove(STAY);
             gamefield.nextTurn();
             THEN("The projectile goes left")
@@ -171,7 +171,7 @@ SCENARIO("The projectile moves around the gamefield")
 
         WHEN("The tank tries attacks to right")
         {
-            tank->setAttack(13,1,1);
+            tank->setAttack(RIGHT);
             tank->setMove(STAY);
             gamefield.nextTurn();
 
@@ -233,9 +233,9 @@ SCENARIO("The projectile collides with the actors on the gamefield")
     {
         WHEN("Each tank tries to shoot a projectile")
         {
-            tank->setAttack(0,0,1);//attack 2nd
+            tank->setAttack(LEFT);//attack 2nd
             tank->setMove(STAY);
-            tank2->setAttack(13,0,1);//attack 1st
+            tank2->setAttack(RIGHT);//attack 1st
             tank2->setMove(STAY);
             gamefield.nextTurn();
 
@@ -261,10 +261,10 @@ SCENARIO("The projectile collides with the actors on the gamefield")
         WHEN("One tank shoots at the other tank and the other tank does not move")
         {
             tank->setMove(STAY);//do not move
-            tank2->setAttack(13,0,100);//attack 1st
+            tank2->setAttack(RIGHT);//attack 1st
             tank2->setMove(STAY);
             gamefield.nextTurn();
-            tank2->setAttack(1,0,100);//attack 1st
+            tank2->setAttack(STAY);//attack 1st
             gamefield.nextTurn();
             gamefield.nextTurn();
             gamefield.nextTurn();
