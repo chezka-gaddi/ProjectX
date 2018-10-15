@@ -5,10 +5,12 @@
 *******************************************************************************/
 
 #include "Texture.h"
+#include <iostream>
+using namespace std;
 
 // Initialize texture arrays
 GLuint gameTex[8];      /*!<Texture array for the tanks and their projectiles */
-GLuint tankTex[4];      /*!<Texture array for game constants */
+GLuint tankTex[18];      /*!<Texture array for game constants */
 
 
 /***************************************************************************//**
@@ -17,55 +19,27 @@ GLuint tankTex[4];      /*!<Texture array for game constants */
 *
 * Loads and saves all the textures needed for the game in texture arrays.
 *******************************************************************************/
-int LoadGLTextures()
+int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> gameimgs)
 {
     // Load in the tank texure information
-    tankTex[0] = SOIL_load_OGL_texture(
-                     "images/tank1.png",
+    for( int i = 0; i < 18; i++ )
+    {
+        cout << images.size() << endl;
+        cout << images[i] << endl;
+        const char *c = images[i].c_str();
+        tankTex[i] = SOIL_load_OGL_texture(
+                     c,
                      SOIL_LOAD_AUTO,
                      SOIL_CREATE_NEW_ID,
                      SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
-    if(tankTex[0] == 0)
+        if(tankTex[i] == 0)
         return false;
 
-    glBindTexture(GL_TEXTURE_2D, tankTex[0]);
+        glBindTexture(GL_TEXTURE_2D, tankTex[i]);
+    }
 
 
-    tankTex[1] = SOIL_load_OGL_texture(
-                     "images/bullet1.png",
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-    if(tankTex[1] == 0)
-        return false;
-
-    glBindTexture(GL_TEXTURE_2D, tankTex[1]);
-
-
-    tankTex[2] = SOIL_load_OGL_texture(
-                     "images/tank2.png",
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-    if(tankTex[2] == 0)
-        return false;
-
-    glBindTexture(GL_TEXTURE_2D, tankTex[2]);
-
-
-    tankTex[3] = SOIL_load_OGL_texture(
-                     "images/bullet2.png",
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-    if(tankTex[3] == 0)
-        return false;
-
-    glBindTexture(GL_TEXTURE_2D, tankTex[3]);
 
 
     // Load in constant game images
@@ -81,40 +55,21 @@ int LoadGLTextures()
     glBindTexture(GL_TEXTURE_2D, gameTex[0]);
 
 
-    gameTex[1] = SOIL_load_OGL_texture(
-                     "images/green.png",
+    for( int i = 1; i < 4; i++ )
+    {
+        const char *c = gameimgs[i-1].c_str();
+        cout << c << endl;
+        gameTex[i] = SOIL_load_OGL_texture(
+                     c,
                      SOIL_LOAD_AUTO,
                      SOIL_CREATE_NEW_ID,
                      SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
-    if(gameTex[1] == 0)
+        if(gameTex[i] == 0)
         return false;
 
-    glBindTexture(GL_TEXTURE_2D, gameTex[1]);
-
-
-    gameTex[2] = SOIL_load_OGL_texture(
-                     "images/tree.png",
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-    if(gameTex[2] == 0)
-        return false;
-
-    glBindTexture(GL_TEXTURE_2D, gameTex[2]);
-
-
-    gameTex[3] = SOIL_load_OGL_texture(
-                     "images/rock.png",
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-    if(gameTex[3] == 0)
-        return false;
-
-    glBindTexture(GL_TEXTURE_2D, gameTex[3]);
+        glBindTexture(GL_TEXTURE_2D, gameTex[i]);
+    }
 
 
     gameTex[4] = SOIL_load_OGL_texture(

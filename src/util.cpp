@@ -48,11 +48,9 @@ void initOpenGL(int argc, char** argv, int wCols, int wRows, gameMode mode)
 
     glutCreateWindow("Capture the Flag");
 
+    glutSetIconTitle("images/icon.png");
+
     glutDisplayFunc(display);
-
-    glEnable(GL_TEXTURE_2D);
-
-    LoadGLTextures();
 
     glShadeModel(GL_SMOOTH);
 
@@ -71,8 +69,6 @@ void initOpenGL(int argc, char** argv, int wCols, int wRows, gameMode mode)
     glDepthFunc(GL_LEQUAL);
 
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
-    glDisable(GL_TEXTURE_2D);
 
     utilityCentral( mode, new InitEvent(wCols, wRows));
 }

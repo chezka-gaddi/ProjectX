@@ -18,19 +18,14 @@
 * @param[in] x_coor - coordinate to spawn tank
 * @param[in] y_coor - coordinate to spawn tank
 * *****************************************************************************/
-TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor )
+TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction dir )
 {
     screen_x = x_coor;
     screen_y = y_coor;
     id = ID;
 
-    tex = 0;
+    tex = dir + (ID-1)*10;
     angle = 0;
-    if( ID == 2 )
-    {
-        angle = 180;
-        tex = 2;
-    }
 }
 
 

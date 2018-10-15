@@ -11,6 +11,6 @@
 #include "SOIL.h"
 #include "global.h"
 
-int LoadGLTextures();
+int LoadGLTextures(std::vector <std::string>,std::vector <std::string>);
 
 #endif
