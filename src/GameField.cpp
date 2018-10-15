@@ -165,7 +165,7 @@ void GameField::runMoves(ActorInfo &a)
         pos.id = a.id;
         //get the AI's desired move
         dir = a.act_p->move(fieldMap, pos);
-
+        a.heading = (dir == STAY) ? a.heading : dir;
         //If it checks out, execute it
         //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
         switch (dir)
