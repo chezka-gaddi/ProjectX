@@ -1,6 +1,6 @@
 #AI LIST: AI <NAME> <STARTX> <STARTY>
-AI SimpleAI 2 0 tank1_1.png tank1_2.png tank1_3.png tank1_4.png tank1_5.png tank1_6.png tank1_7.png tank1_8.png bullet1.png
-AI SimpleAI 10 4 tank2_1.png tank2_2.png tank2_3.png tank2_4.png tank2_5.png tank2_6.png tank2_7.png tank2_8.png bullet2.png
+AI SimpleAI 2 0 images/tank1_1.png images/tank1_2.png images/tank1_3.png images/tank1_4.png images/tank1_5.png images/tank1_6.png images/tank1_7.png images/tank1_8.png bullet1.png
+AI SimpleAI 10 4 images/tank2_1.png images/tank2_2.png images/tank2_3.png images/tank2_4.png images/tank2_5.png images/tank2_6.png images/tank2_7.png images/tank2_8.png bullet2.png
 #AI SimpleAI 14 2
 #AI SimpleAI 1 8
 #AI SimpleAI 13 8
