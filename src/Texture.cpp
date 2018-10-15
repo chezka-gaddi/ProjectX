@@ -24,9 +24,8 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
     // Load in the tank texure information
     for( int i = 0; i < 18; i++ )
     {
-        cout << images.size() << endl;
-        cout << images[i] << endl;
         const char *c = images[i].c_str();
+        cout << c << endl;
         tankTex[i] = SOIL_load_OGL_texture(
                      c,
                      SOIL_LOAD_AUTO,
@@ -38,8 +37,6 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
 
         glBindTexture(GL_TEXTURE_2D, tankTex[i]);
     }
-
-
 
 
     // Load in constant game images

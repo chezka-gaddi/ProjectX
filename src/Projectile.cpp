@@ -6,7 +6,6 @@
 
 #include "Drawable.h"
 
-
 /***************************************************************************//**
 * @author Chezka Gaddi
 * @brief Constructor
@@ -58,8 +57,8 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir )
         angle = 135;
         break;
     }
-    tex = 8;
     
+    tex = (-id-1)*1+(-id)*8;
 }
 
 
