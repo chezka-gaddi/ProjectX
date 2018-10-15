@@ -350,6 +350,7 @@ void GameField::nextTurn()
                     {
                         if (atk != STAY)
                         {
+                            actors[i].heading = atk;
                             ProjectileActor * proj = new ProjectileActor(atk);
                             newProjectile.range = 6;
                             newProjectile.id = -actors[i].id;
