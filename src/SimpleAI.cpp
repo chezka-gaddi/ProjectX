@@ -22,9 +22,9 @@ direction SimpleAI::move(MapData map, PositionData status)
         {
             //If an enemy is encountered closer than previously encountered
             if ( map.map[x + y*map.width] > 0 &&
-                    map.map[x + y*map.width] != status.id &&
-                    calcDist(status.game_x, status.game_y, x, y) < min_dist &&
-                    calcDist(status.game_x, status.game_y, x, y) > 1)
+                 map.map[x + y*map.width] != status.id &&
+                 calcDist(status.game_x, status.game_y, x, y) < min_dist &&
+                 calcDist(status.game_x, status.game_y, x, y) > 1)
             {
                 min_dist = calcDist(status.game_x, status.game_y, x, y);
 
@@ -87,7 +87,7 @@ direction SimpleAI::move(MapData map, PositionData status)
 
 /**
  * @author David Donahue
- * @par Description:
+ * @par Description: 
  * Calculates how many moves it will take to reach a given coordinate
  * @param[in] map - The current state of the playfield
  * @param[in] status - The AI's tank's location, health and ID
@@ -103,8 +103,8 @@ AttackData SimpleAI::attack(MapData map, PositionData status)
         {
             //If an enemy is encountered closer than previously encountered
             if ( map.map[x + y*map.width] &&
-                    map.map[x + y*map.width] != status.id &&
-                    calcDist(status.game_x, status.game_y, x, y) < min_dist)
+                 map.map[x + y*map.width] != status.id &&
+                 calcDist(status.game_x, status.game_y, x, y) < min_dist)
             {
                 min_dist = calcDist(status.game_x, status.game_y, x, y);
                 ret = AttackData(x, y, 1);
@@ -117,6 +117,19 @@ AttackData SimpleAI::attack(MapData map, PositionData status)
 /**
  * @author David Donahue
  * @par Description:
+ * Returns the attributes for the tank
+ * @param[in] pointsAvailable - available points for the distribution
+ * @return attributes of the tank
+ */
+attributes SimpleAI::setAttribute(int pointsAvailable)
+{
+   attributes tankAttributes;
+
+   return tankAttributes;
+}
+/**
+ * @author David Donahue
+ * @par Description: 
  * Calculates how many moves it will take to reach a given coordinate
  * @param[in] x1 - starting point x coordinate
  * @param[in] y1 - starting point y coordinate

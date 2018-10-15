@@ -173,6 +173,22 @@ AttackData ProjectileActor::attack(MapData map, PositionData status)
 }
 
 
+/**************************************************************************//**
+ * @author Brad Peterson
+ * 
+ * @par Description
+ * Returns attributes of projectile
+ *
+ * @returns projAttributes - attributes of projectile
+ *
+******************************************************************************/
+attributes ProjectileActor::setAttribute(int pointsAvailable)
+{
+    attributes projAttributes;
+
+    return projAttributes;
+}
+
 //Getters
 /**************************************************************************//**
  * @author Brad Peterson

@@ -11,6 +11,7 @@
 #define ASCIITANKACTOR_H
 
 #include "Actor.h"
+#include "attributes.h"
 /***************************************************************************//**
 * @class AsciiTankActor
 * @author Youki Lewis
@@ -26,9 +27,11 @@ class AsciiTankActor : public Actor
 public:
     virtual direction move(MapData map, PositionData status);    /*!<Returns the actorMove member variable */
     virtual AttackData attack(MapData map, PositionData status); /*!<Returns the actorAttack member variable */
+    
+    virtual attributes setAttribute(int pointsAvailable);
 
     AsciiTankActor();
 
 };
-
+        
 #endif

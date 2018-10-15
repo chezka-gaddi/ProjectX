@@ -1,4 +1,5 @@
 #include "SimpleActor.h"
+#include "attributes.h"
 
 
 /**
@@ -69,6 +70,51 @@ void SimpleActor::setAttack(int x, int y, int d)
 void SimpleActor::setMove(direction d)
 {
     dir = d;
+}
+
+/**
+ * @author Youki Lewis
+ * @par Description:
+ * Sets the attributes for the tanks decided by the AI
+ *
+ * @parm[in] pointsAvailable - available points for distribution
+ */
+attributes SimpleActor::setAttribute(int pointsAvailable)
+{
+    attributes tankAttributes;
+    int basicDistribution = pointsAvailable / 4;
+    int leftoverPoints = pointsAvailable % 4;
+    int randChoice = 0;
+    
+    tankAttributes.tankHealth = basicDistribution;
+    tankAttributes.tankDamage = basicDistribution;
+    tankAttributes.tankRange = basicDistribution;
+    tankAttributes.tankShots = basicDistribution;
+        
+    while (leftoverPoints != 0)
+    {
+      randChoice = rand() % 4;
+          
+      switch( randChoice )
+      {
+          case 0:
+              tankAttributes.tankHealth += 1;
+              break;
+          case 1:
+              tankAttributes.tankDamage += 1;
+              break;
+          case 2:
+              tankAttributes.tankRange += 1;
+              break;
+          case 3:
+              tankAttributes.tankShots += 1;
+              break;
+          default:
+              tankAttributes.tankHealth += 1;
+          }
+        }
+
+    return tankAttributes;
 }
 
 

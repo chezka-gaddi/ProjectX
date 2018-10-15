@@ -89,6 +89,23 @@ AttackData AsciiTankActor::attack( MapData map, PositionData status)
 }
 
 
+/*************************************************************************//**
+ * @author Youki Lewis
+ *
+ * @par Description:
+ * This member function will return the actorAttack variable 
+ * 
+ * @param[in]        pointsAvailable - points available for distribution
+ *
+ * @return tankAttributes - the attributes of the tank
+ *
+ ****************************************************************************/
+attributes AsciiTankActor::setAttribute( int pointsAvailable )
+{
+    attributes tankAttributes;
+
+    return tankAttributes;
+}
 
 AsciiTankActor::AsciiTankActor() {}
 

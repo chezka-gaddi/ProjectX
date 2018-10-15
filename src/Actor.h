@@ -7,6 +7,7 @@
 #include <string>
 #include "MoveData.h"
 #include "AttackData.h"
+#include "attributes.h"
 #include "MapData.h"
 #include "direction.h"
 #include "PositionData.h"
@@ -34,6 +35,12 @@ public:
      * @return Attack data the desired attack to be made, if possible the gamefield will do the move
      */
     virtual AttackData attack(MapData map, PositionData status) = 0;
+
+    /**
+     *  sets the attributes of the tank
+     *  @ returns attributeStruct to set tanks attribute
+     */
+    virtual attributes setAttribute(int pointsAvailable) = 0;
 
 
 
