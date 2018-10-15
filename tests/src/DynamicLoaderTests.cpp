@@ -4,7 +4,6 @@
 #include <string>
 #include <Actor.h>
 #include <MapData.h>
-#include <AttackData.h>
 #include <direction.h>
 #include <PositionData.h>
 

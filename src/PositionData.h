@@ -27,5 +27,6 @@ struct PositionData
     int ap; /*!< remaining action points*/
     PositionData() {}
 PositionData(int i, int h, int x, int y, int a) : id(i), health(h), game_x(x), game_y(y), ap(a) {}
+PositionData(int i, int h, int x, int y) : id(i), health(h), game_x(x), game_y(y), ap(2) {}
 };
 #endif //SLACKERS_PLATFORM_POSITIONDATA_H
