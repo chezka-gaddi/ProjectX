@@ -20,38 +20,17 @@
 class ProjectileActor:public Actor
 {
 protected:
-    int range;     /*!<The range of the projectile */
-    int startX;    /*!<The starting x coordinate */
-    int startY;    /*!<The starting y coordinate */
-    int endX;     /*!<The ending x coordinate */
-    int endY;     /*!<The ending y coordinate */
-    int newX;     /*!<The new x coordinate */
-    int newY;     /*!<The new y coordinate */
+    direction dir;
 public:
     ProjectileActor();
-    ProjectileActor(int newRange, int newStartX, int newStartY, int newEndX,
-                    int newEndY);
+    ProjectileActor(direction d);
 
     direction move(MapData map, PositionData status);
 
-    AttackData attack(MapData map, PositionData status);  
+    direction attack(MapData map, PositionData status);  
     
     attributes setAttribute(int pointsAvailable);
 
-    //Getters
-    int getRange();
-    int getStartX();
-    int getStartY();
-    int getEndX();
-    int getEndY();
-    int getNewX();
-    int getNewY();
-    //Setters
-    void setRange(int rangeUpdate);
-    void setStartX(int startXUpdate);
-    void setStartY(int startYUpdate);
-    void setEndX(int endXUpdate);
-    void setEndY(int endYUpdate);
 
 };
 

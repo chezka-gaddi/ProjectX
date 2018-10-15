@@ -17,7 +17,7 @@ TEST_CASE("SimpleAI does not attack when no other actors are present")
     PositionData pos(1, 1, 0, 0); //ID of 1, health of 1, position 0,0
     map.map[0] = 1; //place tank on the map
 
-    REQUIRE(ai.attack(map, pos).damage == 0);
+    REQUIRE(ai.attack(map, pos) == STAY);
 }
 TEST_CASE("SimpleAI attacks the nearest actor")
 {
@@ -27,7 +27,7 @@ TEST_CASE("SimpleAI attacks the nearest actor")
     map.map[0] = 1; //place AI on the map
     map.map[1] = 2; //place enemy tank on map
 
-    REQUIRE(ai.attack(map, pos) == AttackData(0,1,1));
+    REQUIRE(ai.attack(map, pos) == DOWN);
 }
 TEST_CASE("SimpleAI moves toward the nearest enemy tank")
 {

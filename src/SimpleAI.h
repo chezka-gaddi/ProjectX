@@ -22,7 +22,7 @@ public:
      * calculates an attack and returns the data describing its attack
      * @return Attack data the desired attack to be made, if possible the gamefield will do the move
      */
-    virtual AttackData attack(MapData map, PositionData status);
+    virtual direction attack(MapData map, PositionData status);
 
     virtual attributes setAttribute(int pointsAvailable);
 

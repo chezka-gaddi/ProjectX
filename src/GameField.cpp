@@ -307,7 +307,7 @@ void GameField::nextTurn()
 {
     ++turnCount;
 
-    AttackData atk;
+    direction atk;
     ActorInfo newProjectile;
     PositionData pos;
     for (int i = 0; i < actors.size(); ++i)
@@ -326,15 +326,11 @@ void GameField::nextTurn()
             atk = actors[i].act_p->attack(fieldMap, pos);
 
 
-            if (atk.damage > 0)
+            if (actors[i].id > 0) //tanks attacking
             {
-                if (actors[i].id > 0) //tanks attacking
+                if (atk != STAY)
                 {
-                    ProjectileActor * proj = new ProjectileActor;
-                    proj->setEndX(atk.attack_x);
-                    proj->setEndY(atk.attack_y);
-                    proj->setStartX(actors[i].x);
-                    proj->setStartY(actors[i].y);
+                    ProjectileActor * proj = new ProjectileActor(atk);
                     newProjectile.range = 6;
                     newProjectile.id = -actors[i].id;
                     newProjectile.act_p = proj;
@@ -345,20 +341,9 @@ void GameField::nextTurn()
                     actors.insert(actors.begin() + i + 1, newProjectile);
                     actors[i].shots++;
                 }
-                else //projectiles requesting a self destruct
-                {
-                    actors[i].health = 0;
-                    actors[i].id = 0;
-                    actors[i].range = 0;
-                    actors[i].damage = 0;
-
-                    //update the display
-                    updateMap();
-                    if (displayCallback != NULL)
-                        displayCallback(fieldMap, actors, turnCount);
-                }
-
             }
+            
+        
         }
     }
 

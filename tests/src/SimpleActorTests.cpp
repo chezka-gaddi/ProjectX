@@ -21,14 +21,14 @@ TEST_CASE("default SimpleActor.attack() attacks 0,0 with 0 damage")
     SimpleActor* a = new SimpleActor;
     MapData m;
     PositionData p;
-    AttackData result;
+    direction result;
     result = a->attack(m,p);
-    REQUIRE(( result.attack_x == 0 && result.attack_y == 0 && result.damage == 0));
+    REQUIRE(result == STAY);
     delete a;
 }
 TEST_CASE("SimpleActor moves in the direction specified at construction")
 {
-    SimpleActor* a = new SimpleActor(DOWN, 0);
+    SimpleActor* a = new SimpleActor(DOWN, STAY);
     MapData m;
     PositionData p;
     REQUIRE(a->move(m,p) == DOWN);
@@ -36,20 +36,18 @@ TEST_CASE("SimpleActor moves in the direction specified at construction")
 }
 TEST_CASE("SimpleActor.attack() attacks specified point with specified damage")
 {
-    SimpleActor* a = new SimpleActor(STAY, 0);
+    SimpleActor* a = new SimpleActor(STAY, STAY);
     MapData m;
     PositionData p;
-    AttackData result;
-    a->setAttack(1, 1, 1);
+    direction result;
+    a->setAttack(DOWNRIGHT);
     result = a->attack(m,p);
-    REQUIRE(result.attack_x == 1);
-    REQUIRE( result.attack_y == 1);
-    REQUIRE( result.damage == 1 );
+    REQUIRE(result == DOWNRIGHT);
     delete a;
 }
 TEST_CASE("SimpleActor.setMove() changes the return of SimpleActor.move()")
 {
-    SimpleActor* a = new SimpleActor(UP, 0);
+    SimpleActor* a = new SimpleActor(UP, STAY);
     MapData m;
     PositionData p;
     a->setMove(DOWN);

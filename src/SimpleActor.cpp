@@ -23,7 +23,7 @@ direction SimpleActor::move(MapData map, PositionData status)
  * @param[in] map - MapData with the current game map
  * @param[in] status - information about the current actor including position and ID
  */
-AttackData SimpleActor::attack(MapData map, PositionData status)
+direction SimpleActor::attack(MapData map, PositionData status)
 {
     return atk;
 }
@@ -32,7 +32,7 @@ AttackData SimpleActor::attack(MapData map, PositionData status)
  * @par Description:
  * Default constructor, sets default move to up and attack to 0,0
  */
-SimpleActor::SimpleActor() : atk(0,0,0), dir (UP) {}
+SimpleActor::SimpleActor() : atk(STAY), dir (UP) {}
 
 /**
  * @author David Donahue
@@ -40,9 +40,9 @@ SimpleActor::SimpleActor() : atk(0,0,0), dir (UP) {}
  * Constructor with desired direction and damage to attack 0,0 with
  *
  * @param[in] mv : the desired default move
- * @param[in] d : the desired attack damage
+ * @param[in] d : the desired attack direction
  */
-SimpleActor::SimpleActor(direction mv, int d) : atk(0, 0, d), dir(mv) {}
+SimpleActor::SimpleActor(direction mv, direction d) : atk(d), dir(mv) {}
 
 /**
  * @author David Donahue
@@ -53,11 +53,9 @@ SimpleActor::SimpleActor(direction mv, int d) : atk(0, 0, d), dir(mv) {}
  * @param[in] y - y coordinate to attack
  * @param[in] d - damage of the projectile
  */
-void SimpleActor::setAttack(int x, int y, int d)
+void SimpleActor::setAttack(direction d)
 {
-    atk.attack_x = x;
-    atk.attack_y = y;
-    atk.damage = d;
+    atk = d;
 }
 
 /**
