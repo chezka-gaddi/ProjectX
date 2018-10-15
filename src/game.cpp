@@ -141,8 +141,6 @@ void gameOver()
 *******************************************************************************/
 void Game::executeTurn()
 {
-
-
     if(isplayable(tankGame->getActors()))
     {
         tankGame->nextTurn();
@@ -194,9 +192,13 @@ void Game::initGameState()
     std::vector<std::pair<int,int>> obstacleLocations;
     std::vector<std::pair<int,int>> tankLocations;
 
+    std::vector<std::string> tankImages;
+    std::vector<std::string> gameImages;
+    std::string name;
+
     if (!fin)
         cout << "FAILED TO LOAD CONFIG\n";
-
+    
     while (!fin.eof())
     {
         getline(fin, configLine);
@@ -214,7 +216,21 @@ void Game::initGameState()
                 AINames.push_back(args.substr(0, i));
                 std::stringstream(args.substr(i+1)) >> x >> y;
                 tankLocations.push_back(std::pair<int,int>(x,y));
+                
+                i = args.find(' ', i+1);    //skip x
+                i = args.find(' ', i+1);    //skip y
+                
+                args = args.substr(i+1);
+                
+                for( int x = 0; x < 10; x++ )
+                {
+                    i = args.find(' ');    //skip y
+                    name = args.substr(0,i);
+                    tankImages.push_back(name);
+                    args = args.substr(i+1);
+                }
             }
+            
             //field params
             else if (id == "WIDTH")
             {
@@ -224,11 +240,35 @@ void Game::initGameState()
             {
                 stringstream(args) >> height;
             }
+            else if (id == "FIELDIMAGE")
+            {
+                stringstream(args) >> name;
+                gameImages.push_back(name);
+            }
             else if (id == "OBSTACLE")
             {
                 int x,y;
                 stringstream(args) >> x >> y;
                 obstacleLocations.push_back(std::pair<int,int> (x, y));
+            }
+            else if( id == "OBSTACLE_IMAGE" )
+            {
+                bool done = false;
+                while (!done)
+                {
+                    if (args.find(' ') == string::npos)
+                    {
+                        done = true;
+                        gameImages.push_back(args);
+                    }
+                    else
+                    {
+                        i = args.find(' ');
+                        gameImages.push_back(args.substr(0, i));
+                        args = args.substr(i + 1);
+                    }
+
+                }
             }
             //Tank params
             else if (id == "DAMAGE")
@@ -251,6 +291,11 @@ void Game::initGameState()
         }
     }
 
+    glEnable(GL_TEXTURE_2D);
+    if(!LoadGLTextures(tankImages, gameImages))
+        cout << "OH HELL NO!!!!"<< endl;
+    glDisable(GL_TEXTURE_2D);
+    
     std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
 
     std::vector<ActorInfo> startActors;
@@ -259,7 +304,7 @@ void Game::initGameState()
     for (int i = 0; i < startActorPointers.size(); ++i)
     {
         startActors.push_back(ActorInfo(startActorPointers[i], health, damage, tankLocations[i].first,
-                                        tankLocations[i].second, i + 1, range));
+                                        tankLocations[i].second, i + 1,range));
     }
     // Create a stats menu for both tanks
     for( auto actTemp : startActors)
@@ -274,22 +319,9 @@ void Game::initGameState()
     for (auto o : obstacleLocations)
     {
         tankGame->addObstacle(o.first, o.second);
+        temp = new Obstacles( 1, convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ) );
+        constants.push_back(temp);
     }
-
-    temp = new Obstacles( 1, convertGLXCoordinate( 3 ), convertGLYCoordinate( 0 ) );
-    constants.push_back(temp);
-    temp = new Obstacles( 2, convertGLXCoordinate( 13 ), convertGLYCoordinate( 4 ) );
-    constants.push_back(temp);
-    temp = new Obstacles( 2, convertGLXCoordinate( 7 ), convertGLYCoordinate( 2 ) );
-    constants.push_back(temp);
-    temp = new Obstacles( 1, convertGLXCoordinate( 4 ), convertGLYCoordinate( 7 ) );
-    constants.push_back(temp);
-    temp = new Obstacles( 1, convertGLXCoordinate( 10 ), convertGLYCoordinate( 5 ) );
-    constants.push_back(temp);
-    temp = new Obstacles( 1, convertGLXCoordinate( 14 ), convertGLYCoordinate( 1 ) );
-    constants.push_back(temp);
-    temp = new Obstacles( 1, convertGLXCoordinate( 2 ), convertGLYCoordinate( 5 ) );
-    constants.push_back(temp);
 }
 
 

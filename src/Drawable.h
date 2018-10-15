@@ -10,7 +10,7 @@
 #include <cstring>
 #include <string>
 #include "global.h"
-
+#include "direction.h"
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -95,7 +95,7 @@ class Projectile : public Drawable
 public:
     int angle;
 
-    Projectile(int ID, GLfloat x, GLfloat y);
+    Projectile(int ID, GLfloat x, GLfloat y, direction dir);
 
     void draw();
 };
@@ -111,7 +111,7 @@ class TankDrawable : public Drawable
 public:
     int angle;
 
-    TankDrawable( int ID, GLfloat x, GLfloat y);
+    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir);
 
     void draw();
 };
