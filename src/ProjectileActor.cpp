@@ -69,3 +69,13 @@ attributes ProjectileActor::setAttribute(int pointsAvailable)
 
     return projAttributes;
 }
+
+/**
+ * @author David Donahue
+ * @par Description
+ * Returns descision to (0) end turn, (1) move, or (2) attack
+ */
+int ProjectileActor::spendAP(MapData map, PositionData status)
+{
+    return 1;
+}

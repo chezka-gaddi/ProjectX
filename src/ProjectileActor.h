@@ -11,7 +11,6 @@
 #include "Actor.h"
 #include "direction.h"
 #include "MoveData.h"
-#include "AttackData.h"
 #include "attributes.h"
 
 /*!
@@ -31,6 +30,7 @@ public:
     
     attributes setAttribute(int pointsAvailable);
 
+    int spendAP(MapData map, PositionData status);
 
 };
 

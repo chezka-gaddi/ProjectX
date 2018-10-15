@@ -40,7 +40,8 @@ protected:
     void updateMap();
     void runMoves(ActorInfo &a);
     ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
-
+    //Action points for each actor
+    int ap;
 public:
     /**
      * Each turn will be as follows:
@@ -71,6 +72,7 @@ public:
     GameField(int width, int height);
     GameField(int width, int height, std::vector<ActorInfo> startActors);
     GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int));
+    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), int ap);
 
 
     ~GameField();
