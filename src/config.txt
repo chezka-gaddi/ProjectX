@@ -9,7 +9,7 @@ AI SimpleAI 10 4 images/tank2_1.png images/tank2_2.png images/tank2_3.png images
 WIDTH 15
 HEIGHT 9
 
-FIELDIMAGE images/city.png
+FIELDIMAGE images/green.png
 
 OBSTACLE 3 0
 OBSTACLE 13 4
@@ -19,7 +19,7 @@ OBSTACLE 10 5
 OBSTACLE 14 1
 OBSTACLE 2 5
 
-OBSTACLE_IMAGE images/Column_1.png images/Car_2.png
+OBSTACLE_IMAGE images/tree.png images/rock.png
 
 
 

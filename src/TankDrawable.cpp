@@ -24,7 +24,7 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
     screen_y = y_coor;
     id = ID;
 
-    tex = dir + (ID-1)*10;
+    tex = dir + (ID-1)*9;
     angle = 0;
 }
 
