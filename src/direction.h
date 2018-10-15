@@ -7,6 +7,7 @@
 
 
 enum direction {LEFT, RIGHT, UP, DOWN, STAY, UPLEFT, UPRIGHT, DOWNLEFT,
-		DOWNRIGHT};
+                DOWNRIGHT
+               };
 
 #endif

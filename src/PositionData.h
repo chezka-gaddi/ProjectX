@@ -16,10 +16,11 @@
 * @par Description
 * The position data for each actor
 *******************************************************************************/
-struct PositionData{
+struct PositionData
+{
 
-    std::string name; /*!<The name */  
-    int id; /*!<The id number */  
+    std::string name; /*!<The name */
+    int id; /*!<The id number */
     int health; /*!<The health */
     int game_x; /*!<The x coordinate */
     int game_y; /*!<The y coordinate */

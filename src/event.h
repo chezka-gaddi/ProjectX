@@ -21,30 +21,30 @@ using namespace std;
 /***************************************************************************//**
 * @author Paul Hinker
 * @class Event
-* @brief Event is the parent class for all event classes and has a doAction 
+* @brief Event is the parent class for all event classes and has a doAction
 * and destructor function that must be overwritten by subclasses.
 *******************************************************************************/
 class Event
 {
-    public:
-        virtual void doAction(Game&) = 0;
-        virtual ~Event();
+public:
+    virtual void doAction(Game&) = 0;
+    virtual ~Event();
 };
 
 
 /***************************************************************************//**
 * @author Paul Hinker
 * @class initEvent
-* @brief Creates an event depending on what trigger was set off. 
+* @brief Creates an event depending on what trigger was set off.
 *******************************************************************************/
 class InitEvent : public Event
 {
     int columns, rows;
-    
-    public:
-        InitEvent(int, int);
 
-        void doAction(Game &);
+public:
+    InitEvent(int, int);
+
+    void doAction(Game &);
 };
 
 
@@ -55,8 +55,8 @@ class InitEvent : public Event
 *******************************************************************************/
 class DisplayEvent : public Event
 {
-    public:
-        void doAction(Game &);
+public:
+    void doAction(Game &);
 };
 
 
@@ -67,13 +67,13 @@ class DisplayEvent : public Event
 *******************************************************************************/
 class ReshapeEvent : public Event
 {
-   int width;
-   int height;
+    int width;
+    int height;
 
-    public:
-        ReshapeEvent(int, int);
+public:
+    ReshapeEvent(int, int);
 
-        void doAction(Game &);
+    void doAction(Game &);
 };
 
 
@@ -85,11 +85,11 @@ class ReshapeEvent : public Event
 class TimerEvent : public Event
 {
     unsigned int tick;
-    
-    public:
-        TimerEvent(int);
 
-        void doAction(Game &);
+public:
+    TimerEvent(int);
+
+    void doAction(Game &);
 };
 
 
@@ -100,9 +100,9 @@ class TimerEvent : public Event
 *******************************************************************************/
 class CloseEvent : public Event
 {
-    public:
-        CloseEvent();
+public:
+    CloseEvent();
 
-        void doAction(Game &);
+    void doAction(Game &);
 };
 #endif

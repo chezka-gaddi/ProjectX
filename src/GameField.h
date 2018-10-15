@@ -3,7 +3,7 @@
  * @author David Donahue
  * @brief GameField manages the play field and  actors.
  */
-                            
+
 #ifndef SLACKERS_PLATFORM_GAMEFIELD_H
 #define SLACKERS_PLATFORM_GAMEFIELD_H
 
@@ -24,8 +24,9 @@
 * The class that will act as the manager of the gamefield
 * *****************************************************************************/
 
-class GameField{
-   
+class GameField
+{
+
 protected:
     /*!< this is all of the actors on the field: tanks + projectiles */
     std::vector<ActorInfo> actors;
@@ -39,7 +40,7 @@ protected:
     void updateMap();
     void runMoves(ActorInfo &a);
     ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
- 
+
 public:
     /**
      * Each turn will be as follows:
@@ -85,7 +86,7 @@ public:
     MapData getMapData();
     ActorInfo & actorInfoById(int id);
     bool obstacleAt(int x, int y);
-    
+
     /*******************************/
     /************setters************/
     /*******************************/

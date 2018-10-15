@@ -1,17 +1,39 @@
+/***************************************************************************//**
+* @file util.cpp
+* @author Chezka Gaddi
+* @brief Contains all functions manage event creations.
+*******************************************************************************/
 #include "util.h"
 
+
+/***************************************************************************//**
+* @author Chezka Gaddi
+* @brief utilityCentral
+*
+* Creates the game manager and manages events to their associated functions
+*******************************************************************************/
 void utilityCentral(gameMode mode, Event *event)
 {
     static Game gameloop(mode);
-    
+
     event->doAction(gameloop);
-    
+
     delete event;
 }
 
+
 /***************************************************************************//**
- * Initialize glut callback functions, set the display mode, create a window
- ******************************************************************************/
+* @author Chezka Gaddi
+* @brief initOpenGL
+*
+* Initialize glut callback functions, set the display mode, create a window.
+*
+* @param[in] argc - number of command line arguments
+* @param[in] argc - pointer to the list of command line arguments
+* @param[in] wCols - width of the window
+* @param[in] wRows - height of the window
+* @param[in] mode - game mode
+*******************************************************************************/
 void initOpenGL(int argc, char** argv, int wCols, int wRows, gameMode mode)
 {
     glutInit(&argc, argv);
@@ -29,9 +51,9 @@ void initOpenGL(int argc, char** argv, int wCols, int wRows, gameMode mode)
     glutDisplayFunc(display);
 
     glEnable(GL_TEXTURE_2D);
-    
+
     LoadGLTextures();
-    
+
     glShadeModel(GL_SMOOTH);
 
     glutReshapeFunc(reshape);
@@ -43,14 +65,14 @@ void initOpenGL(int argc, char** argv, int wCols, int wRows, gameMode mode)
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
     glClearDepth(1.0f);
-    
+
     glEnable(GL_DEPTH_TEST);
-    
+
     glDepthFunc(GL_LEQUAL);
-    
+
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    
+
     glDisable(GL_TEXTURE_2D);
-    
+
     utilityCentral( mode, new InitEvent(wCols, wRows));
 }

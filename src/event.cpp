@@ -36,8 +36,8 @@ InitEvent::InitEvent(int c, int r) : columns(c), rows(r) {}
  ******************************************************************************/
 void InitEvent::doAction(Game &game)
 {
-   glClear(GL_COLOR_BUFFER_BIT);
-   game.initGameState();
+    glClear(GL_COLOR_BUFFER_BIT);
+    game.initGameState();
 }
 
 
@@ -52,15 +52,15 @@ void InitEvent::doAction(Game &game)
 void updateDrawables(Game &game)
 {
     Drawable *temp_draw = nullptr;
-    
+
     if(!game.objects.empty())
         game.objects.clear();
 
     vector <ActorInfo> actors = game.tankGame->getActors();
-    
+
     for( auto obs : game.constants )
         game.objects.push_back( obs );
-    
+
     for( auto act : actors )
     {
         if( act.health > 0 && act.id > 0 )
@@ -92,18 +92,18 @@ void DisplayEvent::doAction(Game &game)
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glLoadIdentity();
-    
-    updateDrawables(game);    
-    
+
+    updateDrawables(game);
+
     Drawable *stuff;
-    
-    for( int i = 0; i < game.objects.size(); i++ )  
+
+    for( int i = 0; i < game.objects.size(); i++ )
     {
         stuff = game.objects[i];
         stuff->draw();
     }
 
-    system("sleep 0.5");
+    system("sleep 0.2");
     glutSwapBuffers();
 }
 
@@ -134,8 +134,6 @@ void ReshapeEvent::doAction(Game &game)
     glFrustum(-ar, ar, -1.0, 1.0, 2.0, 90.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
-    std::cout << "Reshaping window to [" << width << ", " << height << "]\n";
 }
 
 

@@ -29,7 +29,7 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor )
     if( ID == 2 )
     {
         angle = 180;
-        tex = 1;
+        tex = 2;
     }
 }
 
@@ -45,21 +45,25 @@ void TankDrawable::draw()
     glEnable(GL_TEXTURE_2D);
     glColor4ub(255,255,255,255);
     glPushMatrix();
-    
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
-    glTranslatef(screen_x, screen_y, -5.0f);  
-	glRotatef(angle,0,0,1);
-    glBindTexture(GL_TEXTURE_2D, texture[tex]);
-	
+    glTranslatef(screen_x, screen_y, -5.0f);
+    glRotatef(angle,0,0,1);
+    glBindTexture(GL_TEXTURE_2D, tankTex[tex]);
+
     glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.13f, -0.1f,  1.0f);
-        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.13f, -0.1f,  1.0f);
-        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.13f,  0.1f,  1.0f);
-        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.13f,  0.1f,  1.0f);
-	glEnd();
-    
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.13f, -0.1f,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( 0.13f, -0.1f,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( 0.13f,  0.1f,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.13f,  0.1f,  1.0f);
+    glEnd();
+
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }

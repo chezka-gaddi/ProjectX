@@ -11,8 +11,8 @@
  *****************************************************************************/
 Actor::Actor()
 {
-   name = "";
-   id = 0;
+    name = "";
+    id = 0;
 }
 
 /**************************************************************************//**
@@ -24,8 +24,8 @@ Actor::Actor()
  *****************************************************************************/
 Actor::Actor(std::string newName, int newId)
 {
-   name = newName;
-   id = newId;
+    name = newName;
+    id = newId;
 }
 
 /**************************************************************************//**
@@ -44,9 +44,9 @@ Actor::~Actor()
  * @author John Weatherhead
  *
  * @par Description
- * This member function will set the member variable name to a new value 
+ * This member function will set the member variable name to a new value
  *         contained in newName.
- * 
+ *
  * @param[in]        newName - The new string that name will be
  *
  *****************************************************************************/
@@ -59,9 +59,9 @@ void Actor::setName(std::string newName)
  * @author John Weatherhead
  *
  * @par Description
- * This member function will set the member variable id to a new value 
+ * This member function will set the member variable id to a new value
  *         contained in newId.
- * 
+ *
  * @param[in]        newId - The new id number that id will be
  *
 *****************************************************************************/
@@ -77,7 +77,7 @@ void Actor::setId(int newId)
  * @par Description
  * This member function will return the value contained in the member variable
  *   id
- * 
+ *
  * @return        id - The id number of the actor
  *
 *****************************************************************************/
@@ -92,7 +92,7 @@ int Actor::getId()
  * @par Description
  * This member function will return the value contained in the member variable
  *   name
- * 
+ *
  * @return        name - The name string of the actor
  *
 *****************************************************************************/

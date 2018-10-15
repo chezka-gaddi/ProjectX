@@ -18,19 +18,20 @@
 * @brief Drawable is the parent class for all GUI objects and has a draw function that
 * must be overwritten by subclasses.
 *******************************************************************************/
-class Drawable{
-    public:
-        std::string name;   /*!<The name of the drawable */
-        int id;             /*!<The id number of the drawable */
-        GLfloat screen_x;   /*!<The screen x coordinate of the drawable */
-        GLfloat screen_y;   /*!<The scren y coordinate of the drawable */
-        int health;         /*!<The health value of the drawable */
-        GLuint tex;            /*!<Texture to draw object with */
+class Drawable
+{
+public:
+    std::string name;   /*!<The name of the drawable */
+    int id;             /*!<The id number of the drawable */
+    GLfloat screen_x;   /*!<The screen x coordinate of the drawable */
+    GLfloat screen_y;   /*!<The scren y coordinate of the drawable */
+    int health;         /*!<The health value of the drawable */
+    GLuint tex;            /*!<Texture to draw object with */
 
-        Drawable(){}
-        ~Drawable(){}
+    Drawable() {}
+    ~Drawable() {}
 
-        virtual void draw() = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
+    virtual void draw() = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
 };
 
 
@@ -41,11 +42,11 @@ class Drawable{
 *******************************************************************************/
 class GameFieldDrawable : public Drawable
 {
-    public:
-        GLuint tex;
-        GameFieldDrawable();
+public:
+    GLuint tex;
+    GameFieldDrawable();
 
-        void draw();
+    void draw();
 };
 
 
@@ -56,18 +57,17 @@ class GameFieldDrawable : public Drawable
 *******************************************************************************/
 class Menu : public Drawable
 {
-    public:
-        char name[9];       /*!<Name of the player to be displayed */
-        int health;         /*!<Player's health */
-        int bullet;         /*!<Current bullet count */
-        int score;          /*!<Current score */
-        GLuint tex;
+public:
+    char name[9];       /*!<Name of the player to be displayed */
+    int health;         /*!<Player's health */
+    int bullet;         /*!<Current bullet count */
+    int score;          /*!<Current score */
 
-        Menu( int, int, int, int );
+    Menu( int, int, int, int );
 
-        void drawHeart( GLfloat, GLfloat );
-        void drawPlayerStats();
-        void draw();
+    void drawTextBox( GLfloat, GLfloat );
+    void drawPlayerStats();
+    void draw();
 };
 
 
@@ -78,10 +78,10 @@ class Menu : public Drawable
 *******************************************************************************/
 class Obstacles : public Drawable
 {
-    public:
-        Obstacles( int, GLfloat, GLfloat);
+public:
+    Obstacles( int, GLfloat, GLfloat);
 
-        void draw();
+    void draw();
 };
 
 
@@ -92,12 +92,12 @@ class Obstacles : public Drawable
 *******************************************************************************/
 class Projectile : public Drawable
 {
-    public:
-        int angle;
+public:
+    int angle;
 
-        Projectile(int ID, GLfloat x, GLfloat y);
+    Projectile(int ID, GLfloat x, GLfloat y);
 
-        void draw();
+    void draw();
 };
 
 
@@ -108,12 +108,12 @@ class Projectile : public Drawable
 *******************************************************************************/
 class TankDrawable : public Drawable
 {
-    public:
-        int angle;
+public:
+    int angle;
 
-        TankDrawable( int ID, GLfloat x, GLfloat y);
+    TankDrawable( int ID, GLfloat x, GLfloat y);
 
-        void draw();
+    void draw();
 };
 
 

@@ -21,7 +21,7 @@
 class AsciiTankActor : public Actor
 {
 
-    direction actorMove; 
+    direction actorMove;
     AttackData actorAttack;
     bool enableConsole;
 public:

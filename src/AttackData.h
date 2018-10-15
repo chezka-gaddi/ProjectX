@@ -9,11 +9,12 @@
 /*! \struct AttackData
     \brief Contains attack coordinates and damage value
 */
-struct AttackData {
+struct AttackData
+{
     int attack_x;  /*!<The x coordinate of the attack */
     int attack_y;   /*!<The y coordinate of the attack */
     int damage;     /*!<The damage value of the attack */
-AttackData(int x, int y, int d) : attack_x(x), attack_y(y), damage(d) {}
+    AttackData(int x, int y, int d) : attack_x(x), attack_y(y), damage(d) {}
     AttackData() {}
 };
 

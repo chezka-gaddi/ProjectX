@@ -14,7 +14,8 @@
 /**
  * this is mostly used for the inner workings of the gamefield
  */
-struct TurnData {
+struct TurnData
+{
     Actor *actor; /*!<A pointer to an Actor */
     AttackData attackData; /*!<The AttackData object */
     MoveData moveData;    /*!<The MoveData object */

@@ -5,11 +5,12 @@
 #include "direction.h"
 #include <cmath>
 
-class SimpleAI : public Actor{
+class SimpleAI : public Actor
+{
     int calcDist(int x1, int y1, int x2, int y2);
 
 public:
-    #ifndef testing
+#ifndef testing
 
     /**
      * calculates a move, and returns the data describing its move
@@ -33,10 +34,10 @@ public:
      * @param[in] y2 - end point y coordinate
      * @return distance to the target
      */
-    
+
     SimpleAI();
     ~SimpleAI();
-    #endif
+#endif
 };
 
 #endif

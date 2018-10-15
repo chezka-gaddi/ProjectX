@@ -24,13 +24,13 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor )
     screen_y = y_coor;
     id = ID;
 
-    tex = 4;
+    tex = 1;
     angle = 0;
 
     if( -ID == 2 )
     {
         angle = 180;
-        tex = 5;
+        tex = 3;
     }
 }
 
@@ -45,15 +45,19 @@ void Projectile::draw()
 {
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
-    glTranslatef(screen_x, screen_y, -5.0f);  
-	glRotatef(angle,0,0,1);
-    glBindTexture(GL_TEXTURE_2D, texture[tex]);
-	glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.07f, -0.07f,  1.0f);
-        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.07f, -0.07f,  1.0f);
-        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.07f,  0.07f,  1.0f);
-        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.07f,  0.07f,  1.0f);
-	glEnd();
+    glTranslatef(screen_x, screen_y, -5.0f);
+    glRotatef(angle,0,0,1);
+    glBindTexture(GL_TEXTURE_2D, tankTex[tex]);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.07f, -0.07f,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( 0.07f, -0.07f,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( 0.07f,  0.07f,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.07f,  0.07f,  1.0f);
+    glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }

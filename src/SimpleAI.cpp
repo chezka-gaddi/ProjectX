@@ -6,7 +6,7 @@ SimpleAI::~SimpleAI() {}
 
 /**
  * @author David Donahue
- * @par Description: 
+ * @par Description:
  * Calculates how many moves it will take to reach a given coordinate
  * @param[in] map - The current state of the playfield
  * @param[in] status - The AI's tank's location, health and ID
@@ -52,7 +52,7 @@ direction SimpleAI::move(MapData map, PositionData status)
                             ret = (status.game_y > y) ? UP : DOWN; //avoid it up or down
                         }
                     }
-                        
+
                 }
                 else
                 {
