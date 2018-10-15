@@ -320,7 +320,7 @@ void GameField::nextTurn()
     int act_ap;
     for (int i = 0; i < actors.size(); ++i)
     {
-        act_ap = actors[i].range + 1;
+        act_ap = actors[i].range;
         while (act_ap > 0)
         {
             pos.game_x = actors[i].x;
