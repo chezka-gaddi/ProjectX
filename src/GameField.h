@@ -48,6 +48,7 @@ public:
      */
     void nextTurn();
     void addActor(ActorInfo);
+    void checkForCheaters(int pointsAvailable);
     void addObstacle(int x, int y);
     void removeObstacle(int x, int y);
     /**

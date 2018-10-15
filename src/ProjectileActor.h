@@ -12,6 +12,7 @@
 #include "direction.h"
 #include "MoveData.h"
 #include "AttackData.h"
+#include "attributes.h"
 
 /*!
  * @brief This class is the base class for all projectile actors
@@ -33,6 +34,8 @@ public:
     direction move(MapData map, PositionData status);
 
     AttackData attack(MapData map, PositionData status);  
+    
+    attributes setAttribute(int pointsAvailable);
 
     //Getters
     int getRange();    

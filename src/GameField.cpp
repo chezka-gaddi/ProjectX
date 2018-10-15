@@ -372,6 +372,25 @@ void GameField::addActor(ActorInfo a)
 }
 
 /**
+ * @author Youki Lewis
+ * @par Description:
+ * Check if points are distributed properly
+ */
+void GameField::checkForCheaters(int pointsAvailable)
+{
+    for( auto &a : actors )
+    {
+        if( a.health + a.damage + a.range + a.shots > pointsAvailable)
+         {
+             a.health = 1;
+             a.damage = 1;
+             a.range = 1;
+             a.shots = 1;
+         }
+     }
+}
+
+/**
  * @author David Donahue
  * @par Description:
  * Adds an obstacle to the map

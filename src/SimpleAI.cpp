@@ -116,6 +116,19 @@ AttackData SimpleAI::attack(MapData map, PositionData status)
 
 /**
  * @author David Donahue
+ * @par Description:
+ * Returns the attributes for the tank
+ * @param[in] pointsAvailable - available points for the distribution
+ * @return attributes of the tank
+ */
+attributes SimpleAI::setAttribute(int pointsAvailable)
+{
+   attributes tankAttributes;
+
+   return tankAttributes;
+}
+/**
+ * @author David Donahue
  * @par Description: 
  * Calculates how many moves it will take to reach a given coordinate
  * @param[in] x1 - starting point x coordinate

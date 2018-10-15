@@ -19,6 +19,7 @@ class SimpleActor : public Actor
     public:
         virtual direction move(MapData map, PositionData status);
         virtual AttackData attack(MapData map, PositionData status);
+        virtual attributes setAttribute(int pointsAvailable);
         SimpleActor();
         SimpleActor(direction mv, int d);
         void setAttack(int x, int y, int d);
