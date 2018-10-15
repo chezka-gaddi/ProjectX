@@ -128,7 +128,7 @@ TEST_CASE("GameField correctly places actors on the map when added")
 TEST_CASE("Actor moves when nextTurn() is called")
 {
     Actor * a = new SimpleActor;
-    ActorInfo newAI(a, 1, 1, 1, 1, 1);
+    ActorInfo newAI(a, 1, 1, 1, 1, 1, 2);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
@@ -138,7 +138,7 @@ TEST_CASE("Actor moves when nextTurn() is called")
 TEST_CASE("Actors are prevented from moving off the map")
 {
     Actor * a = new SimpleActor;
-    ActorInfo newAI(a, 2, 1, 1, 0, 1);
+    ActorInfo newAI(a, 2, 1, 1, 0, 1, 2);
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
@@ -149,8 +149,8 @@ TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are
 {
     Actor * a1 = new SimpleActor(STAY, UP);
     Actor * a2 = new SimpleActor(UP, STAY);
-    ActorInfo newAI1(a1, 1, 1, 0, 2, 1);
-    ActorInfo newAI2(a2, 1, 1, 0, 0, 2);
+    ActorInfo newAI1(a1, 1, 1, 0, 2, 1, 2);
+    ActorInfo newAI2(a2, 1, 1, 0, 0, 2, 2);
     GameField g (1, 3);
     g.addActor(newAI1);
     g.addActor(newAI2);
@@ -161,7 +161,7 @@ TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are
 TEST_CASE("Actors move until their range is depleted")
 {
     Actor * a = new SimpleActor;
-    ActorInfo newAI(a, 1, 1, 0, 3, 1, 2);
+    ActorInfo newAI(a, 1, 1, 0, 3, 1, 3);
     GameField g (1,4);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
@@ -171,7 +171,7 @@ TEST_CASE("Actors move until their range is depleted")
 TEST_CASE("Actors spawn and move projectiles on attack")
 {
     Actor * a = new SimpleActor(STAY, UP);
-    ActorInfo newAI(a, 1, 1, 0, 7, 1, 0);
+    ActorInfo newAI(a, 1, 1, 0, 7, 1, 1);
     GameField g (1, 8);
     g.addActor(newAI);
     std::vector<int> ref = {0, -1, 0, 0, 0, 0, 0, 1};
@@ -181,7 +181,7 @@ TEST_CASE("Actors spawn and move projectiles on attack")
 TEST_CASE("Actors take 1 point of damage from the walls of the arena")
 {
     Actor * a = new SimpleActor(UP, STAY);
-    ActorInfo newAI(a, 2, 1, 0, 0, 1, 1);
+    ActorInfo newAI(a, 2, 1, 0, 0, 1, 2);
     GameField g (1, 1);
     g.addActor(newAI);
     g.nextTurn();
@@ -243,7 +243,7 @@ TEST_CASE("Collision is checked when firing point-blank")
 TEST_CASE("Actor shot counter incremented on attacking")
 {
     SimpleActor * a = new SimpleActor(STAY, UP);
-    ActorInfo newAI(a, 1, 1, 0, 1, 1, 0);
+    ActorInfo newAI(a, 1, 1, 0, 1, 1, 1);
     GameField g (1, 2);
     g.addActor(newAI);
     g.nextTurn();
@@ -255,8 +255,8 @@ TEST_CASE("Actor hit counter incremented on hiting an enemy")
     SimpleActor * a1 = new SimpleActor(STAY, UP);
     SimpleActor * a2 = new SimpleActor(STAY, STAY);
 
-    ActorInfo AI1(a1, 10, 1, 0, 1, 1, 0);
-    ActorInfo AI2(a2, 10, 1, 0, 0, 2, 0);
+    ActorInfo AI1(a1, 10, 1, 0, 1, 1, 1);
+    ActorInfo AI2(a2, 10, 1, 0, 0, 2, 1);
 
     GameField g (1, 2);
     g.addActor(AI1);
@@ -319,7 +319,7 @@ TEST_CASE("Obstacles can be removed from the gamefield")
 TEST_CASE("Actors take 1 point of damage from hitting obstacles")
 {
     Actor * a = new SimpleActor(UP, STAY);
-    ActorInfo newAI(a, 2, 1, 0, 2, 1, 1);
+    ActorInfo newAI(a, 2, 1, 0, 2, 1, 2);
     GameField g (1, 3);
     g.addActor(newAI);
     g.addObstacle(0, 1);
@@ -329,7 +329,7 @@ TEST_CASE("Actors take 1 point of damage from hitting obstacles")
 TEST_CASE("Actors do not take damage when shooting an obstacle point-blank")
 {
     Actor * a = new SimpleActor(STAY, UP);
-    ActorInfo newAI(a, 2, 1, 0, 1, 1, 1);
+    ActorInfo newAI(a, 2, 1, 0, 1, 1, 2);
     GameField g (1, 2);
     g.addActor(newAI);
     g.addObstacle(0, 0);
@@ -339,13 +339,13 @@ TEST_CASE("Actors do not take damage when shooting an obstacle point-blank")
 TEST_CASE("Actors take 1 point of damage from the wall trying to move up/left")
 {
     Actor *a = new SimpleActor(UPLEFT, STAY);
-    ActorInfo newAI(a, 2, 1, 1, 0, 1, 1); // set up to hit upper wall
+    ActorInfo newAI(a, 2, 1, 1, 0, 1, 2); // set up to hit upper wall
     GameField g (2, 2);
     g.addActor(newAI);
     g.nextTurn();
     REQUIRE(g.getActors().back().health == 1);
     Actor *a2 = new SimpleActor(UPLEFT, STAY);
-    ActorInfo newAI2(a2, 2, 1, 0, 1, 1, 1); // setup to hit left wall
+    ActorInfo newAI2(a2, 2, 1, 0, 1, 1, 2); // setup to hit left wall
     GameField g2 (2, 2);
     g.addActor(newAI2);
     g.nextTurn();
@@ -354,7 +354,7 @@ TEST_CASE("Actors take 1 point of damage from the wall trying to move up/left")
 TEST_CASE("Actor moves diagonal up/left and changes position")
 {
     Actor *a = new SimpleActor(UPLEFT, STAY);
-    ActorInfo newAI(a, 2, 1, 1, 1, 1, 1);
+    ActorInfo newAI(a, 2, 1, 1, 1, 1, 2);
     GameField g (2, 2);
     g.addActor(newAI);
     g.nextTurn();
@@ -364,7 +364,7 @@ TEST_CASE("Actor moves diagonal up/left and changes position")
 TEST_CASE("Actor moves diagonal up/right and changes position")
 {
     Actor *a = new SimpleActor(UPRIGHT, STAY);
-    ActorInfo AI(a, 2, 1, 0, 1, 1, 1);
+    ActorInfo AI(a, 2, 1, 0, 1, 1, 2);
     GameField g (2, 2);
     g.addActor(AI);
     g.nextTurn();
@@ -375,8 +375,8 @@ TEST_CASE("Actors moves diagonal up/right into a wall and takes damage")
 {
     Actor *a = new SimpleActor(UPRIGHT, STAY);
     Actor *a2 = new SimpleActor(UPRIGHT, STAY);
-    ActorInfo AI(a, 2, 1, 1, 1, 1, 1); // setup to hit right wall
-    ActorInfo AI2(a2, 2, 1, 0, 0, 1, 1); // setup to hit upper wall
+    ActorInfo AI(a, 2, 1, 1, 1, 1, 2); // setup to hit right wall
+    ActorInfo AI2(a2, 2, 1, 0, 0, 1, 2); // setup to hit upper wall
     GameField g (2, 2);
     GameField g2 (2, 2);
     g.addActor(AI);
@@ -389,7 +389,7 @@ TEST_CASE("Actors moves diagonal up/right into a wall and takes damage")
 TEST_CASE("Actor moves diagonal down/left and changes position")
 {
     Actor *a = new SimpleActor(DOWNLEFT, STAY);
-    ActorInfo AI(a, 2, 1, 1, 0, 1, 1);
+    ActorInfo AI(a, 2, 1, 1, 0, 1, 2);
     GameField g (2, 2);
     g.addActor(AI);
     g.nextTurn();
@@ -400,8 +400,8 @@ TEST_CASE("Actor moves diagonal down/left and collides with wall")
 {
     Actor *a = new SimpleActor(DOWNLEFT, STAY);
     Actor *a2 = new SimpleActor(DOWNLEFT, STAY);
-    ActorInfo AI(a, 2, 1, 0, 0, 1, 1); // setup to hit left wall
-    ActorInfo AI2(a2, 2, 1, 0, 1, 1, 1); // setup to hit lower wall
+    ActorInfo AI(a, 2, 1, 0, 0, 1, 2); // setup to hit left wall
+    ActorInfo AI2(a2, 2, 1, 0, 1, 1, 2); // setup to hit lower wall
     GameField g (2, 2);
     GameField g2 (2, 2);
     g.addActor(AI);
@@ -415,7 +415,7 @@ TEST_CASE("Actor moves diagonal down/right and changes position")
 {
 
     Actor *a = new SimpleActor(DOWNRIGHT, STAY);
-    ActorInfo AI(a, 2, 1, 0, 0, 1, 1);
+    ActorInfo AI(a, 2, 1, 0, 0, 1, 2);
     GameField g (2, 2);
     g.addActor(AI);
     g.nextTurn();
@@ -428,8 +428,8 @@ TEST_CASE("Actor moves diagonal down/right and collides with wall")
     Actor *a = new SimpleActor(DOWNRIGHT, STAY);
     Actor *a2 = new SimpleActor(DOWNRIGHT, STAY);
     ActorInfo AI(a, 2,
-                 1, 1, 0, 1, 1); // setup to hit right wall
-    ActorInfo AI2(a2, 2, 1, 0, 1, 1, 1); // setup to hit lower wall
+                 1, 1, 0, 1, 2); // setup to hit right wall
+    ActorInfo AI2(a2, 2, 1, 0, 1, 1, 2); // setup to hit lower wall
     GameField g (2, 2);
     GameField g2 (2, 2);
     g.addActor(AI);
@@ -466,7 +466,7 @@ TEST_CASE("Checks for cheaters. Sets cheaters' tanks to have 1 for each attribut
 TEST_CASE("GameField updates heading of ActorInfo")
 {
     Actor *a = new SimpleActor(UPRIGHT, STAY);
-    ActorInfo AI(a, 1, 1, 0, 1, 1, 1);
+    ActorInfo AI(a, 1, 1, 0, 1, 1, 2);
 
     GameField g (2, 2);
 

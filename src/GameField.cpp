@@ -11,7 +11,7 @@
  * Default constructor, makes a 10x10 empty map
  */
 
-GameField::GameField()
+GameField::GameField() : ap(2)
 {
     turnCount = 0;
     fieldMap.width = 10;
@@ -43,7 +43,7 @@ GameField::~GameField()
  * @par Description:
  * Constructor given dimensions
  */
-GameField::GameField(int width, int height)
+GameField::GameField(int width, int height) : ap(2)
 {
     turnCount = 0;
     fieldMap.width = width;
@@ -59,7 +59,7 @@ GameField::GameField(int width, int height)
  * @par Description:
  * Constructor with dimensions and a vector of ActorInfo
  */
-GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actors(acts)
+GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actors(acts), ap(2)
 {
     turnCount = 0;
     fieldMap.width = width;
@@ -72,7 +72,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     displayCallback = NULL;
 }
 
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int)) : actors(startActors)
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int)) : actors(startActors), ap(2)
 {
     turnCount = 0;
     fieldMap.width = width;
@@ -84,6 +84,20 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
     updateMap();
     displayCallback = d_callback;
 }
+
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), int AP) : actors(startActors), ap(AP)
+{
+    turnCount = 0;
+    fieldMap.width = width;
+    fieldMap.height = height;
+    fieldMap.map.resize(width * height);
+    fieldMap.obstacleMap.resize(width * height);
+    std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
+    updateMap();
+    displayCallback = d_callback;
+}
+
 
 /**
  * @author David Donahue
@@ -151,149 +165,142 @@ void GameField::runMoves(ActorInfo &a)
 
     std::vector<int> collisionVect;
     int collisionDamage;
-    int rangeCount;
     PositionData pos;
     direction dir;
 
-    rangeCount = a.range;
-    while (rangeCount)
+
+    //PositionData to give the AI
+    pos.game_x = a.x;
+    pos.game_y = a.y;
+    pos.health = a.health;
+    pos.id = a.id;
+    //get the AI's desired move
+    dir = a.act_p->move(fieldMap, pos);
+    a.heading = (dir == STAY) ? a.heading : dir;
+    //If it checks out, execute it
+    //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
+    switch (dir)
     {
-        //PositionData to give the AI
-        pos.game_x = a.x;
-        pos.game_y = a.y;
-        pos.health = a.health;
-        pos.id = a.id;
-        //get the AI's desired move
-        dir = a.act_p->move(fieldMap, pos);
-        a.heading = (dir == STAY) ? a.heading : dir;
-        //If it checks out, execute it
-        //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
-        switch (dir)
+    case UP:
+        if (a.y > 0 && !obstacleAt(a.x, a.y - 1))
+            a.y--;
+        else
+            a.health--;
+        break;
+
+    case DOWN:
+        if (a.y < fieldMap.height-1 && !obstacleAt(a.x, a.y + 1))
+            a.y++;
+        else
+            a.health--;
+        break;
+
+    case LEFT:
+        if (a.x > 0 && !obstacleAt(a.x - 1, a.y))
+            a.x--;
+        else
+            a.health--;
+        break;
+
+    case RIGHT:
+        if (a.x < fieldMap.width-1 && !obstacleAt(a.x + 1, a.y))
+            a.x++;
+        else
+            a.health--;
+        break;
+    case UPLEFT:
+        if (a.y > 0 && a.x > 0 && !obstacleAt(a.x-1,a.y-1))
         {
-        case UP:
-            if (a.y > 0 && !obstacleAt(a.x, a.y - 1))
-                a.y--;
-            else
-                a.health--;
-            break;
-
-        case DOWN:
-            if (a.y < fieldMap.height-1 && !obstacleAt(a.x, a.y + 1))
-                a.y++;
-            else
-                a.health--;
-            break;
-
-        case LEFT:
-            if (a.x > 0 && !obstacleAt(a.x - 1, a.y))
-                a.x--;
-            else
-                a.health--;
-            break;
-
-        case RIGHT:
-            if (a.x < fieldMap.width-1 && !obstacleAt(a.x + 1, a.y))
-                a.x++;
-            else
-                a.health--;
-            break;
-        case UPLEFT:
-            if (a.y > 0 && a.x > 0 && !obstacleAt(a.x-1,a.y-1))
-            {
-                a.y--;
-                a.x--;
-            }
-            else
-                a.health--;
-            break;
-
-        case UPRIGHT:
-            if (a.y > 0 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y-1))
-            {
-                a.y--;
-                a.x++;
-            }
-            else
-                a.health--;
-            break;
-
-        case DOWNLEFT:
-            if (a.y < fieldMap.height-1 && a.x > 0 && !obstacleAt(a.x-1,a.y+1))
-            {
-                a.y++;
-                a.x--;
-            }
-            else
-                a.health--;
-            break;
-
-        case DOWNRIGHT:
-            if (a.y < fieldMap.height-1 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y+1))
-            {
-                a.y++;
-                a.x++;
-            }
-            else
-                a.health--;
-            break;
-
-        default:
-            break;
-        }
-
-        bool tankInCollision = false;
-
-        collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
-        for (int i = 0; i < actors.size(); ++i ) //check each actor
-        {
-            if (actors[i].x == a.x && actors[i].y == a.y)
-            {
-                collisionVect.push_back(i);
-                if (actors[i].id > 0)
-                    tankInCollision = true;
-            }
-
-        }
-
-        if (collisionVect.size() > 1 && a.health > 0)
-        {
-            collisionDamage = 0;
-            for (auto i: collisionVect)
-            {
-                if(!(actorInfoById(-actors[i].id) == nullActor) && tankInCollision)
-                {
-                    actorInfoById(-actors[i].id).hits++;
-                }
-                collisionDamage += actors[i].damage;
-            }
-            for (auto i: collisionVect) //apply the portion from the other actors
-            {
-                actors[i].health -= (collisionDamage - actors[i].damage);
-                if (actors[i].health < 0)
-                    actors[i].health = 0;
-                if (actors[i].health == 0)
-                {
-                    actors[i].damage = 0;
-                    actors[i].id = 0;
-                    actors[i].range = 0;
-                }
-            }
-        }
-        if (a.health == 0)
-        {
-            rangeCount = 0;
-            a.damage = 0;
-            a.id = 0;
+            a.y--;
+            a.x--;
         }
         else
-            --rangeCount;
+            a.health--;
+        break;
 
-        updateMap();
+    case UPRIGHT:
+        if (a.y > 0 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y-1))
+        {
+            a.y--;
+            a.x++;
+        }
+        else
+            a.health--;
+        break;
 
-        if (displayCallback != NULL)
-            displayCallback(fieldMap, actors, turnCount);
+    case DOWNLEFT:
+        if (a.y < fieldMap.height-1 && a.x > 0 && !obstacleAt(a.x-1,a.y+1))
+        {
+            a.y++;
+            a.x--;
+        }
+        else
+            a.health--;
+        break;
+
+    case DOWNRIGHT:
+        if (a.y < fieldMap.height-1 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y+1))
+        {
+            a.y++;
+            a.x++;
+        }
+        else
+            a.health--;
+        break;
+
+    default:
+        break;
+    }
+
+    bool tankInCollision = false;
+
+    collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
+    for (int i = 0; i < actors.size(); ++i ) //check each actor
+    {
+        if (actors[i].x == a.x && actors[i].y == a.y)
+        {
+            collisionVect.push_back(i);
+            if (actors[i].id > 0)
+                tankInCollision = true;
+        }
 
     }
+
+    if (collisionVect.size() > 1 && a.health > 0)
+    {
+        collisionDamage = 0;
+        for (auto i: collisionVect)
+        {
+            if(!(actorInfoById(-actors[i].id) == nullActor) && tankInCollision)
+            {
+                actorInfoById(-actors[i].id).hits++;
+            }
+            collisionDamage += actors[i].damage;
+        }
+        for (auto i: collisionVect) //apply the portion from the other actors
+        {
+            actors[i].health -= (collisionDamage - actors[i].damage);
+            if (actors[i].health < 0)
+                actors[i].health = 0;
+            if (actors[i].health == 0)
+            {
+                actors[i].damage = 0;
+                actors[i].id = 0;
+                actors[i].range = 0;
+            }
+        }
+    }
+    if (a.health == 0)
+    {
+        a.damage = 0;
+        a.id = 0;
+    }
+    
+    updateMap();
+
+    if (displayCallback != NULL)
+        displayCallback(fieldMap, actors, turnCount);
+
 }
 
 /**
@@ -310,40 +317,55 @@ void GameField::nextTurn()
     direction atk;
     ActorInfo newProjectile;
     PositionData pos;
+    int act_ap;
     for (int i = 0; i < actors.size(); ++i)
     {
-        runMoves(actors[i]);
-
-        if(actors[i].health != 0)
+        act_ap = actors[i].range;
+        while (act_ap > 0)
         {
-            //PositionData to give the AI
             pos.game_x = actors[i].x;
             pos.game_y = actors[i].y;
             pos.health = actors[i].health;
             pos.id = actors[i].id;
+            pos.ap = act_ap;
 
-            //Get the AI's desired attack
-            atk = actors[i].act_p->attack(fieldMap, pos);
-
-
-            if (actors[i].id > 0) //tanks attacking
+            if (actors[i].act_p->spendAP(fieldMap, pos) == 1)
+                runMoves(actors[i]);
+            
+            else if (actors[i].act_p->spendAP(fieldMap, pos) == 2)
             {
-                if (atk != STAY)
+                if(actors[i].health != 0)
                 {
-                    ProjectileActor * proj = new ProjectileActor(atk);
-                    newProjectile.range = 6;
-                    newProjectile.id = -actors[i].id;
-                    newProjectile.act_p = proj;
-                    newProjectile.health = 1;
-                    newProjectile.damage = 1;
-                    newProjectile.x = actors[i].x;
-                    newProjectile.y = actors[i].y;
-                    actors.insert(actors.begin() + i + 1, newProjectile);
-                    actors[i].shots++;
+                    //PositionData to give the AI
+                    pos.game_x = actors[i].x;
+                    pos.game_y = actors[i].y;
+                    pos.health = actors[i].health;
+                    pos.id = actors[i].id;
+
+                    //Get the AI's desired attack
+                    atk = actors[i].act_p->attack(fieldMap, pos);
+
+
+                    if (actors[i].id > 0) //tanks attacking
+                    {
+                        if (atk != STAY)
+                        {
+                            ProjectileActor * proj = new ProjectileActor(atk);
+                            newProjectile.range = 6;
+                            newProjectile.id = -actors[i].id;
+                            newProjectile.act_p = proj;
+                            newProjectile.health = 1;
+                            newProjectile.damage = 1;
+                            newProjectile.x = actors[i].x;
+                            newProjectile.y = actors[i].y;
+                            actors.insert(actors.begin() + i + 1, newProjectile);
+                            actors[i].shots++;
+                        }
+                    }
+            
                 }
             }
-            
-        
+            --act_ap;
         }
     }
 

@@ -22,7 +22,6 @@ class AsciiTankActor : public Actor
 {
 
     direction actorMove;
-    AttackData actorAttack;
     bool enableConsole;
 public:
     virtual direction move(MapData map, PositionData status);    /*!<Returns the actorMove member variable */
@@ -30,6 +29,7 @@ public:
     
     virtual attributes setAttribute(int pointsAvailable);
 
+    virtual int spendAP(MapData map, PositionData status);
     AsciiTankActor();
 
 };

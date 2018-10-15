@@ -121,6 +121,12 @@ attributes AsciiTankActor::setAttribute( int pointsAvailable )
     return tankAttributes;
 }
 
+
+int AsciiTankActor::spendAP(MapData map, PositionData status)
+{
+    return (status.ap > 1) ? 1 : 2;
+}
+
 AsciiTankActor::AsciiTankActor() {}
 
 #ifdef DYNAMIC

@@ -32,4 +32,4 @@ OBSTACLE_IMAGE images/tree.png images/rock.png
 #TANK RULES
 DAMAGE 1
 HEALTH 3
-RANGE 1
+RANGE 2
