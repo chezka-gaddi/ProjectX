@@ -444,7 +444,8 @@ TEST_CASE("Actor moves diagonal down/right and collides with wall")
 
     Actor *a = new SimpleActor(DOWNRIGHT, 0);
     Actor *a2 = new SimpleActor(DOWNRIGHT, 0);
-    ActorInfo AI(a, 2, 1, 1, 0, 1, 1); // setup to hit right wall
+    ActorInfo AI(a, 2,
+                 1, 1, 0, 1, 1); // setup to hit right wall
     ActorInfo AI2(a2, 2, 1, 0, 1, 1, 1); // setup to hit lower wall
     GameField g (2, 2);
     GameField g2 (2, 2);
@@ -478,4 +479,16 @@ TEST_CASE("Checks for cheaters. Sets cheaters' tanks to have 1 for each attribut
    REQUIRE(g.getActors().at(1).damage == 1);
    REQUIRE(g.getActors().at(1).range == 1); 
    REQUIRE(g.getActors().at(1).shots == 1);
+}
+TEST_CASE("GameField updates heading of ActorInfo")
+{
+    Actor *a = new SimpleActor(UPRIGHT, 0);
+    ActorInfo AI(a, 1, 1, 0, 1, 1, 1);
+
+    GameField g (2, 2);
+
+    g.addActor(AI);
+
+    g.nextTurn();
+    REQUIRE(g.actorInfoById(1).heading == UPRIGHT);
 }
