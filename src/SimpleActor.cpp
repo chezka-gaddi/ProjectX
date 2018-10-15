@@ -115,6 +115,10 @@ attributes SimpleActor::setAttribute(int pointsAvailable)
     return tankAttributes;
 }
 
+int SimpleActor::spendAP(MapData map, PositionData status)
+{
+    return (status.ap > 1) ? 1 : 2;
+}
 
 #ifdef DYNAMIC
 extern "C" //required for runtime linking

@@ -2,11 +2,8 @@
 
 #ifndef SLACKERS_PLATFORM_ACTOR_H
 #define SLACKERS_PLATFORM_ACTOR_H
-
-
 #include <string>
 #include "MoveData.h"
-#include "AttackData.h"
 #include "attributes.h"
 #include "MapData.h"
 #include "direction.h"
@@ -22,7 +19,6 @@ protected:
     int id;                 /*!< the id number of the actor */
 
 public:
-#ifndef testing
 
     /**
      * calculates a move, and returns the data describing its move
@@ -38,13 +34,15 @@ public:
 
     /**
      *  sets the attributes of the tank
-     *  @ returns attributeStruct to set tanks attribute
+     *  @return attributeStruct to set tanks attribute
      */
     virtual attributes setAttribute(int pointsAvailable) = 0;
 
-
-
-#endif
+    /**
+     *  Decides wether to move or attack given how many AP remain 
+     *  @return 0 for end turn, 1 for move, 2 for attack
+     */
+    virtual int spendAP(MapData map, PositionData status) = 0;
 
     Actor();
     ~Actor();

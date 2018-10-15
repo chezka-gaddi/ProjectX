@@ -26,4 +26,4 @@ OBSTACLE_IMAGE images/Column_1.png images/Car_2.png
 #TANK RULES
 DAMAGE 1
 HEALTH 3
-RANGE 1
+RANGE 2
