@@ -58,14 +58,14 @@ void updateDrawables(Game &game)
 
     vector <ActorInfo> actors = game.tankGame->getActors();
 
-    for( auto obs : game.constants )
-        game.objects.push_back( obs );
+    //for( auto obs : game.constants )
+        //game.objects.push_back( obs );
 
     for( auto act : actors )
     {
         if( act.health > 0 && act.id > 0 )
         {
-            temp_draw = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y) );
+            temp_draw = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y ), act.heading );
             game.objects.push_back( temp_draw );
             temp_draw = new Menu( act.id, act.health, act.shots, act.hits );
             game.objects.push_back( temp_draw );
@@ -73,7 +73,7 @@ void updateDrawables(Game &game)
 
         else if( act.id < 0 )
         {
-            temp_draw = new Projectile( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y) );
+            temp_draw = new Projectile( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y), act.heading );
             game.objects.push_back(temp_draw);
         }
     }
@@ -93,16 +93,25 @@ void DisplayEvent::doAction(Game &game)
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glLoadIdentity();
 
+    
     updateDrawables(game);
-
     Drawable *stuff;
 
+
+    for( int i = 0; i < game.constants.size(); i++ )
+    {
+        stuff = game.constants[i];
+        stuff->draw();
+    }
+    
+    
     for( int i = 0; i < game.objects.size(); i++ )
     {
         stuff = game.objects[i];
         stuff->draw();
     }
 
+	
     system("sleep 0.2");
     glutSwapBuffers();
 }

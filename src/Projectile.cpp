@@ -18,20 +18,48 @@
 * @param[in] x_coor - coordinate to spawn projectile
 * @param[in] y_coor - coordinate to spawn projectile
 * *****************************************************************************/
-Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor )
+Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir )
 {
     screen_x = x_coor;
     screen_y = y_coor;
     id = ID;
 
-    tex = 1;
-    angle = 0;
-
-    if( -ID == 2 )
+    switch(dir)
     {
+    case UP:
+        angle = 90;
+        break;
+
+    case UPRIGHT:
+        angle = 45;
+        break;
+
+    case RIGHT:
+        angle = 0;
+        break;
+    
+    case DOWNRIGHT:
+        angle = -45;
+        break;
+    
+    case DOWN:
+        angle = -90;
+        break;
+    
+    case DOWNLEFT:
+        angle = -135;
+        break;
+    
+    case LEFT:
         angle = 180;
-        tex = 3;
+        break;
+    
+    case UPLEFT:
+        angle = 135;
+        break;
     }
+    tex = 8;
+    
 }
 
 

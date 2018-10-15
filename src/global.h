@@ -10,6 +10,6 @@
 #include <vector>
 
 extern GLuint gameTex[8];   /*!<Texture array for the game constants */
-extern GLuint tankTex[4];   /*!<Texture array for the tanks and their projectiles */
+extern GLuint tankTex[18];   /*!<Texture array for the tanks and their projectiles */
 
 #endif
