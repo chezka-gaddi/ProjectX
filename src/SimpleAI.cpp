@@ -165,6 +165,8 @@ int SimpleAI::calcDist(int x1, int y1, int x2, int y2)
 
 int SimpleAI::spendAP(MapData map, PositionData status)
 {
+    if (move(map, status) == STAY)
+        return 2;
     return (status.ap > 1) ? 1 : 2;
 }
 
