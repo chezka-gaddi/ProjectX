@@ -27,6 +27,7 @@ OBSTACLE 4 2
 
 OBSTACLE_IMAGE images/tree.png images/rock.png
 
+SPECIAL 4
 
 
 #TANK RULES
