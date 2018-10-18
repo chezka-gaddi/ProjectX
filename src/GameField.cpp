@@ -164,6 +164,7 @@ void GameField::setSPECIAL(int points)
     for(auto &actor: actors)
     {
         actor.tankAttributes = actor.act_p->setAttribute(points);
+        actor.health += actor.tankAttributes.tankHealth;
     }
 }
 /**
