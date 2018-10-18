@@ -184,7 +184,7 @@ void Game::initGameState()
     std::cout << "Game::Loading config.txt\n";
     ifstream fin("config.txt");
     std::string configLine;
-    int width = 10;
+    int width = 20;
     int  height = 10;
     int damage = 1;
     int  health = 3;
@@ -333,4 +333,14 @@ void Game::initGameState()
 void Game::closeDown()
 {
     std::cout << "Game::Closing game, cleaning up memory\n";
+}
+
+/***************************************************************************//**
+* @brief earlyOut
+*
+* Allows exiting the game during playback with the ESC, Q, or q input
+*******************************************************************************/
+void Game::earlyOut()
+{
+    glutLeaveMainLoop();
 }

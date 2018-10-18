@@ -31,7 +31,7 @@ TANKS += src/AsciiTankActor.so
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
 platform: $(FILES:.cpp=.o)
-	make tanks
+	+make tanks
 	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES) $(LIBS)
 
 %.so: %.cpp

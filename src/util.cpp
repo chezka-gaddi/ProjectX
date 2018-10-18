@@ -56,7 +56,9 @@ void initOpenGL(int argc, char** argv, int wCols, int wRows, gameMode mode)
 
     glutReshapeFunc(reshape);
 
-    glutTimerFunc(1000, ticktock, 1000);
+    glutKeyboardFunc(keyboard);
+
+    glutTimerFunc(750, ticktock, 750);
 
     glutCloseFunc(onClose);
 

@@ -24,19 +24,36 @@ void drawBitmapText( char *string, GLfloat x, GLfloat y );
 Menu::Menu( int id, int hp, int ammo, int hits )
 {
     this->id = id;
-    if( id == 1 )
+    switch(id)
     {
+      case 1:
+      {
         strncpy(name, "Player 1", 9);
         screen_x = -0.70;
-    }
-
-    else
-    {
+        screen_y = 0.62;
+        break;
+      }
+      case 2:
+      {
         strncpy(name, "Player 2", 9);
         screen_x = 1.7;
+        screen_y = 0.62;
+        break;
+      }
+      case 3:
+      {
+        strncpy(name, "Player 3", 9);
+        screen_x = -0.70;
+        screen_y = 0.62;
+        break;
+      }
+      case 4:
+      {
+        strncpy(name, "Player 4", 9);
+        screen_x = 1.7;
+        screen_y = 0.62;
+      }
     }
-
-    screen_y = 0.62;
     health = hp;
     bullet = ammo;
     score = hits;

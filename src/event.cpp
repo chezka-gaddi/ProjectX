@@ -188,3 +188,20 @@ void CloseEvent::doAction(Game &game)
 {
     game.closeDown();
 }
+
+/***************************************************************************//**
+ * @brief Constructor
+ *
+ * @param[in] k - the ascii value of the key that was pressed
+ * @param[in] x - the x-coordinate of where the key 'k' was pressed
+ * @param[in] y - the y-coordinate of where the key 'k' was pressed
+ ******************************************************************************/
+KeyboardEvent::KeyboardEvent(unsigned char k, int x, int y) : key(k), xLoc(x), yLoc(y) {}
+
+void KeyboardEvent::doAction(Game &game)
+{
+    if(key == ESCAPE_KEY || key == 'Q' || key == 'q')
+    {
+        game.earlyOut();  
+    }
+}

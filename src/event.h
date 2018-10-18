@@ -105,4 +105,26 @@ public:
 
     void doAction(Game &);
 };
+
+/***************************************************************************//**
+* @author Paul Hinker
+* @class KeyboardEvent
+* @brief Created when a keyvoard even is triggered
+******************************************************************************/
+class KeyboardEvent : public Event
+{
+  /// The key involved in this event
+  unsigned char key;
+  /// The x-location of where the event took place
+  int xLoc;
+  /// The y-location of where the event took place
+  int yLoc;
+
+public:
+  /// Constructor
+  KeyboardEvent(unsigned char, int, int);
+
+  void doAction(Game &);
+};
+
 #endif

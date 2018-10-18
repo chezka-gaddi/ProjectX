@@ -56,3 +56,16 @@ void onClose()
 {
     utilityCentral(ai,new CloseEvent());
 }
+
+/***************************************************************************//**
+ * @brief A callback function for handling keyboard input
+ *
+ * @param[in] key - the key that was pressed
+ * @param[in] x   - the x-coordinate when the key was pressed
+ * @param[in] y   - the y-coordinate when the key was pressed
+ ******************************************************************************/
+void keyboard(unsigned char key, int x, int y)
+{
+  utilityCentral(ai, new KeyboardEvent(key, x, actualY(y)));
+}
+

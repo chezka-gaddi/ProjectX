@@ -24,4 +24,7 @@ void ticktock(int value);
 /// Called when openGL is closing
 void onClose();
 
+/// Called when a key is pressed
+void keyboard(unsigned char key, int x, int y);
+
 #endif
