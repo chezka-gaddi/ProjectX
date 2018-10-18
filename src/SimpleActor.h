@@ -11,6 +11,7 @@
 
 #include "Actor.h"
 #include "direction.h"
+#include <iostream>
 
 class SimpleActor : public Actor
 {

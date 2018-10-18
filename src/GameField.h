@@ -43,6 +43,7 @@ protected:
     //Action points for each actor
     int ap;
 public:
+    void setSPECIAL(int points);
     /**
      * Each turn will be as follows:
      * a tank will have the option to move and then a tank will fire, once all of the tanks have fired

@@ -154,6 +154,18 @@ void GameField::updateMap()
     }
 
 }
+/***************************************************************************//**
+ * @brief
+ * Prompts the actors to choose attributes to specialize int
+ * @author Riley Kopp
+ ******************************************************************************/
+void GameField::setSPECIAL(int points)
+{
+    for(auto &actor: actors)
+    {
+        actor.tankAttributes = actor.act_p->setAttribute(points);
+    }
+}
 /**
  * @author David Donahue
  * @par Description:
