@@ -90,9 +90,18 @@ gen-library: $(FILES:.cpp=.o)
 	cp src/MapData.h build/src/
 	cp src/direction.h build/src/
 	cp src/PositionData.h build/src/
+	cp src/.gitlab-ci.yml build/
 	cp $(TANKS:.so=.cpp) build/
 	cp $(TANKS:.so=.h) build/
 	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
 	# Change tanks src to point to new directory
 	sed -i 's#include "#include "src/#g' build/SimpleAI.h
 
+push-to-git:
+	mkdir -p build
+	cd build
+	git clone git@gitlab.com:jamckee/projectx.git
+	make gen-library -j8
+	git add .
+	git commit -m "Automated push"
+	git status
