@@ -70,7 +70,7 @@ int main(int argc, char **argv)
         mode = mp;
 
     //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
-    initOpenGL( argc, argv, 1100, 800, mode );
+    initOpenGL( argc, argv, 1000, 727, mode );
 
     glutMainLoop();
 

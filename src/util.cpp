@@ -44,7 +44,7 @@ void initOpenGL(int argc, char** argv, int wCols, int wRows, gameMode mode)
 
     glutInitWindowSize(wCols, wRows);
 
-    glutInitWindowPosition(100, 100);
+    glutInitWindowPosition(100, 10);
 
     glutCreateWindow("Capture the Flag");
 

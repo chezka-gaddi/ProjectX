@@ -2,43 +2,6 @@
 
 #include "Actor.h"
 
-/**************************************************************************//**
- * @author John Weatherhead
- *
- * @par Description
- * This constructor will set all member variables to zero/name
- *
- *****************************************************************************/
-Actor::Actor()
-{
-    name = "";
-    id = 0;
-}
-
-/**************************************************************************//**
- * @author John Weatherhead
- *
- * @par Description
- * This constructor will set all member variables to zero/name
- *
- *****************************************************************************/
-Actor::Actor(std::string newName, int newId)
-{
-    name = newName;
-    id = newId;
-}
-
-/**************************************************************************//**
- * @author John Weatherhead
- *
- * @par Description
- * Destructor as this is a base class and it is needed.
- *
- *****************************************************************************/
-Actor::~Actor()
-{
-
-}
 //Setters
 /**************************************************************************//**
  * @author John Weatherhead
