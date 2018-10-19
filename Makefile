@@ -30,7 +30,6 @@ FILES += $(SRC_PATH)DynamicLoader.cpp
 FILES += $(SRC_PATH)Menu.cpp
 
 TANKS = $(SRC_PATH)SimpleAI.so
-TANKS += $(SRC_PATH)AsciiTankActor.so
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
@@ -58,16 +57,12 @@ clean:
 	rm -rf platform src/*.o
 
 clean-lib: clean 
-	rm -rf build/$(LIB_PATH)libCTF.so
-	rm -rf build/$(SRC_PATH)*.gch
-	rm -rf build/platform
-	rm -rf build/$(SRC_PATH)*.o
-	rm -rf build/$(TANK_PATH)
+	rm -rf build
 
 cleanTanks:
 	rm -rf $(TANK_PATH)
 
-gen-library: $(FILES:.cpp=.o)
+gen-library: $(FILES)
 	@mkdir -p build/$(LIB_PATH)
 	@mkdir -p build/$(SRC_PATH)
 	@mkdir -p build/images
@@ -75,11 +70,21 @@ gen-library: $(FILES:.cpp=.o)
 	$(CXX) $(CXXFLAGS) $(INCS) -o build/$@ -c $< $(LIBS)
 	g++ -o build/$(LIB_PATH)libCTF.so -shared $(CXXFLAGS) $?
 	#echo :Building pre-compiled header"
-	$(CXX) -x c++-header $(CXXFLAGS) $(INCS) -o build/$(SRC_PATH)AllHeader.h.gch -c $(SRC_PATH)AllHeader.h $(LIBS)
+	$(CXX) -x c++-header $(CXXFLAGS) $(INCS) -o build/src/Actor.h.gch -c src/Actor.h $(LIBS)
 	#echo "Building platform"
-	$(CXX) $(CXXFLAGS) $(INCS) -o build/$(SRC_PATH)/main.o -c $(SRC_PATH)main.cpp $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) -o $(SRC_PATH)main.o -c $(SRC_PATH)main.cpp $(LIBS)
 	$(CXX) $(CXXFLAGS) $(INCS) -o build/platform $(MAIN) $(FILES) $(LIBS)
 	#echo "Copying support files"
+	cp src/Makefile build/
 	cp config.txt	build/config.txt
 	cp -R images/ build/images/
-	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
+	cp src/Actor.* build/src/
+	cp src/MoveData.h build/src/
+	cp src/attributes.h build/src/
+	cp src/MapData.h build/src/
+	cp src/direction.h build/src/
+	cp src/PositionData.h build/src/
+	cp $(TANKS:.so=.cpp) build/
+	cp $(TANKS:.so=.h) build/
+	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
+	sed -i 's#include "#include "src/#g' build/SimpleAI.h
