@@ -97,11 +97,11 @@ gen-library: $(FILES:.cpp=.o)
 	# Change tanks src to point to new directory
 	sed -i 's#include "#include "src/#g' build/SimpleAI.h
 
-push-to-git:
+push-to-git: clean-lib
 	mkdir -p build
-	cd build
-	git clone git@gitlab.com:jamckee/projectx.git
+	git clone git@gitlab.com:jamckee/projectx.git build/
 	make gen-library -j8
+	cd build
 	git add .
 	git commit -m "Automated push"
 	git status
