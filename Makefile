@@ -63,7 +63,7 @@ clean-lib: clean
 cleanTanks:
 	rm -rf $(TANK_PATH)
 
-gen-lib: clean-lib
+dev: clean-lib
 	make gen-library -j8
 
 gen-library: $(FILES:.cpp=.o)
@@ -81,7 +81,7 @@ gen-library: $(FILES:.cpp=.o)
 	#echo "Building Sample Tank"	
 	$(CXX) $(CXXFLAGS) -shared src/SimpleAI.cpp -o build/$(TANK_PATH)SimpleAI.so $(SOFLAGS)
 	#echo "Copying support files"
-	cp src/Makefile build/
+	cp -R src/build/ .
 	cp config.txt	build/config.txt
 	cp -R images/ build/
 	cp src/Actor.h build/src/
@@ -90,7 +90,6 @@ gen-library: $(FILES:.cpp=.o)
 	cp src/MapData.h build/src/
 	cp src/direction.h build/src/
 	cp src/PositionData.h build/src/
-	cp src/.gitlab-ci.yml build/
 	cp $(TANKS:.so=.cpp) build/
 	cp $(TANKS:.so=.h) build/
 	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
@@ -102,6 +101,7 @@ push-to-git: clean-lib
 	git clone git@gitlab.com:jamckee/projectx.git build/
 	make gen-library -j8
 	cd build
-	git add .
-	git commit -m "Automated push"
-	git status
+	git --git-dir=build/.git --work-tree=build add .
+	git --git-dir=build/.git --work-tree=build commit -m "Automated push of new version"
+	git --git-dir=build/.git --work-tree=build status
+	git --git-dir=build/.git --work-tree=build push
