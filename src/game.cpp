@@ -195,6 +195,7 @@ void Game::initGameState()
     std::vector<std::string> tankImages;
     std::vector<std::string> gameImages;
     std::string name;
+    int attributePoints = 0;
 
     if (!fin)
         cout << "FAILED TO LOAD CONFIG\n";
@@ -283,6 +284,10 @@ void Game::initGameState()
             {
                 stringstream(args) >> range;
             }
+            else if (id == "SPECIAL")
+            {
+                stringstream(args) >> attributePoints;
+            }
             else if (id != "")
             {
                 std::cout << "BAD ARGUMENT: " << id << '\n';
@@ -314,6 +319,7 @@ void Game::initGameState()
     }
 
     tankGame = new GameField(width, height, startActors, displayWrapper);
+    tankGame->setSPECIAL(attributePoints);
 
     // Add obstacles to the gamefield
     for (auto o : obstacleLocations)
