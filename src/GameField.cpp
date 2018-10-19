@@ -165,6 +165,10 @@ void GameField::setSPECIAL(int points)
     {
         actor.tankAttributes = actor.act_p->setAttribute(points);
         actor.health += actor.tankAttributes.tankHealth;
+        actor.damage += actor.tankAttributes.tankDamage;
+        actor.range  += actor.tankAttributes.tankRange;
+        actor.shots  += actor.tankAttributes.tankShots;
+        actor.radar  += actor.tankAttributes.tankRadar;
     }
 }
 /**
@@ -315,7 +319,22 @@ void GameField::runMoves(ActorInfo &a)
         displayCallback(fieldMap, actors, turnCount);
 
 }
+/***************************************************************************//**
+* @author Riley Kopp
+* @brief
+* turns the map into just what the current tank can see based off radar
+******************************************************************************/
+void create_fog_of_war(MapData &map, ActorInfo current_actor)
+{
+    int radar =  2 * current_actor.radar;
+    int x_pos = current_actor.x;
+    int y_pos = current_actor.y;
 
+    // For now radar will just be the (2 x radar) radius around the tank
+    
+
+
+}
 /**
  * @author David Donahue
  * @par Description:
@@ -330,7 +349,12 @@ void GameField::nextTurn()
     direction atk;
     ActorInfo newProjectile;
     PositionData pos;
+    int action;
     int act_ap;
+    MapData fog_of_war = fieldMap;
+
+    create_fog_of_war(fog_of_war, actors[i]);
+
     for (int i = 0; i < actors.size(); ++i)
     {
         act_ap = actors[i].range;
@@ -341,11 +365,11 @@ void GameField::nextTurn()
             pos.health = actors[i].health;
             pos.id = actors[i].id;
             pos.ap = act_ap;
-
-            if (actors[i].act_p->spendAP(fieldMap, pos) == 1)
+            action = actors[i].act_p->spendAP(fog_of_war, pos);
+            if ( action == 1)
                 runMoves(actors[i]);
             
-            else if (actors[i].act_p->spendAP(fieldMap, pos) == 2)
+            else if (action == 2)
             {
                 if(actors[i].health != 0)
                 {

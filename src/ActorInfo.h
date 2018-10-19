@@ -33,6 +33,7 @@ struct ActorInfo
     int range;
     int hits;
     int shots;
+    int radar;
     attributes tankAttributes;
     direction heading;
 ActorInfo(Actor *a, int h, int d, int xpos, int ypos, int i, int r) : act_p(a), health(h),
