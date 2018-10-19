@@ -69,3 +69,7 @@ platform
 #emacs temporary files
 \#*\#
 .\#*
+
+# Building development folder
+build
+build/*
