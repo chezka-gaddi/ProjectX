@@ -11,7 +11,6 @@ TANK_PATH= tanks/
 LIB_PATH= libraries/
 
 MAIN = $(SRC_PATH)main.cpp
-VERSION=1.0
 
 FILES = $(SRC_PATH)GameField.cpp
 FILES += $(SRC_PATH)Actor.cpp
@@ -101,7 +100,7 @@ push-to-git: clean-lib
 	mkdir -p build
 	git clone git@gitlab.com:jamckee/projectx.git build/
 	make gen-library -j8
-	#git --git-dir=build/.git --work-tree=build add .
-	#git --git-dir=build/.git --work-tree=build commit -m "Automated push of new version: Version: $(VERSION)"
-	#git --git-dir=build/.git --work-tree=build status
-	#git --git-dir=build/.git --work-tree=build push
+	git --git-dir=build/.git --work-tree=build add .
+	git --git-dir=build/.git --work-tree=build commit -m "Automated push of new version."
+	git --git-dir=build/.git --work-tree=build status
+	git --git-dir=build/.git --work-tree=build push
