@@ -223,10 +223,11 @@ void Game::initGameState()
                 
                 args = args.substr(i+1);
                 
-                for( int x = 0; x < 9; x++ )
+                for( int x = 0; x < 5; x++ )
                 {
                     i = args.find(' ');    //skip y
                     name = args.substr(0,i);
+                    std::cout << name << std::endl;
                     tankImages.push_back(name);
                     args = args.substr(i+1);
                 }
@@ -298,7 +299,7 @@ void Game::initGameState()
 
     glEnable(GL_TEXTURE_2D);
     if(!LoadGLTextures(tankImages, gameImages))
-        cout << "OH HELL NO!!!!"<< endl;
+        cout << "Failed to open image." << endl;
     glDisable(GL_TEXTURE_2D);
     
     std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
