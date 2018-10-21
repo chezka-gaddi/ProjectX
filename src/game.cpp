@@ -227,7 +227,6 @@ void Game::initGameState()
                 {
                     i = args.find(' ');    //skip y
                     name = args.substr(0,i);
-                    std::cout << name << std::endl;
                     tankImages.push_back(name);
                     args = args.substr(i+1);
                 }

@@ -40,6 +40,22 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
             {
                 tex = (ID-1) * 5 + 1;  
             } break;
+        case UPRIGHT:
+            {
+                tex = (ID-1) * 5 + 1;  
+            } break;
+        case DOWNRIGHT:
+            {
+                tex = (ID-1) * 5 + 1;  
+            } break;
+        case UPLEFT:
+            {
+                tex = (ID-1) * 5 + 3;  
+            } break;
+        case DOWNLEFT:
+            {
+                tex = (ID-1) * 5 + 3;  
+            } break;
         case UP:
             {
                 tex = (ID-1) * 5 + 0;  
@@ -48,6 +64,8 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
             {
                 tex = (ID-1) * 5 + 2;  
             } break;
+        default:
+            tex = ID-1 * 5;
     }
 
     angle = 0;
