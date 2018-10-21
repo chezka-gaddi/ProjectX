@@ -29,7 +29,10 @@ FILES += $(SRC_PATH)callbacks.cpp
 FILES += $(SRC_PATH)DynamicLoader.cpp
 FILES += $(SRC_PATH)Menu.cpp
 
-TANKS = $(SRC_PATH)SimpleAI.so
+TANK_PATH= ./tanks/
+TANKS = src/SimpleAI.so
+TANKS += src/PongAI.so
+
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 

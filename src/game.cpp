@@ -367,6 +367,7 @@ void Game::initGameState()
         cout << "Failed to open image." << endl;
     glDisable(GL_TEXTURE_2D);
     
+    cout << "Loading Shared Objects...";
     std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
 
     std::vector<ActorInfo> startActors;
@@ -377,6 +378,7 @@ void Game::initGameState()
         startActors.push_back(ActorInfo(startActorPointers[i], health, damage, tankLocations[i].first,
                                         tankLocations[i].second, i + 1,range));
     }
+    cout << "Done" << endl;
     // Create a stats menu for both tanks
     for( auto actTemp : startActors)
     {
@@ -384,16 +386,20 @@ void Game::initGameState()
         objects.push_back(temp);
     }
 
+    cout << "Initializing Game...";
     tankGame = new GameField(width, height, startActors, displayWrapper);
     tankGame->setSPECIAL(attributePoints);
+    cout << "Done" << endl;
 
     // Add obstacles to the gamefield
+    cout << "Generating Obstacles...";
     for (auto o : obstacleLocations)
     {
         tankGame->addObstacle(o.first, o.second);
         temp = new Obstacles( 1, convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ) );
         constants.push_back(temp);
     }
+    cout << "Done" << endl;
 }
 
 
