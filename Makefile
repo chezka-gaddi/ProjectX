@@ -82,7 +82,7 @@ gen-library: $(FILES:.cpp=.o)
 	#echo "Building Sample Tank"	
 	$(CXX) $(CXXFLAGS) -shared src/SimpleAI.cpp -o build/$(TANK_PATH)SimpleAI.so $(SOFLAGS)
 	#echo "Copying support files"
-	cp -R src/build/ .
+	cp -R src/buildsrc/ .
 	cp config.txt	build/config.txt
 	cp -R images/ build/
 	cp src/Actor.h build/src/
@@ -101,7 +101,8 @@ push-to-git: clean-lib
 	mkdir -p build
 	git clone git@gitlab.com:jamckee/projectx.git build/
 	make gen-library -j8
-	#git --git-dir=build/.git --work-tree=build add .
-	#git --git-dir=build/.git --work-tree=build commit -m "Automated push of new version: Version: $(VERSION)"
-	#git --git-dir=build/.git --work-tree=build status
-	#git --git-dir=build/.git --work-tree=build push
+	cd build
+	git --git-dir=build/.git --work-tree=build add .
+	git --git-dir=build/.git --work-tree=build commit -m "Automated push of new version: 1.02"
+	git --git-dir=build/.git --work-tree=build status
+	git --git-dir=build/.git --work-tree=build push
