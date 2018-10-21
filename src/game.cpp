@@ -184,8 +184,8 @@ void Game::initGameState()
     std::cout << "Game::Loading config.txt\n";
     ifstream fin("config.txt");
     std::string configLine;
-    int width = 20;
-    int  height = 10;
+    int width = 15;
+    int  height = 9;
     int damage = 1;
     int  health = 3;
     int range = 1;
@@ -236,10 +236,24 @@ void Game::initGameState()
             else if (id == "WIDTH")
             {
                 stringstream(args) >> width;
+                if (width < 15) { 
+                    width = 15;
+                    cout << "Invalid width parameter, defaulting to 15.\n";
+                } else if (width > 15) {
+                        width = 15;
+                        cout << "Invalid width parameter, defaulting to 15.\n";
+                }
             }
             else if (id == "HEIGHT")
             {
                 stringstream(args) >> height;
+                if (height < 9){
+                    height = 9;
+                    cout << "Invalid height parameter, defaulting to 9.\n";
+                } else if (height > 9) {
+                        height = 9;
+                        cout << "Invalid height parameter, defaulting to 9.\n";
+                }
             }
             else if (id == "FIELDIMAGE")
             {
@@ -249,8 +263,32 @@ void Game::initGameState()
             else if (id == "OBSTACLE")
             {
                 int x,y;
+                bool taken;
                 stringstream(args) >> x >> y;
-                obstacleLocations.push_back(std::pair<int,int> (x, y));
+                if (x > width - 1 || x < 0 || y > height - 1 || y < 0)
+                {
+                    printf ("Invalid obstacle location: (%d, %d). Ranges: (0-%d, 0-%d)\n", x, y, width-1, height-1);
+                }else {
+                  for (int i = 0; i < tankLocations.size(); i ++){
+                          if (tankLocations[i].first == x && tankLocations[i].second == y){
+                                  taken = true;
+                                  printf ("Invalid obstacle location: (%d, %d) aleady taken by tank\n", x, y);
+                          }
+                  }
+                  if (!taken)
+                  {
+                          for (int i = 0; i < obstacleLocations.size(); i ++){
+                              if (obstacleLocations[i].first == x && obstacleLocations[i].second == y){
+                                taken = true;
+                                printf ("Invalid obstacle location: (%d, %d) aleady taken by object\n", x, y);
+                              }
+                          }
+                  }
+                  if (!taken){
+                          obstacleLocations.push_back(std::pair<int,int> (x, y));
+                  }
+                  taken = false;
+                }
             }
             else if( id == "OBSTACLE_IMAGE" )
             {
@@ -275,18 +313,46 @@ void Game::initGameState()
             else if (id == "DAMAGE")
             {
                 stringstream(args) >> damage;
+                if (damage < 1){ 
+                  damage = 1;
+                  cout << "Invalid damage value, defaulting to 2\n";
+                } else if (damage > 4) {
+                    printf("%d damage might be a little excesive, setting to 4", damage);
+                    damage = 4;
+                }
             }
             else if (id == "HEALTH")
             {
                 stringstream(args) >> health;
+                if (health < 2){ 
+                  health = 2;
+                  cout << "Invalid health value, defaulting to 2\n";
+                } else if (health > 5) {
+                    printf("%d health might be a little excesive, setting to 5", health);
+                    health = 5;
+                }
             }
             else if (id == "RANGE")
             {
                 stringstream(args) >> range;
+                if (range < 2){ 
+                  range = 2;
+                  cout << "Invalid range value, defaulting to 2\n";
+                } else if (range > 10) {
+                    printf("%d range might be a little excesive, setting to 10", range);
+                    range = 4;
+                }
             }
             else if (id == "SPECIAL")
             {
                 stringstream(args) >> attributePoints;
+                if (attributePoints < 1){ 
+                  attributePoints = 1;
+                  cout << "Invalid special value, defaulting to 1\n";
+                } else if (attributePoints > 4) {
+                    printf("%d specials might be a little excesive, setting to 4", attributePoints);
+                    attributePoints = 4;
+                }
             }
             else if (id != "")
             {

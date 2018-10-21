@@ -7,9 +7,10 @@ AI SimpleAI 14 7 images/tank2_1.png images/tank2_3.png images/tank2_5.png images
 #AI SimpleAI 13 8
 
 #FIELD CONFIGURATION
-WIDTH 20
-HEIGHT 20
+WIDTH 15
+HEIGHT 9
 
+#FIELDIMAGE <MAP FILE>
 FIELDIMAGE images/green.png
 
 #OBSTACLE 1 0
@@ -26,13 +27,16 @@ FIELDIMAGE images/green.png
 #OBSTACLE 14 7
 #OBSTACLE 4 2
 
+#OBSTACLE_IMAGE <IMAGE1> [<IMAGE2>]
 OBSTACLE_IMAGE images/tree.png images/rock.png
 
 
 
 #TANK RULES
+#DAMAGE <STAT>
+#HEALTH <STAT>
+#RANGE <STAT>
 DAMAGE 1
 HEALTH 2
 RANGE 2
 SPECIAL 1
-

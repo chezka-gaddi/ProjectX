@@ -54,27 +54,14 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 
 int main(int argc, char **argv)
 {
-    gameMode mode;
-
-    if (argc == 1 || argv[1][0] == 'a')
-    {
-        mode = ai;
-    }
-
-    else if (argv[1][0] == 's')
-    {
-        mode = sp;
-    }
-
-    else
-        mode = mp;
+    gameMode mode = ai;
 
     //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
-    initOpenGL( argc, argv, 1100, 800, mode );
+    initOpenGL( argc, argv, 1000, 727, mode );
 
     glutMainLoop();
 
-    std::cout << "\n\n\n\n\n GAME OVER \n\n\n\n\n\n";
+    std::cout << "\n\n\n GAME OVER \n\n\n";
 
     return 0;
 }

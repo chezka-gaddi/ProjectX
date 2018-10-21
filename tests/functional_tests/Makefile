@@ -9,7 +9,7 @@ TEST_FILES += projectile_functional_tests.o
 
 
 FILES = ../../src/GameField.o
-FILES += ../../src/AsciiTankActor.o
+#FILES += ../../src/AsciiTankActor.o
 FILES += ../../src/Actor.o
 FILES += ../../src/MapData.o
 FILES += ../../src/ProjectileActor.o

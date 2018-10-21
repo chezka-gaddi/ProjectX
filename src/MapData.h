@@ -30,7 +30,7 @@ struct MapData
     MapData(int w, int h);
     MapData();
 };
-/** overload << to display to console */
+/* overload << to display to console */
 std::ostream & operator<<(std::ostream& os, const MapData& md);
 
 #endif
