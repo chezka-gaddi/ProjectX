@@ -79,7 +79,6 @@ void updateDrawables(Game &game)
             {
                 if (actor.x == act.x && actor.y == act.y && actor.id != act.id)
                 {
-                    std::cout << "Overlap of actor " << actor.id << " and " << act.id<< std::endl;
                     overlap = true;
                 }
             }
