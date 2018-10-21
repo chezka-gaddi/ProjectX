@@ -365,7 +365,7 @@ void GameField::nextTurn()
                         {
                             actors[i].heading = atk;
                             ProjectileActor * proj = new ProjectileActor(atk);
-                            newProjectile.range = 6;
+                            newProjectile.range = 3;
                             newProjectile.id = -actors[i].id;
                             newProjectile.act_p = proj;
                             newProjectile.health = 1;

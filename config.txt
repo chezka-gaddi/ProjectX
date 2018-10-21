@@ -1,6 +1,6 @@
 #AI LIST: AI <NAME> <STARTX> <STARTY>
 AI PongAI 1 1 images/tank1_1.png images/tank1_3.png images/tank1_5.png images/tank1_7.png images/bullet1.png
-AI PongAI 7 0 images/tank2_1.png images/tank2_3.png images/tank2_5.png images/tank2_7.png images/bullet2.png
+AI PongAI 14 8 images/tank2_1.png images/tank2_3.png images/tank2_5.png images/tank2_7.png images/bullet2.png
 #AI SimpleAI 14 7 images/tank1_1.png images/tank1_3.png images/tank1_5.png images/tank1_7.png images/bullet1.png
 #AI SimpleAI 1 7 images/tank2_1.png images/tank2_3.png images/tank2_5.png images/tank2_7.png images/bullet2.png
 #AI SimpleAI 1 8
@@ -13,19 +13,18 @@ HEIGHT 9
 #FIELDIMAGE <MAP FILE>
 FIELDIMAGE images/green.png
 
-#OBSTACLE 1 0
-#OBSTACLE 5 7
-#OBSTACLE 12 2
-#OBSTACLE 3 7
-#OBSTACLE 9 6
-#OBSTACLE 13 5
-#OBSTACLE 2 5
-#OBSTACLE 10 1
-#OBSTACLE 8 3
-#OBSTACLE 2 2
-#OBSTACLE 5 5
-#OBSTACLE 14 7
-#OBSTACLE 4 2
+OBSTACLE 1 0
+OBSTACLE 5 7
+OBSTACLE 12 2
+OBSTACLE 3 7
+OBSTACLE 9 6
+OBSTACLE 13 5
+OBSTACLE 2 5
+OBSTACLE 10 1
+OBSTACLE 8 3
+OBSTACLE 2 2
+OBSTACLE 5 5
+OBSTACLE 4 2
 
 #OBSTACLE_IMAGE <IMAGE1> [<IMAGE2>]
 OBSTACLE_IMAGE images/tree.png images/rock.png
