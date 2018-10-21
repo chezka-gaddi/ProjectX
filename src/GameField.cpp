@@ -341,11 +341,11 @@ void GameField::nextTurn()
             pos.health = actors[i].health;
             pos.id = actors[i].id;
             pos.ap = act_ap;
-
-            if (actors[i].act_p->spendAP(fieldMap, pos) == 1)
+            int move = actors[i].act_p->spendAP(fieldMap, pos); 
+            if (move == 1)
                 runMoves(actors[i]);
             
-            else if (actors[i].act_p->spendAP(fieldMap, pos) == 2)
+            else if (move  == 2)
             {
                 if(actors[i].health != 0)
                 {
