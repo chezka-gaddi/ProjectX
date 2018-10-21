@@ -38,7 +38,7 @@ TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have eve
 
 platform: $(FILES:.cpp=.o) $(MAIN:.cpp=.o)
 	+make tanks
-	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(MAIN) $(FILES) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) -o platform $? $(LIBS)
 
 %.so: %.cpp
 	$(CXX) $(CXXFLAGS) -shared $< $(TANKS_LINK) -o $@ $(SOFLAGS)
@@ -80,7 +80,7 @@ gen-library: $(FILES:.cpp=.o)
 	#$(CXX) -x c++-header $(CXXFLAGS) $(INCS) -o build/src/Actor.h.gch -c src/Actor.h $(LIBS)
 	#echo "Building platform"
 	$(CXX) $(CXXFLAGS) $(INCS) -o $(SRC_PATH)main.o -c $(SRC_PATH)main.cpp $(LIBS)
-	$(CXX) $(CXXFLAGS) $(INCS) -o buildsrc/platform $(MAIN) $? $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) -o buildsrc/platform src/main.o $? $(LIBS)
 	#echo "Building Sample Tank"	
 	$(CXX) $(CXXFLAGS) -shared src/SimpleAI.cpp -o buildsrc/$(TANK_PATH)SimpleAI.so $(SOFLAGS)
 	#echo "Copying support files"
@@ -103,7 +103,7 @@ push-to-git: clean-lib
 	mkdir -p buildsrc
 	git clone git@gitlab.com:jamckee/projectx.git buildsrc/
 	make gen-library -j8
-	git --git-dir=buildsrc/.git --work-tree=buildsrc add .
-	git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 1.03"
-	git --git-dir=buildsrc/.git --work-tree=buildsrc status
-	git --git-dir=buildsrc/.git --work-tree=buildsrc push
+	#git --git-dir=buildsrc/.git --work-tree=buildsrc add .
+	#git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 1.03"
+	#git --git-dir=buildsrc/.git --work-tree=buildsrc status
+	#git --git-dir=buildsrc/.git --work-tree=buildsrc push
