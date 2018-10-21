@@ -103,7 +103,7 @@ push-to-git: clean-lib
 	mkdir -p buildsrc
 	git clone git@gitlab.com:jamckee/projectx.git buildsrc/
 	make gen-library -j8
-	#git --git-dir=buildsrc/.git --work-tree=buildsrc add .
-	#git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 1.03"
-	#git --git-dir=buildsrc/.git --work-tree=buildsrc status
-	#git --git-dir=buildsrc/.git --work-tree=buildsrc push
+	git --git-dir=buildsrc/.git --work-tree=buildsrc add .
+	git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 1.03"
+	git --git-dir=buildsrc/.git --work-tree=buildsrc status
+	git --git-dir=buildsrc/.git --work-tree=buildsrc push
