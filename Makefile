@@ -57,7 +57,7 @@ clean:
 	rm -rf platform src/*.o
 
 clean-lib: clean
-	rm -rf build
+	rm -rf buildsrc
 	rm -rf libraries/libCTF.so
 
 cleanTanks:
@@ -67,40 +67,40 @@ dev: clean-lib
 	make gen-library -j8
 
 gen-library: $(FILES:.cpp=.o)
-	@mkdir -p build/$(LIB_PATH)
-	@mkdir -p build/$(SRC_PATH)
-	@mkdir -p build/$(TANK_PATH)
-	@mkdir -p build/images	
+	@mkdir -p buildsrc/$(LIB_PATH)
+	@mkdir -p buildsrc/$(SRC_PATH)
+	@mkdir -p buildsrc/$(TANK_PATH)
+	@mkdir -p buildsrc/images	
 	#echo "Building object library"
-	g++ -o build/$(LIB_PATH)libCTF.so -shared $(CXXFLAGS) $? $(SOFLAGS)
+	g++ -o buildsrc/$(LIB_PATH)libCTF.so -shared $(CXXFLAGS) $? $(SOFLAGS)
 	#echo :Building pre-compiled header"
 	#$(CXX) -x c++-header $(CXXFLAGS) $(INCS) -o build/src/Actor.h.gch -c src/Actor.h $(LIBS)
 	#echo "Building platform"
 	$(CXX) $(CXXFLAGS) $(INCS) -o $(SRC_PATH)main.o -c $(SRC_PATH)main.cpp $(LIBS)
-	$(CXX) $(CXXFLAGS) $(INCS) -o build/platform $(MAIN) $? $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) -o buildsrc/platform $(MAIN) $? $(LIBS)
 	#echo "Building Sample Tank"	
-	$(CXX) $(CXXFLAGS) -shared src/SimpleAI.cpp -o build/$(TANK_PATH)SimpleAI.so $(SOFLAGS)
+	$(CXX) $(CXXFLAGS) -shared src/SimpleAI.cpp -o buildsrc/$(TANK_PATH)SimpleAI.so $(SOFLAGS)
 	#echo "Copying support files"
 	cp -R src/buildsrc/ .
-	cp config.txt	build/config.txt
-	cp -R images/ build/
-	cp src/Actor.h build/src/
-	cp src/MoveData.h build/src/
-	cp src/attributes.h build/src/
-	cp src/MapData.h build/src/
-	cp src/direction.h build/src/
-	cp src/PositionData.h build/src/
-	cp $(TANKS:.so=.cpp) build/
-	cp $(TANKS:.so=.h) build/
+	cp config.txt	buildsrc/config.txt
+	cp -R images/ buildsrc/
+	cp src/Actor.h buildsrc/src/
+	cp src/MoveData.h buildsrc/src/
+	cp src/attributes.h buildsrc/src/
+	cp src/MapData.h buildsrc/src/
+	cp src/direction.h buildsrc/src/
+	cp src/PositionData.h buildsrc/src/
+	cp $(TANKS:.so=.cpp) buildsrc/
+	cp $(TANKS:.so=.h) buildsrc/
 	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
 	# Change tanks src to point to new directory
-	sed -i 's#include "#include "src/#g' build/SimpleAI.h
+	sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
 
 push-to-git: clean-lib
-	mkdir -p build
-	git clone git@gitlab.com:jamckee/projectx.git build/
+	mkdir -p buildsrc
+	git clone git@gitlab.com:jamckee/projectx.git buildsrc/
 	make gen-library -j8
-	git --git-dir=build/.git --work-tree=build add .
-	git --git-dir=build/.git --work-tree=build commit -m "Automated push of new version."
-	git --git-dir=build/.git --work-tree=build status
-	git --git-dir=build/.git --work-tree=build push
+	git --git-dir=buildsrc/.git --work-tree=buildsrc add .
+	git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 1.03"
+	git --git-dir=buildsrc/.git --work-tree=buildsrc status
+	git --git-dir=buildsrc/.git --work-tree=buildsrc push
