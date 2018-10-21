@@ -195,6 +195,7 @@ void Game::initGameState()
     std::vector<std::string> tankImages;
     std::vector<std::string> gameImages;
     std::string name;
+    int attributePoints = 0;
 
     if (!fin)
         cout << "FAILED TO LOAD CONFIG\n";
@@ -222,7 +223,7 @@ void Game::initGameState()
                 
                 args = args.substr(i+1);
                 
-                for( int x = 0; x < 9; x++ )
+                for( int x = 0; x < 5; x++ )
                 {
                     i = args.find(' ');    //skip y
                     name = args.substr(0,i);
@@ -283,6 +284,10 @@ void Game::initGameState()
             {
                 stringstream(args) >> range;
             }
+            else if (id == "SPECIAL")
+            {
+                stringstream(args) >> attributePoints;
+            }
             else if (id != "")
             {
                 std::cout << "BAD ARGUMENT: " << id << '\n';
@@ -293,7 +298,7 @@ void Game::initGameState()
 
     glEnable(GL_TEXTURE_2D);
     if(!LoadGLTextures(tankImages, gameImages))
-        cout << "OH HELL NO!!!!"<< endl;
+        cout << "Failed to open image." << endl;
     glDisable(GL_TEXTURE_2D);
     
     std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
@@ -314,6 +319,7 @@ void Game::initGameState()
     }
 
     tankGame = new GameField(width, height, startActors, displayWrapper);
+    tankGame->setSPECIAL(attributePoints);
 
     // Add obstacles to the gamefield
     for (auto o : obstacleLocations)

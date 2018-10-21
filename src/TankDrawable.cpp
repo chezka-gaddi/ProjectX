@@ -23,8 +23,51 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
     screen_x = x_coor;
     screen_y = y_coor;
     id = ID;
+    
 
-    tex = dir + (ID-1)*9;
+    // Acesses the right image for the tanks
+    //  0 is the up image,
+    //  1 is right,
+    //  2 is down,
+    //  3 is left.
+    switch(dir)
+    {
+        case LEFT:
+            {
+                tex = (ID-1) * 5 + 3;  
+            } break;
+        case RIGHT:
+            {
+                tex = (ID-1) * 5 + 1;  
+            } break;
+        case UPRIGHT:
+            {
+                tex = (ID-1) * 5 + 1;  
+            } break;
+        case DOWNRIGHT:
+            {
+                tex = (ID-1) * 5 + 1;  
+            } break;
+        case UPLEFT:
+            {
+                tex = (ID-1) * 5 + 3;  
+            } break;
+        case DOWNLEFT:
+            {
+                tex = (ID-1) * 5 + 3;  
+            } break;
+        case UP:
+            {
+                tex = (ID-1) * 5 + 0;  
+            } break;
+        case DOWN:
+            {
+                tex = (ID-1) * 5 + 2;  
+            } break;
+        default:
+            tex = ID-1 * 5;
+    }
+
     angle = 0;
 }
 

@@ -10,7 +10,7 @@ using namespace std;
 
 // Initialize texture arrays
 GLuint gameTex[8];      /*!<Texture array for the tanks and their projectiles */
-GLuint tankTex[18];      /*!<Texture array for game constants */
+GLuint tankTex[20];      /*!<Texture array for game constants */
 
 
 /***************************************************************************//**
@@ -22,7 +22,7 @@ GLuint tankTex[18];      /*!<Texture array for game constants */
 int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> gameimgs)
 {
     // Load in the tank texure information
-    for( int i = 0; i < 18; i++ )
+    for( int i = 0; i < images.size(); i++ )
     {
         const char *c = images[i].c_str();
         cout << c << endl;

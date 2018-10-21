@@ -475,3 +475,30 @@ TEST_CASE("GameField updates heading of ActorInfo")
     g.nextTurn();
     REQUIRE(g.actorInfoById(1).heading == UPRIGHT);
 }
+
+
+TEST_CASE("Game Field properly gets attributes from actors")
+{
+    Actor * actor_1 = new SimpleActor(UPRIGHT, STAY);
+
+    ActorInfo test(actor_1, 1, 1, 0, 1, 1, 2);
+    std::vector<ActorInfo> output;
+    std::vector<ActorInfo> vect;
+
+    vect.push_back(test);
+
+    GameField manager(2, 2, vect);
+
+    manager.setSPECIAL(4);
+
+    output = manager.getActors();
+
+    REQUIRE(output[0].tankAttributes.tankHealth == 1);
+    REQUIRE(output[0].tankAttributes.tankDamage == 1);
+    REQUIRE(output[0].tankAttributes.tankRange == 1);
+    REQUIRE(output[0].tankAttributes.tankShots == 1);
+
+
+
+    
+}
