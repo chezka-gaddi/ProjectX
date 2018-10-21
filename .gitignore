@@ -67,6 +67,15 @@ testAll
 platform
 *.gc*
 
+#GDB
+####################
+.gdb_history
+
+
 #emacs temporary files
 \#*\#
 .\#*
+
+# Building development folder
+build
+build/*
