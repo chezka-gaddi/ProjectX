@@ -174,7 +174,7 @@ TEST_CASE("Actors spawn and move projectiles on attack")
     ActorInfo newAI(a, 1, 1, 0, 7, 1, 1);
     GameField g (1, 8);
     g.addActor(newAI);
-    std::vector<int> ref = {0, 0, 0, 0, -1, 0, 0, 1};
+    std::vector<int> ref = {0, -1, 0, 0, 0, 0, 0, 1};
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
 }
