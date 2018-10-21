@@ -10,7 +10,6 @@
 // Include(s)
 #include <catch.hpp>
 #include <GameField.h>
-#include <AsciiTankActor.h>
 #include <vector>
 #include <iostream>
 #include <direction.h>

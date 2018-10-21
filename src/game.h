@@ -15,7 +15,6 @@
 #include "GameField.h"
 #include "Drawable.h"
 #include "Actor.h"
-#include "AsciiTankActor.h"
 #include "SimpleAI.h"
 #include "DynamicLoader.h"
 #include <fstream>
