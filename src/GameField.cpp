@@ -182,7 +182,15 @@ void GameField::setSPECIAL(int points)
     for(auto &actor: actors)
     {
         actor.tankAttributes = actor.act_p->setAttribute(points);
-        actor.health += actor.tankAttributes.tankHealth;
+        if ((actor.tankAttributes.tankHealth 
+                    + actor.tankAttributes.tankRange 
+                    + actor.tankAttributes.tankDamage) == points)
+        {
+            actor.health += actor.tankAttributes.tankHealth;
+            actor.range += actor.tankAttributes.tankRange;
+            actor.damage += actor.tankAttributes.tankDamage;
+        }
+        std::cout << "Tank " << actor.id << " did not provide the correct amount of special points!" <<std::endl;
     }
 }
 /**
