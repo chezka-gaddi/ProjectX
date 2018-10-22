@@ -44,8 +44,9 @@ int main (int argc, char ** argv)
 
     string tank1;
     string tank2;
-    string config_name = "Round_1_1";
+    string config_name = "OneVOneTournament/Round_1_1";
 
+    int random;
 
     tank_list.open(argv[1], ios::in);
 
@@ -56,26 +57,56 @@ int main (int argc, char ** argv)
         getline(tank_list, tank1);
         getline(tank_list, tank2);
 
+        if(tank1.empty() || tank2.empty())
+        {
+            break;
+        }
+
         // TODO Check for odd number of tanks
         
         game_config.open(config_name.c_str());
         game_config << "# Tank List" << endl;
         game_config << "AI " << tank1 << endl;
         game_config << "AI " << tank2 << endl << endl << endl;
-        
-        map.open(map_list[rand() % map_list.size()]);
-/*
-        while(!map.eof())
-        {
-            getline(map, temp);
-            game_config << temp << endl;
-        }
-       
-        map.close();
-  */       
-        config_name[8]++;
 
-    game_config.close();
+        random = rand() % map_list.size() - 1;
+        game_config << "#Map: "<< map_list[random] << endl;
+        map.open(map_list[random]);
+
+        if(map.is_open())
+        {
+            cout << "Map Opened" << endl;
+            while(!map.eof())
+            {
+                getline(map, temp);
+                game_config << temp << endl;
+            }
+        }
+        map.close();
+         
+        tank1.erase();
+        tank2.erase();
+
+
+
+
+        game_config  << endl << "#Tank rules" << endl
+            << "DAMAGE 1"
+            << endl
+            << "HEALTH 2"
+            << endl
+            << "AP 2"
+            << endl
+            << "SPECIAL 1"
+            << endl;
+
+
+
+
+        game_config.close();
+        config_name.back()++;
+
+
     }
 
     tank_list.close();
