@@ -71,6 +71,24 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     updateMap();
     displayCallback = NULL;
 }
+/**
+ * @author Riley Kopp
+ * @par Description:
+ * Constructor with dimensions and a vector of ActorInfo, and action points
+ */
+GameField::GameField(int width, int height, std::vector<ActorInfo> acts
+        , int actionpoints) : actors(acts), ap(actionpoints)
+{
+    turnCount = 0;
+    fieldMap.width = width;
+    fieldMap.height = height;
+    fieldMap.map.resize(width * height);
+    fieldMap.obstacleMap.resize(width * height);
+    std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
+    updateMap();
+    displayCallback = NULL;
+}
 
 GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int)) : actors(startActors), ap(2)
 {
@@ -369,7 +387,7 @@ void GameField::nextTurn()
                             newProjectile.id = -actors[i].id;
                             newProjectile.act_p = proj;
                             newProjectile.health = 1;
-                            newProjectile.damage = 1;
+                            newProjectile.damage = actors[i].damage;
                             newProjectile.x = actors[i].x;
                             newProjectile.y = actors[i].y;
                             actors.insert(actors.begin() + i + 1, newProjectile);
