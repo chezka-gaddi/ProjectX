@@ -369,7 +369,7 @@ void GameField::nextTurn()
                             newProjectile.id = -actors[i].id;
                             newProjectile.act_p = proj;
                             newProjectile.health = 1;
-                            newProjectile.damage = 1;
+                            newProjectile.damage = actors[i].damage;
                             newProjectile.x = actors[i].x;
                             newProjectile.y = actors[i].y;
                             actors.insert(actors.begin() + i + 1, newProjectile);

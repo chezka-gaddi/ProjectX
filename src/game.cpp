@@ -332,7 +332,7 @@ void Game::initGameState()
                     health = 5;
                 }
             }
-            else if (id == "RANGE")
+            else if (id == "AP")
             {
                 stringstream(args) >> range;
                 if (range < 2){ 
