@@ -1,12 +1,12 @@
 9
 9
-         
- OOOOOOO 
- O     O 
- O OOO   
- O OOO O 
- O OOO O 
-       O 
- OOOOOOO 
-         
+Txxxxxxxx
+xOOOOOOOx
+xOxxxxxOx
+xOxOOOxxx
+xOxOOOxOx
+xOxOOOxOx
+xxxxxxxOx
+xOOOOOOOx
+xxxxxxxxT
 

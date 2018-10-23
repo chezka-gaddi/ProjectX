@@ -1,17 +1,17 @@
 25
 15
-       O   O   O        
- OO    O O O   O     OO 
- O O O O O O   O     OO 
- O O O O O O            
- O   O O O     OO OOOOOO
- OOOOO O O O            
-   O     O O            
- O O O O O  O           
- O O O O  O  O          
- O O O  O  O  O         
- O   O   O  O           
- O O   O  O  O  O       
-   OOOOOOOO O O  O      
- OO            O  O     
-      OOOOOOOO          
+xxxxxxxOxxxOxxxOxxxxxxxx
+xOOxxxxOxOxOxxxOxxxTxOOx
+xOxOxOxOxOxOxxxOxxxxxOOx
+xOxOxOxOxOxOxxxxxxxxxxxx
+xOTxxOxOxOxxxxxOOxOOOOOO
+xOOOOOxOxOxOxxxxxxxxxxxx
+xxxOxxxxxOxOxxxxxxxxxxxx
+xOxOxOxOxOxxOxxxxxxxxxxx
+xOxOxOxOxxOxxOxxxxxxxxxx
+xOxOxOxxOxxOxxOxxxxxxxxx
+xOxxxOxxxOxxOxxxxxxxxxxx
+xOxOxxxOxxOxxOxxOxxxxxxx
+xxTOOOOOOOOxOxOxxOxxxTxx
+xOOxxxxxxxxxxxxOxxOxxxxx
+xxxxxxOOOOOOOOxxxxxxxxxx

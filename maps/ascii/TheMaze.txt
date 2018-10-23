@@ -1,7 +1,7 @@
 15
 10
 xOxOxxOxOxOxOx
-xxxOOxxxxxxOxx
+TxxOOxxxxxxOxx
 xxxxxxxxxOxOxO
 OOOOOOOOOOxOxO
 xxxxxxxxxxxOxO
@@ -9,5 +9,4 @@ OOOxOOOOOOxxxO
 xxxxxxxOxOOOOO
 xxxxxOxOxxOxxx
 xOOOOOxxxxOxxx
-xxxOxOOOOOOOxO
-xOxxxOxxxxxxxx
+xOxxxOxxxxxxxT

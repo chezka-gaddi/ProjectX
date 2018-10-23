@@ -19,10 +19,10 @@ int main (int argc, char ** argv)
     ifstream map_list_file;
 
     string temp;
-    
+
     if(argc != 3)
     {
-        cout << "Not the right amount of arguments" 
+        cout << "Not the right amount of arguments"
              << endl
              << "Command Should Look Like:"
              << endl
@@ -30,9 +30,10 @@ int main (int argc, char ** argv)
              << endl;
         exit(1);
     }
-    
+
 
     vector<string> map_list;
+    vector<string> round_matchup;
     map_list_file.open(argv[2]);
 
     while(!map_list_file.eof())
@@ -57,17 +58,17 @@ int main (int argc, char ** argv)
         getline(tank_list, tank1);
         getline(tank_list, tank2);
 
+        round_matchup.push_back(tank1);
+        round_matchup.push_back(tank2);
+
         if(tank1.empty() || tank2.empty())
         {
             break;
         }
 
         // TODO Check for odd number of tanks
-        
+
         game_config.open(config_name.c_str());
-        game_config << "# Tank List" << endl;
-        game_config << "AI " << tank1 << endl;
-        game_config << "AI " << tank2 << endl << endl << endl;
 
         random = rand() % map_list.size() - 1;
         game_config << "#Map: "<< map_list[random] << endl;
@@ -76,14 +77,24 @@ int main (int argc, char ** argv)
         if(map.is_open())
         {
             cout << "Map Opened" << endl;
-            while(!map.eof())
+            while(temp != "Spawn Points x, y")
             {
                 getline(map, temp);
                 game_config << temp << endl;
             }
+
+            game_config << "# Tank List" << endl;
+            while( round_matchup.size() != 0)
+            {
+               getline(map, temp);
+               game_config << "AI "  <<round_matchup.back() << " " << temp << endl;
+               round_matchup.pop_back();
+            }
+
+
         }
         map.close();
-         
+
         tank1.erase();
         tank2.erase();
 
@@ -112,7 +123,7 @@ int main (int argc, char ** argv)
     tank_list.close();
 
     return 0;
-    
+
 
 
 }
