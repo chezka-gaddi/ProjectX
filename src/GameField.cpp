@@ -178,19 +178,26 @@ void GameField::updateMap()
  * @author Riley Kopp
  ******************************************************************************/
 void GameField::setSPECIAL(int points)
-{
+{   int sum =0;
     for(auto &actor: actors)
     {
         actor.tankAttributes = actor.act_p->setAttribute(points);
-        if ((actor.tankAttributes.tankHealth 
+
+        sum = actor.tankAttributes.tankHealth 
                     + actor.tankAttributes.tankRange 
-                    + actor.tankAttributes.tankDamage) == points)
+                    + actor.tankAttributes.tankDamage;
+        if (sum  == points)
         {
             actor.health += actor.tankAttributes.tankHealth;
             actor.range += actor.tankAttributes.tankRange;
             actor.damage += actor.tankAttributes.tankDamage;
         }
-        std::cout << "Tank " << actor.id << " did not provide the correct amount of special points!" <<std::endl;
+        else
+        std::cout << "Tank " 
+            << actor.id 
+            << " did not provide the correct amount of special points! Points used: " 
+            << sum
+            <<std::endl;
     }
 }
 /**
