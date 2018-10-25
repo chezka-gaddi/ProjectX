@@ -67,7 +67,7 @@ Menu::Menu( int id, int hp, int ammo, int hits )
 *
 * Draws the player stats up in the menu bar.
 * *****************************************************************************/
-void Menu::draw()
+void Menu::draw(int x, int y)
 {
     glEnable(GL_TEXTURE_2D);
     glColor4ub(255,255,255,255);

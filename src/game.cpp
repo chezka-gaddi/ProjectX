@@ -56,7 +56,8 @@ Game::~Game()
 *******************************************************************************/
 float Game::convertGLXCoordinate( int x )
 {
-    GLfloat x_gl = -1.77 + (x * 0.25);
+    float fscalar = 3.75/(fieldx);
+    GLfloat x_gl = -1.77 + (x * fscalar);
     return x_gl;
 }
 
@@ -72,7 +73,8 @@ float Game::convertGLXCoordinate( int x )
 *******************************************************************************/
 float Game::convertGLYCoordinate( int y )
 {
-    GLfloat y_gl = 0.75 - ( y * 0.3 );
+    float fscalar = 2.7/(fieldy);
+    GLfloat y_gl = 0.75 - ( y * fscalar);
     return y_gl;
 }
 
@@ -238,22 +240,25 @@ void Game::initGameState()
                 stringstream(args) >> width;
                 if (width < 15) { 
                     width = 15;
-                    cout << "Invalid width parameter, defaulting to 15.\n";
-                } else if (width > 15) {
-                        width = 15;
-                        cout << "Invalid width parameter, defaulting to 15.\n";
+                    cout << "Invalid width parameter, defaulting to 20.\n";
+                } else if (width > 50) {
+                        width = 25;
+                        cout << "Invalid width parameter, defaulting to 20.\n";
                 }
+                fieldx = width;
+                Drawable::scalar = (3.75/width)/.25;
             }
             else if (id == "HEIGHT")
             {
                 stringstream(args) >> height;
                 if (height < 9){
                     height = 9;
-                    cout << "Invalid height parameter, defaulting to 9.\n";
-                } else if (height > 9) {
-                        height = 9;
-                        cout << "Invalid height parameter, defaulting to 9.\n";
+                    cout << "Invalid height parameter, defaulting to 10.\n";
+                } else if (height > 50) {
+                        height = 10;
+                        cout << "Invalid height parameter, defaulting to 10.\n";
                 }
+                fieldy = height;
             }
             else if (id == "FIELDIMAGE")
             {

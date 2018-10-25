@@ -114,14 +114,14 @@ void DisplayEvent::doAction(Game &game)
     for( int i = 0; i < game.constants.size(); i++ )
     {
         stuff = game.constants[i];
-        stuff->draw();
+        stuff->draw(game.getX(), game.getY());
     }
     
     
     for( int i = 0; i < game.objects.size(); i++ )
     {
         stuff = game.objects[i];
-        stuff->draw();
+        stuff->draw(game.getX(), game.getY());
     }
 
 	
