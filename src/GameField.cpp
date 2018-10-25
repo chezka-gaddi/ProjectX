@@ -353,14 +353,34 @@ void GameField::runMoves(ActorInfo &a)
 * @brief
 * turns the map into just what the current tank can see based off radar
 ******************************************************************************/
-void create_fog_of_war(MapData &map, ActorInfo current_actor)
+void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
 {
-    int radar =  2 * current_actor.radar;
+    int radar = current_actor.radar;
     int x_pos = current_actor.x;
     int y_pos = current_actor.y;
+    int x_max_radar_range = radar + x_pos;
+    int x_min_radar_range = x_pos - radar;
+    int y_max_radar_range = radar + y_pos;
+    int y_min_radar_range = y_pos - radar;
 
-    // For now radar will just be the (2 x radar) radius around the tank
-    
+    int x_iter = 0;
+    int y_iter = 0;
+
+    for(y_iter; y_iter < map.height; y_iter++)
+    {
+        for(x_iter; x_iter < map.width; x_iter++)
+        {
+            if( y_iter < y_min_radar_range
+                    || y_iter > y_max_radar_range
+                    || x_iter < x_min_radar_range
+                    || x_iter > x_min_radar_range)
+            {
+                map.map.at((y_iter * map.width) + x_iter) = 0;
+                map.obstacleMap.at((y_iter * map.width) + x_iter) = false;
+            }
+        }
+
+    }
 
 
 }
@@ -382,13 +402,13 @@ void GameField::nextTurn()
     int act_ap;
     MapData fog_of_war = fieldMap;
 
-    create_fog_of_war(fog_of_war, actors[i]);
 
     for (int i = 0; i < actors.size(); ++i)
     {
         act_ap = actors[i].range;
         while (act_ap > 0)
         {
+            create_fog_of_war(fog_of_war, actors[i]);
             pos.game_x = actors[i].x;
             pos.game_y = actors[i].y;
             pos.health = actors[i].health;

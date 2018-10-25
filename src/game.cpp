@@ -343,6 +343,17 @@ void Game::initGameState()
                     range = 4;
                 }
             }
+            else if (id == "RADAR")
+            {
+                stringstream(args) >> radar;
+                if (radar < 2){ 
+                  radar = 2;
+                  cout << "Invalid radar value, defaulting to 2\n";
+                } else if (radar > 10) {
+                    printf("%d radar might be a little excesive, setting to 10", radar);
+                    radar = 10;
+                }
+            }
             else if (id == "SPECIAL")
             {
                 stringstream(args) >> attributePoints;
