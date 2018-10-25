@@ -25,13 +25,18 @@ public:
     int id;             /*!<The id number of the drawable */
     GLfloat screen_x;   /*!<The screen x coordinate of the drawable */
     GLfloat screen_y;   /*!<The scren y coordinate of the drawable */
+
     int health;         /*!<The health value of the drawable */
     GLuint tex;            /*!<Texture to draw object with */
 
     Drawable() {}
     ~Drawable() {}
 
-    virtual void draw() = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
+    virtual void draw(int, int) = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
+    void setScalar(float newScalar){this->scalar = newScalar;};
+    float getScalar(){return this->scalar;};
+    
+    static float scalar;
 };
 
 
@@ -46,7 +51,7 @@ public:
     GLuint tex;
     GameFieldDrawable();
 
-    void draw();
+    void draw(int, int);
 };
 
 
@@ -67,7 +72,8 @@ public:
 
     void drawTextBox( GLfloat, GLfloat );
     void drawPlayerStats();
-    void draw();
+    void draw(int, int);
+
 };
 
 
@@ -81,7 +87,7 @@ class Obstacles : public Drawable
 public:
     Obstacles( int, GLfloat, GLfloat);
 
-    void draw();
+    void draw(int, int);
 };
 
 
@@ -97,7 +103,7 @@ public:
 
     Projectile(int ID, GLfloat x, GLfloat y, direction dir);
 
-    void draw();
+    void draw(int, int);
 };
 
 
@@ -113,7 +119,7 @@ public:
 
     TankDrawable( int ID, GLfloat x, GLfloat y, direction dir);
 
-    void draw();
+    void draw(int, int);
 };
 
 

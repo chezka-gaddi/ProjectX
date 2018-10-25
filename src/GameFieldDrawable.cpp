@@ -22,10 +22,11 @@ GameFieldDrawable::GameFieldDrawable() : tex(1) {}
 *
 * Overloaded draw function that creates the gamefield
 *******************************************************************************/
-void GameFieldDrawable::draw()
+void GameFieldDrawable::draw(int x, int y)
 {
     glEnable(GL_TEXTURE_2D);
 
+    //Background
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, -5.0f);
     glBindTexture(GL_TEXTURE_2D, gameTex[0]);
@@ -40,20 +41,19 @@ void GameFieldDrawable::draw()
     glVertex3f(-2.0f,  2.0f,  1.0f);
     glEnd();
     glPopMatrix();
-
-
+    //Field
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, -5.0f);
     glBindTexture(GL_TEXTURE_2D, gameTex[tex]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-1.89f, -1.875f,  1.0f);
+    glVertex3f(-1.89f, -1.875f,  1.0f); //Bottom left
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 1.91f, -1.875f,  1.0f);
+    glVertex3f( 1.91f, -1.875f,  1.0f); //Bottom Right
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 1.91f,  0.92f,  1.0f);
+    glVertex3f( 1.91f,  0.92f,  1.0f);  //Top Right
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-1.89f,  0.92f,  1.0f);
+    glVertex3f(-1.89f,  0.92f,  1.0f);  //Top Left
     glEnd();
     glPopMatrix();
 }
