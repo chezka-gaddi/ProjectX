@@ -124,5 +124,6 @@ OBSTACLE_IMAGE images/tree.png images/rock.png
 #RANGE <STAT>
 DAMAGE 1
 HEALTH 2
+RADAR 3
 AP 5
 SPECIAL 1

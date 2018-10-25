@@ -185,11 +185,13 @@ void GameField::setSPECIAL(int points)
 
         sum = actor.tankAttributes.tankHealth 
                     + actor.tankAttributes.tankRange 
+                    + actor.tankAttributes.tankRadar 
                     + actor.tankAttributes.tankDamage;
         if (sum  == points)
         {
             actor.health += actor.tankAttributes.tankHealth;
             actor.range += actor.tankAttributes.tankRange;
+            actor.radar += actor.tankAttributes.tankRadar;
             actor.damage += actor.tankAttributes.tankDamage;
         }
         else
@@ -221,7 +223,9 @@ void GameField::runMoves(ActorInfo &a)
     pos.health = a.health;
     pos.id = a.id;
     //get the AI's desired move
-    dir = a.act_p->move(fieldMap, pos);
+    MapData fog = fieldMap;
+    create_fog_of_war(fog, a);
+    dir = a.act_p->move(fog, pos);
     a.heading = (dir == STAY) ? a.heading : dir;
     //If it checks out, execute it
     //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
@@ -429,7 +433,7 @@ void GameField::nextTurn()
                     pos.id = actors[i].id;
 
                     //Get the AI's desired attack
-                    atk = actors[i].act_p->attack(fieldMap, pos);
+                    atk = actors[i].act_p->attack(fog_of_war, pos);
 
 
                     if (actors[i].id > 0) //tanks attacking

@@ -189,6 +189,7 @@ void Game::initGameState()
     int damage = 1;
     int  health = 3;
     int range = 1;
+    int radar = 2;
     std::vector<std::pair<int,int>> obstacleLocations;
     std::vector<std::pair<int,int>> tankLocations;
 
@@ -387,7 +388,7 @@ void Game::initGameState()
     for (int i = 0; i < startActorPointers.size(); ++i)
     {
         startActors.push_back(ActorInfo(startActorPointers[i], health, damage, tankLocations[i].first,
-                                        tankLocations[i].second, i + 1,range));
+                                        tankLocations[i].second, i + 1,range, radar));
     }
     cout << "Done" << endl;
     // Create a stats menu for both tanks
