@@ -20,12 +20,12 @@ TEST_CASE("DynamicTankLoader can load a tank")
     std::vector<Actor *> actors = dynamicTankLoader(actNames);
     REQUIRE(actors.size() == 1);
 }
-TEST_CASE("DynamicTankLoader can load a non-SimpleAI tank")
-{
-    std::vector<std::string> actNames = {"AsciiTankActor"};
-    std::vector<Actor *> actors = dynamicTankLoader(actNames);
-    REQUIRE(actors.size() == 1);
-}
+//TEST_CASE("DynamicTankLoader can load a non-SimpleAI tank")
+//{
+//    std::vector<std::string> actNames = {"AsciiTankActor"};
+//    std::vector<Actor *> actors = dynamicTankLoader(actNames);
+//    REQUIRE(actors.size() == 1);
+//}
 TEST_CASE("The dynamically loaded tanks actually work")
 {
     std::vector<std::string> actNames = {"SimpleActor"};

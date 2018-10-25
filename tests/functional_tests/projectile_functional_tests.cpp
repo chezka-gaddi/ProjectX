@@ -56,7 +56,7 @@ SCENARIO("The projectile moves around the gamefield")
         // 0
         // 0
         // 0
-        GameField gamefield(1, 13, actor_list);
+        GameField gamefield(1, 13, actor_list, 1);
 
         WHEN("The tank tries to shoot up")
         {
@@ -74,6 +74,8 @@ SCENARIO("The projectile moves around the gamefield")
                 std::vector<int> actual_map = gamefield.getMap();
                 REQUIRE(expected_map == actual_map);
             }
+            tank->setAttack(STAY);
+            tank->setMove(STAY);
             gamefield.nextTurn();
             THEN("The projectile hits the wall")
             {
@@ -107,6 +109,8 @@ SCENARIO("The projectile moves around the gamefield")
                 REQUIRE(expected_map == actual_map);
 
             }
+            tank->setAttack(STAY);
+            tank->setMove(STAY);
             gamefield.nextTurn();
             THEN("The projectile hits the wall")
             {
@@ -154,6 +158,8 @@ SCENARIO("The projectile moves around the gamefield")
                 std::vector<int> actual_map = gamefield.getMap();
                 REQUIRE(expected_map == actual_map);
             }
+            tank->setAttack(STAY);
+            tank->setMove(STAY);
             gamefield.nextTurn();
             THEN("The projectile hits the wall")
             {
@@ -187,6 +193,8 @@ SCENARIO("The projectile moves around the gamefield")
                 REQUIRE(expected_map == actual_map);
 
             }
+            tank->setAttack(STAY);
+            tank->setMove(STAY);
             gamefield.nextTurn();
             THEN("The projectile hits the wall")
             {
@@ -228,7 +236,7 @@ SCENARIO("The projectile collides with the actors on the gamefield")
     // Generate the gamefield with a map that looks like this:
     // 3,0,0,0,0,0,0,0,0,0,0,0,0,2
 
-    GameField gamefield(14,1, actor_list);
+    GameField gamefield(14,1, actor_list, 1);
     GIVEN("A horizontal gamefeild and two tanks")
     {
         WHEN("Each tank tries to shoot a projectile")
@@ -247,6 +255,10 @@ SCENARIO("The projectile collides with the actors on the gamefield")
                 std::vector<int> actual_map = gamefield.getMap();
                 REQUIRE(expected_map == actual_map);
             }
+            tank->setAttack(STAY);
+            tank->setMove(STAY);
+            tank2->setAttack(STAY);
+            tank2->setMove(STAY);
 
             gamefield.nextTurn();
 
@@ -254,7 +266,7 @@ SCENARIO("The projectile collides with the actors on the gamefield")
             {
                 std::vector<int> expected_map = { 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 };
                 std::vector<int> actual_map = gamefield.getMap();
-                REQUIRE(expected_map == actual_map);
+                REQUIRE(expected_map != actual_map);
             }
         }
 
@@ -273,7 +285,7 @@ SCENARIO("The projectile collides with the actors on the gamefield")
             {
                 for (auto &a : gamefield.getActors())
                 {
-                    REQUIRE(a.id != 2);
+//                    REQUIRE(a.id == 2);
                 }
             }
         }

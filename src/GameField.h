@@ -76,6 +76,7 @@ public:
     GameField(int width, int height, std::vector<ActorInfo> startActors);
     GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int));
     GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), int ap);
+    GameField(int width, int height, std::vector<ActorInfo> startActors, int actonpoints);
 
 
     ~GameField();

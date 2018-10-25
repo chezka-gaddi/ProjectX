@@ -71,6 +71,24 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
     updateMap();
     displayCallback = NULL;
 }
+/**
+ * @author Riley Kopp
+ * @par Description:
+ * Constructor with dimensions and a vector of ActorInfo, and action points
+ */
+GameField::GameField(int width, int height, std::vector<ActorInfo> acts
+        , int actionpoints) : actors(acts), ap(actionpoints)
+{
+    turnCount = 0;
+    fieldMap.width = width;
+    fieldMap.height = height;
+    fieldMap.map.resize(width * height);
+    fieldMap.obstacleMap.resize(width * height);
+    std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
+    updateMap();
+    displayCallback = NULL;
+}
 
 GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int)) : actors(startActors), ap(2)
 {
@@ -160,15 +178,26 @@ void GameField::updateMap()
  * @author Riley Kopp
  ******************************************************************************/
 void GameField::setSPECIAL(int points)
-{
+{   int sum =0;
     for(auto &actor: actors)
     {
         actor.tankAttributes = actor.act_p->setAttribute(points);
-        actor.health += actor.tankAttributes.tankHealth;
-        actor.damage += actor.tankAttributes.tankDamage;
-        actor.range  += actor.tankAttributes.tankRange;
-        actor.shots  += actor.tankAttributes.tankShots;
-        actor.radar  += actor.tankAttributes.tankRadar;
+
+        sum = actor.tankAttributes.tankHealth 
+                    + actor.tankAttributes.tankRange 
+                    + actor.tankAttributes.tankDamage;
+        if (sum  == points)
+        {
+            actor.health += actor.tankAttributes.tankHealth;
+            actor.range += actor.tankAttributes.tankRange;
+            actor.damage += actor.tankAttributes.tankDamage;
+        }
+        else
+        std::cout << "Tank " 
+            << actor.id 
+            << " did not provide the correct amount of special points! Points used: " 
+            << sum
+            <<std::endl;
     }
 }
 /**
@@ -393,7 +422,7 @@ void GameField::nextTurn()
                             newProjectile.id = -actors[i].id;
                             newProjectile.act_p = proj;
                             newProjectile.health = 1;
-                            newProjectile.damage = 1;
+                            newProjectile.damage = actors[i].damage;
                             newProjectile.x = actors[i].x;
                             newProjectile.y = actors[i].y;
                             actors.insert(actors.begin() + i + 1, newProjectile);

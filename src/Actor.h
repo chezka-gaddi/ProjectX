@@ -15,8 +15,8 @@
 class Actor
 {
 protected:
-    std::string name;       /*!< The string name of the actor */
-    int id;                 /*!< the id number of the actor */
+    std::string name = "Hank the Tank";       /*!< The string name of the actor */
+    int id = 0;                 /*!< the id number of the actor */
 
 public:
 
@@ -43,10 +43,6 @@ public:
      *  @return 0 for end turn, 1 for move, 2 for attack
      */
     virtual int spendAP(MapData map, PositionData status) = 0;
-
-    Actor();
-    ~Actor();
-    Actor(std::string newName, int newId);
 
     //Getters
     std::string getName();    /*!< Returns the value within name */

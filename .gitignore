@@ -9,6 +9,7 @@
 !*/
 #unignores everything with an extension 
 !*.*
+!*.map
 
 #ignores cmake stuff i use cmake so this is helpful for me -jake
 src/cmake-build-debug/
@@ -67,6 +68,15 @@ testAll
 platform
 *.gc*
 
+#GDB
+####################
+.gdb_history
+
+
 #emacs temporary files
 \#*\#
 .\#*
+
+# Building development folder
+build
+build/*

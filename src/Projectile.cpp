@@ -58,7 +58,7 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir )
         break;
     }
     
-    tex = (-id-1)*1+(-id)*8;
+    tex = ((-1 * id) - 1) * 5 + 4;
 }
 
 

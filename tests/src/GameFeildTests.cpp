@@ -502,3 +502,17 @@ TEST_CASE("Game Field properly gets attributes from actors")
 
     
 }
+
+
+TEST_CASE("GameField Calculates Fog of War")
+{
+    Actor * actor_1 = new SimpleActor(STAY, STAY);
+    ActorInfo test(actor_1, 1,1, 3,3, 2, 1, 1, 2);
+
+    std::vector<ActorInfo> tank_list;
+    tank_list.push_back(test);
+
+    GameField manager(7, 7, tank_list);
+
+    
+}

@@ -6,6 +6,7 @@
  ******************************************************************************/
 
 #include "event.h"
+#include <iostream>
 
 
 /***************************************************************************//**
@@ -53,6 +54,7 @@ void updateDrawables(Game &game)
 {
     Drawable *temp_draw = nullptr;
 
+    bool overlap = false;
     if(!game.objects.empty())
         game.objects.clear();
 
@@ -73,8 +75,19 @@ void updateDrawables(Game &game)
 
         else if( act.id < 0 )
         {
-            temp_draw = new Projectile( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y), act.heading );
-            game.objects.push_back(temp_draw);
+            for(auto actor : actors)
+            {
+                if (actor.x == act.x && actor.y == act.y && actor.id != act.id)
+                {
+                    overlap = true;
+                }
+            }
+            if(overlap != true)
+            {
+                temp_draw = new Projectile( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y), act.heading );
+                game.objects.push_back(temp_draw);
+            }
+            overlap = false;
         }
     }
 }
