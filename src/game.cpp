@@ -387,8 +387,15 @@ void Game::initGameState()
 
     for (int i = 0; i < startActorPointers.size(); ++i)
     {
-        startActors.push_back(ActorInfo(startActorPointers[i], health, damage, tankLocations[i].first,
-                                        tankLocations[i].second, i + 1,range, radar));
+        startActors.push_back(ActorInfo(startActorPointers[i]
+                    , health
+                    , damage
+                    , tankLocations[i].first
+                    , tankLocations[i].second
+                    , i + 1
+                    , range
+                    , 0
+                    , radar));
     }
     cout << "Done" << endl;
     // Create a stats menu for both tanks

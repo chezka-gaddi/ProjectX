@@ -187,7 +187,7 @@ void GameField::setSPECIAL(int points)
                     + actor.tankAttributes.tankRange 
                     + actor.tankAttributes.tankRadar 
                     + actor.tankAttributes.tankDamage;
-        if (sum  == points)
+        if (sum  <= points)
         {
             actor.health += actor.tankAttributes.tankHealth;
             actor.range += actor.tankAttributes.tankRange;
@@ -367,24 +367,26 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
     int y_max_radar_range = radar + y_pos;
     int y_min_radar_range = y_pos - radar;
 
-    int x_iter = 0;
     int y_iter = 0;
-
+int removed =0;
     for(y_iter; y_iter < map.height; y_iter++)
     {
-        for(x_iter; x_iter < map.width; x_iter++)
+        for(int x_iter = 0; x_iter < map.width; x_iter++)
         {
             if( y_iter < y_min_radar_range
                     || y_iter > y_max_radar_range
                     || x_iter < x_min_radar_range
-                    || x_iter > x_min_radar_range)
+                    || x_iter > x_max_radar_range)
             {
-                map.map.at((y_iter * map.width) + x_iter) = 0;
-                map.obstacleMap.at((y_iter * map.width) + x_iter) = false;
+                map.map[y_iter * map.width + x_iter] = 0;
+                map.obstacleMap[y_iter * map.width + x_iter] = false;
+                removed++;
             }
         }
 
     }
+    std::cout << map << std::endl;
+    std::cout << removed << std::endl;
 
 
 }

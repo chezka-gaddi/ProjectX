@@ -545,3 +545,32 @@ TEST_CASE("GameField Calculates Fog of War")
     
     
 }
+
+TEST_CASE("GameField hides other thanks in the Fog of War")
+{
+    Actor * actor_1 = new SimpleActor(STAY, STAY);
+    Actor * actor_2 = new SimpleActor(STAY, STAY);
+    ActorInfo test(actor_1, 1,1, 3,3, 2, 1, 1, 2);
+    ActorInfo test_hidden(actor_2, 1,1,0 ,0, 21, 1, 1, 2);
+
+    bool hidden = true;
+
+    std::vector<ActorInfo> tank_list;
+    tank_list.push_back(test);
+    tank_list.push_back(test_hidden);
+
+    GameField manager(7, 7, tank_list);
+
+    MapData test_map = manager.getMapData();
+
+    manager.create_fog_of_war(test_map, test);
+
+    for (auto x: test_map.map)
+        if(x == 21)
+            hidden = false;
+
+    REQUIRE(hidden == true);
+
+    
+    
+}
