@@ -32,7 +32,7 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor )
 *
 * Draws the obstacle will be into the gamefield.
 * *****************************************************************************/
-void Obstacles::draw()
+void Obstacles::draw(int, int)
 {
     glEnable(GL_TEXTURE_2D);
     glColor4ub(255,255,255,255);
@@ -46,13 +46,13 @@ void Obstacles::draw()
 
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.18f, -0.20f,  1.0f);
+    glVertex3f(-0.18f * scalar, -0.20f * scalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.18f, -0.20f,  1.0f);
+    glVertex3f( 0.18f * scalar, -0.20f * scalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.18f,  0.20f,  1.0f);
+    glVertex3f( 0.18f * scalar,  0.20f * scalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.18f,  0.20f,  1.0f);
+    glVertex3f(-0.18f * scalar,  0.20f * scalar,  1.0f);
     glEnd();
 
     glPopMatrix();

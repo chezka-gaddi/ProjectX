@@ -178,19 +178,28 @@ void GameField::updateMap()
  * @author Riley Kopp
  ******************************************************************************/
 void GameField::setSPECIAL(int points)
-{
+{   int sum =0;
     for(auto &actor: actors)
     {
         actor.tankAttributes = actor.act_p->setAttribute(points);
-        if ((actor.tankAttributes.tankHealth 
+
+        sum = actor.tankAttributes.tankHealth 
                     + actor.tankAttributes.tankRange 
-                    + actor.tankAttributes.tankDamage) == points)
+                    + actor.tankAttributes.tankRadar 
+                    + actor.tankAttributes.tankDamage;
+        if (sum  <= points)
         {
             actor.health += actor.tankAttributes.tankHealth;
             actor.range += actor.tankAttributes.tankRange;
+            actor.radar += actor.tankAttributes.tankRadar;
             actor.damage += actor.tankAttributes.tankDamage;
         }
-        std::cout << "Tank " << actor.id << " did not provide the correct amount of special points!" <<std::endl;
+        else
+        std::cout << "Tank " 
+            << actor.id 
+            << " did not provide the correct amount of special points! Points used: " 
+            << sum
+            <<std::endl;
     }
 }
 /**
@@ -214,7 +223,9 @@ void GameField::runMoves(ActorInfo &a)
     pos.health = a.health;
     pos.id = a.id;
     //get the AI's desired move
-    dir = a.act_p->move(fieldMap, pos);
+    MapData fog = fieldMap;
+    create_fog_of_war(fog, a);
+    dir = a.act_p->move(fog, pos);
     a.heading = (dir == STAY) ? a.heading : dir;
     //If it checks out, execute it
     //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
@@ -341,7 +352,48 @@ void GameField::runMoves(ActorInfo &a)
         displayCallback(fieldMap, actors, turnCount);
 
 }
+/***************************************************************************//**
+* @author Riley Kopp
+* @brief
+* turns the map into just what the current tank can see based off radar
+******************************************************************************/
+void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
+{
 
+    if(current_actor.id <= 0)
+        return;
+
+
+    int radar = current_actor.radar;
+    int x_pos = current_actor.x;
+    int y_pos = current_actor.y;
+    int x_max_radar_range = radar + x_pos >= map.width ? map.width - 1 : radar + x_pos;
+    int y_max_radar_range = radar + y_pos >= map.height ? map.height - 1 : radar + y_pos;
+    int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
+    int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
+    
+
+
+
+    MapData new_map = map;
+    std::fill(new_map.map.begin(), new_map.map.end(), 0);
+    std::fill(new_map.obstacleMap.begin(), new_map.obstacleMap.end(), false);
+
+int value;
+    for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
+    {
+        for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
+        {
+                value = y_iter * map.width + x_iter;  
+                new_map.map[value] = map.map[value];
+                new_map.obstacleMap[value] = map.obstacleMap[value];
+        }
+
+    }
+
+    map = new_map;
+
+}
 /**
  * @author David Donahue
  * @par Description:
@@ -356,22 +408,28 @@ void GameField::nextTurn()
     direction atk;
     ActorInfo newProjectile;
     PositionData pos;
+    int action;
     int act_ap;
+    MapData fog_of_war = fieldMap;
+
+
     for (int i = 0; i < actors.size(); ++i)
     {
         act_ap = actors[i].range;
         while (act_ap > 0)
         {
+            fog_of_war = fieldMap;
+            create_fog_of_war(fog_of_war, actors[i]);
             pos.game_x = actors[i].x;
             pos.game_y = actors[i].y;
             pos.health = actors[i].health;
             pos.id = actors[i].id;
             pos.ap = act_ap;
-            int move = actors[i].act_p->spendAP(fieldMap, pos); 
-            if (move == 1)
+            action = actors[i].act_p->spendAP(fog_of_war, pos);
+            if ( action == 1)
                 runMoves(actors[i]);
             
-            else if (move  == 2)
+            else if (action == 2)
             {
                 if(actors[i].health != 0)
                 {
@@ -382,7 +440,7 @@ void GameField::nextTurn()
                     pos.id = actors[i].id;
 
                     //Get the AI's desired attack
-                    atk = actors[i].act_p->attack(fieldMap, pos);
+                    atk = actors[i].act_p->attack(fog_of_war, pos);
 
 
                     if (actors[i].id > 0) //tanks attacking
