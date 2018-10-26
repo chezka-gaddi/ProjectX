@@ -447,7 +447,7 @@ TEST_CASE("Checks for cheaters. Sets cheaters' tanks to have 1 for each attribut
    attributes AIAttributes;
    AIAttributes = a->setAttribute(pointsAvailable);
    ActorInfo AI(a, AIAttributes.tankHealth, AIAttributes.tankDamage, 1, 1, 1,
-                AIAttributes.tankRange, AIAttributes.tankShots); 
+                AIAttributes.tankAP, AIAttributes.tankShots); 
    ActorInfo AI2(a2, 10, 10, 0, 0, 2, 10, 10); // invalid tank: defaults all to one
    AI.tankAttributes = AIAttributes;
    GameField g (2, 2);
@@ -495,7 +495,7 @@ TEST_CASE("Game Field properly gets attributes from actors")
 
     REQUIRE(output[0].tankAttributes.tankHealth == 1);
     REQUIRE(output[0].tankAttributes.tankDamage == 1);
-    REQUIRE(output[0].tankAttributes.tankRange == 1);
+    REQUIRE(output[0].tankAttributes.tankAP == 1);
     REQUIRE(output[0].tankAttributes.tankShots == 1);
 
 

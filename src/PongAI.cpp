@@ -51,7 +51,7 @@ attributes PongAI::setAttribute(int pointsAvailable)
 {
     attributes retval;
 
-    retval.tankRange = pointsAvailable;
+    retval.tankAP = pointsAvailable;
 
     return retval;
 }

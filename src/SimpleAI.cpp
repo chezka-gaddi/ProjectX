@@ -146,7 +146,7 @@ attributes SimpleAI::setAttribute(int pointsAvailable)
 {
    attributes tankAttributes;
 
-   tankAttributes.tankHealth = 100000000;
+   tankAttributes.tankHealth += pointsAvailable;
 
    return tankAttributes;
 }

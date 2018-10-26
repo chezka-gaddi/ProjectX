@@ -184,13 +184,13 @@ void GameField::setSPECIAL(int points)
         actor.tankAttributes = actor.act_p->setAttribute(points);
 
         sum = actor.tankAttributes.tankHealth 
-                    + actor.tankAttributes.tankRange 
+                    + actor.tankAttributes.tankAP
                     + actor.tankAttributes.tankRadar 
                     + actor.tankAttributes.tankDamage;
         if (sum  <= points)
         {
             actor.health += actor.tankAttributes.tankHealth;
-            actor.range += actor.tankAttributes.tankRange;
+            actor.range += actor.tankAttributes.tankAP;
             actor.radar += actor.tankAttributes.tankRadar;
             actor.damage += actor.tankAttributes.tankDamage;
         }

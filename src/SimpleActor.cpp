@@ -85,7 +85,7 @@ attributes SimpleActor::setAttribute(int pointsAvailable)
     
     tankAttributes.tankHealth = basicDistribution;
     tankAttributes.tankDamage = basicDistribution;
-    tankAttributes.tankRange = basicDistribution;
+    tankAttributes.tankAP = basicDistribution;
     tankAttributes.tankShots = basicDistribution;
         
     return tankAttributes;

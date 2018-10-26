@@ -268,7 +268,7 @@ void Game::initGameState()
                         ai_speed = 1000;
                 }
                 TimerEvent::idle_speed = ai_speed;
-                idle_speed = 1000;
+                idle_speed = ai_speed;
             } 
             //field params
             else if (id == "WIDTH")
@@ -276,10 +276,10 @@ void Game::initGameState()
                 stringstream(args) >> width;
                 if (width < 15) { 
                     width = 15;
-                    cout << "Invalid width parameter, defaulting to 20.\n";
-                } else if (width > 50) {
-                        width = 25;
-                        cout << "Invalid width parameter, defaulting to 20.\n";
+                    cout << "Invalid width parameter, defaulting to 15.\n";
+                } else if (width > 40) {
+                        width = 40;
+                        cout << "Invalid width parameter, defaulting to 40.\n";
                 }
                 fieldx = width;
                 Drawable::scalar = (3.75/width)/.25;
@@ -289,10 +289,10 @@ void Game::initGameState()
                 stringstream(args) >> height;
                 if (height < 9){
                     height = 9;
-                    cout << "Invalid height parameter, defaulting to 10.\n";
-                } else if (height > 50) {
-                        height = 10;
-                        cout << "Invalid height parameter, defaulting to 10.\n";
+                    cout << "Invalid height parameter, defaulting to 9.\n";
+                } else if (height > 20) {
+                        height = 20;
+                        cout << "Invalid height parameter, defaulting to 30.\n";
                 }
                 fieldy = height;
             }
@@ -378,10 +378,10 @@ void Game::initGameState()
                 stringstream(args) >> range;
                 if (range < 2){ 
                   range = 2;
-                  cout << "Invalid range value, defaulting to 2\n";
-                } else if (range > 10) {
-                    printf("%d range might be a little excesive, setting to 10", range);
-                    range = 4;
+                  cout << "Invalid number of action points value, defaulting to 2\n";
+                } else if (range > 5) {
+                    printf("%d range might be a little excesive, setting to 5", range);
+                    range = 5;
                 }
             }
             else if (id == "RADAR")
