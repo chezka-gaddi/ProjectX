@@ -1,12 +1,15 @@
-15
-10
-xOxOxxOxOxOxOx
-TxxOOxxxxxxOxx
-xxxxxxxxxOxOxO
-OOOOOOOOOOxOxO
-xxxxxxxxxxxOxO
-OOOxOOOOOOxxxO
-xxxxxxxOxOOOOO
-xxxxxOxOxxOxxx
-xOOOOOxxxxOxxx
-xOxxxOxxxxxxxT
+30
+13
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+T     O                    O  O
+O  OOOO  OOOOOOOOOOOOOOOO  O  O
+O        O                 O  O
+O  OOOOOOO  OOOOOOOOOOOOOOOO  O
+O     O     O     O     O     O
+OOOOOOO  OOOO  O  O  O  O  OOOO
+O     O  O     O  O  O  O     O
+O  O  O  O  OOOO  O  O  OOOO  O
+O  O  O        O     O  O     O
+O  OOOOOOOOOO  OOOOOOO  O  O  O
+O                    O     O  T
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
