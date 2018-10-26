@@ -540,7 +540,7 @@ TEST_CASE("GameField Calculates Fog of War")
     manager.create_fog_of_war(test_map, test);
     std::fill(expected_obstacles.begin(), expected_obstacles.end(), false);
 
-    REQUIRE(test_map.obstacleMap != expected_obstacles);
+    REQUIRE(test_map.obstacleMap == expected_obstacles);
 
     
     
