@@ -56,8 +56,19 @@ Game::~Game()
 *******************************************************************************/
 float Game::convertGLXCoordinate( int x )
 {
-    float fscalar = 3.75/(fieldx);
-    GLfloat x_gl = -1.77 + (x * fscalar);
+    float fscaler;
+    if (fieldx < 19){
+      fscaler = x * ((-.013 * fieldx) + .445);
+    }else if (fieldx >= 20 && fieldx <= 25){
+      fscaler = x * ((-0.0075 * fieldx) + 0.335);
+    }else if (fieldx > 25){
+      fscaler = x * ((-0.005050 * fieldx) + .273750);
+    }
+    //float fscalar = x * .25    //15
+    //float fscalar = x * .1850; //20
+    //float fscalar = x * .1475;   //25
+    //float fscalar = x * .12225;      //30
+    GLfloat x_gl = -1.75 + (fscaler);
     return x_gl;
 }
 
@@ -73,8 +84,20 @@ float Game::convertGLXCoordinate( int x )
 *******************************************************************************/
 float Game::convertGLYCoordinate( int y )
 {
-    float fscalar = 2.7/(fieldy);
-    GLfloat y_gl = 0.75 - ( y * fscalar);
+    //float fscalar = y * 2.7/(fieldy);
+    //float fscalar = y * .3; //9
+    //float fscalar = y * .215; //12
+    //float fscalar = y * .170; //15
+    //float fscalar = .142; //18
+    float fscaler;
+    if (fieldy <= 12){
+            fscaler = (y * ((-.028333 * fieldy) + .555));
+    }else if (fieldy <= 15 && fieldy > 12){
+            fscaler = (y * ((-.015 * fieldy) + .395));
+    }else if (fieldy > 16){
+            fscaler = (y * ((-.00933 * fieldy) + .31));
+    }
+    GLfloat y_gl = 0.75 - (fscaler);
     return y_gl;
 }
 
