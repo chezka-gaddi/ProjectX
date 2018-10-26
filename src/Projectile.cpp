@@ -68,7 +68,7 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir )
 *
 * Draws the projectile in the gamefield
 * *****************************************************************************/
-void Projectile::draw()
+void Projectile::draw(int x, int y)
 {
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
@@ -77,13 +77,13 @@ void Projectile::draw()
     glBindTexture(GL_TEXTURE_2D, tankTex[tex]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.07f, -0.07f,  1.0f);
+    glVertex3f(-0.07f * scalar, -0.07f * scalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.07f, -0.07f,  1.0f);
+    glVertex3f( 0.07f * scalar, -0.07f * scalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.07f,  0.07f,  1.0f);
+    glVertex3f( 0.07f * scalar,  0.07f * scalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.07f,  0.07f,  1.0f);
+    glVertex3f(-0.07f * scalar,  0.07f * scalar,  1.0f);
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);

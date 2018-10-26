@@ -56,7 +56,19 @@ Game::~Game()
 *******************************************************************************/
 float Game::convertGLXCoordinate( int x )
 {
-    GLfloat x_gl = -1.77 + (x * 0.25);
+    float fscaler;
+    if (fieldx < 19){
+      fscaler = x * ((-.013 * fieldx) + .445);
+    }else if (fieldx >= 20 && fieldx <= 25){
+      fscaler = x * ((-0.0075 * fieldx) + 0.335);
+    }else if (fieldx > 25){
+      fscaler = x * ((-0.005050 * fieldx) + .273750);
+    }
+    //float fscalar = x * .25    //15
+    //float fscalar = x * .1850; //20
+    //float fscalar = x * .1475;   //25
+    //float fscalar = x * .12225;      //30
+    GLfloat x_gl = -1.75 + (fscaler);
     return x_gl;
 }
 
@@ -72,7 +84,20 @@ float Game::convertGLXCoordinate( int x )
 *******************************************************************************/
 float Game::convertGLYCoordinate( int y )
 {
-    GLfloat y_gl = 0.75 - ( y * 0.3 );
+    //float fscalar = y * 2.7/(fieldy);
+    //float fscalar = y * .3; //9
+    //float fscalar = y * .215; //12
+    //float fscalar = y * .170; //15
+    //float fscalar = .142; //18
+    float fscaler;
+    if (fieldy <= 12){
+            fscaler = (y * ((-.028333 * fieldy) + .555));
+    }else if (fieldy <= 15 && fieldy > 12){
+            fscaler = (y * ((-.015 * fieldy) + .395));
+    }else if (fieldy > 16){
+            fscaler = (y * ((-.00933 * fieldy) + .31));
+    }
+    GLfloat y_gl = 0.75 - (fscaler);
     return y_gl;
 }
 
@@ -239,22 +264,25 @@ void Game::initGameState()
                 stringstream(args) >> width;
                 if (width < 15) { 
                     width = 15;
-                    cout << "Invalid width parameter, defaulting to 15.\n";
-                } else if (width > 15) {
-                        width = 15;
-                        cout << "Invalid width parameter, defaulting to 15.\n";
+                    cout << "Invalid width parameter, defaulting to 20.\n";
+                } else if (width > 50) {
+                        width = 25;
+                        cout << "Invalid width parameter, defaulting to 20.\n";
                 }
+                fieldx = width;
+                Drawable::scalar = (3.75/width)/.25;
             }
             else if (id == "HEIGHT")
             {
                 stringstream(args) >> height;
                 if (height < 9){
                     height = 9;
-                    cout << "Invalid height parameter, defaulting to 9.\n";
-                } else if (height > 9) {
-                        height = 9;
-                        cout << "Invalid height parameter, defaulting to 9.\n";
+                    cout << "Invalid height parameter, defaulting to 10.\n";
+                } else if (height > 50) {
+                        height = 10;
+                        cout << "Invalid height parameter, defaulting to 10.\n";
                 }
+                fieldy = height;
             }
             else if (id == "FIELDIMAGE")
             {

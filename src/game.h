@@ -54,6 +54,13 @@ public:
     void earlyOut();
     float convertGLXCoordinate( int );
     float convertGLYCoordinate( int );
+
+    int getX(){return fieldx;};
+    int getY(){return fieldy;};
+
+private:
+    int fieldx;
+    int fieldy;
 };
 
 #endif //__GAME_H

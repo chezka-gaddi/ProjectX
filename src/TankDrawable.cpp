@@ -23,7 +23,6 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
     screen_x = x_coor;
     screen_y = y_coor;
     id = ID;
-    
 
     // Acesses the right image for the tanks
     //  0 is the up image,
@@ -78,7 +77,7 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
 *
 * Generates the tank onto the gamefield
 * *****************************************************************************/
-void TankDrawable::draw()
+void TankDrawable::draw(int x, int y)
 {
     glEnable(GL_TEXTURE_2D);
     glColor4ub(255,255,255,255);
@@ -93,13 +92,13 @@ void TankDrawable::draw()
 
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.13f, -0.1f,  1.0f);
+    glVertex3f(-0.13f * scalar, -0.1f * scalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.13f, -0.1f,  1.0f);
+    glVertex3f( 0.13f * scalar, -0.1f * scalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.13f,  0.1f,  1.0f);
+    glVertex3f( 0.13f * scalar,  0.1f * scalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.13f,  0.1f,  1.0f);
+    glVertex3f(-0.13f * scalar,  0.1f * scalar,  1.0f);
     glEnd();
 
     glPopMatrix();
