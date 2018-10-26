@@ -455,7 +455,7 @@ void Game::initGameState()
     for (auto o : obstacleLocations)
     {
         tankGame->addObstacle(o.first, o.second);
-        temp = new Obstacles( 1, convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ) );
+        temp = new Obstacles( (rand() % 2 +1), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ) );
         constants.push_back(temp);
     }
     cout << "Done" << endl;
