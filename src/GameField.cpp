@@ -390,7 +390,7 @@ int value;
         }
 
     }
-    std::cout << new_map << std::endl;
+    //std::cout << new_map << std::endl;
 
     map = new_map;
 

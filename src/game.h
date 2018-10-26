@@ -58,9 +58,12 @@ public:
     int getX(){return fieldx;};
     int getY(){return fieldy;};
 
+    int getAISpeed(){return idle_speed;};
+
 private:
     int fieldx;
     int fieldy;
+    int idle_speed;
 };
 
 #endif //__GAME_H

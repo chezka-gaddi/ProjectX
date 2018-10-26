@@ -6,6 +6,7 @@
 
 #include "game.h"
 #include "callbacks.h"
+#include "event.h"
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -209,6 +210,7 @@ void Game::initGameState()
     std::cout << "Game::Loading config.txt\n";
     ifstream fin("config.txt");
     std::string configLine;
+    int ai_speed = 1000;
     int width = 15;
     int  height = 9;
     int damage = 1;
@@ -257,7 +259,17 @@ void Game::initGameState()
                     args = args.substr(i+1);
                 }
             }
-            
+            else if (id == "AI_SPEED")
+            {
+                stringstream(args) >> ai_speed;
+                if (ai_speed > 1000)
+                {
+                        cout << "Speeds above 1000 are extremely slow, defaulting at 1000\n";
+                        ai_speed = 1000;
+                }
+                TimerEvent::idle_speed = ai_speed;
+                idle_speed = 1000;
+            } 
             //field params
             else if (id == "WIDTH")
             {
