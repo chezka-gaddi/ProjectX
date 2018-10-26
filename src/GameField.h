@@ -42,6 +42,7 @@ protected:
     ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
     //Action points for each actor
     int ap;
+
 public:
     void setSPECIAL(int points);
     /**
@@ -90,6 +91,8 @@ public:
     MapData getMapData();
     ActorInfo & actorInfoById(int id);
     bool obstacleAt(int x, int y);
+    void create_fog_of_war(MapData &map, ActorInfo current_actor);
+
 
     /*******************************/
     /************setters************/

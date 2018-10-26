@@ -9,6 +9,7 @@
 !*/
 #unignores everything with an extension 
 !*.*
+!*.map
 
 #ignores cmake stuff i use cmake so this is helpful for me -jake
 src/cmake-build-debug/
