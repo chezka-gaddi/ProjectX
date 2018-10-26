@@ -87,6 +87,7 @@ gen-library: $(FILES:.cpp=.o)
 	cp -R src/buildsrc/ .
 	cp config.txt	buildsrc/config.txt
 	cp -R images/ buildsrc/
+	cp -R maps/ buildsrc/
 	cp src/Actor.h buildsrc/src/
 	cp src/MoveData.h buildsrc/src/
 	cp src/attributes.h buildsrc/src/
