@@ -23,7 +23,7 @@ test:
    script:
       - cd tests/src
       - echo "Running tests"
-      - make
+      - make -j4
       - ./testAll -d yes
 
 
@@ -34,5 +34,5 @@ test_FT:
    script:
       - cd tests/functional_tests/
       - g++ -I../src/ --std=c++11 -c main.cpp 
-      - make
+      - make -j4
       - ./testAll  -d yes
