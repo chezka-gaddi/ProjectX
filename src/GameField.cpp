@@ -359,35 +359,40 @@ void GameField::runMoves(ActorInfo &a)
 ******************************************************************************/
 void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
 {
+
+    if(current_actor.id <= 0)
+        return;
+
+
     int radar = current_actor.radar;
     int x_pos = current_actor.x;
     int y_pos = current_actor.y;
-    int x_max_radar_range = radar + x_pos;
-    int x_min_radar_range = x_pos - radar;
-    int y_max_radar_range = radar + y_pos;
-    int y_min_radar_range = y_pos - radar;
+    int x_max_radar_range = radar + x_pos >= map.width ? map.width - 1 : radar + x_pos;
+    int y_max_radar_range = radar + y_pos >= map.height ? map.height - 1 : radar + y_pos;
+    int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
+    int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
+    
 
-    int y_iter = 0;
-int removed =0;
-    for(y_iter; y_iter < map.height; y_iter++)
+
+
+    MapData new_map = map;
+    std::fill(new_map.map.begin(), new_map.map.end(), 0);
+    std::fill(new_map.obstacleMap.begin(), new_map.obstacleMap.end(), false);
+
+int value;
+    for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
     {
-        for(int x_iter = 0; x_iter < map.width; x_iter++)
+        for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
         {
-            if( y_iter < y_min_radar_range
-                    || y_iter > y_max_radar_range
-                    || x_iter < x_min_radar_range
-                    || x_iter > x_max_radar_range)
-            {
-                map.map[y_iter * map.width + x_iter] = 0;
-                map.obstacleMap[y_iter * map.width + x_iter] = false;
-                removed++;
-            }
+                value = y_iter * map.width + x_iter;  
+                new_map.map[value] = map.map[value];
+                new_map.obstacleMap[value] = map.obstacleMap[value];
         }
 
     }
-    std::cout << map << std::endl;
-    std::cout << removed << std::endl;
+    std::cout << new_map << std::endl;
 
+    map = new_map;
 
 }
 /**
@@ -414,6 +419,7 @@ void GameField::nextTurn()
         act_ap = actors[i].range;
         while (act_ap > 0)
         {
+            fog_of_war = fieldMap;
             create_fog_of_war(fog_of_war, actors[i]);
             pos.game_x = actors[i].x;
             pos.game_y = actors[i].y;
