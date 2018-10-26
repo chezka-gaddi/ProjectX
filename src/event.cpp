@@ -165,7 +165,11 @@ void ReshapeEvent::doAction(Game &game)
  * @param[in] tick - the number of milliseconds to wait before the next timer
  *    tick
  ******************************************************************************/
-TimerEvent::TimerEvent(int value) : tick(value) {}
+TimerEvent::TimerEvent(int &value) { 
+  if (TimerEvent::idle_speed != 0)
+    value = TimerEvent::idle_speed; 
+  tick = TimerEvent::idle_speed;
+}
 
 
 /***************************************************************************//**
@@ -179,7 +183,8 @@ TimerEvent::TimerEvent(int value) : tick(value) {}
  ******************************************************************************/
 void TimerEvent::doAction(Game &game)
 {
-    game.executeTurn();
+  idle_speed = game.getAISpeed();
+  game.executeTurn();
 }
 
 

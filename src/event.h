@@ -87,9 +87,10 @@ class TimerEvent : public Event
     unsigned int tick;
 
 public:
-    TimerEvent(int);
+    TimerEvent(int&);
 
     void doAction(Game &);
+    static int idle_speed;
 };
 
 
