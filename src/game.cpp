@@ -189,6 +189,7 @@ void Game::initGameState()
     int damage = 1;
     int  health = 3;
     int range = 1;
+    int radar = 2;
     std::vector<std::pair<int,int>> obstacleLocations;
     std::vector<std::pair<int,int>> tankLocations;
 
@@ -343,6 +344,17 @@ void Game::initGameState()
                     range = 4;
                 }
             }
+            else if (id == "RADAR")
+            {
+                stringstream(args) >> radar;
+                if (radar < 2){ 
+                  radar = 2;
+                  cout << "Invalid radar value, defaulting to 2\n";
+                } else if (radar > 10) {
+                    printf("%d radar might be a little excesive, setting to 10", radar);
+                    radar = 10;
+                }
+            }
             else if (id == "SPECIAL")
             {
                 stringstream(args) >> attributePoints;
@@ -375,8 +387,15 @@ void Game::initGameState()
 
     for (int i = 0; i < startActorPointers.size(); ++i)
     {
-        startActors.push_back(ActorInfo(startActorPointers[i], health, damage, tankLocations[i].first,
-                                        tankLocations[i].second, i + 1,range));
+        startActors.push_back(ActorInfo(startActorPointers[i]
+                    , health
+                    , damage
+                    , tankLocations[i].first
+                    , tankLocations[i].second
+                    , i + 1
+                    , range
+                    , 0
+                    , radar));
     }
     cout << "Done" << endl;
     // Create a stats menu for both tanks
