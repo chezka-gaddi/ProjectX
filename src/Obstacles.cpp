@@ -17,12 +17,23 @@
 * *****************************************************************************/
 Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor )
 {
+    //id's:
+    // 0 = Tree   1 = Rocks   2 = Bushes
+    //0-9   Trees  - Packaged Trees  0-3   - 4 Trees
+    //10-19 Rocks  - Packaged Rocks  10-12 - 3 Rocks
+    //20-29 Bushes - Packaged Bushes 20-23 - 4 Bushes
     screen_x = x_coor;
     screen_y = y_coor;
-
-    tex = 2;
-    if(id == 2)
-        tex = 3;
+    
+    if (id == 0){ //It's a tree
+      tex = ((rand() % 4));
+    }else if( id == 1){ //It's a Rocks
+      tex = ((rand() % 3) + 10);
+    }else if( id == 2){ //It's a Bushes
+      tex = ((rand() % 4) + 20);
+    }else{
+      tex = 1; //default to tree if we got a bad id
+    }
 }
 
 
@@ -42,7 +53,13 @@ void Obstacles::draw(int, int)
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
     glTranslatef(screen_x, screen_y, -5.0f);
-    glBindTexture(GL_TEXTURE_2D, gameTex[tex]);
+    if (tex >= 0 && tex <= 9){ //It's a tree
+      glBindTexture(GL_TEXTURE_2D, treeTex[tex]);
+    }else if( tex >= 10 && tex <= 19){ //It's a Rocks
+      glBindTexture(GL_TEXTURE_2D, rockTex[tex-10]);
+    }else if( tex >= 20 && tex <= 29){ //It's a Bushes
+      glBindTexture(GL_TEXTURE_2D, bushTex[tex-20]);
+    }
 
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);

@@ -500,7 +500,7 @@ void Game::initGameState()
                     , radar));
     }
     cout << "Done" << endl;
-    // Create a stats menu for both tanks
+    // Create a stats menu for up to 4 tanks
     for( auto actTemp : startActors)
     {
         temp = new Menu( actTemp.id, actTemp.health, actTemp.shots, actTemp.hits );
@@ -517,7 +517,7 @@ void Game::initGameState()
     for (auto o : obstacleLocations)
     {
         tankGame->addObstacle(o.first, o.second);
-        temp = new Obstacles( (rand() % 2 +1), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ) );
+        temp = new Obstacles( (rand() % 3), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ) );
         constants.push_back(temp);
     }
     cout << "Done" << endl;
