@@ -225,8 +225,10 @@ void Game::initGameState()
     std::string name;
     int attributePoints = 0;
 
-    if (!fin)
+    if (!fin){
         cout << "FAILED TO LOAD CONFIG\n";
+        exit(1);
+    }
     
     while (!fin.eof())
     {
