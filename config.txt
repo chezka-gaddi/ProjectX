@@ -50,6 +50,9 @@ OBSTACLE 10 7
 
 #OBSTACLE_IMAGE <IMAGE1> [<IMAGE2>]
 OBSTACLE_IMAGE images/tree/tree.png images/rock/rock.png
+TREE_IMAGE images/tree/tree.png
+BUSH_IMAGE
+ROCK_IMAGE images/rock/rock.png
 
 #TANK RULES
 #DAMAGE <STAT>

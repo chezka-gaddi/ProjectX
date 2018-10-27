@@ -222,6 +222,9 @@ void Game::initGameState()
 
     std::vector<std::string> tankImages;
     std::vector<std::string> gameImages;
+    std::vector<std::string> treeImages;
+    std::vector<std::string> rockImages;
+    std::vector<std::string> bushImages;
     std::string name;
     int attributePoints = 0;
 
@@ -303,7 +306,7 @@ void Game::initGameState()
                 stringstream(args) >> name;
                 gameImages.push_back(name);
             }
-            else if (id == "OBSTACLE")
+            else if (id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH")
             {
                 int x,y;
                 bool taken;
@@ -347,6 +350,63 @@ void Game::initGameState()
                     {
                         i = args.find(' ');
                         gameImages.push_back(args.substr(0, i));
+                        args = args.substr(i + 1);
+                    }
+
+                }
+            }
+            else if( id == "TREE_IMAGE" )
+            {
+                bool done = false;
+                while (!done)
+                {
+                    if (args.find(' ') == string::npos)
+                    {
+                        done = true;
+                        treeImages.push_back(args);
+                    }
+                    else
+                    {
+                        i = args.find(' ');
+                        treeImages.push_back(args.substr(0, i));
+                        args = args.substr(i + 1);
+                    }
+
+                }
+            }
+            else if( id == "ROCK_IMAGE" )
+            {
+                bool done = false;
+                while (!done)
+                {
+                    if (args.find(' ') == string::npos)
+                    {
+                        done = true;
+                        rockImages.push_back(args);
+                    }
+                    else
+                    {
+                        i = args.find(' ');
+                        rockImages.push_back(args.substr(0, i));
+                        args = args.substr(i + 1);
+                    }
+
+                }
+            }
+            else if( id == "BUSH_IMAGE" )
+            {
+                bool done = false;
+                while (!done)
+                {
+                    if (args.find(' ') == string::npos)
+                    {
+                        done = true;
+                        bushImages.push_back(args);
+                    }
+                    else
+                    {
+                        i = args.find(' ');
+                        bushImages.push_back(args.substr(0, i));
                         args = args.substr(i + 1);
                     }
 
@@ -417,7 +477,7 @@ void Game::initGameState()
     }
 
     glEnable(GL_TEXTURE_2D);
-    if(!LoadGLTextures(tankImages, gameImages))
+    if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages))
         cout << "Failed to open image." << endl;
     glDisable(GL_TEXTURE_2D);
     
