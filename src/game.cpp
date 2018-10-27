@@ -7,6 +7,7 @@
 #include "game.h"
 #include "callbacks.h"
 #include "event.h"
+#include <ctime>
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -227,6 +228,7 @@ void Game::initGameState()
     std::vector<std::string> bushImages;
     std::string name;
     int attributePoints = 0;
+    srand(time(0));
 
     if (!fin){
         cout << "FAILED TO LOAD CONFIG\n";
