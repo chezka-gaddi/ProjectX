@@ -8,10 +8,6 @@ AI SimpleAI 8 0 images/Green/tankG_U.png images/Green/tankG_R.png images/Green/t
 #AI IDLE SPEED: AI_SPEED <750>
 AI_SPEED 750
 
-#FIELD CONFIGURATION
-#WIDTH 9
-#HEIGHT 9
-
 #FIELDIMAGE <MAP FILE>
 FIELDIMAGE images/green.png
 WIDTH 25
@@ -31,7 +27,6 @@ MAP
   OOO   OOO   OOO   OOO  
   OOO   OOO   OOO   OOO  
    T                     
-
 
 #OBSTACLE_IMAGE <IMAGE1> [<IMAGE2>]
 OBSTACLE_IMAGE images/tree/tree.png images/rock/rock.png
