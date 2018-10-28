@@ -222,6 +222,9 @@ void Game::initGameState()
     int range = 1;
     int radar = 2;
     std::vector<std::pair<int,int>> obstacleLocations;
+    std::vector<std::pair<int,int>> treeLocations;
+    std::vector<std::pair<int,int>> rockLocations;
+    std::vector<std::pair<int,int>> bushLocations;
     std::vector<std::pair<int,int>> tankLocations;
 
     std::vector<std::string> tankImages;
@@ -329,6 +332,42 @@ void Game::initGameState()
             {
                 stringstream(args) >> name;
                 gameImages.push_back(name);
+            }
+            else if (id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH")
+            {
+                int x,y;
+                bool taken;
+                stringstream(args) >> x >> y;
+                if (x > width - 1 || x < 0 || y > height - 1 || y < 0)
+                {
+                    printf ("Invalid obstacle location: (%d, %d). Ranges: (0-%d, 0-%d)\n", x, y, width-1, height-1);
+                }else {
+                  for (int i = 0; i < tankLocations.size(); i ++){
+                          if (tankLocations[i].first == x && tankLocations[i].second == y){
+                                  taken = true;
+                                  printf ("Invalid obstacle location: (%d, %d) aleady taken by tank\n", x, y);
+                          }
+                  }
+                  if (!taken)
+                  {
+                          for (int i = 0; i < obstacleLocations.size(); i ++){
+                              if (obstacleLocations[i].first == x && obstacleLocations[i].second == y){
+                                taken = true;
+                                printf ("Invalid obstacle location: (%d, %d) aleady taken by object\n", x, y);
+                              }
+                          }
+                  }
+                  if (!taken && id == "TREE"){
+                          treeLocations.push_back(std::pair<int,int> (x, y));
+                  } else if (!taken && id == "ROCK"){
+                          rockLocations.push_back(std::pair<int,int> (x, y));
+                  } else if (!taken && id == "BUSH"){
+                          bushLocations.push_back(std::pair<int,int> (x, y));
+                  } else {
+                          obstacleLocations.push_back(std::pair<int,int> (x, y));
+                  }
+                  taken = false;
+                }
             }
             else if( id == "OBSTACLE_IMAGE" )
             {
@@ -513,6 +552,24 @@ void Game::initGameState()
         tankGame->addObstacle(o.first, o.second);
         temp = new Obstacles( (rand() % 3), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ) );
         constants.push_back(temp);
+    }
+    for (auto t : treeLocations)
+    {
+        tankGame->addObstacle(t.first, t.second);
+        temp = new Obstacles( 0, convertGLXCoordinate( t.first ), convertGLYCoordinate( t.second ) );
+        trees.push_back(temp);
+    }
+    for (auto r : rockLocations)
+    {
+        tankGame->addObstacle(r.first, r.second);
+        temp = new Obstacles( 1, convertGLXCoordinate( r.first ), convertGLYCoordinate( r.second ) );
+        rocks.push_back(temp);
+    }
+    for (auto b : bushLocations)
+    {
+        tankGame->addObstacle(b.first, b.second);
+        temp = new Obstacles( 2, convertGLXCoordinate( b.first ), convertGLYCoordinate( b.second ) );
+        bushes.push_back(temp);
     }
     cout << "Done" << endl;
 }

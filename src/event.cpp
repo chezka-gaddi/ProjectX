@@ -106,10 +106,8 @@ void DisplayEvent::doAction(Game &game)
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glLoadIdentity();
 
-    
     updateDrawables(game);
     Drawable *stuff;
-
 
     for( int i = 0; i < game.constants.size(); i++ )
     {
@@ -117,14 +115,29 @@ void DisplayEvent::doAction(Game &game)
         stuff->draw(game.getX(), game.getY());
     }
     
-    
     for( int i = 0; i < game.objects.size(); i++ )
     {
         stuff = game.objects[i];
         stuff->draw(game.getX(), game.getY());
     }
+    
+    for( int i = 0; i < game.trees.size(); i++ )
+    {
+        stuff = game.trees[i];
+        stuff->draw(game.getX(), game.getY());
+    }
+    
+    for( int i = 0; i < game.rocks.size(); i++ )
+    {
+        stuff = game.rocks[i];
+        stuff->draw(game.getX(), game.getY());
+    }
+    for( int i = 0; i < game.bushes.size(); i++ )
+    {
+        stuff = game.bushes[i];
+        stuff->draw(game.getX(), game.getY());
+    }
 
-	
     system("sleep 0.2");
     glutSwapBuffers();
 }
