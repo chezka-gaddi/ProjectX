@@ -219,6 +219,9 @@ void Game::initGameState()
     int range = 1;
     int radar = 2;
     std::vector<std::pair<int,int>> obstacleLocations;
+    std::vector<std::pair<int,int>> treeLocations;
+    std::vector<std::pair<int,int>> rockLocations;
+    std::vector<std::pair<int,int>> bushLocations;
     std::vector<std::pair<int,int>> tankLocations;
 
     std::vector<std::string> tankImages;
@@ -332,7 +335,13 @@ void Game::initGameState()
                               }
                           }
                   }
-                  if (!taken){
+                  if (!taken && id == "TREE"){
+                          treeLocations.push_back(std::pair<int,int> (x, y));
+                  } else if (!taken && id == "ROCK"){
+                          rockLocations.push_back(std::pair<int,int> (x, y));
+                  } else if (!taken && id == "BUSH"){
+                          bushLocations.push_back(std::pair<int,int> (x, y));
+                  } else {
                           obstacleLocations.push_back(std::pair<int,int> (x, y));
                   }
                   taken = false;
@@ -521,6 +530,24 @@ void Game::initGameState()
         tankGame->addObstacle(o.first, o.second);
         temp = new Obstacles( (rand() % 3), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ) );
         constants.push_back(temp);
+    }
+    for (auto t : treeLocations)
+    {
+        tankGame->addObstacle(t.first, t.second);
+        temp = new Obstacles( 0, convertGLXCoordinate( t.first ), convertGLYCoordinate( t.second ) );
+        trees.push_back(temp);
+    }
+    for (auto r : rockLocations)
+    {
+        tankGame->addObstacle(r.first, r.second);
+        temp = new Obstacles( 1, convertGLXCoordinate( r.first ), convertGLYCoordinate( r.second ) );
+        rocks.push_back(temp);
+    }
+    for (auto b : bushLocations)
+    {
+        tankGame->addObstacle(b.first, b.second);
+        temp = new Obstacles( 2, convertGLXCoordinate( b.first ), convertGLYCoordinate( b.second ) );
+        bushes.push_back(temp);
     }
     cout << "Done" << endl;
 }
