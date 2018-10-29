@@ -85,7 +85,8 @@ gen-library: $(FILES:.cpp=.o)
 	$(CXX) $(CXXFLAGS) -shared src/SimpleAI.cpp -o buildsrc/$(TANK_PATH)SimpleAI.so $(SOFLAGS)
 	#echo "Copying support files"
 	cp -R src/buildsrc/ .
-	cp config.txt	buildsrc/config.txt
+	cp config.txt	buildsrc/config.sample
+	cp README.md buildsrc/README.md
 	cp -R images/ buildsrc/
 	cp -R maps/ buildsrc/
 	cp src/Actor.h buildsrc/src/
@@ -105,7 +106,8 @@ push-to-git: clean-lib
 	mkdir -p buildsrc
 	git clone git@gitlab.com:jamckee/projectx.git buildsrc/
 	make gen-library -j8
+	git --git-dir=buildsrc/.git --work-tree=buildsrc checkout -b pre-release
 	git --git-dir=buildsrc/.git --work-tree=buildsrc add .
-	git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 1.03"
+	git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 2.02"
 	git --git-dir=buildsrc/.git --work-tree=buildsrc status
-	git --git-dir=buildsrc/.git --work-tree=buildsrc push
+	git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release

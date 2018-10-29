@@ -37,10 +37,13 @@ enum gameMode {ai, sp, mp};
 class Game
 {
 public:
-    vector <Drawable *> objects;        /*!<Holds all of the current actors */
-    vector <Drawable *> constants;      /*!<Holds the GameFieldDrawable and menus */
-    GameField *tankGame;                /*!<Pointer to the game manager */
-    gameMode g_mode;                    /*!<Type of game to be ran */
+    vector <Drawable *> objects;       /*!<Holds all of the current actors */
+    vector <Drawable *> constants;     /*!<Holds the GameFieldDrawable and menus */
+    vector <Drawable *> bushes;        /*!<Holds the bushes drawables */
+    vector <Drawable *> rocks;         /*!<Holds the rocks drawables */
+    vector <Drawable *> trees;         /*!<Holds the trees drawables */
+    GameField *tankGame;               /*!<Pointer to the game manager */
+    gameMode g_mode;                   /*!<Type of game to be ran */
     int turn;
 
     Game();

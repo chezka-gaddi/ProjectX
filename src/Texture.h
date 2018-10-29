@@ -11,6 +11,9 @@
 #include "SOIL.h"
 #include "global.h"
 
-int LoadGLTextures(std::vector <std::string>,std::vector <std::string>);
+//int LoadGLTextures(std::vector <std::string>,std::vector <std::string>);
+int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> gameimgs,
+                   std::vector <std::string> trees, std::vector <std::string> rocks, 
+                   std::vector <std::string> bushes);
 
 #endif

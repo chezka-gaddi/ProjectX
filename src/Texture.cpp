@@ -10,7 +10,11 @@ using namespace std;
 
 // Initialize texture arrays
 GLuint gameTex[8];      /*!<Texture array for the tanks and their projectiles */
-GLuint tankTex[20];      /*!<Texture array for game constants */
+GLuint tankTex[20];     /*!<Texture array for game constants */
+GLuint treeTex[10];     /*!<Texture array for the trees */
+GLuint bushTex[10];     /*!<Texture array for the bushes */
+GLuint rockTex[10];     /*!<Texture array for the rocks */
+GLuint effectTex[10];   /*<Texture array for the special effects */
 
 
 /***************************************************************************//**
@@ -19,13 +23,16 @@ GLuint tankTex[20];      /*!<Texture array for game constants */
 *
 * Loads and saves all the textures needed for the game in texture arrays.
 *******************************************************************************/
-int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> gameimgs)
+int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> gameimgs,
+                   std::vector <std::string> trees, std::vector <std::string> rocks, 
+                   std::vector <std::string> bushes)
 {
     // Load in the tank texure information
+    cout << "Loading Tank Textures:";
     for( int i = 0; i < images.size(); i++ )
     {
         const char *c = images[i].c_str();
-        cout << c << endl;
+        (i%5 == 0) ? cout << "\n" << c << "   \t" : cout << c << "   \t";
         tankTex[i] = SOIL_load_OGL_texture(
                      c,
                      SOIL_LOAD_AUTO,
@@ -34,11 +41,63 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
 
         if(tankTex[i] == 0)
         return false;
-
+        
         glBindTexture(GL_TEXTURE_2D, tankTex[i]);
     }
 
+    cout << "\nLoading Tree Textures:\n";
+    // Load in the tree texure information
+    for( int i = 0; i < trees.size(); i++ )
+    {
+        const char *c = trees[i].c_str();
+        cout << c << "\t";
+        treeTex[i] = SOIL_load_OGL_texture(
+                     c,
+                     SOIL_LOAD_AUTO,
+                     SOIL_CREATE_NEW_ID,
+                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
+        if(treeTex[i] == 0)
+        return false;
+
+        glBindTexture(GL_TEXTURE_2D, treeTex[i]);
+    }
+    cout << "\nLoading rock Textures:\n";
+    // Load in the rock texures information
+    for( int i = 0; i < rocks.size(); i++ )
+    {
+        const char *c = rocks[i].c_str();
+        cout << c << "\t";
+        rockTex[i] = SOIL_load_OGL_texture(
+                     c,
+                     SOIL_LOAD_AUTO,
+                     SOIL_CREATE_NEW_ID,
+                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+        if(rockTex[i] == 0)
+        return false;
+
+        glBindTexture(GL_TEXTURE_2D, rockTex[i]);
+    }
+    cout << "\nLoading Bush Textures:\n";
+    // Load in the bush texure information
+    for( int i = 0; i < bushes.size(); i++ )
+    {
+        const char *c = bushes[i].c_str();
+        cout << c << "\t";
+        bushTex[i] = SOIL_load_OGL_texture(
+                     c,
+                     SOIL_LOAD_AUTO,
+                     SOIL_CREATE_NEW_ID,
+                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+        if(bushTex[i] == 0)
+        return false;
+
+        glBindTexture(GL_TEXTURE_2D, bushTex[i]);
+    }
+
+    cout << "\nLoading UI Textures:\n";
     // Load in constant game images
     gameTex[0] = SOIL_load_OGL_texture(
                      "images/background.png",
@@ -55,7 +114,7 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
     for( int i = 1; i < 4; i++ )
     {
         const char *c = gameimgs[i-1].c_str();
-        cout << c << endl;
+        cout << c << "\t";
         gameTex[i] = SOIL_load_OGL_texture(
                      c,
                      SOIL_LOAD_AUTO,
@@ -119,6 +178,6 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
 
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-
+    cout << "\n";
     return true;
 }

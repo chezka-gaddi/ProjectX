@@ -1,7 +1,7 @@
 /*! \file */
 
 #include "Actor.h"
-Actor::Actor() {}
+//Actor::Actor() {}
 Actor::~Actor() {}
 
 

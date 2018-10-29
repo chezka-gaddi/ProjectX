@@ -7,6 +7,7 @@
 #include "game.h"
 #include "callbacks.h"
 #include "event.h"
+#include <ctime>
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -222,11 +223,17 @@ void Game::initGameState()
 
     std::vector<std::string> tankImages;
     std::vector<std::string> gameImages;
+    std::vector<std::string> treeImages;
+    std::vector<std::string> rockImages;
+    std::vector<std::string> bushImages;
     std::string name;
     int attributePoints = 0;
+    srand(time(0));
 
-    if (!fin)
+    if (!fin){
         cout << "FAILED TO LOAD CONFIG\n";
+        exit(1);
+    }
     
     while (!fin.eof())
     {
@@ -301,7 +308,7 @@ void Game::initGameState()
                 stringstream(args) >> name;
                 gameImages.push_back(name);
             }
-            else if (id == "OBSTACLE")
+            else if (id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH")
             {
                 int x,y;
                 bool taken;
@@ -345,6 +352,63 @@ void Game::initGameState()
                     {
                         i = args.find(' ');
                         gameImages.push_back(args.substr(0, i));
+                        args = args.substr(i + 1);
+                    }
+
+                }
+            }
+            else if( id == "TREE_IMAGE" )
+            {
+                bool done = false;
+                while (!done)
+                {
+                    if (args.find(' ') == string::npos)
+                    {
+                        done = true;
+                        treeImages.push_back(args);
+                    }
+                    else
+                    {
+                        i = args.find(' ');
+                        treeImages.push_back(args.substr(0, i));
+                        args = args.substr(i + 1);
+                    }
+
+                }
+            }
+            else if( id == "ROCK_IMAGE" )
+            {
+                bool done = false;
+                while (!done)
+                {
+                    if (args.find(' ') == string::npos)
+                    {
+                        done = true;
+                        rockImages.push_back(args);
+                    }
+                    else
+                    {
+                        i = args.find(' ');
+                        rockImages.push_back(args.substr(0, i));
+                        args = args.substr(i + 1);
+                    }
+
+                }
+            }
+            else if( id == "BUSH_IMAGE" )
+            {
+                bool done = false;
+                while (!done)
+                {
+                    if (args.find(' ') == string::npos)
+                    {
+                        done = true;
+                        bushImages.push_back(args);
+                    }
+                    else
+                    {
+                        i = args.find(' ');
+                        bushImages.push_back(args.substr(0, i));
                         args = args.substr(i + 1);
                     }
 
@@ -415,7 +479,7 @@ void Game::initGameState()
     }
 
     glEnable(GL_TEXTURE_2D);
-    if(!LoadGLTextures(tankImages, gameImages))
+    if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages))
         cout << "Failed to open image." << endl;
     glDisable(GL_TEXTURE_2D);
     
@@ -438,7 +502,7 @@ void Game::initGameState()
                     , radar));
     }
     cout << "Done" << endl;
-    // Create a stats menu for both tanks
+    // Create a stats menu for up to 4 tanks
     for( auto actTemp : startActors)
     {
         temp = new Menu( actTemp.id, actTemp.health, actTemp.shots, actTemp.hits );
@@ -455,7 +519,7 @@ void Game::initGameState()
     for (auto o : obstacleLocations)
     {
         tankGame->addObstacle(o.first, o.second);
-        temp = new Obstacles( (rand() % 2 +1), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ) );
+        temp = new Obstacles( (rand() % 3), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ) );
         constants.push_back(temp);
     }
     cout << "Done" << endl;

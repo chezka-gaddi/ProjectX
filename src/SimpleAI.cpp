@@ -88,7 +88,7 @@ direction SimpleAI::move(MapData map, PositionData status)
 /**
  * @author David Donahue
  * @par Description: 
- * Calculates how many moves it will take to reach a given coordinate
+ * Calculates whether or not not too attack, and if so where to attack
  * @param[in] map - The current state of the playfield
  * @param[in] status - The AI's tank's location, health and ID
  * @return Location to attack and whether to attack
