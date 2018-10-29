@@ -416,7 +416,7 @@ void GameField::nextTurn()
     for (int i = 0; i < actors.size(); ++i)
     {
         act_ap = actors[i].range;
-        while (act_ap > 0)
+        while (act_ap > 0 && actors[i].id != 0)
         {
             fog_of_war = fieldMap;
             create_fog_of_war(fog_of_war, actors[i]);
