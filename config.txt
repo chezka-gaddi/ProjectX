@@ -1,5 +1,5 @@
 #AI LIST: AI <NAME> <STARTX> <STARTY>
-AI SimpleAI 0 0 images/Yellow/tankY_U.png images/Yellow/tankY_R.png images/Yellow/tankY_D.png images/Yellow/tankY_L.png images/Yellow/bulletY.png
+AI CamperAI 0 0 images/Yellow/tankY_U.png images/Yellow/tankY_R.png images/Yellow/tankY_D.png images/Yellow/tankY_L.png images/Yellow/bulletY.png
 AI SimpleAI 0 8 images/Blue/tankB_U.png images/Blue/tankB_R.png images/Blue/tankB_D.png images/Blue/tankB_L.png images/Blue/bulletB.png
 AI SimpleAI 8 8 images/Red/tankR_U.png images/Red/tankR_R.png images/Red/tankR_D.png images/Red/tankR_L.png images/Red/bulletR.png
 AI SimpleAI 8 0 images/Green/tankG_U.png images/Green/tankG_R.png images/Green/tankG_D.png images/Green/tankG_L.png images/Green/bulletG.png
@@ -15,6 +15,10 @@ AI_SPEED 750
 FIELDIMAGE images/green.png
 WIDTH 15
 HEIGHT 9
+ROCK 0 3
+ROCK 1 0
+ROCK 1 1
+ROCK 1 2
 TREE 4 1
 TREE 5 1
 TREE 6 1

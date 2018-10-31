@@ -519,7 +519,7 @@ void Game::initGameState()
     }
 
     cout << "Initializing Game...";
-    tankGame = new GameField(width, height, startActors, displayWrapper);
+    tankGame = new GameField(width, height, startActors, displayWrapper, this);
     tankGame->setSPECIAL(attributePoints);
     cout << "Done" << endl;
 
@@ -533,19 +533,19 @@ void Game::initGameState()
     }
     for (auto t : treeLocations)
     {
-        tankGame->addObstacle(t.first, t.second);
+        tankGame->addObstacle(t.first, t.second, 'T');
         temp = new Obstacles( 0, convertGLXCoordinate( t.first ), convertGLYCoordinate( t.second ) );
         trees.push_back(temp);
     }
     for (auto r : rockLocations)
     {
-        tankGame->addObstacle(r.first, r.second);
+        tankGame->addObstacle(r.first, r.second); //No driving over rocks
         temp = new Obstacles( 1, convertGLXCoordinate( r.first ), convertGLYCoordinate( r.second ) );
         rocks.push_back(temp);
     }
     for (auto b : bushLocations)
     {
-        tankGame->addObstacle(b.first, b.second);
+        tankGame->addObstacle(b.first, b.second, 'T');
         temp = new Obstacles( 2, convertGLXCoordinate( b.first ), convertGLYCoordinate( b.second ) );
         bushes.push_back(temp);
     }
