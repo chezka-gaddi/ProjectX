@@ -32,7 +32,7 @@ FILES += $(SRC_PATH)Menu.cpp
 TANK_PATH= ./tanks/
 TANKS = src/SimpleAI.so
 TANKS += src/PongAI.so
-
+TANKS += src/CamperAI.so
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 

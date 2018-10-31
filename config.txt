@@ -10,7 +10,6 @@ AI_SPEED 750
 
 #FIELDIMAGE <MAP FILE>
 FIELDIMAGE images/green.png
-WIDTH 25
 HEIGHT 15
 MAP
         OOOOOO           
