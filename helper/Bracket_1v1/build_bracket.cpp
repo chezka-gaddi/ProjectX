@@ -52,7 +52,8 @@ int main (int argc, char ** argv)
     while(!map_list.eof())
     {
         getline(map_list, temp);
-        maps.push_back(temp);
+        if(!temp.empty())
+            maps.push_back(temp);
     }
 
     map_list.close();
@@ -65,13 +66,13 @@ int main (int argc, char ** argv)
     {
         for(int tank_2 = tank_1 + 1; tank_2 < tanks.size() - 1 ; tank_2++)
         {
-        base_file_name = tanks.at(tank_1) + "vs" + tanks.at(tank_2);
+        base_file_name = tanks.at(tank_1) + "vs" + tanks.at(tank_2) + ".txt";
         game_config.open(base_file_name);
-            map_id = rand() % maps.size() - 1;
+            map_id = rand() % maps.size();
+    cout << map_id << endl; 
             
             map.open(maps[map_id]);
             // copy over the map to the game config
-            game_config << "Map: " << maps.at(map_id) << endl;
             while(!map.eof())
             {
                 getline(map, temp);

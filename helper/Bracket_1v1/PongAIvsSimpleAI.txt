@@ -1,3 +1,4 @@
+Map: ../../maps/Target.txt
 WIDTH 30
 HEIGHT 13
 MAP
@@ -13,7 +14,7 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 
 AI PongAI 0 0 images/Blue/tankB_U.png images/Blue/tankB_R.png images/Blue/tankB_D.png images/Blue/tankB_L.png images/Blue/bulletB.png
-AI RandomAI 29 12 images/Red/tankR_U.png images/Red/tankR_R.png images/Red/tankR_D.png images/Red/tankR_L.png images/Red/bulletR.png
+AI SimpleAI 29 12 images/Red/tankR_U.png images/Red/tankR_R.png images/Red/tankR_D.png images/Red/tankR_L.png images/Red/bulletR.png
 #Game Rules
 DAMAGE 1
 HEALTH 2
