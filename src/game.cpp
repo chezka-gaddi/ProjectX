@@ -205,6 +205,7 @@ void Game::initGameState()
     Drawable *temp = nullptr;
 
     // Load game field
+
     temp = new GameFieldDrawable();
     constants.push_back(temp);
     std::vector<string> AINames;
@@ -240,6 +241,25 @@ void Game::initGameState()
         getline(fin, configLine);
         if (configLine[0] != '#') //ignore comment lines
         {
+            if (configLine == "MAP")
+            {
+               for ( int y = 0; y < height; y++)
+               {
+                    getline(fin, configLine);
+                    cout << configLine << endl;
+
+                    for(int x = 0; x < width; x++)
+                    {   
+                        if (configLine[x] == 'O' 
+                         || configLine[x] == 'B' 
+                         || configLine[x] == 'T')
+                            obstacleLocations.push_back(std::pair<int, int> (x, y));
+                    }
+
+                }
+
+            
+            }
             int i = configLine.find(' '); //index of first space
             std::string id = configLine.substr(0, i); //separate the identefier from the argumets
             std::string args = configLine.substr(i+1);
@@ -307,36 +327,6 @@ void Game::initGameState()
             {
                 stringstream(args) >> name;
                 gameImages.push_back(name);
-            }
-            else if (id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH")
-            {
-                int x,y;
-                bool taken;
-                stringstream(args) >> x >> y;
-                if (x > width - 1 || x < 0 || y > height - 1 || y < 0)
-                {
-                    printf ("Invalid obstacle location: (%d, %d). Ranges: (0-%d, 0-%d)\n", x, y, width-1, height-1);
-                }else {
-                  for (int i = 0; i < tankLocations.size(); i ++){
-                          if (tankLocations[i].first == x && tankLocations[i].second == y){
-                                  taken = true;
-                                  printf ("Invalid obstacle location: (%d, %d) aleady taken by tank\n", x, y);
-                          }
-                  }
-                  if (!taken)
-                  {
-                          for (int i = 0; i < obstacleLocations.size(); i ++){
-                              if (obstacleLocations[i].first == x && obstacleLocations[i].second == y){
-                                taken = true;
-                                printf ("Invalid obstacle location: (%d, %d) aleady taken by object\n", x, y);
-                              }
-                          }
-                  }
-                  if (!taken){
-                          obstacleLocations.push_back(std::pair<int,int> (x, y));
-                  }
-                  taken = false;
-                }
             }
             else if( id == "OBSTACLE_IMAGE" )
             {
