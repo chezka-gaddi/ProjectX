@@ -528,25 +528,25 @@ void Game::initGameState()
     for (auto o : obstacleLocations)
     {
         tankGame->addObstacle(o.first, o.second);
-        temp = new Obstacles( (rand() % 3), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ) );
+        temp = new Obstacles( (rand() % 3), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ), o.first, o.second );
         constants.push_back(temp);
     }
     for (auto t : treeLocations)
     {
         tankGame->addObstacle(t.first, t.second, 'T');
-        temp = new Obstacles( 0, convertGLXCoordinate( t.first ), convertGLYCoordinate( t.second ) );
+        temp = new Obstacles( 0, convertGLXCoordinate( t.first ), convertGLYCoordinate( t.second ), t.first, t.second );
         trees.push_back(temp);
     }
     for (auto r : rockLocations)
     {
-        tankGame->addObstacle(r.first, r.second); //No driving over rocks
-        temp = new Obstacles( 1, convertGLXCoordinate( r.first ), convertGLYCoordinate( r.second ) );
+        tankGame->addObstacle(r.first, r.second, 'R'); //No driving over rocks
+        temp = new Obstacles( 1, convertGLXCoordinate( r.first ), convertGLYCoordinate( r.second ), r.first, r.second );
         rocks.push_back(temp);
     }
     for (auto b : bushLocations)
     {
-        tankGame->addObstacle(b.first, b.second, 'T');
-        temp = new Obstacles( 2, convertGLXCoordinate( b.first ), convertGLYCoordinate( b.second ) );
+        tankGame->addObstacle(b.first, b.second, 'B');
+        temp = new Obstacles( 2, convertGLXCoordinate( b.first ), convertGLYCoordinate( b.second ), b.first, b.second );
         bushes.push_back(temp);
     }
     cout << "Done" << endl;
