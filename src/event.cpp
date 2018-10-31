@@ -124,13 +124,15 @@ void DisplayEvent::doAction(Game &game)
     for( int i = 0; i < game.trees.size(); i++ )
     {
         stuff = game.trees[i];
-        stuff->draw(game.getX(), game.getY());
+        if (stuff->health > 0 )
+          stuff->draw(game.getX(), game.getY());
     }
     
     for( int i = 0; i < game.rocks.size(); i++ )
     {
         stuff = game.rocks[i];
-        stuff->draw(game.getX(), game.getY());
+        if (stuff->health > 0 )
+                stuff->draw(game.getX(), game.getY());
     }
     for( int i = 0; i < game.bushes.size(); i++ )
     {

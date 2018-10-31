@@ -55,7 +55,7 @@ attributes CamperAI::setAttribute(int pointsAvailable)
 {
     attributes retval;
 
-    retval.tankAP = pointsAvailable;
+    retval.tankHealth = pointsAvailable;
 
     return retval;
 }

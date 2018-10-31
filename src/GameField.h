@@ -44,7 +44,7 @@ protected:
     ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
     //Action points for each actor
     int ap;
-    void checkObjectStrike(ActorInfo &a);
+    bool checkObjectStrike(ActorInfo &a);
     Game *gameptr = nullptr;
 
 public:

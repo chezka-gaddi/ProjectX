@@ -33,10 +33,14 @@ public:
     ~Drawable() {}
 
     virtual void draw(int, int) = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
+protected:
     void setScalar(float newScalar){this->scalar = newScalar;};
-    float getScalar(){return this->scalar;};
-    
+    //float getScalar(){return this->scalar;};
+    int gridx;
+    int gridy; 
     static float scalar;
+friend class Game;
+friend class GameField;
 };
 
 
@@ -85,7 +89,7 @@ public:
 class Obstacles : public Drawable
 {
 public:
-    Obstacles( int, GLfloat, GLfloat);
+    Obstacles( int, GLfloat, GLfloat, int, int);
 
     void draw(int, int);
 };
