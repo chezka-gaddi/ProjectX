@@ -226,8 +226,7 @@ void GameField::setSPECIAL(int points)
 void GameField::runMoves(ActorInfo &a)
 {
 
-    std::vector<int> collisionVect;
-    int collisionDamage, xoff = 0, yoff = 0;
+    int xoff = 0, yoff = 0;
     PositionData pos;
     direction dir;
 
@@ -250,53 +249,47 @@ void GameField::runMoves(ActorInfo &a)
         if (a.y > 0 && (!obstacleAt(a.x, a.y - 1) 
                     || obstacleAt(a.x, a.y - 1) == 'T' 
                     || obstacleAt(a.x, a.y - 1) == 'B'))
-            //a.y--;
             yoff = -1;
         else
-            a.health--;
+            a.id < 0 ? a.health-=a.health : a.health--;
         break;
 
     case DOWN:
         if (a.y < fieldMap.height-1 && (!obstacleAt(a.x, a.y + 1) 
                                     || obstacleAt(a.x, a.y + 1) == 'T' 
                                     || obstacleAt(a.x, a.y + 1) == 'B'))
-            //a.y++;
             yoff = 1;
         else
-            a.health--;
+            a.id < 0 ? a.health-=a.health : a.health--;
         break;
 
     case LEFT:
         if (a.x > 0 && (!obstacleAt(a.x - 1, a.y) 
                     || obstacleAt(a.x - 1, a.y) == 'T' 
                     || obstacleAt(a.x - 1, a.y) == 'B'))
-            //a.x--;
             xoff = -1;
         else
-            a.health--;
+            a.id < 0 ? a.health-=a.health : a.health--;
         break;
 
     case RIGHT:
         if (a.x < fieldMap.width-1 && (!obstacleAt(a.x + 1, a.y) 
                                    || obstacleAt(a.x + 1, a.y) == 'T' 
                                    || obstacleAt(a.x + 1, a.y) == 'B' ))
-            //a.x++;
             xoff = 1;
         else
-            a.health--;
+            a.id < 0 ? a.health-=a.health : a.health--;
         break;
     case UPLEFT:
         if (a.y > 0 && a.x > 0 && (!obstacleAt(a.x-1,a.y-1) 
                                || obstacleAt(a.x-1,a.y-1)== 'T' 
                                || obstacleAt(a.x-1,a.y-1) == 'B'))
         {
-            //a.y--;
-            //a.x--;
             yoff = -1;
             xoff = -1;
         }
         else
-            a.health--;
+            a.id < 0 ? a.health-=a.health : a.health--;
         break;
 
     case UPRIGHT:
@@ -304,13 +297,11 @@ void GameField::runMoves(ActorInfo &a)
                                               || obstacleAt(a.x+1, a.y-1) == 'T' 
                                               || obstacleAt(a.x+1, a.y-1) == 'B'))
         {
-            //a.y--;
-            //a.x++;
             yoff = -1;
             xoff = 1;
         }
         else
-            a.health--;
+            a.id < 0 ? a.health-=a.health : a.health--;
         break;
 
     case DOWNLEFT:
@@ -318,13 +309,11 @@ void GameField::runMoves(ActorInfo &a)
                                                || obstacleAt(a.x-1,a.y+1) == 'T' 
                                                || obstacleAt(a.x-1,a.y+1) == 'B'))
         {
-            //a.y++;
-            //a.x--;
             yoff = 1;
             xoff = -1;
         }
         else
-            a.health--;
+            a.id < 0 ? a.health-=a.health : a.health--;
         break;
 
     case DOWNRIGHT:
@@ -332,69 +321,65 @@ void GameField::runMoves(ActorInfo &a)
                                                               || obstacleAt(a.x+1, a.y+1) == 'T' 
                                                               || obstacleAt(a.x+1, a.y+1) == 'B'))
         {
-            //a.y++;
-            //a.x++;
             yoff = 1;
             xoff = 1;
         }
         else
-            a.health--;
+            a.id < 0 ? a.health-=a.health : a.health--;
         break;
 
     default:
         break;
     }
 
-    bool tankInCollision = false;
     a.x += xoff;
     a.y += yoff;
 
-    collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
     for (int i = 0; i < actors.size(); ++i ) //check each actor
     {
-        if (actors[i].x == a.x && actors[i].y == a.y)
+        if (actors[i].health > 0 && actors[i].x == a.x && actors[i].y == a.y && a.id != actors[i].id)
         {
-            collisionVect.push_back(i);
-            if (actors[i].id > 0 && actors[i].id != a.id)
+            if (a.id > 0 && actors[i].id > 0) //Check tank to tank ramming
             {
+                printf("Tank hit tank\n");
+                //Reverse the move
                 a.x -= xoff;
                 a.y -= yoff;
-                tankInCollision = true;
-            }
-        }
-
-    }
-    printf("Collision Vector Size: %d\n",collisionVect.size());
-    if (collisionVect.size() > 1 && a.health > 0)
-    {
-        collisionDamage = 0;
-        for (auto i: collisionVect)
-        {
-            if(!(actorInfoById(-actors[i].id) == nullActor) && tankInCollision)
+                actors[i].health -= a.health; //deal full health damage to target
+                a.health--; //deal 1 damage to tank doing the ramming
+                if (actors[i].health <= 0)
+                {
+                  actors[i].health = 0;
+                  actors[i].damage = 0;
+                  actors[i].id = 0;
+                  actors[i].range = 0;
+                  a.hits++; //A tank hit is still a hit right?
+                }
+            }else if(actors[i].id < 0) //Check if we ran into a projectile (What we are doesn't matter)
             {
-                actorInfoById(-actors[i].id).hits++;
-            }
-            collisionDamage += actors[i].damage;
-        }
-        for (auto i: collisionVect) //apply the portion from the other actors
-        {
-            printf("Collision Damage: %d\n",collisionDamage-actors[i].damage);
-            actors[i].health -= (collisionDamage - actors[i].damage);
-            if (actors[i].health <= 0)
+                printf("Projectile or Tank hit a projectile.\n");
+                a.health -= actors[i].health; //Do damage to ourself
+                actors[i].health = 0; //Destroy the projectile
+                if (a.id > 0 && -actors[i].id != a.id) //Give the owner a hit, but not a self hit and not a missile to missle hit
+                  actorInfoById(-actors[i].id).hits++; 
+            }else if(a.id < 0) //If we're a projectile and we hit a tank
             {
-                actors[i].health = 0;
-                actors[i].damage = 0;
-                actors[i].id = 0;
-                actors[i].range = 0;
+              printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
+              actors[i].health -= a.health; //damage the tank
+              a.health -= a.health;         //damage ourselves
+              if (a.id != -actors[i].id)      //no self hits
+                actorInfoById(-a.id).hits++;  //give our owner a hit
             }
         }
+        if (a.health <= 0)
+          break;
     }
-    if (a.health == 0)
+    if (a.health <= 0)
     {
         a.damage = 0;
         a.id = 0;
+        a.health = 0;
     }
-    
     updateMap();
 
     if (displayCallback != NULL)
@@ -478,6 +463,7 @@ void GameField::nextTurn()
     PositionData pos;
     int action;
     int act_ap;
+    int tSize, tId;
     MapData fog_of_war = fieldMap;
 
 
@@ -501,8 +487,6 @@ void GameField::nextTurn()
 
             else if (action == 2)
             {
-                if(actors[i].health != 0)
-                {
                     //PositionData to give the AI
                     pos.game_x = actors[i].x;
                     pos.game_y = actors[i].y;
@@ -531,9 +515,9 @@ void GameField::nextTurn()
                         }
                     }
             
-                }
             }
             --act_ap;
+            
         }
     }
 
