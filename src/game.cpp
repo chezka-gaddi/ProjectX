@@ -120,6 +120,7 @@ static bool isplayable(std::vector<ActorInfo> actorInfo)
     for (auto a : actorInfo)
         tankCount += (a.id > 0) ? 1 : 0;
 
+
     return (tankCount > 1);
 }
 
@@ -176,8 +177,11 @@ void Game::executeTurn()
 
     else
     {
-        gameOver();
-        glutLeaveMainLoop();
+      ofstream fout("results.txt", ios::out | ios::app);
+      fout << tankGame->getWinner() << endl;
+      fout.close();
+      gameOver();
+      glutLeaveMainLoop();
     }
 }
 /**
@@ -236,9 +240,14 @@ void Game::initGameState()
     int attributePoints = 0;
     srand(time(0));
 
+    ofstream fout("results.txt", ios::out | ios::app);
+
     if (!fin){
         cout << "FAILED TO LOAD CONFIG\n";
         exit(1);
+    }
+    if (!fout){
+        cout << "UNABLE OPEN RESULTS FILE (results.txt)\n";
     }
     
     while (!fin.eof())
@@ -520,6 +529,11 @@ void Game::initGameState()
     std::vector<ActorInfo> startActors;
 
 
+    fout << "Players: ";
+    for (int i = 0; i < AINames.size(); i++)
+            fout << AINames[i] << " ";
+    fout << "Winner: ";
+    fout.close(); 
     for (int i = 0; i < startActorPointers.size(); ++i)
     {
         startActors.push_back(ActorInfo(startActorPointers[i]
@@ -530,7 +544,9 @@ void Game::initGameState()
                     , i + 1
                     , range
                     , 0
-                    , radar));
+                    , radar
+                    , AINames[i]));
+        printf("Actor %d name: %s\n", i, AINames[i].c_str());
     }
     cout << "Done" << endl;
     // Create a stats menu for up to 4 tanks

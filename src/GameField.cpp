@@ -717,3 +717,12 @@ int GameField::obstacleAt(int x, int y)
 {
     return fieldMap.obstacleMap[x + y * fieldMap.width];
 }
+
+std::string GameField::getWinner()
+{
+    string winner = "none\n";
+    for (auto a : actors)
+      if (a.health > 0 && a.id > 0)
+              winner = a.name;
+    return winner;
+}
