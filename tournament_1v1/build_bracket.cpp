@@ -66,7 +66,7 @@ int main (int argc, char ** argv)
     {
         for(int tank_2 = tank_1 + 1; tank_2 < tanks.size() - 1 ; tank_2++)
         {
-        base_file_name = tanks.at(tank_1) + "vs" + tanks.at(tank_2) + ".txt";
+        base_file_name = tanks.at(tank_1) + "vs" + tanks.at(tank_2) + ".round";
         game_config.open(base_file_name);
             map_id = rand() % maps.size();
     cout << map_id << endl;

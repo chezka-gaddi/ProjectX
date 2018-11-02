@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo tournament_1v1/*.txt > temp.txt
+echo tournament_1v1/*.round > temp.txt
 
 cat temp.txt | sed "s/ /\n/g" > temp_2.txt
 rm temp.txt
