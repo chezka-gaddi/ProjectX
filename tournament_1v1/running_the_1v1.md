@@ -1,4 +1,4 @@
-#How to Run the Tournament
+# How to Run the Tournament
 Steps for running the tournament:
 
 1) Create a .txt file with the list of tanks. The tank list should be formatted
