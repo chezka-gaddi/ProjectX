@@ -266,7 +266,7 @@ SCENARIO("The projectile collides with the actors on the gamefield")
             {
                 std::vector<int> expected_map = { 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 };
                 std::vector<int> actual_map = gamefield.getMap();
-                REQUIRE(expected_map != actual_map);
+                REQUIRE(expected_map == actual_map);
             }
         }
 
