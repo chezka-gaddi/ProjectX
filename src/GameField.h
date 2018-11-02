@@ -63,6 +63,7 @@ public:
      * removes all actors that have a health of 0 from the game (not actors with health less than 0)
      */
     void cull();
+    std::string getWinner();
 
     /**
      * this will find all the actors in a single cell
