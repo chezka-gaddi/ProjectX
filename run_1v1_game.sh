@@ -3,22 +3,21 @@
 echo tournament_1v1/*.txt > temp.txt
 
 cat temp.txt | sed "s/ /\n/g" > temp_2.txt
-
 rm temp.txt
 
+empty_size=0
+actual_size=$(wc -c < "temp_2.txt")
 
-text="place_holder"
-
-until ["$text" eq ""]; do
-    text=$(head -n 1 temp_2.txt)
-    cp $text ./config.txt
+until [ "$actual_size" -eq "$empty_size" ]; do
+    TEXT=$(head -n 1 temp_2.txt)
+#    echo $actual_size
+    cp $TEXT ./config.txt
     ./platform
-    #Fun fact! putting a '>>' in the command below will fill up your hard drive 
-    # and crash your system.... or so i've heard.... -R
     tail -n +2 temp_2.txt > temp_2.txt
+    actual_size=$(wc -c < "temp_2.txt")
 done
 
-rm temp_2.txt    
-    
+rm temp_2.txt
+
 
 
