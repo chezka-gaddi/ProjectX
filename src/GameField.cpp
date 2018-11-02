@@ -404,15 +404,15 @@ void GameField::runMoves(ActorInfo &a)
 bool GameField::checkObjectStrike(ActorInfo &a)
 {
   int tempOb = obstacleAt(a.x, a.y);
-  if (a.id > 0) //Get the non projectiles back out of here
+  if (a.id > 0 || a.health < 0) //Get the non projectiles back out of here
           return false;
   if (tempOb == 0){  //if the spot is empty then we couldn't have hit anything
-          printf("Nothing hit at (%d, %d): %d Health: %d\n", a.x, a.y, tempOb, a.health);
+          //printf("Nothing hit at (%d, %d): %d Health: %d\n", a.x, a.y, tempOb, a.health);
           return false;
   }
-
-  else if (tempOb == 'B'){ //Bushes don't stop bullets
-          printf("Bush hit.  Not stopping.\n");
+  else if (tempOb == 'B'){ //Bushes don't stop bullets 
+          //We technically dont need this now since bushes dont do anything, but we can make them destroyable later?
+          //printf("Bush hit.  Not stopping.\n");
           return false;
   }
   else if(tempOb == 'R')
@@ -434,12 +434,12 @@ bool GameField::checkObjectStrike(ActorInfo &a)
     }
   }else if (tempOb == 'T')
   {
-    printf("Tree strike, log it.\n");
+    //printf("Tree strike, log it.\n");
     for (auto t : gameptr->trees)
     {
           if (t->gridx == a.x && t->gridy == a.y && t->health > 0)
           {
-            printf("Found tree strike, chop it.\n");
+            //printf("Found tree strike, chop it.\n");
             t->health -= a.damage;
             return true;
           }
