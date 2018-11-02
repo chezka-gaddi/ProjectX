@@ -51,8 +51,6 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 #include "util.h"
 
 // Main
-float Drawable::scalar = 1.0;
-int TimerEvent::idle_speed = 750;
 
 int main(int argc, char **argv)
 {

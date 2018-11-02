@@ -200,6 +200,8 @@ void displayWrapper(MapData map, std::vector<ActorInfo> actors, int turnCount)
 * Initialize the main GameField and all the Drawables needed to start the game.
 * Reads settings from the file "config.txt"
 *******************************************************************************/
+float Drawable::scalar = 1.0;
+int TimerEvent::idle_speed = 750;
 void Game::initGameState()
 {
     Drawable *temp = nullptr;
