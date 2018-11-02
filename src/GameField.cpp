@@ -720,7 +720,7 @@ int GameField::obstacleAt(int x, int y)
 
 std::string GameField::getWinner()
 {
-    string winner = "none\n";
+    string winner = "none";
     for (auto a : actors)
       if (a.health > 0 && a.id > 0)
               winner = a.name;

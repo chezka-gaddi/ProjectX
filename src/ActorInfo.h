@@ -38,10 +38,29 @@ struct ActorInfo
     std::string name = "default\n";
     attributes tankAttributes;
     direction heading;
+ActorInfo(Actor *a
+        , int h
+        , int d
+        , int xpos
+        , int ypos
+        , int i
+        , int r) 
+    : act_p(a)
+    , health(h)
+    , damage(d)
+    , x(xpos)
+    , y(ypos)
+    , id(i)
+    , range(r)
+    , hits(0)
+    , shots(0)
+    , radar(0)
+    , tankAttributes()
+    , heading(RIGHT) {}
 
     ActorInfo(Actor *a, int h, int d, int xpos, int ypos, int i) : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), range(2), hits(0), shots(0), radar(0),tankAttributes(), heading(RIGHT) {}
     ActorInfo(Actor *a, int h, int d, int xpos, int ypos, int i, int r, int s) : act_p(a), health(h),damage(d), x(xpos), y(ypos), id(i), range(r), hits(0), shots(s), radar(0), tankAttributes(),heading(RIGHT){}
-    ActorInfo(Actor *a, int h, int d, int xpos, int ypos, int i, int r, int s, int v, std::string n) : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), range(r), hits(0), shots(s), tankAttributes(), radar(v), name(n), heading(RIGHT){}  
+    ActorInfo(Actor *a, int h, int d, int xpos, int ypos, int i, int r, int s, int v, std::string n = "default") : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), range(r), hits(0), shots(s), tankAttributes(), radar(v), name(n), heading(RIGHT){}  
     ActorInfo() : act_p(NULL), health(0), damage(0), x(0), y(0), id(0), range(0), hits(0), shots(0),heading(RIGHT){}
 };
 
