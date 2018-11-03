@@ -346,6 +346,10 @@ void GameField::runMoves(ActorInfo &a)
     a.x += xoff;
     a.y += yoff;
     hitObj = checkObjectStrike(a);
+    if (hitObj == true){
+      a.x -= xoff;
+      a.y -= yoff;
+    }
     if (a.health > 0 && hitObj == false)
     {
       for (int i = 0; i < actors.size(); ++i ) //check each actor
@@ -354,7 +358,7 @@ void GameField::runMoves(ActorInfo &a)
         {
             if (a.id > 0 && actors[i].id > 0) //Check tank to tank ramming
             {
-                printf("Tank hit tank\n");
+                //printf("Tank hit tank\n");
                 //Reverse the move
                 a.x -= xoff;
                 a.y -= yoff;
@@ -371,7 +375,7 @@ void GameField::runMoves(ActorInfo &a)
                 }
             }else if(actors[i].id < 0) //Check if we ran into a projectile (What we are doesn't matter)
             {
-                printf("Projectile or Tank hit a projectile.\n");
+                //printf("Projectile or Tank hit a projectile.\n");
                 tHealth = a.health;
                 a.health -= actors[i].health; //Do damage to ourself
                 actors[i].health -= tHealth;; //Destroy the projectile
@@ -379,7 +383,7 @@ void GameField::runMoves(ActorInfo &a)
                   actorInfoById(-actors[i].id).hits++; 
             }else if(a.id < 0) //If we're a projectile and we hit a tank
             {
-              printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
+              //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
               actors[i].health -= a.damage; //damage the tank
               a.health -= a.health;         //damage ourselves
               if (a.id != -actors[i].id)      //no self hits
