@@ -66,7 +66,6 @@ direction ProjectileActor::attack(MapData map, PositionData status)
 attributes ProjectileActor::setAttribute(int pointsAvailable)
 {
     attributes projAttributes;
-
     return projAttributes;
 }
 

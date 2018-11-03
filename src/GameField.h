@@ -24,6 +24,8 @@
 * The class that will act as the manager of the gamefield
 * *****************************************************************************/
 
+class Game;
+
 class GameField
 {
 
@@ -42,6 +44,8 @@ protected:
     ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
     //Action points for each actor
     int ap;
+    bool checkObjectStrike(ActorInfo &a);
+    Game *gameptr = nullptr;
 
 public:
     void setSPECIAL(int points);
@@ -53,12 +57,13 @@ public:
     void nextTurn();
     void addActor(ActorInfo);
     void checkForCheaters(int pointsAvailable);
-    void addObstacle(int x, int y);
+    void addObstacle(int x, int y, int type = 1);
     void removeObstacle(int x, int y);
     /**
      * removes all actors that have a health of 0 from the game (not actors with health less than 0)
      */
     void cull();
+    std::string getWinner();
 
     /**
      * this will find all the actors in a single cell
@@ -74,6 +79,7 @@ public:
     GameField(int width, int height);
     GameField(int width, int height, std::vector<ActorInfo> startActors);
     GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int));
+    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), Game *);
     GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), int ap);
     GameField(int width, int height, std::vector<ActorInfo> startActors, int actonpoints);
 
@@ -90,7 +96,7 @@ public:
     std::vector<ActorInfo> getActors();
     MapData getMapData();
     ActorInfo & actorInfoById(int id);
-    bool obstacleAt(int x, int y);
+    int obstacleAt(int x, int y);
     void create_fog_of_war(MapData &map, ActorInfo current_actor);
 
 

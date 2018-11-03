@@ -3,6 +3,7 @@
  * @author David Donahue
  */
 #include "GameField.h"
+#include "game.h"
 #include <iostream>
 
 /**
@@ -19,7 +20,7 @@ GameField::GameField() : ap(2)
     fieldMap.map.resize(100);
     fieldMap.obstacleMap.resize(100);
     std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
-    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), 0);
     displayCallback = NULL;
 }
 
@@ -101,6 +102,20 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
     std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
     updateMap();
     displayCallback = d_callback;
+}
+
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), Game *game) : actors(startActors), ap(2)
+{
+    turnCount = 0;
+    fieldMap.width = width;
+    fieldMap.height = height;
+    fieldMap.map.resize(width * height);
+    fieldMap.obstacleMap.resize(width * height);
+    std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+    std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
+    updateMap();
+    displayCallback = d_callback;
+    gameptr = game;
 }
 
 GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), int AP) : actors(startActors), ap(AP)
@@ -211,8 +226,8 @@ void GameField::setSPECIAL(int points)
 void GameField::runMoves(ActorInfo &a)
 {
 
-    std::vector<int> collisionVect;
-    int collisionDamage;
+    int xoff = 0, yoff = 0, tHealth = 0;
+    bool hitObj;
     PositionData pos;
     direction dir;
 
@@ -229,70 +244,96 @@ void GameField::runMoves(ActorInfo &a)
     a.heading = (dir == STAY) ? a.heading : dir;
     //If it checks out, execute it
     //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
+    if (a.health <= 0)//We arn't playing this game with dead actors anymore
+            return;
     switch (dir)
     {
     case UP:
-        if (a.y > 0 && !obstacleAt(a.x, a.y - 1))
-            a.y--;
+        if (a.y > 0 && (!obstacleAt(a.x, a.y - 1) 
+                    || obstacleAt(a.x, a.y - 1) == 'R' 
+                    || obstacleAt(a.x, a.y - 1) == 'T' 
+                    || obstacleAt(a.x, a.y - 1) == 'B'))
+            yoff = -1;
         else
             a.health--;
         break;
 
     case DOWN:
-        if (a.y < fieldMap.height-1 && !obstacleAt(a.x, a.y + 1))
-            a.y++;
+        if (a.y < fieldMap.height-1 && (!obstacleAt(a.x, a.y + 1) 
+                                    || obstacleAt(a.x, a.y + 1) == 'R' 
+                                    || obstacleAt(a.x, a.y + 1) == 'T' 
+                                    || obstacleAt(a.x, a.y + 1) == 'B'))
+            yoff = 1;
         else
             a.health--;
         break;
 
     case LEFT:
-        if (a.x > 0 && !obstacleAt(a.x - 1, a.y))
-            a.x--;
+        if (a.x > 0 && (!obstacleAt(a.x - 1, a.y) 
+                    || obstacleAt(a.x - 1, a.y) == 'R' 
+                    || obstacleAt(a.x - 1, a.y) == 'T' 
+                    || obstacleAt(a.x - 1, a.y) == 'B'))
+            xoff = -1;
         else
             a.health--;
         break;
 
     case RIGHT:
-        if (a.x < fieldMap.width-1 && !obstacleAt(a.x + 1, a.y))
-            a.x++;
+        if (a.x < fieldMap.width-1 && (!obstacleAt(a.x + 1, a.y)
+                                   || obstacleAt(a.x + 1, a.y) == 'R' 
+                                   || obstacleAt(a.x + 1, a.y) == 'T' 
+                                   || obstacleAt(a.x + 1, a.y) == 'B' ))
+            xoff = 1;
         else
             a.health--;
         break;
     case UPLEFT:
-        if (a.y > 0 && a.x > 0 && !obstacleAt(a.x-1,a.y-1))
+        if (a.y > 0 && a.x > 0 && (!obstacleAt(a.x-1,a.y-1) 
+                               || obstacleAt(a.x-1,a.y-1)== 'R' 
+                               || obstacleAt(a.x-1,a.y-1)== 'T' 
+                               || obstacleAt(a.x-1,a.y-1) == 'B'))
         {
-            a.y--;
-            a.x--;
+            yoff = -1;
+            xoff = -1;
         }
         else
             a.health--;
         break;
 
     case UPRIGHT:
-        if (a.y > 0 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y-1))
+        if (a.y > 0 && a.x < fieldMap.width-1 && (!obstacleAt(a.x+1, a.y-1) 
+                                || obstacleAt(a.x+1, a.y-1) == 'R' 
+                                || obstacleAt(a.x+1, a.y-1) == 'T' 
+                                || obstacleAt(a.x+1, a.y-1) == 'B'))
         {
-            a.y--;
-            a.x++;
+                yoff = -1;
+                xoff = 1;
         }
         else
-            a.health--;
+                a.health--;
         break;
 
     case DOWNLEFT:
-        if (a.y < fieldMap.height-1 && a.x > 0 && !obstacleAt(a.x-1,a.y+1))
+        if (a.y < fieldMap.height-1 && a.x > 0 && (!obstacleAt(a.x-1,a.y+1) 
+                                               || obstacleAt(a.x-1,a.y+1) == 'R' 
+                                               || obstacleAt(a.x-1,a.y+1) == 'T' 
+                                               || obstacleAt(a.x-1,a.y+1) == 'B'))
         {
-            a.y++;
-            a.x--;
+            yoff = 1;
+            xoff = -1;
         }
         else
             a.health--;
         break;
 
     case DOWNRIGHT:
-        if (a.y < fieldMap.height-1 && a.x < fieldMap.width-1 && !obstacleAt(a.x+1, a.y+1))
+        if (a.y < fieldMap.height-1 && a.x < fieldMap.width-1 && (!obstacleAt(a.x+1, a.y+1) 
+                                                              || obstacleAt(a.x+1, a.y+1) == 'R'
+                                                              || obstacleAt(a.x+1, a.y+1) == 'T' 
+                                                              || obstacleAt(a.x+1, a.y+1) == 'B'))
         {
-            a.y++;
-            a.x++;
+            yoff = 1;
+            xoff = 1;
         }
         else
             a.health--;
@@ -302,55 +343,113 @@ void GameField::runMoves(ActorInfo &a)
         break;
     }
 
-    bool tankInCollision = false;
-
-    collisionVect.erase(collisionVect.begin(), collisionVect.end()); //blank the vector
-    for (int i = 0; i < actors.size(); ++i ) //check each actor
-    {
-        if (actors[i].x == a.x && actors[i].y == a.y)
-        {
-            collisionVect.push_back(i);
-            if (actors[i].id > 0)
-                tankInCollision = true;
-        }
-
+    a.x += xoff;
+    a.y += yoff;
+    hitObj = checkObjectStrike(a);
+    if (hitObj == true){
+      a.x -= xoff;
+      a.y -= yoff;
     }
-
-    if (collisionVect.size() > 1 && a.health > 0)
+    if (a.health > 0 && hitObj == false)
     {
-        collisionDamage = 0;
-        for (auto i: collisionVect)
+      for (int i = 0; i < actors.size(); ++i ) //check each actor
+      {
+        if (a.health > 0 && actors[i].health > 0 && actors[i].x == a.x && actors[i].y == a.y && a.id != actors[i].id)
         {
-            if(!(actorInfoById(-actors[i].id) == nullActor) && tankInCollision)
+            if (a.id > 0 && actors[i].id > 0) //Check tank to tank ramming
             {
-                actorInfoById(-actors[i].id).hits++;
-            }
-            collisionDamage += actors[i].damage;
-        }
-        for (auto i: collisionVect) //apply the portion from the other actors
-        {
-            actors[i].health -= (collisionDamage - actors[i].damage);
-            if (actors[i].health < 0)
-                actors[i].health = 0;
-            if (actors[i].health == 0)
+                //printf("Tank hit tank\n");
+                //Reverse the move
+                a.x -= xoff;
+                a.y -= yoff;
+                tHealth = actors[i].health;
+                actors[i].health -= a.health; //deal full health damage to target
+                a.health -= tHealth; //deal 1 damage to tank doing the ramming
+                if (actors[i].health <= 0)
+                {
+                  actors[i].health = 0;
+                  actors[i].damage = 0;
+                  actors[i].id = 0;
+                  actors[i].range = 0;
+                  a.hits++; //A tank hit is still a hit right?
+                }
+            }else if(actors[i].id < 0) //Check if we ran into a projectile (What we are doesn't matter)
             {
-                actors[i].damage = 0;
-                actors[i].id = 0;
-                actors[i].range = 0;
+                //printf("Projectile or Tank hit a projectile.\n");
+                tHealth = a.health;
+                a.health -= actors[i].health; //Do damage to ourself
+                actors[i].health -= tHealth;; //Destroy the projectile
+                if (a.id > 0 && -actors[i].id != a.id) //Give the owner a hit, but not a self hit and not a missile to missle hit
+                  actorInfoById(-actors[i].id).hits++; 
+            }else if(a.id < 0) //If we're a projectile and we hit a tank
+            {
+              //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
+              actors[i].health -= a.damage; //damage the tank
+              a.health -= a.health;         //damage ourselves
+              if (a.id != -actors[i].id)      //no self hits
+                actorInfoById(-a.id).hits++;  //give our owner a hit
             }
         }
+      }
     }
-    if (a.health == 0)
+    if (a.health <= 0 || hitObj == true)
     {
         a.damage = 0;
         a.id = 0;
+        a.health = 0;
     }
-    
     updateMap();
 
     if (displayCallback != NULL)
         displayCallback(fieldMap, actors, turnCount);
 
+}
+
+bool GameField::checkObjectStrike(ActorInfo &a)
+{
+  int tempOb = obstacleAt(a.x, a.y);
+  if (a.id > 0 || a.health < 0) //Get the non projectiles back out of here
+          return false;
+  if (tempOb == 0){  //if the spot is empty then we couldn't have hit anything
+          //printf("Nothing hit at (%d, %d): %d Health: %d\n", a.x, a.y, tempOb, a.health);
+          return false;
+  }
+  else if (tempOb == 'B'){ //Bushes don't stop bullets 
+          //We technically dont need this now since bushes dont do anything, but we can make them destroyable later?
+          //printf("Bush hit.  Not stopping.\n");
+          return false;
+  }
+  else if(tempOb == 'R')
+  {
+    //printf("Rock strike, log it.\n");
+    for (auto r : gameptr->rocks)
+    {
+          if (r->gridx == a.x && r->gridy == a.y && r->health > 0)
+          {
+            //printf("Found Rock strike, log it.\n");
+            r->health -= a.damage;
+            if (r->health < 0)
+            {
+                    r->health = 0;
+            }
+                
+            return true;
+          }
+    }
+  }else if (tempOb == 'T')
+  {
+    //printf("Tree strike, log it.\n");
+    for (auto t : gameptr->trees)
+    {
+          if (t->gridx == a.x && t->gridy == a.y && t->health > 0)
+          {
+            //printf("Found tree strike, chop it.\n");
+            t->health -= a.damage;
+            return true;
+          }
+    }
+  }
+  return false;
 }
 /***************************************************************************//**
 * @author Riley Kopp
@@ -410,10 +509,11 @@ void GameField::nextTurn()
     PositionData pos;
     int action;
     int act_ap;
+    int tSize, tId;
     MapData fog_of_war = fieldMap;
 
 
-    for (int i = 0; i < actors.size(); ++i)
+    for (int i = 0; i < actors.size() && actors[i].health != 0; ++i)
     {
         act_ap = actors[i].range;
         while (act_ap > 0 && actors[i].id != 0)
@@ -427,12 +527,12 @@ void GameField::nextTurn()
             pos.ap = act_ap;
             action = actors[i].act_p->spendAP(fog_of_war, pos);
             if ( action == 1)
+            {
                 runMoves(actors[i]);
-            
+            }
+
             else if (action == 2)
             {
-                if(actors[i].health != 0)
-                {
                     //PositionData to give the AI
                     pos.game_x = actors[i].x;
                     pos.game_y = actors[i].y;
@@ -461,9 +561,9 @@ void GameField::nextTurn()
                         }
                     }
             
-                }
             }
             --act_ap;
+            
         }
     }
 
@@ -509,9 +609,9 @@ void GameField::checkForCheaters(int pointsAvailable)
  * @param[in] y - the y value of the obstacle
  */
 
-void GameField::addObstacle(int x, int y)
+void GameField::addObstacle(int x, int y, int type)
 {
-    fieldMap.obstacleMap[x + fieldMap.width * y] = true;
+    fieldMap.obstacleMap[x + fieldMap.width * y] = type;
 }
 
 /**
@@ -580,6 +680,7 @@ void GameField::cull()
  * Returns the full fieldMap as a MapData struct
  */
 MapData GameField::getMapData()
+
 {
     return fieldMap;
 }
@@ -616,7 +717,16 @@ ActorInfo & GameField::actorInfoById(int id)
  * @return true if an obstacle exists at a tile, false if not
  *
  */
-bool GameField::obstacleAt(int x, int y)
+int GameField::obstacleAt(int x, int y)
 {
     return fieldMap.obstacleMap[x + y * fieldMap.width];
+}
+
+std::string GameField::getWinner()
+{
+    string winner = "none";
+    for (auto a : actors)
+      if (a.health > 0 && a.id > 0)
+              winner = a.name;
+    return winner;
 }

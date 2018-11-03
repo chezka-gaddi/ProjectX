@@ -514,7 +514,7 @@ TEST_CASE("GameField Calculates Fog of War")
 
     GameField manager(7, 7, tank_list);
 
-    std::vector<bool> expected_obstacles = { true, true, true, true, true, true, true,
+    std::vector<int> expected_obstacles = { true, true, true, true, true, true, true,
                                              true, false, false, false, false, false, true,
                                              true, false, false, false, false, false, true,
                                              true, false, false, false, false, false, true,
