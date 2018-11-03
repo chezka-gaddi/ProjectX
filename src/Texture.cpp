@@ -28,11 +28,11 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
                    std::vector <std::string> bushes)
 {
     // Load in the tank texure information
-    cout << "Loading Tank Textures:";
+    cout << "\nLoading Tank Textures:";
     for( int i = 0; i < images.size(); i++ )
     {
         const char *c = images[i].c_str();
-        (i%5 == 0) ? cout << "\n" << c << "   \t" : cout << c << "   \t";
+        (i%5 == 0) ? cout << "\n" << c << "  " : cout << c << "  ";
         tankTex[i] = SOIL_load_OGL_texture(
                      c,
                      SOIL_LOAD_AUTO,
@@ -50,7 +50,7 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
     for( int i = 0; i < trees.size(); i++ )
     {
         const char *c = trees[i].c_str();
-        cout << c << "\t";
+        cout << c << "  ";
         treeTex[i] = SOIL_load_OGL_texture(
                      c,
                      SOIL_LOAD_AUTO,
@@ -67,7 +67,7 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
     for( int i = 0; i < rocks.size(); i++ )
     {
         const char *c = rocks[i].c_str();
-        cout << c << "\t";
+        cout << c << "  ";
         rockTex[i] = SOIL_load_OGL_texture(
                      c,
                      SOIL_LOAD_AUTO,
@@ -84,7 +84,7 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
     for( int i = 0; i < bushes.size(); i++ )
     {
         const char *c = bushes[i].c_str();
-        cout << c << "\t";
+        cout << c << "  ";
         bushTex[i] = SOIL_load_OGL_texture(
                      c,
                      SOIL_LOAD_AUTO,
@@ -114,7 +114,7 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
     for( int i = 1; i < 4; i++ )
     {
         const char *c = gameimgs[i-1].c_str();
-        cout << c << "\t";
+        cout << c << "  ";
         gameTex[i] = SOIL_load_OGL_texture(
                      c,
                      SOIL_LOAD_AUTO,
