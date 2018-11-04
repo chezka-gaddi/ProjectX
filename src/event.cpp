@@ -73,11 +73,11 @@ void updateDrawables(Game &game)
             game.objects.push_back( temp_draw );
         }
 
-        else if( act.id < 0 )
+        else if( act.id < 0 && act.health > 0)
         {
             for(auto actor : actors)
             {
-                if (actor.x == act.x && actor.y == act.y && actor.id != act.id)
+                if (actor.x == act.x && actor.y == act.y && actor.id != act.id && actor.health != 0)
                 {
                     overlap = true;
                 }

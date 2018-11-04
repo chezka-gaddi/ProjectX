@@ -40,13 +40,60 @@ direction CamperAI::move(MapData map, PositionData status)
 direction CamperAI::attack(MapData map, PositionData status)
 {
     int y_pos = status.game_y;
-    int median = map.height / 2;
+    int x_pos = status.game_x;
+    int hmedian = map.height / 2;
+    int wmedian = map.width / 2;
     direction retval;
 
-    if(y_pos >= median)
-        retval = UP;
-    else
-        retval = DOWN;
+    if(y_pos >= hmedian && x_pos <= wmedian){
+      switch (turn){
+        case 1:
+          retval = UPRIGHT;
+          break;
+        case 2:
+          retval = RIGHT;
+          break;
+        default:
+          retval = UP;
+          break;
+      }
+    }else if(y_pos < hmedian && x_pos <= wmedian){
+      switch (turn){
+        case 1:
+          retval = DOWNRIGHT;
+          break;
+        case 2:
+          retval = RIGHT;
+          break;
+        default:
+          retval = DOWN;
+          break;
+      }
+    }else if(y_pos >= hmedian && x_pos > wmedian){
+      switch (turn){
+        case 1:
+          retval = UPLEFT;
+          break;
+        case 2:
+          retval = LEFT;
+          break;
+        default:
+          retval = UP;
+          break;
+      }
+    }else if(y_pos < hmedian && x_pos > wmedian){
+      switch (turn){
+        case 1:
+          retval = DOWNLEFT;
+          break;
+        case 2:
+          retval = LEFT;
+          break;
+        default:
+          retval = DOWN;
+          break;
+      }
+    }
 
     return retval;
 }
@@ -62,6 +109,12 @@ attributes CamperAI::setAttribute(int pointsAvailable)
 
 int CamperAI::spendAP(MapData map, PositionData status)
 {
+    if (maxAp == 0)
+      maxAp = status.ap;
+    if (maxAp == status.ap)
+      turn = 0;
+    else
+      turn++;
     if (move(map, status) != STAY)
             return 1;
     return 2; // Attack
