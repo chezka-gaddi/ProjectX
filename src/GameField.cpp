@@ -346,9 +346,11 @@ void GameField::runMoves(ActorInfo &a)
     a.x += xoff;
     a.y += yoff;
     hitObj = checkObjectStrike(a);
-    if (hitObj == true){
+    if (a.id > 0 && obstacleAt(a.x, a.y) == 'R'){
       a.x -= xoff;
       a.y -= yoff;
+      hitObj == true;
+      a.health--;
     }
     if (a.health > 0 && hitObj == false)
     {
@@ -392,7 +394,7 @@ void GameField::runMoves(ActorInfo &a)
         }
       }
     }
-    if (a.health <= 0 || hitObj == true)
+    if (a.id < 0 && (a.health <= 0 || hitObj == true))
     {
         a.damage = 0;
         a.id = 0;
