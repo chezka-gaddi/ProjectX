@@ -23,9 +23,9 @@ direction CamperAI::move(MapData map, PositionData status)
        (x_pos == map.width - 1 && y_pos == 0) || 
        (x_pos == map.width - 1 && y_pos == map.height - 1))
         retval = STAY;
-    else if(y_pos > median)
-        retval = UP;
     else if(y_pos <= median)
+        retval = UP;
+    else if(y_pos > median)
         retval = DOWN;
     else if(x_pos > median2)
         retval = RIGHT;
