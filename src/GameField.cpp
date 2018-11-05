@@ -372,6 +372,7 @@ void GameField::runMoves(ActorInfo &a)
                 hit += tHealth - 1;
                 if (actors[i].health <= 0)
                 {
+                  SFX.push_back(make_pair(actors[i].x, actors[i].y));
                   actors[i].health = 0;
                   actors[i].damage = 0;
                   actors[i].id = 0;
@@ -392,6 +393,14 @@ void GameField::runMoves(ActorInfo &a)
               hit += a.health;
               if (a.id != -actors[i].id)      //no self hits
                 actorInfoById(-a.id).hits++;  //give our owner a hit
+              if (actors[i].health <= 0)
+              {
+                SFX.push_back(make_pair(actors[i].x, actors[i].y));
+                actors[i].health = 0;
+                actors[i].damage = 0;
+                actors[i].id = 0;
+                actors[i].range = 0;
+              }
             }
         }
       }
@@ -399,6 +408,7 @@ void GameField::runMoves(ActorInfo &a)
     a.health -= hit;
     if (a.id < 0 && (a.health <= 0 || hitObj == true))
     {
+        SFX.push_back(make_pair(a.x, a.y));
         a.damage = 0;
         a.id = 0;
         a.health = 0;
@@ -641,6 +651,24 @@ void GameField::removeObstacle(int x, int y)
 std::vector<ActorInfo> GameField::getActors()
 {
     return actors;
+}
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Get the current set of SFX
+ */
+std::vector<std::pair<int,int>> GameField::getSFX()
+{
+    return SFX;
+}
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Clear the current set of SFX
+ */
+void GameField::clearSFX()
+{
+    SFX.clear();
 }
 /**
  * @author David Donahue

@@ -59,7 +59,7 @@ void updateDrawables(Game &game)
         game.objects.clear();
 
     vector <ActorInfo> actors = game.tankGame->getActors();
-
+    vector <std::pair<int,int>> SFX = game.tankGame->getSFX();
     //for( auto obs : game.constants )
         //game.objects.push_back( obs );
 
@@ -90,6 +90,27 @@ void updateDrawables(Game &game)
             overlap = false;
         }
     }
+    overlap = false;
+    for (auto sfx : SFX )
+    {
+      //printf("Adding explosion. At (%d,%d)\n", sfx.first, sfx.second);
+      for (int i = 0; i < game.sfx.size();i++)
+      {
+        if (game.sfx[i]->screen_x == game.convertGLXCoordinate(sfx.first) 
+            && game.sfx[i]->screen_y == game.convertGLYCoordinate(sfx.second))
+        {
+          overlap = true;
+          break;
+        }
+      }
+      if (!overlap)
+      {
+        temp_draw = new sfxDrawable(game.convertGLXCoordinate( sfx.first ), game.convertGLYCoordinate(sfx.second));
+        game.sfx.push_back(temp_draw);
+      }
+      overlap = false;
+    }
+    game.tankGame->clearSFX();
 }
 
 
@@ -139,7 +160,12 @@ void DisplayEvent::doAction(Game &game)
         stuff = game.bushes[i];
         stuff->draw(game.getX(), game.getY());
     }
-
+    for( int i = 0; i < game.sfx.size(); i++ )
+    {
+        stuff = game.sfx[i];
+        stuff->draw(game.getX(), game.getY());
+    }
+    game.sfx.clear();
     system("sleep 0.2");
     glutSwapBuffers();
 }

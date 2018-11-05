@@ -32,6 +32,8 @@ class GameField
 protected:
     /*!< this is all of the actors on the field: tanks + projectiles */
     std::vector<ActorInfo> actors;
+    std::vector<std::pair<int,int>> SFX;
+
     int turnCount; /*!< The turn count number */
     /** struct with width, height, and a vector of ints in
      row major order, 0 for empty tiles and actor id for nonempty. */
@@ -94,6 +96,8 @@ public:
     int getHeight();
     std::vector<int> getMap();
     std::vector<ActorInfo> getActors();
+    std::vector<std::pair<int,int>> getSFX();
+    void clearSFX();
     MapData getMapData();
     ActorInfo & actorInfoById(int id);
     int obstacleAt(int x, int y);
