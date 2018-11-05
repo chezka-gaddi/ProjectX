@@ -33,10 +33,14 @@ public:
     ~Drawable() {}
 
     virtual void draw(int, int) = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
+protected:
     void setScalar(float newScalar){this->scalar = newScalar;};
-    float getScalar(){return this->scalar;};
-    
+    //float getScalar(){return this->scalar;};
+    int gridx;
+    int gridy; 
     static float scalar;
+friend class Game;
+friend class GameField;
 };
 
 
@@ -85,7 +89,7 @@ public:
 class Obstacles : public Drawable
 {
 public:
-    Obstacles( int, GLfloat, GLfloat);
+    Obstacles( int, GLfloat, GLfloat, int, int);
 
     void draw(int, int);
 };
@@ -122,6 +126,20 @@ public:
     void draw(int, int);
 };
 
+/***************************************************************************//**
+* @author Not Chezka Gaddi
+* @class sfxDrawable
+* @brief sfxDrawable contains instructions to draw the sfxDrawable
+*******************************************************************************/
+class sfxDrawable : public Drawable
+{
+public:
+    int angle;
+
+    sfxDrawable(GLfloat x, GLfloat y);
+
+    void draw(int, int);
+};
 
 
 #endif //SLACKERS_PLATFORM_DRAWABLE_H

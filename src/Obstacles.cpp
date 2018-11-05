@@ -15,7 +15,7 @@
 * @param[in] x_coor - coordinate to spawn obstacle
 * @param[in] y_coor - coordinate to spawn obstacle
 * *****************************************************************************/
-Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor )
+Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
 {
     //id's:
     // 0 = Tree   1 = Rocks   2 = Bushes
@@ -24,10 +24,13 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor )
     //20-29 Bushes - Packaged Bushes 20-23 - 4 Bushes
     screen_x = x_coor;
     screen_y = y_coor;
-    
+    gridx = gx;
+    gridy = gy;
     if (id == 0){ //It's a tree
+      health = 2;
       tex = ((rand() % 4));
     }else if( id == 1){ //It's a Rocks
+      health = 4;
       tex = ((rand() % 3) + 10);
     }else if( id == 2){ //It's a Bushes
       tex = ((rand() % 4) + 20);

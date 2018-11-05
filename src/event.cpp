@@ -59,7 +59,7 @@ void updateDrawables(Game &game)
         game.objects.clear();
 
     vector <ActorInfo> actors = game.tankGame->getActors();
-
+    vector <std::pair<int,int>> SFX = game.tankGame->getSFX();
     //for( auto obs : game.constants )
         //game.objects.push_back( obs );
 
@@ -73,11 +73,11 @@ void updateDrawables(Game &game)
             game.objects.push_back( temp_draw );
         }
 
-        else if( act.id < 0 )
+        else if( act.id < 0 && act.health > 0)
         {
             for(auto actor : actors)
             {
-                if (actor.x == act.x && actor.y == act.y && actor.id != act.id)
+                if (actor.x == act.x && actor.y == act.y && actor.id != act.id && actor.health != 0)
                 {
                     overlap = true;
                 }
@@ -90,6 +90,27 @@ void updateDrawables(Game &game)
             overlap = false;
         }
     }
+    overlap = false;
+    for (auto sfx : SFX )
+    {
+      //printf("Adding explosion. At (%d,%d)\n", sfx.first, sfx.second);
+      for (int i = 0; i < game.sfx.size();i++)
+      {
+        if (game.sfx[i]->screen_x == game.convertGLXCoordinate(sfx.first) 
+            && game.sfx[i]->screen_y == game.convertGLYCoordinate(sfx.second))
+        {
+          overlap = true;
+          break;
+        }
+      }
+      if (!overlap)
+      {
+        temp_draw = new sfxDrawable(game.convertGLXCoordinate( sfx.first ), game.convertGLYCoordinate(sfx.second));
+        game.sfx.push_back(temp_draw);
+      }
+      overlap = false;
+    }
+    game.tankGame->clearSFX();
 }
 
 
@@ -106,10 +127,8 @@ void DisplayEvent::doAction(Game &game)
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glLoadIdentity();
 
-    
     updateDrawables(game);
     Drawable *stuff;
-
 
     for( int i = 0; i < game.constants.size(); i++ )
     {
@@ -117,14 +136,36 @@ void DisplayEvent::doAction(Game &game)
         stuff->draw(game.getX(), game.getY());
     }
     
-    
     for( int i = 0; i < game.objects.size(); i++ )
     {
         stuff = game.objects[i];
         stuff->draw(game.getX(), game.getY());
     }
-
-	
+    
+    for( int i = 0; i < game.trees.size(); i++ )
+    {
+        stuff = game.trees[i];
+        if (stuff->health > 0 )
+          stuff->draw(game.getX(), game.getY());
+    }
+    
+    for( int i = 0; i < game.rocks.size(); i++ )
+    {
+        stuff = game.rocks[i];
+        if (stuff->health > 0 )
+                stuff->draw(game.getX(), game.getY());
+    }
+    for( int i = 0; i < game.bushes.size(); i++ )
+    {
+        stuff = game.bushes[i];
+        stuff->draw(game.getX(), game.getY());
+    }
+    for( int i = 0; i < game.sfx.size(); i++ )
+    {
+        stuff = game.sfx[i];
+        stuff->draw(game.getX(), game.getY());
+    }
+    game.sfx.clear();
     system("sleep 0.2");
     glutSwapBuffers();
 }

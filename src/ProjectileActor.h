@@ -25,11 +25,8 @@ public:
     ProjectileActor(direction d);
 
     direction move(MapData map, PositionData status);
-
     direction attack(MapData map, PositionData status);  
-    
     attributes setAttribute(int pointsAvailable);
-
     int spendAP(MapData map, PositionData status);
 
 };

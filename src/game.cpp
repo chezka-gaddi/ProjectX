@@ -120,6 +120,7 @@ static bool isplayable(std::vector<ActorInfo> actorInfo)
     for (auto a : actorInfo)
         tankCount += (a.id > 0) ? 1 : 0;
 
+
     return (tankCount > 1);
 }
 
@@ -176,8 +177,11 @@ void Game::executeTurn()
 
     else
     {
-        gameOver();
-        glutLeaveMainLoop();
+      ofstream fout("results.txt", ios::out | ios::app);
+      fout << tankGame->getWinner() << endl;
+      fout.close();
+      gameOver();
+      glutLeaveMainLoop();
     }
 }
 /**
@@ -222,6 +226,9 @@ void Game::initGameState()
     int range = 1;
     int radar = 2;
     std::vector<std::pair<int,int>> obstacleLocations;
+    std::vector<std::pair<int,int>> treeLocations;
+    std::vector<std::pair<int,int>> rockLocations;
+    std::vector<std::pair<int,int>> bushLocations;
     std::vector<std::pair<int,int>> tankLocations;
 
     std::vector<std::string> tankImages;
@@ -233,11 +240,16 @@ void Game::initGameState()
     int attributePoints = 0;
     srand(time(0));
 
+    ofstream fout("results.txt", ios::out | ios::app);
+
     if (!fin){
         cout << "FAILED TO LOAD CONFIG\n";
         exit(1);
     }
-    
+    if (!fout){
+        cout << "UNABLE OPEN RESULTS FILE (results.txt)\n";
+    }
+
     while (!fin.eof())
     {
         getline(fin, configLine);
@@ -245,22 +257,33 @@ void Game::initGameState()
         {
             if (configLine == "MAP")
             {
+               cout << "Building the map...\n";
                for ( int y = 0; y < height; y++)
                {
+               if (y == height/3)
+                       cout << "  Planting trees...\n";
+               else if (y == height/3*2)
+                       cout << "  Moving rocks...\n";
+               else if (y == height-1)
+                       cout << "  Trimming bushes...\n";
                     getline(fin, configLine);
-                    cout << configLine << endl;
+                    //cout << configLine << endl;
 
                     for(int x = 0; x < width; x++)
-                    {   
-                        if (configLine[x] == 'O' 
-                         || configLine[x] == 'B' 
-                         || configLine[x] == 'T')
-                            obstacleLocations.push_back(std::pair<int, int> (x, y));
+                    {
+                        if (configLine[x] == 'B')
+                          bushLocations.push_back(std::pair<int,int> (x, y));
+                        else if (configLine[x] == 'R')
+                          rockLocations.push_back(std::pair<int,int> (x, y));
+                        else if (configLine[x] == 'T')
+                          treeLocations.push_back(std::pair<int,int> (x, y));
+                        else if (configLine[x] != 'x')
+                          obstacleLocations.push_back(std::pair<int, int> (x, y));
                     }
 
                 }
 
-            
+                cout << "...Done\n";
             }
             int i = configLine.find(' '); //index of first space
             std::string id = configLine.substr(0, i); //separate the identefier from the argumets
@@ -269,17 +292,19 @@ void Game::initGameState()
             //AI settings
             if (id == "AI") //AI to load
             {
+                cout << "Checking player " << AINames.size()+1 << "...";
                 int x, y;
                 i = args.find(' ');
                 AINames.push_back(args.substr(0, i));
                 std::stringstream(args.substr(i+1)) >> x >> y;
                 tankLocations.push_back(std::pair<int,int>(x,y));
-                
+                cout << "  finding spawn...";
                 i = args.find(' ', i+1);    //skip x
                 i = args.find(' ', i+1);    //skip y
-                
+
                 args = args.substr(i+1);
-                
+                cout << "  colorizing tank...";
+
                 for( int x = 0; x < 5; x++ )
                 {
                     i = args.find(' ');    //skip y
@@ -287,9 +312,11 @@ void Game::initGameState()
                     tankImages.push_back(name);
                     args = args.substr(i+1);
                 }
+                cout << "  ...done.\n";
             }
             else if (id == "AI_SPEED")
             {
+                cout << "Speeding up the AI's...  ";
                 stringstream(args) >> ai_speed;
                 if (ai_speed > 1000)
                 {
@@ -298,37 +325,80 @@ void Game::initGameState()
                 }
                 TimerEvent::idle_speed = ai_speed;
                 idle_speed = ai_speed;
-            } 
+                cout << "...done.\n";
+            }
             //field params
             else if (id == "WIDTH")
             {
+                cout << "S t r e t c h i n g   t h e   m a p . . .  ";
                 stringstream(args) >> width;
-                if (width < 15) { 
+                if (width < 15) {
                     width = 15;
                     cout << "Invalid width parameter, defaulting to 15.\n";
                 } else if (width > 40) {
                         width = 40;
-                        cout << "Invalid width parameter, defaulting to 40.\n";
+                        cout << "Width parameter too high, defaulting to 40.\n";
                 }
                 fieldx = width;
                 Drawable::scalar = (3.75/width)/.25;
+                cout << "...done.\n";
             }
             else if (id == "HEIGHT")
             {
+                cout << "Elon\n    gati\n        ng t\n            he ma\n                p...  ";
                 stringstream(args) >> height;
                 if (height < 9){
                     height = 9;
                     cout << "Invalid height parameter, defaulting to 9.\n";
                 } else if (height > 20) {
                         height = 20;
-                        cout << "Invalid height parameter, defaulting to 30.\n";
+                        cout << "Height parameter too high, defaulting to 30.\n";
                 }
                 fieldy = height;
+                cout << "...done.\n";
             }
             else if (id == "FIELDIMAGE")
             {
+                cout << "Painting the background...\n";
                 stringstream(args) >> name;
                 gameImages.push_back(name);
+                cout << "...done\n";
+            }
+            else if (id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH")
+            {
+                int x,y;
+                bool taken;
+                stringstream(args) >> x >> y;
+                if (x > width - 1 || x < 0 || y > height - 1 || y < 0)
+                {
+                    printf ("Invalid obstacle location: (%d, %d). Ranges: (0-%d, 0-%d)\n", x, y, width-1, height-1);
+                }else {
+                  for (int i = 0; i < tankLocations.size(); i ++){
+                          if (tankLocations[i].first == x && tankLocations[i].second == y){
+                                  taken = true;
+                                  printf ("Invalid obstacle location: (%d, %d) aleady taken by tank\n", x, y);
+                          }
+                  }
+                  if (!taken)
+                  {
+                          for (int i = 0; i < obstacleLocations.size(); i ++){
+                              if (obstacleLocations[i].first == x && obstacleLocations[i].second == y){
+                                taken = true;
+                                printf ("Invalid obstacle location: (%d, %d) aleady taken by object\n", x, y);
+                              }
+                          }
+                  }
+                  if (!taken && id == "TREE"){
+                          treeLocations.push_back(std::pair<int,int> (x, y));
+                  } else if (!taken && id == "ROCK"){
+                          rockLocations.push_back(std::pair<int,int> (x, y));
+                  } else if (!taken && id == "BUSH"){
+                          bushLocations.push_back(std::pair<int,int> (x, y));
+                  } else {
+                          obstacleLocations.push_back(std::pair<int,int> (x, y));
+                  }
+                  taken = false;
+                }
             }
             else if( id == "OBSTACLE_IMAGE" )
             {
@@ -410,55 +480,55 @@ void Game::initGameState()
             else if (id == "DAMAGE")
             {
                 stringstream(args) >> damage;
-                if (damage < 1){ 
+                if (damage < 1){
                   damage = 1;
                   cout << "Invalid damage value, defaulting to 2\n";
                 } else if (damage > 4) {
-                    printf("%d damage might be a little excesive, setting to 4", damage);
+                    printf("%d damage might be a little excesive, setting to 4\n", damage);
                     damage = 4;
                 }
             }
             else if (id == "HEALTH")
             {
                 stringstream(args) >> health;
-                if (health < 2){ 
+                if (health < 2){
                   health = 2;
                   cout << "Invalid health value, defaulting to 2\n";
-                } else if (health > 5) {
-                    printf("%d health might be a little excesive, setting to 5", health);
-                    health = 5;
+                } else if (health > 8) {
+                    printf("%d health might be a little excesive, setting to 5\n", health);
+                    health = 8;
                 }
             }
             else if (id == "AP")
             {
                 stringstream(args) >> range;
-                if (range < 2){ 
+                if (range < 2){
                   range = 2;
                   cout << "Invalid number of action points value, defaulting to 2\n";
                 } else if (range > 5) {
-                    printf("%d range might be a little excesive, setting to 5", range);
+                    printf("%d range might be a little excesive, setting to 5\n", range);
                     range = 5;
                 }
             }
             else if (id == "RADAR")
             {
                 stringstream(args) >> radar;
-                if (radar < 2){ 
+                if (radar < 2){
                   radar = 2;
                   cout << "Invalid radar value, defaulting to 2\n";
-                } else if (radar > 10) {
-                    printf("%d radar might be a little excesive, setting to 10", radar);
-                    radar = 10;
+                } else if (radar > width/2) {
+                    printf("%d radar might be a little excesive, setting to %d\n", radar,width/2);
+                    radar = width/2;
                 }
             }
             else if (id == "SPECIAL")
             {
                 stringstream(args) >> attributePoints;
-                if (attributePoints < 1){ 
+                if (attributePoints < 1){
                   attributePoints = 1;
                   cout << "Invalid special value, defaulting to 1\n";
                 } else if (attributePoints > 4) {
-                    printf("%d specials might be a little excesive, setting to 4", attributePoints);
+                    printf("%d specials might be a little excesive, setting to 4.\n", attributePoints);
                     attributePoints = 4;
                 }
             }
@@ -472,15 +542,21 @@ void Game::initGameState()
 
     glEnable(GL_TEXTURE_2D);
     if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages))
-        cout << "Failed to open image." << endl;
+        cout << "Failed to open image(s).\n" << endl;
     glDisable(GL_TEXTURE_2D);
-    
-    cout << "Loading Shared Objects...";
+
+    cout << "Loading Shared Objects...\n";
     std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
 
     std::vector<ActorInfo> startActors;
 
 
+    fout << "Players: ";
+    for (int i = 0; i < AINames.size(); i++)
+            fout << AINames[i] << " ";
+    fout << "Winner: ";
+    fout.close();
+    cout << "Creating Player Tanks...\n";
     for (int i = 0; i < startActorPointers.size(); ++i)
     {
         startActors.push_back(ActorInfo(startActorPointers[i]
@@ -491,9 +567,11 @@ void Game::initGameState()
                     , i + 1
                     , range
                     , 0
-                    , radar));
+                    , radar
+                    , AINames[i]));
+        printf("Actor %d name: %s\n", i, AINames[i].c_str());
     }
-    cout << "Done" << endl;
+    cout << "  ...Done" << endl;
     // Create a stats menu for up to 4 tanks
     for( auto actTemp : startActors)
     {
@@ -501,20 +579,41 @@ void Game::initGameState()
         objects.push_back(temp);
     }
 
-    cout << "Initializing Game...";
-    tankGame = new GameField(width, height, startActors, displayWrapper);
+    cout << "Initializing Game...\n";
+    tankGame = new GameField(width, height, startActors, displayWrapper, this);
     tankGame->setSPECIAL(attributePoints);
-    cout << "Done" << endl;
+    cout << "...Done\n" << endl;
 
     // Add obstacles to the gamefield
-    cout << "Generating Obstacles...";
+    cout << "Placing Obstacles...\n";
     for (auto o : obstacleLocations)
     {
         tankGame->addObstacle(o.first, o.second);
-        temp = new Obstacles( (rand() % 3), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ) );
+        temp = new Obstacles( (rand() % 3), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ), o.first, o.second );
         constants.push_back(temp);
     }
-    cout << "Done" << endl;
+        cout << "  ...letting the trees grow\n";
+    for (auto t : treeLocations)
+    {
+        tankGame->addObstacle(t.first, t.second, 'T');
+        temp = new Obstacles( 0, convertGLXCoordinate( t.first ), convertGLYCoordinate( t.second ), t.first, t.second );
+        trees.push_back(temp);
+    }
+        cout << "  ...petting the rocks\n";
+    for (auto r : rockLocations)
+    {
+        tankGame->addObstacle(r.first, r.second, 'R'); //No driving over rocks
+        temp = new Obstacles( 1, convertGLXCoordinate( r.first ), convertGLYCoordinate( r.second ), r.first, r.second );
+        rocks.push_back(temp);
+    }
+        cout << "  ...finding some shrubberies\n";
+    for (auto b : bushLocations)
+    {
+        tankGame->addObstacle(b.first, b.second, 'B');
+        temp = new Obstacles( 2, convertGLXCoordinate( b.first ), convertGLYCoordinate( b.second ), b.first, b.second );
+        bushes.push_back(temp);
+    }
+    cout << "...done.\n" << endl;
 }
 
 

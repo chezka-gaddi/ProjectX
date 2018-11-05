@@ -28,11 +28,12 @@ FILES += $(SRC_PATH)game.cpp
 FILES += $(SRC_PATH)callbacks.cpp
 FILES += $(SRC_PATH)DynamicLoader.cpp
 FILES += $(SRC_PATH)Menu.cpp
+FILES += $(SRC_PATH)sfxDrawable.cpp
 
 TANK_PATH= ./tanks/
 TANKS = src/SimpleAI.so
 TANKS += src/PongAI.so
-
+TANKS += src/CamperAI.so
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
@@ -57,7 +58,7 @@ tanks:	$(TANKS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
 
 clean:
-	rm -rf platform src/*.o
+	rm -rf platform results.txt src/*.o
 
 clean-lib: clean
 	rm -rf buildsrc
@@ -108,6 +109,6 @@ push-to-git: clean-lib
 	make gen-library -j8
 	git --git-dir=buildsrc/.git --work-tree=buildsrc checkout -b pre-release
 	git --git-dir=buildsrc/.git --work-tree=buildsrc add .
-	git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 2.02"
+	git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 3.01"
 	git --git-dir=buildsrc/.git --work-tree=buildsrc status
 	git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release
