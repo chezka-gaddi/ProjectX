@@ -34,6 +34,10 @@ public:
 
     CamperAI();
     ~CamperAI();
+
+protected:
+    int turn = 0;
+    int maxAp = 0;
 };
 
 #endif

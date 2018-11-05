@@ -28,6 +28,7 @@ FILES += $(SRC_PATH)game.cpp
 FILES += $(SRC_PATH)callbacks.cpp
 FILES += $(SRC_PATH)DynamicLoader.cpp
 FILES += $(SRC_PATH)Menu.cpp
+FILES += $(SRC_PATH)sfxDrawable.cpp
 
 TANK_PATH= ./tanks/
 TANKS = src/SimpleAI.so

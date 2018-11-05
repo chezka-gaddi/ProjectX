@@ -51,6 +51,7 @@ src/.idea/
 *.log
 *.sql
 *.sqlite
+results.txt
 
 # OS generated files #
 ######################

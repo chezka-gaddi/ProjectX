@@ -126,6 +126,20 @@ public:
     void draw(int, int);
 };
 
+/***************************************************************************//**
+* @author Not Chezka Gaddi
+* @class sfxDrawable
+* @brief sfxDrawable contains instructions to draw the sfxDrawable
+*******************************************************************************/
+class sfxDrawable : public Drawable
+{
+public:
+    int angle;
+
+    sfxDrawable(GLfloat x, GLfloat y);
+
+    void draw(int, int);
+};
 
 
 #endif //SLACKERS_PLATFORM_DRAWABLE_H

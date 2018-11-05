@@ -226,8 +226,8 @@ void GameField::setSPECIAL(int points)
 void GameField::runMoves(ActorInfo &a)
 {
 
-    int xoff = 0, yoff = 0, tHealth = 0;
-    bool hitObj;
+    int xoff = 0, yoff = 0, tHealth = 0, hit = 0;
+    bool hitObj; 
     PositionData pos;
     direction dir;
 
@@ -244,7 +244,7 @@ void GameField::runMoves(ActorInfo &a)
     a.heading = (dir == STAY) ? a.heading : dir;
     //If it checks out, execute it
     //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
-    if (a.health <= 0)//We arn't playing this game with dead actors anymore
+    if (a.health <= 0 || a.id == 0)//We arn't playing this game with dead actors anymore
             return;
     switch (dir)
     {
@@ -346,15 +346,20 @@ void GameField::runMoves(ActorInfo &a)
     a.x += xoff;
     a.y += yoff;
     hitObj = checkObjectStrike(a);
-    if (hitObj == true){
+    if (a.id > 0 && obstacleAt(a.x, a.y) == 'R'){
       a.x -= xoff;
       a.y -= yoff;
+      hitObj == true;
+      a.health--;
     }
     if (a.health > 0 && hitObj == false)
     {
       for (int i = 0; i < actors.size(); ++i ) //check each actor
       {
-        if (a.health > 0 && actors[i].health > 0 && actors[i].x == a.x && actors[i].y == a.y && a.id != actors[i].id)
+        if (a.health > 0 && actors[i].health > 0  //Make sure neither is dead
+                         && actors[i].x == a.x    //Make sure we're on the same column
+                         && actors[i].y == a.y    //Make sure we're on the same row
+                         && a.id != actors[i].id) //Make sure our tank doesn't damage itself
         {
             if (a.id > 0 && actors[i].id > 0) //Check tank to tank ramming
             {
@@ -362,11 +367,12 @@ void GameField::runMoves(ActorInfo &a)
                 //Reverse the move
                 a.x -= xoff;
                 a.y -= yoff;
-                tHealth = actors[i].health;
+                tHealth - actors[i].health;
                 actors[i].health -= a.health; //deal full health damage to target
-                a.health -= tHealth; //deal 1 damage to tank doing the ramming
+                hit += tHealth - 1;
                 if (actors[i].health <= 0)
                 {
+                  SFX.push_back(make_pair(actors[i].x, actors[i].y));
                   actors[i].health = 0;
                   actors[i].damage = 0;
                   actors[i].id = 0;
@@ -376,24 +382,33 @@ void GameField::runMoves(ActorInfo &a)
             }else if(actors[i].id < 0) //Check if we ran into a projectile (What we are doesn't matter)
             {
                 //printf("Projectile or Tank hit a projectile.\n");
-                tHealth = a.health;
-                a.health -= actors[i].health; //Do damage to ourself
-                actors[i].health -= tHealth;; //Destroy the projectile
+                hit += actors[i].health; //store future damage
+                actors[i].health -= a.health; //Destroy the projectile
                 if (a.id > 0 && -actors[i].id != a.id) //Give the owner a hit, but not a self hit and not a missile to missle hit
                   actorInfoById(-actors[i].id).hits++; 
             }else if(a.id < 0) //If we're a projectile and we hit a tank
             {
               //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
-              actors[i].health -= a.damage; //damage the tank
-              a.health -= a.health;         //damage ourselves
+              actors[i].health -= a.health; //damage the tank
+              hit += a.health;
               if (a.id != -actors[i].id)      //no self hits
                 actorInfoById(-a.id).hits++;  //give our owner a hit
+              if (actors[i].health <= 0)
+              {
+                SFX.push_back(make_pair(actors[i].x, actors[i].y));
+                actors[i].health = 0;
+                actors[i].damage = 0;
+                actors[i].id = 0;
+                actors[i].range = 0;
+              }
             }
         }
       }
     }
-    if (a.health <= 0 || hitObj == true)
+    a.health -= hit;
+    if (a.id < 0 && (a.health <= 0 || hitObj == true))
     {
+        SFX.push_back(make_pair(a.x, a.y));
         a.damage = 0;
         a.id = 0;
         a.health = 0;
@@ -636,6 +651,24 @@ void GameField::removeObstacle(int x, int y)
 std::vector<ActorInfo> GameField::getActors()
 {
     return actors;
+}
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Get the current set of SFX
+ */
+std::vector<std::pair<int,int>> GameField::getSFX()
+{
+    return SFX;
+}
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Clear the current set of SFX
+ */
+void GameField::clearSFX()
+{
+    SFX.clear();
 }
 /**
  * @author David Donahue

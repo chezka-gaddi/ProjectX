@@ -14,8 +14,7 @@ GLuint tankTex[20];     /*!<Texture array for game constants */
 GLuint treeTex[10];     /*!<Texture array for the trees */
 GLuint bushTex[10];     /*!<Texture array for the bushes */
 GLuint rockTex[10];     /*!<Texture array for the rocks */
-GLuint effectTex[10];   /*<Texture array for the special effects */
-
+GLuint sfxTex[10];   /*<Texture array for the special effects */
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -175,6 +174,48 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
 
     glBindTexture(GL_TEXTURE_2D, gameTex[7]);
 
+    cout << "\nLoading SFX Textures:\n";
+    // Load in sfx game images
+    sfxTex[0] = SOIL_load_OGL_texture(
+                     "images/seffect/explosiona.png",
+                     SOIL_LOAD_AUTO,
+                     SOIL_CREATE_NEW_ID,
+                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+    if(sfxTex[0] == 0)
+        return false;
+
+    glBindTexture(GL_TEXTURE_2D, sfxTex[0]);
+    sfxTex[1] = SOIL_load_OGL_texture(
+                     "images/seffect/explosionsb.png",
+                     SOIL_LOAD_AUTO,
+                     SOIL_CREATE_NEW_ID,
+                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+    if(sfxTex[1] == 0)
+        return false;
+
+    glBindTexture(GL_TEXTURE_2D, sfxTex[1]);
+    sfxTex[2] = SOIL_load_OGL_texture(
+                     "images/seffect/explosionsc.png",
+                     SOIL_LOAD_AUTO,
+                     SOIL_CREATE_NEW_ID,
+                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+    if(sfxTex[2] == 0)
+        return false;
+
+    glBindTexture(GL_TEXTURE_2D, sfxTex[2]);
+    sfxTex[3] = SOIL_load_OGL_texture(
+                     "images/seffect/smoke.png",
+                     SOIL_LOAD_AUTO,
+                     SOIL_CREATE_NEW_ID,
+                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+    if(sfxTex[3] == 0)
+        return false;
+
+    glBindTexture(GL_TEXTURE_2D, sfxTex[3]);
 
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
