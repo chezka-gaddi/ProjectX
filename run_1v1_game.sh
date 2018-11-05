@@ -13,7 +13,7 @@ until [ "$actual_size" -eq "$empty_size" ]; do
     TEXT=$(head -n 1 temp_2.txt)
 #    echo $actual_size
     cp $TEXT ./config.txt
-    ./platform >> outcomes
+    ./platform
     tail -n +2 temp_2.txt > temp_2.txt
     actual_size=$(wc -c < "temp_2.txt")
 done

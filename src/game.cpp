@@ -277,7 +277,7 @@ void Game::initGameState()
                           rockLocations.push_back(std::pair<int,int> (x, y));
                         else if (configLine[x] == 'T')
                           treeLocations.push_back(std::pair<int,int> (x, y));
-                        else if (configLine[x] != 'x')
+                        else if (configLine[x] != 'x' && configLine[x] != ' ')
                           obstacleLocations.push_back(std::pair<int, int> (x, y));
                     }
 

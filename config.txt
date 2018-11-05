@@ -1,21 +1,22 @@
 WIDTH 30
 HEIGHT 13
 MAP
-xxxxxxxxOOOOOOxxxxxxxxOOOOOOxx
-xxxxxxxOxxOOxxOxxxxxxOXxOOxxOx
-xxxxxxOOOXOOOXOOxxXXOOXOOOOXOO
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxX
-xxxxOxxxxxOxxxxxOxxxxxOxxxxXXO
-xxOOOOOxOOOOOxOOOOOxOOOOOxxOOO
-xxOxOxOxOxOxOxOxOxOxOxOxOxxOxO
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxOxxxxxOxxxxxOxxxxxOxxxxxxxx
-xxOOOxxxOOOxxxOOOxxxOOOxxxxxxx
+xOxxxxxOxxxxxOxxxxOxxxxOxxxOxx
+xOxxxxxxxxxOxxxOxxxxOxxxOXOOOx
+xOxxOxxxOOxxxxxxxxxxxxOOxxxxxx
+xxOxxxxxxOxxxOxxxxOxxxxxxxxxxx
+xxxOxxOxxxxxxxxxxOxxxOxxxxxxxx
+xxxxxxxxxxOxxxxxxxxxxxxxxxxxxx
+xxOxOxxxxxxxOxxxOxxxxxxxxxxxxx
+xxxxxOxxxOxxxxxxxxxxOxxxxxxxxx
+xxxxxxxxxxxOxxxOxxxxxxxxxxxxxx
+xOxxxxOxxxxxxxxxxxxxxxxxxxxxOx
+xxOxxxxxxOxxOxxxxxxOxxxxxxxOxx
+xxxxxxxOxxxxxxOxxxxxxxxxxxxOxx
+xxOxxxOxxxxxxxxxxxxxxxxxxxxOxx
 
-AI PongAI 0 0 images/Blue/tankB_U.png images/Blue/tankB_R.png images/Blue/tankB_D.png images/Blue/tankB_L.png images/Blue/bulletB.png
-AI SimpleAI 29 12 images/Red/tankR_U.png images/Red/tankR_R.png images/Red/tankR_D.png images/Red/tankR_L.png images/Red/bulletR.png
+AI CamperAI 0 0 images/Blue/tankB_U.png images/Blue/tankB_R.png images/Blue/tankB_D.png images/Blue/tankB_L.png images/Blue/bulletB.png
+AI PongAI 29 12 images/Red/tankR_U.png images/Red/tankR_R.png images/Red/tankR_D.png images/Red/tankR_L.png images/Red/bulletR.png
 FIELDIMAGE images/green.png
 #Game Rules
 DAMAGE 1
