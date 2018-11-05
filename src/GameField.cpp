@@ -226,8 +226,8 @@ void GameField::setSPECIAL(int points)
 void GameField::runMoves(ActorInfo &a)
 {
 
-    int xoff = 0, yoff = 0, tHealth = 0;
-    bool hitObj;
+    int xoff = 0, yoff = 0, tHealth = 0, hit = 0;
+    bool hitObj; 
     PositionData pos;
     direction dir;
 
@@ -364,9 +364,9 @@ void GameField::runMoves(ActorInfo &a)
                 //Reverse the move
                 a.x -= xoff;
                 a.y -= yoff;
-                tHealth = actors[i].health;
+                tHealth - actors[i].health;
                 actors[i].health -= a.health; //deal full health damage to target
-                a.health -= tHealth; //deal 1 damage to tank doing the ramming
+                hit += tHealth - 1;
                 if (actors[i].health <= 0)
                 {
                   actors[i].health = 0;
@@ -378,22 +378,22 @@ void GameField::runMoves(ActorInfo &a)
             }else if(actors[i].id < 0) //Check if we ran into a projectile (What we are doesn't matter)
             {
                 //printf("Projectile or Tank hit a projectile.\n");
-                tHealth = a.health;
-                a.health -= actors[i].health; //Do damage to ourself
-                actors[i].health -= tHealth;; //Destroy the projectile
+                actors[i].health -= a.health; //Destroy the projectile
+                hit += actors[i].health;
                 if (a.id > 0 && -actors[i].id != a.id) //Give the owner a hit, but not a self hit and not a missile to missle hit
                   actorInfoById(-actors[i].id).hits++; 
             }else if(a.id < 0) //If we're a projectile and we hit a tank
             {
               //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
-              actors[i].health -= a.damage; //damage the tank
-              a.health -= a.health;         //damage ourselves
+              actors[i].health -= a.health; //damage the tank
+              hit += a.health;
               if (a.id != -actors[i].id)      //no self hits
                 actorInfoById(-a.id).hits++;  //give our owner a hit
             }
         }
       }
     }
+    a.health -= hit;
     if (a.id < 0 && (a.health <= 0 || hitObj == true))
     {
         a.damage = 0;
