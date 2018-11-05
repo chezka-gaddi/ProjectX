@@ -2,12 +2,12 @@
 # this one is the one i like to use with my workflows (clion, g++, git, cmake, ect)
 # im not sure if this will break anything if it does let me know
 # contact devops if you need a change to this
- 
+
 #ignores everything
-* 
+*
 #unignores directories
 !*/
-#unignores everything with an extension 
+#unignores everything with an extension
 !*.*
 !*.map
 
@@ -33,6 +33,7 @@ src/.idea/
 *.so
 *.d
 *.swp
+*.round
 # Packages #
 ############
 # it's better to unpack these files and commit the raw source

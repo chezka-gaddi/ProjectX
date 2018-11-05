@@ -249,14 +249,14 @@ void Game::initGameState()
     if (!fout){
         cout << "UNABLE OPEN RESULTS FILE (results.txt)\n";
     }
-    
+
     while (!fin.eof())
     {
         getline(fin, configLine);
         if (configLine[0] != '#') //ignore comment lines
         {
             if (configLine == "MAP")
-            {  
+            {
                cout << "Building the map...\n";
                for ( int y = 0; y < height; y++)
                {
@@ -270,15 +270,15 @@ void Game::initGameState()
                     //cout << configLine << endl;
 
                     for(int x = 0; x < width; x++)
-                    {   
+                    {
                         if (configLine[x] == 'B')
                           bushLocations.push_back(std::pair<int,int> (x, y));
                         else if (configLine[x] == 'R')
                           rockLocations.push_back(std::pair<int,int> (x, y));
                         else if (configLine[x] == 'T')
                           treeLocations.push_back(std::pair<int,int> (x, y));
-                        else if (configLine[x] != ' ') 
-                            obstacleLocations.push_back(std::pair<int, int> (x, y));
+                        else if (configLine[x] != 'x')
+                          obstacleLocations.push_back(std::pair<int, int> (x, y));
                     }
 
                 }
@@ -301,10 +301,10 @@ void Game::initGameState()
                 cout << "  finding spawn...";
                 i = args.find(' ', i+1);    //skip x
                 i = args.find(' ', i+1);    //skip y
-                
+
                 args = args.substr(i+1);
                 cout << "  colorizing tank...";
-                
+
                 for( int x = 0; x < 5; x++ )
                 {
                     i = args.find(' ');    //skip y
@@ -326,13 +326,13 @@ void Game::initGameState()
                 TimerEvent::idle_speed = ai_speed;
                 idle_speed = ai_speed;
                 cout << "...done.\n";
-            } 
+            }
             //field params
             else if (id == "WIDTH")
             {
                 cout << "S t r e t c h i n g   t h e   m a p . . .  ";
                 stringstream(args) >> width;
-                if (width < 15) { 
+                if (width < 15) {
                     width = 15;
                     cout << "Invalid width parameter, defaulting to 15.\n";
                 } else if (width > 40) {
@@ -480,7 +480,7 @@ void Game::initGameState()
             else if (id == "DAMAGE")
             {
                 stringstream(args) >> damage;
-                if (damage < 1){ 
+                if (damage < 1){
                   damage = 1;
                   cout << "Invalid damage value, defaulting to 2\n";
                 } else if (damage > 4) {
@@ -491,7 +491,7 @@ void Game::initGameState()
             else if (id == "HEALTH")
             {
                 stringstream(args) >> health;
-                if (health < 2){ 
+                if (health < 2){
                   health = 2;
                   cout << "Invalid health value, defaulting to 2\n";
                 } else if (health > 8) {
@@ -502,7 +502,7 @@ void Game::initGameState()
             else if (id == "AP")
             {
                 stringstream(args) >> range;
-                if (range < 2){ 
+                if (range < 2){
                   range = 2;
                   cout << "Invalid number of action points value, defaulting to 2\n";
                 } else if (range > 5) {
@@ -513,7 +513,7 @@ void Game::initGameState()
             else if (id == "RADAR")
             {
                 stringstream(args) >> radar;
-                if (radar < 2){ 
+                if (radar < 2){
                   radar = 2;
                   cout << "Invalid radar value, defaulting to 2\n";
                 } else if (radar > width/2) {
@@ -524,7 +524,7 @@ void Game::initGameState()
             else if (id == "SPECIAL")
             {
                 stringstream(args) >> attributePoints;
-                if (attributePoints < 1){ 
+                if (attributePoints < 1){
                   attributePoints = 1;
                   cout << "Invalid special value, defaulting to 1\n";
                 } else if (attributePoints > 4) {
@@ -544,7 +544,7 @@ void Game::initGameState()
     if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages))
         cout << "Failed to open image(s).\n" << endl;
     glDisable(GL_TEXTURE_2D);
-    
+
     cout << "Loading Shared Objects...\n";
     std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
 
@@ -555,7 +555,7 @@ void Game::initGameState()
     for (int i = 0; i < AINames.size(); i++)
             fout << AINames[i] << " ";
     fout << "Winner: ";
-    fout.close(); 
+    fout.close();
     cout << "Creating Player Tanks...\n";
     for (int i = 0; i < startActorPointers.size(); ++i)
     {
