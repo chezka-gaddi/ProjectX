@@ -134,6 +134,13 @@ static bool isplayable(std::vector<ActorInfo> actorInfo)
 *******************************************************************************/
 void gameOver()
 {
+
+	const char *str;
+	std::string scoreDetails[3] = {"Place:", "PLayer Number:", "Kills:"};
+
+    float color[] = {1.0f, 1.0f, 1.0f};
+
+
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glLoadIdentity();
     glEnable(GL_TEXTURE_2D);
@@ -153,9 +160,74 @@ void gameOver()
     glEnd();
     glPopMatrix();
 
+    glDisable(GL_TEXTURE_2D);
+
+    float j = -0.5f;
+    bool flag = false;
+
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, -5.0f);
+	glColor3fv(color);
+
+    for(int i = 0; i < 3; i++)
+    {
+    	// std::cout << "Value of J is: " << j << endl;
+    	glRasterPos3f(j, -0.5f, 2.0f);
+    	str = scoreDetails[i].c_str();
+    	while(*str)
+    	{
+    		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    		str++;
+    	}
+    	if(!flag)
+    	{
+    		j += 0.3;
+    		flag = true;
+    	}
+    	else
+    		j += 0.7;
+    }
+
+    float k = -0.6;
+    for(int i = 1; i < 9; i++)
+    {
+
+    	if(i < 4)
+    		switch(i)
+    		{
+    			case 1:
+    				str = "1st";
+    				break;
+    			case 2:
+    				str = "2nd";
+    				break;
+    			case 3:
+    				str = "3rd";
+    				break;
+    		}
+
+
+    	else
+    	{
+			std::string s = std::to_string(i);
+			s += "th";
+			str = s.c_str();  //use char const* as target type    	}
+		}
+
+    	glRasterPos3f(-0.5f, k, 2.0f);
+    	while(*str)
+    	{
+    		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    		str++;
+    	}
+
+    	k += -0.1f;
+
+    }
+
     system("sleep 1.");
     glutSwapBuffers();
-    system("sleep 1.");
+    system("sleep 5.");
 }
 
 
