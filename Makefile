@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -fPIC
-INCS = -I./
+INCS = -I./ -I./src
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
 LIBS += -lSOIL -Llibraries
@@ -12,7 +12,8 @@ LIB_PATH= libraries/
 
 MAIN = $(SRC_PATH)main.cpp
 
-FILES = $(SRC_PATH)GameField.cpp
+FILES = $(MAIN)
+FILES += $(SRC_PATH)GameField.cpp
 FILES += $(SRC_PATH)Actor.cpp
 FILES += $(SRC_PATH)MapData.cpp
 FILES += $(SRC_PATH)ProjectileActor.cpp
@@ -29,30 +30,30 @@ FILES += $(SRC_PATH)callbacks.cpp
 FILES += $(SRC_PATH)DynamicLoader.cpp
 FILES += $(SRC_PATH)Menu.cpp
 FILES += $(SRC_PATH)sfxDrawable.cpp
+FILES += $(SRC_PATH)Crate.cpp
 
 TANK_PATH= ./tanks/
-TANKS = src/SimpleAI.so
-TANKS += src/PongAI.so
-TANKS += src/CamperAI.so
+TANKS = src/SimpleAI.cpp
+TANKS += src/PongAI.cpp
+TANKS += src/CamperAI.cpp
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
-platform: $(FILES:.cpp=.o) $(MAIN:.cpp=.o)
+platform: $(FILES:.cpp=.o)
 	+make tanks
-	$(CXX) $(CXXFLAGS) $(INCS) -o platform $? $(LIBS)
-
-%.so: %.cpp
-	$(CXX) $(CXXFLAGS) -shared $< $(TANKS_LINK) -o $@ $(SOFLAGS)
+	$(CXX) $(CXXFLAGS) $(INCS) -o platform $^ $(LIBS)
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS) $(LIBS)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
 
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
-tanks:	$(TANKS)
-	mkdir -p $(TANK_PATH)
-	mv $^ $(TANK_PATH)
+%.so: %.cpp
+	$(CXX) $(CXXFLAGS) $(INCS) -shared $< $(TANK_LINK) -o $(TANK_PATH)../$@ $(TANK_LINK) $(SOFLAGS)
+
+tanks:	$(TANKS:%.cpp=%.so)
+	@mkdir -p $(TANK_PATH)
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
@@ -65,7 +66,7 @@ clean-lib: clean
 	rm -rf libraries/libCTF.so
 
 cleanTanks:
-	rm -rf $(TANK_PATH)
+	rm -rf $(TANK_PATH)*
 
 dev: clean-lib
 	make gen-library -j8

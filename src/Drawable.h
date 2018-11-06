@@ -150,7 +150,7 @@ class Crate : public Drawable
 public:
     int angle;
 
-    crate(GLfloat x, GLfloat y);
+    Crate(GLfloat x, GLfloat y);
 
     void draw(int, int);
 };

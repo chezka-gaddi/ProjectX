@@ -16,6 +16,9 @@ direction SimpleAI::move(MapData map, PositionData status)
 {
     int min_dist = map.width * map.height + 1;
     direction ret = STAY;
+    int mHeight = map.height/2, mWidth = map.width/2;
+    int x_pos = status.game_x, y_pos = status.game_y;
+    int offset = 2; //lee way for moving
     for (int x = 0; x < map.width; ++x)
     {
         for (int y = 0; y < map.height; ++y)
@@ -90,6 +93,15 @@ direction SimpleAI::move(MapData map, PositionData status)
             }
         }
     }
+    //Move towards center if we can't find anyone
+    if (x_pos < mWidth - offset && y_pos < mHeight - offset && ret == STAY){ret = DOWNRIGHT;}
+    if (x_pos < mWidth - offset && y_pos > mHeight + offset && ret == STAY){ret = UPRIGHT;}
+    if (x_pos > mWidth + offset && y_pos < mHeight - offset && ret == STAY){ret = DOWNLEFT;}
+    if (x_pos > mWidth + offset && y_pos > mHeight + offset && ret == STAY){ret = UPLEFT;}
+    if (x_pos < mWidth - offset && ret == STAY){ret = RIGHT;}
+    if (y_pos > mHeight + offset && ret == STAY){ret = UP;}
+    if (x_pos > mWidth + offset && ret == STAY){ret = LEFT;}
+    if (y_pos < mHeight - offset && ret == STAY){ret = DOWN;}
     return ret;
 }
 
@@ -176,13 +188,26 @@ int SimpleAI::calcDist(int x1, int y1, int x2, int y2)
 
 int SimpleAI::spendAP(MapData map, PositionData status)
 {
-    if (move(map, status) == STAY && attack(map,status) != STAY) //If there is nowhere to move, attack
+    direction tMove = move(map,status);
+    direction tAttack = attack(map,status);
+    int mHeight = map.height/2, mWidth = map.width/2;
+    int x_pos = status.game_x, y_pos = status.game_y;
+    int offset = 2; //lee way for moving
+    
+    if (tMove == STAY && tAttack != STAY) //If there is nowhere to move, attack
         return 2;
     
-    if (attack(map, status) == STAY && move(map,status) != STAY) //If there is nowhere to attack, move
+    if (tAttack == STAY && tMove != STAY) //If there is nowhere to attack, move
         return 1;
+    
+    //Move towards center if we can't find anyone
+    if (x_pos < mWidth - offset){return 1;}
+    if (y_pos > mHeight + offset){return 1;}
+    if (x_pos > mWidth + offset){return 1;}
+    if (y_pos < mHeight - offset){return 1;}
 
-    if (attack(map,status) == STAY && move(map,status) == STAY) //If there is nothing to do, end your turn
+
+    if (tAttack == STAY && tMove == STAY) //If there is nothing to do, end your turn
         return 3;
     
     return (status.ap > 1) ? 1 : 2;
