@@ -190,9 +190,6 @@ int SimpleAI::spendAP(MapData map, PositionData status)
 {
     direction tMove = move(map,status);
     direction tAttack = attack(map,status);
-    int mHeight = map.height/2, mWidth = map.width/2;
-    int x_pos = status.game_x, y_pos = status.game_y;
-    int offset = 2; //lee way for moving
     
     if (tMove == STAY && tAttack != STAY) //If there is nowhere to move, attack
         return 2;
@@ -200,16 +197,10 @@ int SimpleAI::spendAP(MapData map, PositionData status)
     if (tAttack == STAY && tMove != STAY) //If there is nowhere to attack, move
         return 1;
     
-    //Move towards center if we can't find anyone
-    if (x_pos < mWidth - offset){return 1;}
-    if (y_pos > mHeight + offset){return 1;}
-    if (x_pos > mWidth + offset){return 1;}
-    if (y_pos < mHeight - offset){return 1;}
-
-
     if (tAttack == STAY && tMove == STAY) //If there is nothing to do, end your turn
         return 3;
     
+    return 3; //If everything else failed somehow, return STAY
     return (status.ap > 1) ? 1 : 2;
 }
 
