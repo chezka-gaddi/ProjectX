@@ -140,6 +140,20 @@ public:
 
     void draw(int, int);
 };
+/***************************************************************************//**
+* @author Not Chezka Gaddi
+* @class crate
+* @brief crate contains instructions to draw the party crate
+*******************************************************************************/
+class Crate : public Drawable
+{
+public:
+    int angle;
+
+    crate(GLfloat x, GLfloat y);
+
+    void draw(int, int);
+};
 
 
 #endif //SLACKERS_PLATFORM_DRAWABLE_H
