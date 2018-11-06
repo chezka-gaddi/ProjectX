@@ -15,17 +15,30 @@ xxxRxxxxxRxxxxxRxxxxxRxxxxxxxx
 xxTTTxxxTTTxxxTTTxxxTTTxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-AI CamperAI 0 0 images/Blue/tankB_U.png images/Blue/tankB_R.png images/Blue/tankB_D.png images/Blue/tankB_L.png images/Blue/bulletB.png
-AI PongAI 29 12 images/Red/tankR_U.png images/Red/tankR_R.png images/Red/tankR_D.png images/Red/tankR_L.png images/Red/bulletR.png
+AI CamperAI 0 2 images/Yellow/tankY_U.png images/Yellow/tankY_R.png images/Yellow/tankY_D.png images/Yellow/tankY_L.png images/Yellow/bulletY.png
+AI SimpleAI 8 0 images/Blue/tankB_U.png images/Blue/tankB_R.png images/Blue/tankB_D.png images/Blue/tankB_L.png images/Blue/bulletB.png
+AI SimpleAI 0 8 images/Red/tankR_U.png images/Red/tankR_R.png images/Red/tankR_D.png images/Red/tankR_L.png images/Red/bulletR.png
+AI SimpleAI 9 5 images/Green/tankG_U.png images/Green/tankG_R.png images/Green/tankG_D.png images/Green/tankG_L.png images/Green/bulletG.png
+
+#AI IDLE SPEED: AI_SPEED <750>
+AI_SPEED 750
+
+#FIELDIMAGE <MAP FILE>
 FIELDIMAGE images/green.png
-#Game Rules
-DAMAGE 1
-HEALTH 2
-RADAR 10
-AP 5
-SPECIAL 1
-#Images
+                           
+                           
+#OBSTACLE_IMAGE <IMAGE1> [<IMAGE2>]
 OBSTACLE_IMAGE images/tree/tree.png images/rock/rock.png
 TREE_IMAGE images/tree/tree.png images/tree/treeb.png images/tree/treec.png images/tree/treed.png
 BUSH_IMAGE images/bush/bush1.png images/bush/bush2.png images/bush/bush3.png images/bush/bush4.png
 ROCK_IMAGE images/rock/rock.png images/rock/rockb.png images/rock/rockc.png
+
+#TANK RULES
+#DAMAGE <STAT>
+#HEALTH <STAT>
+#RANGE <STAT>
+DAMAGE 1
+HEALTH 2
+RADAR 5
+AP 5
+SPECIAL 1
