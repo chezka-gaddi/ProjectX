@@ -38,7 +38,7 @@ ROCK_IMAGE images/rock/rock.png images/rock/rockb.png images/rock/rockc.png
 #HEALTH <STAT>
 #RANGE <STAT>
 DAMAGE 1
-HEALTH 2
-RADAR 5
+HEALTH 3
+RADAR 4
 AP 5
 SPECIAL 1
