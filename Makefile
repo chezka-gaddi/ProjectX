@@ -37,7 +37,7 @@ TANKS += src/CamperAI.so
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
-platform: $(FILES:.cpp=.o) $(TANKS:.cpp=.so)
+platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
 
 %.o: %.cpp
@@ -46,9 +46,11 @@ platform: $(FILES:.cpp=.o) $(TANKS:.cpp=.so)
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
-tanks:	$(TANKS)
-	mkdir -p $(TANK_PATH)
-	mv $^ $(TANK_PATH)
+tanks/%.so: src/%.cpp
+	$(CXX) $(CXXFLAGS) $(INCS) -shared $< $(TANK_LINK) -o $(TANK_PATH)$(@F) $(TANK_LINK) $(SOFLAGS)
+
+tanks:	$(TANKS:%.cpp=%.so)
+	@mkdir -p $(TANK_PATH)
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
