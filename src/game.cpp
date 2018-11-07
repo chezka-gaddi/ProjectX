@@ -298,6 +298,17 @@ void Game::initGameState()
                 AINames.push_back(args.substr(0, i));
                 std::stringstream(args.substr(i+1)) >> x >> y;
                 tankLocations.push_back(std::pair<int,int>(x,y));
+                for (int x=0;x < tankLocations.size(); x++)
+                {
+                  for( int y = x + 1; y < tankLocations.size(); y++)
+                    {
+                      if (tankLocations.at(x) == tankLocations.at(y))
+                      {
+                        cout << "Tanks cannot spawn on the same tile!" << endl;
+                        exit(1);
+                      }
+                    }
+                }
                 cout << "  finding spawn...";
                 i = args.find(' ', i+1);    //skip x
                 i = args.find(' ', i+1);    //skip y
