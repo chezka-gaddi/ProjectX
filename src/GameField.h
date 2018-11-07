@@ -32,6 +32,7 @@ class GameField
 protected:
     /*!< this is all of the actors on the field: tanks + projectiles */
     std::vector<ActorInfo> actors;
+    std::vector<ActorInfo> deceased;
     std::vector<std::pair<int,int>> SFX;
 
     int turnCount; /*!< The turn count number */
@@ -66,6 +67,7 @@ public:
      */
     void cull();
     std::string getWinner();
+    std::vector<ActorInfo> getDeceased(){return deceased;};
 
     /**
      * this will find all the actors in a single cell
