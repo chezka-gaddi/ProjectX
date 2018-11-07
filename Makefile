@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -fPIC
-INCS = -I./ -I./src
+INCS = -I./ -Isrc/
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
 LIBS += -lSOIL -Llibraries
@@ -44,13 +44,13 @@ platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	#+make tanks
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ 
 
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
-tanks/%.so: src/%.cpp src/Actor.o
-	$(CXX) $(CXXFLAGS) $(INCS) -shared $< -o $(TANK_PATH)$(@F) $(TANK_LINK) $(SOFLAGS)
+tanks/%.so: src/%.cpp ./src/Actor.o
+	$(CXX) $(CXXFLAGS) $(INCS) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
 tanks: $(TANKS:%.cpp=%.so)
 	# @mkdir -p $(TANK_PATH)
