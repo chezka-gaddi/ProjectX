@@ -224,7 +224,7 @@ void Game::initGameState()
     int damage = 1;
     int  health = 3;
     int range = 1;
-    int radar = 2;
+    int radar = 4;
     std::vector<std::pair<int,int>> obstacleLocations;
     std::vector<std::pair<int,int>> treeLocations;
     std::vector<std::pair<int,int>> rockLocations;
@@ -549,9 +549,9 @@ void Game::initGameState()
                 if (radar < 2){
                   radar = 2;
                   cout << "Invalid radar value, defaulting to 2\n";
-                } else if (radar > width/2) {
-                    printf("%d radar might be a little excesive, setting to %d\n", radar,width/2);
-                    radar = width/2;
+                } else if (radar > width - 1) {
+                    printf("%d radar might be a little excesive, setting to %d\n", radar,width - 1);
+                    radar = width - 1;
                 }
             }
             else if (id == "SPECIAL")

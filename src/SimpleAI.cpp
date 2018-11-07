@@ -200,7 +200,6 @@ int SimpleAI::spendAP(MapData map, PositionData status)
     if (tAttack == STAY && tMove == STAY) //If there is nothing to do, end your turn
         return 3;
     
-    return 3; //If everything else failed somehow, return STAY
     return (status.ap > 1) ? 1 : 2;
 }
 

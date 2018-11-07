@@ -48,7 +48,7 @@ BUSH 7 7
 BUSH 8 7
 BUSH 9 7
 BUSH 10 7
-CRATE 7 5
+CRATE 0 4
                            
                            
 #OBSTACLE_IMAGE <IMAGE1> [<IMAGE2>]
