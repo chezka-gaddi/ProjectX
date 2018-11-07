@@ -698,7 +698,6 @@ void GameField::cull()
     {
         if (actors[i].health == 0)
         {
-        	std::cout << "Dead actor with id: " << actors[i].id << " and name: " << actors[i].name << endl;
         	if(actors[i].name != "default\n")
         	{
         		std::cout << "Tank Down!! " << actors[i].name << " died\n";

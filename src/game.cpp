@@ -188,7 +188,11 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     }
 
     int count = 1;
+    int winDex = 0;
     float k = -0.6;
+
+    while(winner[winDex].name == "default\n")
+    	winDex++;
 
     str = "1st";
     glRasterPos3f(-0.5f, k, 2.0f);
@@ -198,7 +202,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     	str++;
     }
 
-    str = winner[0].name.c_str();
+    str = winner[winDex].name.c_str();
     glRasterPos3f(-0.2f, k, 2.0f);
     while(*str)
     {
@@ -206,7 +210,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     	str++;
     }
 
-    str = std::to_string(winner[0].hits).c_str();
+    str = std::to_string(winner[winDex].hits).c_str();
     glRasterPos3f(0.5f, k, 2.0f);
     while(*str)
     {
@@ -217,7 +221,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     k += -0.1f;
     count++;
 
-    for(int j = dead.size() - 1; j >= 0; j--)
+    for(int l = dead.size() - 1; j >= 0; j--)
     {
 
     	if(count < 4)
@@ -248,7 +252,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 
 
     	std::cout << "Finding " << count << "th place.........\n";
-    	str = dead[j].name.c_str();
+    	str = dead[l].name.c_str();
 
     	glRasterPos3f(-0.2f, k, 2.0f);
     	while(*str)
@@ -257,7 +261,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     		str++;
     	}
 
-    	str = std::to_string(dead[j].hits).c_str();
+    	str = std::to_string(dead[l].hits).c_str();
     	glRasterPos3f(0.5f, k, 2.0f);
     	while(*str)
     	{
