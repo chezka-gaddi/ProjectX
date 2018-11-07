@@ -1,5 +1,5 @@
 WIDTH 30
-HEIGHT 13
+HEIGHT 14
 MAP
 xxxxxxxxRRRRRRxxxxxxxxRRRRRRxx
 xxxxxxxTxxRRxxTxxxxxxTxxRRxxTx
