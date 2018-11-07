@@ -31,14 +31,15 @@ FILES += $(SRC_PATH)Menu.cpp
 FILES += $(SRC_PATH)sfxDrawable.cpp
 
 TANK_PATH= ./tanks/
-TANKS = src/SimpleAI.so
-TANKS += src/PongAI.so
-TANKS += src/CamperAI.so
+TANKS = $(SRC_PATH)SimpleAI.cpp
+TANKS += $(SRC_PATH)PongAI.cpp
+TANKS += $(SRC_PATH)CamperAI.cpp
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
 platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
+	#+make tanks
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS) $(LIBS)
@@ -46,14 +47,12 @@ platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
-tanks/%.so: src/%.cpp
-	$(CXX) $(CXXFLAGS) $(INCS) -shared $< $(TANK_LINK) -o $(TANK_PATH)$(@F) $(TANK_LINK) $(SOFLAGS)
+tanks/%.so: src/%.cpp src/Actor.o
+	$(CXX) $(CXXFLAGS) $(INCS) -shared $< -o $(TANK_PATH)$(@F) $(TANK_LINK) $(SOFLAGS)
 
-tanks:	$(TANKS:%.cpp=%.so)
-	@mkdir -p $(TANK_PATH)
+tanks: $(TANKS:%.cpp=%.so)
+	# @mkdir -p $(TANK_PATH)
 
-.cpp.o:
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
 
 clean:
 	rm -rf platform results.txt src/*.o
@@ -94,8 +93,8 @@ gen-library: $(FILES:.cpp=.o)
 	cp src/MapData.h buildsrc/src/
 	cp src/direction.h buildsrc/src/
 	cp src/PositionData.h buildsrc/src/
-	cp $(TANKS:.so=.cpp) buildsrc/
-	cp $(TANKS:.so=.h) buildsrc/
+	cp src/$(TANKS:.so=.cpp) buildsrc/
+	cp src/$(TANKS:.so=.h) buildsrc/
 	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
 	# Change tanks src to point to new directory
 	sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h

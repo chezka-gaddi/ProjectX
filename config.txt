@@ -40,5 +40,5 @@ ROCK_IMAGE images/rock/rock.png images/rock/rockb.png images/rock/rockc.png
 DAMAGE 1
 HEALTH 3
 RADAR 4
-AP 5
+AP 4
 SPECIAL 1

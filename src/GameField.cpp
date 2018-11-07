@@ -252,6 +252,7 @@ void GameField::runMoves(ActorInfo &a)
         if (a.y > 0 && (!obstacleAt(a.x, a.y - 1) 
                     || obstacleAt(a.x, a.y - 1) == 'R' 
                     || obstacleAt(a.x, a.y - 1) == 'T' 
+                    || obstacleAt(a.x, a.y - 1) == 'C' 
                     || obstacleAt(a.x, a.y - 1) == 'B'))
             yoff = -1;
         else
@@ -262,6 +263,7 @@ void GameField::runMoves(ActorInfo &a)
         if (a.y < fieldMap.height-1 && (!obstacleAt(a.x, a.y + 1) 
                                     || obstacleAt(a.x, a.y + 1) == 'R' 
                                     || obstacleAt(a.x, a.y + 1) == 'T' 
+                                    || obstacleAt(a.x, a.y + 1) == 'C' 
                                     || obstacleAt(a.x, a.y + 1) == 'B'))
             yoff = 1;
         else
@@ -272,6 +274,7 @@ void GameField::runMoves(ActorInfo &a)
         if (a.x > 0 && (!obstacleAt(a.x - 1, a.y) 
                     || obstacleAt(a.x - 1, a.y) == 'R' 
                     || obstacleAt(a.x - 1, a.y) == 'T' 
+                    || obstacleAt(a.x - 1, a.y) == 'C' 
                     || obstacleAt(a.x - 1, a.y) == 'B'))
             xoff = -1;
         else
@@ -282,6 +285,7 @@ void GameField::runMoves(ActorInfo &a)
         if (a.x < fieldMap.width-1 && (!obstacleAt(a.x + 1, a.y)
                                    || obstacleAt(a.x + 1, a.y) == 'R' 
                                    || obstacleAt(a.x + 1, a.y) == 'T' 
+                                   || obstacleAt(a.x + 1, a.y) == 'C' 
                                    || obstacleAt(a.x + 1, a.y) == 'B' ))
             xoff = 1;
         else
@@ -291,6 +295,7 @@ void GameField::runMoves(ActorInfo &a)
         if (a.y > 0 && a.x > 0 && (!obstacleAt(a.x-1,a.y-1) 
                                || obstacleAt(a.x-1,a.y-1)== 'R' 
                                || obstacleAt(a.x-1,a.y-1)== 'T' 
+                               || obstacleAt(a.x-1,a.y-1)== 'C' 
                                || obstacleAt(a.x-1,a.y-1) == 'B'))
         {
             yoff = -1;
@@ -304,6 +309,7 @@ void GameField::runMoves(ActorInfo &a)
         if (a.y > 0 && a.x < fieldMap.width-1 && (!obstacleAt(a.x+1, a.y-1) 
                                 || obstacleAt(a.x+1, a.y-1) == 'R' 
                                 || obstacleAt(a.x+1, a.y-1) == 'T' 
+                                || obstacleAt(a.x+1, a.y-1) == 'C' 
                                 || obstacleAt(a.x+1, a.y-1) == 'B'))
         {
                 yoff = -1;
@@ -317,6 +323,7 @@ void GameField::runMoves(ActorInfo &a)
         if (a.y < fieldMap.height-1 && a.x > 0 && (!obstacleAt(a.x-1,a.y+1) 
                                                || obstacleAt(a.x-1,a.y+1) == 'R' 
                                                || obstacleAt(a.x-1,a.y+1) == 'T' 
+                                               || obstacleAt(a.x-1,a.y+1) == 'C' 
                                                || obstacleAt(a.x-1,a.y+1) == 'B'))
         {
             yoff = 1;
@@ -330,6 +337,7 @@ void GameField::runMoves(ActorInfo &a)
         if (a.y < fieldMap.height-1 && a.x < fieldMap.width-1 && (!obstacleAt(a.x+1, a.y+1) 
                                                               || obstacleAt(a.x+1, a.y+1) == 'R'
                                                               || obstacleAt(a.x+1, a.y+1) == 'T' 
+                                                              || obstacleAt(a.x+1, a.y+1) == 'C' 
                                                               || obstacleAt(a.x+1, a.y+1) == 'B'))
         {
             yoff = 1;
@@ -351,6 +359,11 @@ void GameField::runMoves(ActorInfo &a)
       a.y -= yoff;
       hitObj == true;
       a.health--;
+    }else if (a.id < 0 && obstacleAt(a.x, a.y) == 'C'){
+      a.health--;
+      crate_o_doom(a.x, a.y);
+      removeObstacle(a.x, a.y);
+      hitObj == true;
     }
     if (a.health > 0 && hitObj == false)
     {
@@ -463,8 +476,97 @@ bool GameField::checkObjectStrike(ActorInfo &a)
             return true;
           }
     }
+  }else if (tempOb == 'C')
+  {
+    //printf("Hit the crate.\n");
+    for ( auto c : gameptr->specials){
+          if (c->gridx == a.x && c->gridy == a.y && c->health > 0)
+          {
+            //printf("Found the crate.\n");
+
+            //printf("Found tree strike, chop it.\n");
+            c->health = 0;
+            crate_o_doom(c->gridx, c->gridy);//Bang the drum
+            return true;
+          }
+    }
   }
   return false;
+}
+/***************************************************************************//**
+* @author Jon McKee
+* @brief  Crate destruction
+******************************************************************************/
+bool  GameField::crate_o_doom(int x, int y)
+{
+    //Steal the good parts from fog of war
+    int radar = 1; //How big the explosion
+    int x_pos = x;
+    int y_pos = y;
+    int x_max_radar_range = radar + x_pos >= fieldMap.width ? fieldMap.width - 1 : radar + x_pos;
+    int y_max_radar_range = radar + y_pos >= fieldMap.height ? fieldMap.height - 1 : radar + y_pos;
+    int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
+    int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
+    int hit = false;
+    
+    printf("Checking the doom crate.\n");
+    
+    for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
+    {
+        for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
+        {
+          switch(obstacleAt(x_iter, y_iter)){ //now that we stole the internals do our stuff
+              case 'T':
+                for (auto t : gameptr->trees)
+                {
+                  if (t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
+                  {
+                    t->health--;
+                  }
+                }
+                break;
+              case 'C':
+                for (auto c : gameptr->specials)
+                {
+                  if (c->gridx == x_iter && c->gridy == y_iter && c->health > 0)
+                  {
+                    c->health=0;
+                    hit = crate_o_doom(c->gridx, c->gridy); //Chain reaction
+                  }
+                }
+                break;
+              case 'R':
+                for (auto r : gameptr->rocks)
+                {
+                  if (r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
+                  {
+                    r->health--;
+                  }
+                }
+                break;
+              //case 'B':
+              default:
+                for (auto act : actors)
+                {
+                  if (act.x == x_iter && act.y == y_iter && act.health > 0)
+                  {
+                    act.health--;
+                    if (act.health <= 0)
+                    {
+                      act.health = 0;
+                      act.id = 0;
+                    }
+                    hit++;
+                  }
+                }
+                break;        
+          }
+          SFX.push_back(make_pair(x_iter, y_iter));
+        }
+
+    }
+    return hit;
+
 }
 /***************************************************************************//**
 * @author Riley Kopp
