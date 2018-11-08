@@ -94,10 +94,10 @@ direction SimpleAI::move(MapData map, PositionData status)
         }
     }
     //Move towards center if we can't find anyone
-    if (x_pos < mWidth - offset && y_pos < mHeight - offset && ret == STAY){ret = UPRIGHT;}
-    if (x_pos < mWidth - offset && y_pos > mHeight + offset && ret == STAY){ret = DOWNRIGHT;}
-    if (x_pos > mWidth + offset && y_pos < mHeight - offset && ret == STAY){ret = UPLEFT;}
-    if (x_pos > mWidth + offset && y_pos > mHeight + offset && ret == STAY){ret = DOWNLEFT;}
+    if (x_pos < mWidth - offset && y_pos < mHeight - offset && ret == STAY){ret = DOWNRIGHT;}
+    if (x_pos < mWidth - offset && y_pos > mHeight + offset && ret == STAY){ret = UPRIGHT;}
+    if (x_pos > mWidth + offset && y_pos < mHeight - offset && ret == STAY){ret = DOWNLEFT;}
+    if (x_pos > mWidth + offset && y_pos > mHeight + offset && ret == STAY){ret = UPLEFT;}
     if (x_pos < mWidth - offset && ret == STAY){ret = RIGHT;}
     if (y_pos > mHeight + offset && ret == STAY){ret = UP;}
     if (x_pos > mWidth + offset && ret == STAY){ret = LEFT;}

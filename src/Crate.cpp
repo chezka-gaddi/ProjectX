@@ -24,6 +24,7 @@ Crate::Crate( GLfloat x_coor, GLfloat y_coor, int actx, int acty )
     gridx = actx;
     gridy = acty;
     tex = 4;
+    health = 1;
 }
 
 

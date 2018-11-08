@@ -63,7 +63,8 @@ public:
     vector <Drawable *> bushes;        /*!<Holds the bushes drawables */
     vector <Drawable *> rocks;         /*!<Holds the rocks drawables */
     vector <Drawable *> trees;         /*!<Holds the trees drawables */
-    vector <Drawable *> sfx;         /*!<Holds the sfx drawables */
+    vector <Drawable *> specials;       /*!<Holds other special drawables */
+    vector <Drawable *> sfx;           /*!<Holds the sfx drawables */
 
 private:
     int fieldx;

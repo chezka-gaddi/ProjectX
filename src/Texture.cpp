@@ -215,17 +215,17 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
     if(sfxTex[3] == 0)
         return false;
 
-    glBindTexture(GL_TEXTURE_2D, sfxTex[4]);
+    glBindTexture(GL_TEXTURE_2D, sfxTex[3]);
     sfxTex[4] = SOIL_load_OGL_texture(
                      "images/misc/ammo.png",
                      SOIL_LOAD_AUTO,
                      SOIL_CREATE_NEW_ID,
                      SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
-    if(sfxTex[5] == 0)
+    if(sfxTex[4] == 0)
         return false;
 
-    glBindTexture(GL_TEXTURE_2D, sfxTex[5]);
+    glBindTexture(GL_TEXTURE_2D, sfxTex[4]);
 
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);

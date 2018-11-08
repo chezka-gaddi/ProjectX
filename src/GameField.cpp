@@ -359,6 +359,11 @@ void GameField::runMoves(ActorInfo &a)
       a.y -= yoff;
       hitObj == true;
       a.health--;
+    }else if (a.id < 0 && obstacleAt(a.x, a.y) == 'C'){
+      a.health--;
+      crate_o_doom(a.x, a.y);
+      removeObstacle(a.x, a.y);
+      hitObj == true;
     }
     if (a.health > 0 && hitObj == false)
     {
@@ -502,7 +507,13 @@ bool  GameField::crate_o_doom(int x, int y)
     int y_max_radar_range = radar + y_pos >= fieldMap.height ? fieldMap.height - 1 : radar + y_pos;
     int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
     int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
+<<<<<<< HEAD
     int hit = 0;
+=======
+    int hit = false;
+    
+    printf("Checking the doom crate.\n");
+>>>>>>> 80f4d72a295f80a9da196416a8477f68d908140e
     
     for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
     {
@@ -510,7 +521,11 @@ bool  GameField::crate_o_doom(int x, int y)
         {
           switch(obstacleAt(x_iter, y_iter)){ //now that we stole the internals do our stuff
               case 'T':
+<<<<<<< HEAD
                 for (auto &t : gameptr->trees)
+=======
+                for (auto t : gameptr->trees)
+>>>>>>> 80f4d72a295f80a9da196416a8477f68d908140e
                 {
                   if (t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
                   {
@@ -519,17 +534,29 @@ bool  GameField::crate_o_doom(int x, int y)
                 }
                 break;
               case 'C':
+<<<<<<< HEAD
                 for (auto &c : gameptr->specials)
                 {
                   if (c->gridx == x_iter && c->gridy == y_iter && c->health > 0)
                   {
                     c->health--;
+=======
+                for (auto c : gameptr->specials)
+                {
+                  if (c->gridx == x_iter && c->gridy == y_iter && c->health > 0)
+                  {
+                    c->health=0;
+>>>>>>> 80f4d72a295f80a9da196416a8477f68d908140e
                     hit = crate_o_doom(c->gridx, c->gridy); //Chain reaction
                   }
                 }
                 break;
               case 'R':
+<<<<<<< HEAD
                 for (auto &r : gameptr->rocks)
+=======
+                for (auto r : gameptr->rocks)
+>>>>>>> 80f4d72a295f80a9da196416a8477f68d908140e
                 {
                   if (r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
                   {
@@ -537,6 +564,7 @@ bool  GameField::crate_o_doom(int x, int y)
                   }
                 }
                 break;
+<<<<<<< HEAD
               case 'B':
               default:
                 for (auto &act : actors)
@@ -544,6 +572,14 @@ bool  GameField::crate_o_doom(int x, int y)
                   if (act.x == x_iter && act.y == y_iter && act.health > 0)
                   {
                     //printf("Hit a tank at (%d, %d)\n",x_iter, y_iter);
+=======
+              //case 'B':
+              default:
+                for (auto act : actors)
+                {
+                  if (act.x == x_iter && act.y == y_iter && act.health > 0)
+                  {
+>>>>>>> 80f4d72a295f80a9da196416a8477f68d908140e
                     act.health--;
                     if (act.health <= 0)
                     {
@@ -557,8 +593,13 @@ bool  GameField::crate_o_doom(int x, int y)
           }
           SFX.push_back(make_pair(x_iter, y_iter));
         }
+<<<<<<< HEAD
     }
     printf("Hit %d number of tanks.\n",hit);
+=======
+
+    }
+>>>>>>> 80f4d72a295f80a9da196416a8477f68d908140e
     return hit;
 
 }

@@ -136,6 +136,13 @@ void DisplayEvent::doAction(Game &game)
         stuff->draw(game.getX(), game.getY());
     }
     
+    for( int i = 0; i < game.specials.size(); i++ )
+    {
+        stuff = game.specials[i];
+        if (stuff->health > 0 )
+          stuff->draw(game.getX(), game.getY());
+    }
+    
     for( int i = 0; i < game.objects.size(); i++ )
     {
         stuff = game.objects[i];

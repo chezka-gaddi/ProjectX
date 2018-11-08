@@ -12,7 +12,8 @@ LIB_PATH= libraries/
 
 MAIN = $(SRC_PATH)main.cpp
 
-FILES = $(SRC_PATH)GameField.cpp
+FILES = $(MAIN)
+FILES += $(SRC_PATH)GameField.cpp
 FILES += $(SRC_PATH)Actor.cpp
 FILES += $(SRC_PATH)MapData.cpp
 FILES += $(SRC_PATH)ProjectileActor.cpp
@@ -29,6 +30,7 @@ FILES += $(SRC_PATH)callbacks.cpp
 FILES += $(SRC_PATH)DynamicLoader.cpp
 FILES += $(SRC_PATH)Menu.cpp
 FILES += $(SRC_PATH)sfxDrawable.cpp
+FILES += $(SRC_PATH)Crate.cpp
 
 TANK_PATH= ./tanks/
 TANKS = $(SRC_PATH)SimpleAI.cpp
@@ -49,11 +51,8 @@ platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 tanks/%.so: src/%.cpp ./src/Actor.o
 	$(CXX) $(CXXFLAGS) $(INCS) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
-<<<<<<< HEAD
 tanks: $(TANKS:%.cpp=%.so)
 
-=======
->>>>>>> Working Crates
 clean:
 	rm -rf platform results.txt src/*.o
 
@@ -61,13 +60,8 @@ clean-lib: clean
 	rm -rf buildsrc
 	rm -rf libraries/libCTF.so
 
-<<<<<<< HEAD
-cleanTanks:
-	rm -rf $(TANK_PATH)
-=======
 clean-all: clean-lib
 	rm -rf $(TANK_PATH)*
->>>>>>> Working Crates
 
 dev: clean-lib
 	make gen-library -j8
