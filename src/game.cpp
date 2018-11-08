@@ -241,7 +241,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 			s += "th";
 			str = s.c_str();  //use char const* as target type    	}
 		}
-    	
+
 
     	glRasterPos3f(-0.5f, k, 2.0f);
     	while(*str)
@@ -498,9 +498,9 @@ void Game::initGameState()
                 if (width < 15) {
                     width = 15;
                     cout << "Invalid width parameter, defaulting to 15.\n";
-                } else if (width > 40) {
-                        width = 40;
-                        cout << "Width parameter too high, defaulting to 40.\n";
+                } else if (width > 50) {
+                        width = 50;
+                        cout << "Width parameter too high, defaulting to 50.\n";
                 }
                 fieldx = width;
                 Drawable::scalar = (3.75/width)/.25;
@@ -513,9 +513,9 @@ void Game::initGameState()
                 if (height < 9){
                     height = 9;
                     cout << "Invalid height parameter, defaulting to 9.\n";
-                } else if (height > 20) {
-                        height = 20;
-                        cout << "Height parameter too high, defaulting to 30.\n";
+                } else if (height > 21) {
+                        height = 21;
+                        cout << "Height parameter too high, defaulting to 21.\n";
                 }
                 fieldy = height;
                 cout << "...done.\n";
