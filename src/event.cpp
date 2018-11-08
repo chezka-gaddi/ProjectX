@@ -65,12 +65,15 @@ void updateDrawables(Game &game)
 
     for( auto act : actors )
     {
-        if( act.health > 0 && act.id > 0 && act.id < 4)
+        if( act.health > 0 && act.id > 0)
         {
             temp_draw = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y ), act.heading );
             game.objects.push_back( temp_draw );
-            temp_draw = new Menu( act.id, act.health, act.shots, act.hits );
-            game.objects.push_back( temp_draw );
+            if (act.id <= 4)
+            {
+                    temp_draw = new Menu( act.id, act.health, act.shots, act.hits );
+                    game.objects.push_back( temp_draw );
+            }
         }
 
         else if( act.id < 0 && act.health > 0)

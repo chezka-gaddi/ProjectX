@@ -221,7 +221,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     k += -0.1f;
     count++;
 
-    for(int l = dead.size() - 1; j >= 0; j--)
+    for(int l = dead.size() - 1; l >= 0; l--)
     {
 
     	if(count < 4)
@@ -740,8 +740,11 @@ void Game::initGameState()
     // Create a stats menu for up to 4 tanks
     for( auto actTemp : startActors)
     {
-        temp = new Menu( actTemp.id, actTemp.health, actTemp.shots, actTemp.hits );
-        objects.push_back(temp);
+        if (actTemp.id <= 4)
+        {
+          temp = new Menu( actTemp.id, actTemp.health, actTemp.shots, actTemp.hits );
+          objects.push_back(temp);
+        }
     }
 
     cout << "Initializing Game...\n";

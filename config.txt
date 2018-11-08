@@ -4,7 +4,7 @@ MAP
 xxxxxxxxRRRRRRxxxxxxxxRRRRRRxx
 xxxxxxxTxxRRxxTxxxxxxTxxRRxxTx
 xxxxxxTTTBTTTBTTxxxxTTTBTTTBTT
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxCxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxB
 xxxxTxxxxxTxxxxxTxxxxxTxxxxBBT
 xxTTBTTxTTBTTxTTBTTxTTBTTxxTTB
@@ -34,7 +34,7 @@ AI_SPEED 750
 
 #FIELDIMAGE <MAP FILE>
 FIELDIMAGE images/green.png
-                           
+
 #OBSTACLE_IMAGE <IMAGE1> [<IMAGE2>]
 OBSTACLE_IMAGE images/tree/tree.png images/rock/rock.png
 TREE_IMAGE images/tree/tree.png images/tree/treeb.png images/tree/treec.png images/tree/treed.png
