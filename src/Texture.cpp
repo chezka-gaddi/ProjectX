@@ -9,12 +9,12 @@
 using namespace std;
 
 // Initialize texture arrays
-GLuint gameTex[8];      /*!<Texture array for the tanks and their projectiles */
-GLuint tankTex[20];     /*!<Texture array for game constants */
+GLuint tankTex[60];      /*!<Texture array for the tanks and their projectiles */
+GLuint gameTex[20];     /*!<Texture array for game constants */
 GLuint treeTex[10];     /*!<Texture array for the trees */
 GLuint bushTex[10];     /*!<Texture array for the bushes */
 GLuint rockTex[10];     /*!<Texture array for the rocks */
-GLuint sfxTex[10];   /*<Texture array for the special effects */
+GLuint sfxTex[20];   /*<Texture array for the special effects */
 
 /***************************************************************************//**
 * @author Chezka Gaddi
