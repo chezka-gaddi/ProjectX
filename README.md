@@ -1,6 +1,21 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Release 3.10
+## What's new?
+- Scoreboard
+  - At the end of the game a list of the top 3 players will be displayed.
+- Crate_o_Fun
+  - A new crate was added that has a surprise for anyone that shoots it.
+- Tanks
+  - Additional tank colors have been added to the map.
+- Maps
+  - All maps have been updated with destructible objects so that they can now be 
+- Default Map
+  - The default map has been updated to support up to 10 Tanks.
+- SimpleAI
+  - Adjusted SimpleAI so that it will no longer refuse to play the game if it can't see.
+
 ## Release 3.01
 ### What's new?
 - Object health
