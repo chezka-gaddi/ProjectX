@@ -251,7 +251,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     	}
 
 
-    	std::cout << "Finding " << count << "th place.........\n";
+    	//std::cout << "Finding " << count << "th place.........\n";
     	str = dead[l].name.c_str();
 
     	glRasterPos3f(-0.2f, k, 2.0f);
@@ -740,8 +740,11 @@ void Game::initGameState()
     // Create a stats menu for up to 4 tanks
     for( auto actTemp : startActors)
     {
-        temp = new Menu( actTemp.id, actTemp.health, actTemp.shots, actTemp.hits );
-        objects.push_back(temp);
+        if (actTemp.id <= 4)
+        {
+          temp = new Menu( actTemp.id, actTemp.health, actTemp.shots, actTemp.hits );
+          objects.push_back(temp);
+        }
     }
 
     cout << "Initializing Game...\n";

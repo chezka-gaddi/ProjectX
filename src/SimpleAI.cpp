@@ -2,7 +2,7 @@
 #include <iostream>
 
 SimpleAI::SimpleAI() {}
-SimpleAI::~SimpleAI() {printf("Deleting SimpleAI\n");}
+SimpleAI::~SimpleAI() {}
 
 /**
  * @author David Donahue

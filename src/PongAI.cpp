@@ -8,7 +8,6 @@ PongAI::PongAI(void)
 
 PongAI::~PongAI(void)
 {
-    printf("Deleting PongAI\n");
     // Intentionally Left Empty
 }
 
