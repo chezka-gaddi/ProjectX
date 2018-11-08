@@ -19,7 +19,7 @@ protected:
     int id = 0;                 /*!< the id number of the actor */
 
 public:
-    //Actor();
+    //Actor(){};
     virtual ~Actor()=0;
 
     /**

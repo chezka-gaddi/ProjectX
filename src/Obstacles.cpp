@@ -18,7 +18,8 @@
 Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
 {
     //id's:
-    // 0 = Tree   1 = Rocks   2 = Bushes
+    // 0 = Tree   1 = Rocks   2 = Bushes  3 = Other
+    //Textures:
     //0-9   Trees  - Packaged Trees  0-3   - 4 Trees
     //10-19 Rocks  - Packaged Rocks  10-12 - 3 Rocks
     //20-29 Bushes - Packaged Bushes 20-23 - 4 Bushes
@@ -66,13 +67,13 @@ void Obstacles::draw(int, int)
 
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.18f * scalar, -0.20f * scalar,  1.0f);
+    glVertex3f(-0.16f * scalar, -0.19f * scalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.18f * scalar, -0.20f * scalar,  1.0f);
+    glVertex3f( 0.16f * scalar, -0.19f * scalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.18f * scalar,  0.20f * scalar,  1.0f);
+    glVertex3f( 0.16f * scalar,  0.19f * scalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.18f * scalar,  0.20f * scalar,  1.0f);
+    glVertex3f(-0.16f * scalar,  0.19f * scalar,  1.0f);
     glEnd();
 
     glPopMatrix();

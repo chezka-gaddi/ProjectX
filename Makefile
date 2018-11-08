@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -fPIC
-INCS = -I./
+INCS = -I./ -Isrc/
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
 LIBS += -lSOIL -Llibraries
@@ -12,7 +12,8 @@ LIB_PATH= libraries/
 
 MAIN = $(SRC_PATH)main.cpp
 
-FILES = $(SRC_PATH)GameField.cpp
+FILES = $(MAIN)
+FILES += $(SRC_PATH)GameField.cpp
 FILES += $(SRC_PATH)Actor.cpp
 FILES += $(SRC_PATH)MapData.cpp
 FILES += $(SRC_PATH)ProjectileActor.cpp
@@ -29,33 +30,28 @@ FILES += $(SRC_PATH)callbacks.cpp
 FILES += $(SRC_PATH)DynamicLoader.cpp
 FILES += $(SRC_PATH)Menu.cpp
 FILES += $(SRC_PATH)sfxDrawable.cpp
+FILES += $(SRC_PATH)Crate.cpp
 
 TANK_PATH= ./tanks/
-TANKS = src/SimpleAI.so
-TANKS += src/PongAI.so
-TANKS += src/CamperAI.so
+TANKS = $(SRC_PATH)SimpleAI.cpp
+TANKS += $(SRC_PATH)PongAI.cpp
+TANKS += $(SRC_PATH)CamperAI.cpp
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
-platform: $(FILES:.cpp=.o) $(MAIN:.cpp=.o)
-	+make tanks
-	$(CXX) $(CXXFLAGS) $(INCS) -o platform $? $(LIBS)
-
-%.so: %.cpp
-	$(CXX) $(CXXFLAGS) -shared $< $(TANKS_LINK) -o $@ $(SOFLAGS)
+platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
+	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS) $(LIBS)
+	$(CXX) $(CXXFLAGS) -c $? -o $@ 
 
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
-tanks:	$(TANKS)
-	mkdir -p $(TANK_PATH)
-	mv $^ $(TANK_PATH)
+tanks/%.so: src/%.cpp ./src/Actor.o
+	$(CXX) $(CXXFLAGS) $(INCS) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
-.cpp.o:
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
+tanks: $(TANKS:%.cpp=%.so)
 
 clean:
 	rm -rf platform results.txt src/*.o
@@ -64,8 +60,8 @@ clean-lib: clean
 	rm -rf buildsrc
 	rm -rf libraries/libCTF.so
 
-cleanTanks:
-	rm -rf $(TANK_PATH)
+clean-all: clean-lib
+	rm -rf $(TANK_PATH)*
 
 dev: clean-lib
 	make gen-library -j8
@@ -96,8 +92,8 @@ gen-library: $(FILES:.cpp=.o)
 	cp src/MapData.h buildsrc/src/
 	cp src/direction.h buildsrc/src/
 	cp src/PositionData.h buildsrc/src/
-	cp $(TANKS:.so=.cpp) buildsrc/
-	cp $(TANKS:.so=.h) buildsrc/
+	cp src/$(TANKS:.so=.cpp) buildsrc/
+	cp src/$(TANKS:.so=.h) buildsrc/
 	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
 	# Change tanks src to point to new directory
 	sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h

@@ -9,12 +9,12 @@
 using namespace std;
 
 // Initialize texture arrays
-GLuint gameTex[8];      /*!<Texture array for the tanks and their projectiles */
-GLuint tankTex[20];     /*!<Texture array for game constants */
+GLuint tankTex[60];      /*!<Texture array for the tanks and their projectiles */
+GLuint gameTex[20];     /*!<Texture array for game constants */
 GLuint treeTex[10];     /*!<Texture array for the trees */
 GLuint bushTex[10];     /*!<Texture array for the bushes */
 GLuint rockTex[10];     /*!<Texture array for the rocks */
-GLuint sfxTex[10];   /*<Texture array for the special effects */
+GLuint sfxTex[20];   /*<Texture array for the special effects */
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -216,6 +216,16 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
         return false;
 
     glBindTexture(GL_TEXTURE_2D, sfxTex[3]);
+    sfxTex[4] = SOIL_load_OGL_texture(
+                     "images/misc/ammo.png",
+                     SOIL_LOAD_AUTO,
+                     SOIL_CREATE_NEW_ID,
+                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+    if(sfxTex[4] == 0)
+        return false;
+
+    glBindTexture(GL_TEXTURE_2D, sfxTex[4]);
 
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
