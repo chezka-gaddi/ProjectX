@@ -66,20 +66,15 @@ clean-all: clean-lib
 dev: clean-lib
 	make gen-library -j8
 
-gen-library: $(FILES:.cpp=.o)
+gen-library: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	@mkdir -p buildsrc/$(LIB_PATH)
 	@mkdir -p buildsrc/$(SRC_PATH)
 	@mkdir -p buildsrc/$(TANK_PATH)
 	@mkdir -p buildsrc/images	
 	#echo "Building object library"
-	g++ -o buildsrc/$(LIB_PATH)libCTF.so -shared $(CXXFLAGS) $? $(SOFLAGS)
-	#echo :Building pre-compiled header"
-	#$(CXX) -x c++-header $(CXXFLAGS) $(INCS) -o build/src/Actor.h.gch -c src/Actor.h $(LIBS)
+	g++ -o buildsrc/$(LIB_PATH)libCTF.so -shared $(CXXFLAGS) $< $(SOFLAGS)
 	#echo "Building platform"
-	$(CXX) $(CXXFLAGS) $(INCS) -o $(SRC_PATH)main.o -c $(SRC_PATH)main.cpp $(LIBS)
-	$(CXX) $(CXXFLAGS) $(INCS) -o buildsrc/platform src/main.o $? $(LIBS)
-	#echo "Building Sample Tank"	
-	$(CXX) $(CXXFLAGS) -shared src/SimpleAI.cpp -o buildsrc/$(TANK_PATH)SimpleAI.so $(SOFLAGS)
+	$(CXX) $(CXXFLAGS) $(INCS) -o buildsrc/platform $(FILES:.cpp=.o) $(LIBS)
 	#echo "Copying support files"
 	cp -R src/buildsrc/ .
 	cp config.txt	buildsrc/config.sample
@@ -92,12 +87,12 @@ gen-library: $(FILES:.cpp=.o)
 	cp src/MapData.h buildsrc/src/
 	cp src/direction.h buildsrc/src/
 	cp src/PositionData.h buildsrc/src/
-	cp src/$(TANKS:.so=.cpp) buildsrc/
-	cp src/$(TANKS:.so=.h) buildsrc/
+	cp $(TANKS:.so=.cpp) buildsrc/
+	cp $(TANKS:.so=.h) buildsrc/
 	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
 	# Change tanks src to point to new directory
-	sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
-	sed -i 's#include "#include "src/#g' buildsrc/PongAI.h
+	# sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
+	# sed -i 's#include "#include "src/#g' buildsrc/PongAI.h
 
 push-to-git: clean-lib
 	mkdir -p buildsrc
