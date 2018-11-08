@@ -132,8 +132,15 @@ static bool isplayable(std::vector<ActorInfo> actorInfo)
 *
 * Display the screen that reads game over
 *******************************************************************************/
-void gameOver()
+void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 {
+
+	const char *str;
+	std::string scoreDetails[3] = {"Place:", "PLayer Number:", "Hits:"};
+
+    float color[] = {1.0f, 1.0f, 1.0f};
+
+
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glLoadIdentity();
     glEnable(GL_TEXTURE_2D);
@@ -153,9 +160,123 @@ void gameOver()
     glEnd();
     glPopMatrix();
 
+    glDisable(GL_TEXTURE_2D);
+
+    float j = -0.5f;
+    bool flag = false;
+
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, -5.0f);
+	glColor3fv(color);
+
+    for(int i = 0; i < 3; i++)
+    {
+    	glRasterPos3f(j, -0.5f, 2.0f);
+    	str = scoreDetails[i].c_str();
+    	while(*str)
+    	{
+    		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    		str++;
+    	}
+    	if(!flag)
+    	{
+    		j += 0.3;
+    		flag = true;
+    	}
+    	else
+    		j += 0.7;
+    }
+
+    int count = 1;
+    int winDex = 0;
+    float k = -0.6;
+
+    while(winner[winDex].name == "default\n")
+    	winDex++;
+
+    str = "1st";
+    glRasterPos3f(-0.5f, k, 2.0f);
+    while(*str)
+    {
+    	glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    	str++;
+    }
+
+    str = winner[winDex].name.c_str();
+    glRasterPos3f(-0.2f, k, 2.0f);
+    while(*str)
+    {
+    	glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    	str++;
+    }
+
+    str = std::to_string(winner[winDex].hits).c_str();
+    glRasterPos3f(0.5f, k, 2.0f);
+    while(*str)
+    {
+    	glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    	str++;
+    }
+
+    k += -0.1f;
+    count++;
+
+    for(int l = dead.size() - 1; j >= 0; j--)
+    {
+
+    	if(count < 4)
+    		switch(count)
+    		{
+    			case 2:
+    				str = "2nd";
+    				break;
+    			case 3:
+    				str = "3rd";
+    				break;
+    		}
+
+    	else
+    	{
+			std::string s = std::to_string(count);
+			s += "th";
+			str = s.c_str();  //use char const* as target type    	}
+		}
+    	
+
+    	glRasterPos3f(-0.5f, k, 2.0f);
+    	while(*str)
+    	{
+    		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    		str++;
+    	}
+
+
+    	std::cout << "Finding " << count << "th place.........\n";
+    	str = dead[l].name.c_str();
+
+    	glRasterPos3f(-0.2f, k, 2.0f);
+    	while(*str)
+    	{
+    		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    		str++;
+    	}
+
+    	str = std::to_string(dead[l].hits).c_str();
+    	glRasterPos3f(0.5f, k, 2.0f);
+    	while(*str)
+    	{
+    		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    		str++;
+    	}
+
+    	k += -0.1f;
+    	count++;
+
+    }
+
     system("sleep 1.");
     glutSwapBuffers();
-    system("sleep 1.");
+    system("sleep 5.");
 }
 
 
@@ -180,7 +301,7 @@ void Game::executeTurn()
       ofstream fout("results.txt", ios::out | ios::app);
       fout << tankGame->getWinner() << endl;
       fout.close();
-      gameOver();
+      gameOver(tankGame->getDeceased(), tankGame->getActors());
       glutLeaveMainLoop();
     }
 }

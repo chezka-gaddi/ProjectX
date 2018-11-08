@@ -795,11 +795,16 @@ std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
  */
 void GameField::cull()
 {
-
     for (int i = 0; i < actors.size(); ++i) //This is used instead of the c++11 version so that we can use the index.
     {
         if (actors[i].health == 0)
         {
+        	if(actors[i].name != "default\n")
+        	{
+        		std::cout << "Tank Down!! " << actors[i].name << " died\n";
+        		deceased.push_back(actors[i]);
+        		std::cout << "Current number of dead tanks is: " << deceased.size() << endl;
+        	}
             if (actors[i].act_p != NULL)
                 delete actors[i].act_p;
             actors.erase(actors.begin()+i);
