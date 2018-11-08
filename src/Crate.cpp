@@ -17,10 +17,12 @@
 * @param[in] x_coor - coordinate to spawn crate
 * @param[in] y_coor - coordinate to spawn crate
 * *****************************************************************************/
-Crate::Crate( int ID, GLfloat x_coor, GLfloat y_coor, direction dir )
+Crate::Crate( GLfloat x_coor, GLfloat y_coor, int actx, int acty )
 {
     screen_x = x_coor;
     screen_y = y_coor;
+    gridx = actx;
+    gridy = acty;
     tex = 4;
 }
 

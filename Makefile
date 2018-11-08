@@ -39,10 +39,9 @@ TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have eve
 
 platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
-	#+make tanks
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ 
+	$(CXX) $(CXXFLAGS) -c $? -o $@ 
 
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
@@ -50,8 +49,11 @@ platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 tanks/%.so: src/%.cpp ./src/Actor.o
 	$(CXX) $(CXXFLAGS) $(INCS) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
+<<<<<<< HEAD
 tanks: $(TANKS:%.cpp=%.so)
 
+=======
+>>>>>>> Working Crates
 clean:
 	rm -rf platform results.txt src/*.o
 
@@ -59,8 +61,13 @@ clean-lib: clean
 	rm -rf buildsrc
 	rm -rf libraries/libCTF.so
 
+<<<<<<< HEAD
 cleanTanks:
 	rm -rf $(TANK_PATH)
+=======
+clean-all: clean-lib
+	rm -rf $(TANK_PATH)*
+>>>>>>> Working Crates
 
 dev: clean-lib
 	make gen-library -j8

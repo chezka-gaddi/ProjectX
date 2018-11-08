@@ -359,11 +359,6 @@ void GameField::runMoves(ActorInfo &a)
       a.y -= yoff;
       hitObj == true;
       a.health--;
-    }else if (a.id < 0 && obstacleAt(a.x, a.y) == 'C'){
-      a.health--;
-      crate_o_doom(a.x, a.y);
-      removeObstacle(a.x, a.y);
-      hitObj == true;
     }
     if (a.health > 0 && hitObj == false)
     {
@@ -436,6 +431,7 @@ void GameField::runMoves(ActorInfo &a)
 bool GameField::checkObjectStrike(ActorInfo &a)
 {
   int tempOb = obstacleAt(a.x, a.y);
+  int hits = 0;
   if (a.id > 0 || a.health < 0) //Get the non projectiles back out of here
           return false;
   if (tempOb == 0){  //if the spot is empty then we couldn't have hit anything
@@ -450,7 +446,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   else if(tempOb == 'R')
   {
     //printf("Rock strike, log it.\n");
-    for (auto r : gameptr->rocks)
+    for (auto& r : gameptr->rocks)
     {
           if (r->gridx == a.x && r->gridy == a.y && r->health > 0)
           {
@@ -467,7 +463,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   }else if (tempOb == 'T')
   {
     //printf("Tree strike, log it.\n");
-    for (auto t : gameptr->trees)
+    for (auto &t : gameptr->trees)
     {
           if (t->gridx == a.x && t->gridy == a.y && t->health > 0)
           {
@@ -479,14 +475,13 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   }else if (tempOb == 'C')
   {
     //printf("Hit the crate.\n");
-    for ( auto c : gameptr->specials){
+    for ( auto &c : gameptr->specials){
           if (c->gridx == a.x && c->gridy == a.y && c->health > 0)
           {
-            //printf("Found the crate.\n");
-
-            //printf("Found tree strike, chop it.\n");
-            c->health = 0;
-            crate_o_doom(c->gridx, c->gridy);//Bang the drum
+           // printf("Found the crate at (%d, %d) with projectile at (%d,%d).\n",c->gridx, c->gridy, a.x, a.y);
+            c->health--;
+            hits+= crate_o_doom(c->gridx, c->gridy);//Bang the drum
+            actorInfoById(-a.id).hits += hits; 
             return true;
           }
     }
@@ -507,9 +502,7 @@ bool  GameField::crate_o_doom(int x, int y)
     int y_max_radar_range = radar + y_pos >= fieldMap.height ? fieldMap.height - 1 : radar + y_pos;
     int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
     int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
-    int hit = false;
-    
-    printf("Checking the doom crate.\n");
+    int hit = 0;
     
     for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
     {
@@ -517,7 +510,7 @@ bool  GameField::crate_o_doom(int x, int y)
         {
           switch(obstacleAt(x_iter, y_iter)){ //now that we stole the internals do our stuff
               case 'T':
-                for (auto t : gameptr->trees)
+                for (auto &t : gameptr->trees)
                 {
                   if (t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
                   {
@@ -526,17 +519,17 @@ bool  GameField::crate_o_doom(int x, int y)
                 }
                 break;
               case 'C':
-                for (auto c : gameptr->specials)
+                for (auto &c : gameptr->specials)
                 {
                   if (c->gridx == x_iter && c->gridy == y_iter && c->health > 0)
                   {
-                    c->health=0;
+                    c->health--;
                     hit = crate_o_doom(c->gridx, c->gridy); //Chain reaction
                   }
                 }
                 break;
               case 'R':
-                for (auto r : gameptr->rocks)
+                for (auto &r : gameptr->rocks)
                 {
                   if (r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
                   {
@@ -544,12 +537,13 @@ bool  GameField::crate_o_doom(int x, int y)
                   }
                 }
                 break;
-              //case 'B':
+              case 'B':
               default:
-                for (auto act : actors)
+                for (auto &act : actors)
                 {
                   if (act.x == x_iter && act.y == y_iter && act.health > 0)
                   {
+                    //printf("Hit a tank at (%d, %d)\n",x_iter, y_iter);
                     act.health--;
                     if (act.health <= 0)
                     {
@@ -563,8 +557,8 @@ bool  GameField::crate_o_doom(int x, int y)
           }
           SFX.push_back(make_pair(x_iter, y_iter));
         }
-
     }
+    printf("Hit %d number of tanks.\n",hit);
     return hit;
 
 }

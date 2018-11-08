@@ -592,6 +592,13 @@ void Game::initGameState()
         temp = new Obstacles( (rand() % 3), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ), o.first, o.second );
         constants.push_back(temp);
     }
+        cout << "  ...hiding the ammo\n";
+    for (auto c : specialLocations)
+    {
+        tankGame->addObstacle(c.first, c.second, 'C');
+        temp = new Crate( convertGLXCoordinate( c.first ), convertGLYCoordinate( c.second ), c.first, c.second );
+        specials.push_back(temp);
+    }
         cout << "  ...letting the trees grow\n";
     for (auto t : treeLocations)
     {

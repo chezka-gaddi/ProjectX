@@ -15,7 +15,7 @@ xxxRxxxxxRxxxxxRxxxxxRxxxxxxxx
 xxTTTxxxTTTxxxTTTxxxTTTxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-AI CamperAI 0 2 images/Yellow/tankY_U.png images/Yellow/tankY_R.png images/Yellow/tankY_D.png images/Yellow/tankY_L.png images/Yellow/bulletY.png
+AI CamperAI 0 1 images/Yellow/tankY_U.png images/Yellow/tankY_R.png images/Yellow/tankY_D.png images/Yellow/tankY_L.png images/Yellow/bulletY.png
 AI SimpleAI 8 0 images/Blue/tankB_U.png images/Blue/tankB_R.png images/Blue/tankB_D.png images/Blue/tankB_L.png images/Blue/bulletB.png
 AI SimpleAI 0 8 images/Red/tankR_U.png images/Red/tankR_R.png images/Red/tankR_D.png images/Red/tankR_L.png images/Red/bulletR.png
 AI SimpleAI 9 5 images/Green/tankG_U.png images/Green/tankG_R.png images/Green/tankG_D.png images/Green/tankG_L.png images/Green/bulletG.png
@@ -25,7 +25,6 @@ AI_SPEED 750
 
 #FIELDIMAGE <MAP FILE>
 FIELDIMAGE images/green.png
-                           
                            
 #OBSTACLE_IMAGE <IMAGE1> [<IMAGE2>]
 OBSTACLE_IMAGE images/tree/tree.png images/rock/rock.png
