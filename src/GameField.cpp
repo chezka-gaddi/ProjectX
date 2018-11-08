@@ -801,9 +801,9 @@ void GameField::cull()
         {
         	if(actors[i].name != "default\n")
         	{
-        		std::cout << "Tank Down!! " << actors[i].name << " died\n";
+        		//std::cout << "Tank Down!! " << actors[i].name << " died\n";
         		deceased.push_back(actors[i]);
-        		std::cout << "Current number of dead tanks is: " << deceased.size() << endl;
+        		//std::cout << "Current number of dead tanks is: " << deceased.size() << endl;
         	}
             if (actors[i].act_p != NULL)
                 delete actors[i].act_p;

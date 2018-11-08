@@ -7,7 +7,6 @@ CamperAI::CamperAI(void)
 
 CamperAI::~CamperAI(void)
 {
-    printf("Deleting CamperAI\n");
 }
 
 direction CamperAI::move(MapData map, PositionData status)

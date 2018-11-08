@@ -251,7 +251,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     	}
 
 
-    	std::cout << "Finding " << count << "th place.........\n";
+    	//std::cout << "Finding " << count << "th place.........\n";
     	str = dead[l].name.c_str();
 
     	glRasterPos3f(-0.2f, k, 2.0f);

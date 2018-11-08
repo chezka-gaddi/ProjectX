@@ -65,7 +65,7 @@ void updateDrawables(Game &game)
 
     for( auto act : actors )
     {
-        if( act.health > 0 && act.id > 0 )
+        if( act.health > 0 && act.id > 0 && act.id < 4)
         {
             temp_draw = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y ), act.heading );
             game.objects.push_back( temp_draw );
