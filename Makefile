@@ -105,6 +105,6 @@ push-to-git: clean-lib
 	make gen-library -j8
 	git --git-dir=buildsrc/.git --work-tree=buildsrc checkout -b pre-release
 	git --git-dir=buildsrc/.git --work-tree=buildsrc add .
-	git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 3.01"
+	git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 3.10"
 	git --git-dir=buildsrc/.git --work-tree=buildsrc status
 	git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release
