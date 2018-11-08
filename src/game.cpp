@@ -221,7 +221,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     k += -0.1f;
     count++;
 
-    for(int l = dead.size() - 1; j >= 0; j--)
+    for(int l = dead.size() - 1; l >= 0; l--)
     {
 
     	if(count < 4)
