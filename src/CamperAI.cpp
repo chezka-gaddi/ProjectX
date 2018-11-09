@@ -33,7 +33,6 @@ direction CamperAI::move(MapData map, PositionData status)
     else
         retval == STAY;
 
-    std::cout << "Moving in " << retval << " direction\n";
     return retval;
 }
 
@@ -95,7 +94,6 @@ direction CamperAI::attack(MapData map, PositionData status)
       }
     }
 
-    std::cout << "Shooting in " << retval << " direction\n";
     return retval;
 }
 
@@ -110,14 +108,14 @@ attributes CamperAI::setAttribute(int pointsAvailable, attributes baseStats)
 
 int CamperAI::spendAP(MapData map, PositionData status)
 {
-    // if (maxAp == 0)
-    //   maxAp = status.ap;
-    // if (maxAp == status.ap)
-    //   turn = 0;
-    // else
-    //   turn++;
-    // if (move(map, status) != STAY)
-    //         return 1;
+    if (maxAp == 0)
+      maxAp = status.ap;
+    if (maxAp == status.ap)
+      turn = 0;
+    else
+      turn++;
+    if (move(map, status) != STAY)
+            return 1;
     return 2; // Attack
 }
 
