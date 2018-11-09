@@ -48,7 +48,7 @@ protected:
     //Action points for each actor
     int ap;
     bool checkObjectStrike(ActorInfo &a);
-    bool crate_o_doom(int x, int y);
+    bool crate_o_doom(int x, int y, ActorInfo &a);
     Game *gameptr = nullptr;
 
 public:

@@ -136,7 +136,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 {
 
 	const char *str;
-	std::string scoreDetails[3] = {"Place:", "PLayer Number:", "Hits:"};
+	std::string scoreDetails[4] = {"Place:", "Player Number:", "Kills:","Hits:"};
 
     float color[] = {1.0f, 1.0f, 1.0f};
 
@@ -150,28 +150,28 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     glBindTexture(GL_TEXTURE_2D, gameTex[7]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f,  1.0f);
+    glVertex3f(-0.8f, -0.3f,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.5f, -0.5f,  1.0f);
+    glVertex3f( 0.8f, -0.3f,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.5f,  0.5f,  1.0f);
+    glVertex3f( 0.8f,  0.8f,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f,  0.5f,  1.0f);
+    glVertex3f(-0.8f,  0.8f,  1.0f);
     glEnd();
     glPopMatrix();
 
     glDisable(GL_TEXTURE_2D);
 
-    float j = -0.5f;
+    float j = -0.7f;
     bool flag = false;
 
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, -5.0f);
-	glColor3fv(color);
+	  glColor3fv(color);
 
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < 4; i++)
     {
-    	glRasterPos3f(j, -0.5f, 2.0f);
+    	glRasterPos3f(j, -0.3f, 2.0f);
     	str = scoreDetails[i].c_str();
     	while(*str)
     	{
@@ -184,18 +184,21 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     		flag = true;
     	}
     	else
+      {
     		j += 0.7;
+        flag = false;
+      }
     }
 
     int count = 1;
     int winDex = 0;
-    float k = -0.6;
+    float k = -0.5;
 
     while(winner[winDex].name == "default\n")
     	winDex++;
 
     str = "1st";
-    glRasterPos3f(-0.5f, k, 2.0f);
+    glRasterPos3f(-0.7f, k, 2.0f);
     while(*str)
     {
     	glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
@@ -203,15 +206,23 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     }
 
     str = winner[winDex].name.c_str();
-    glRasterPos3f(-0.2f, k, 2.0f);
+    glRasterPos3f(-0.4f, k, 2.0f);
     while(*str)
     {
     	glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
     	str++;
     }
 
+    str = std::to_string(winner[winDex].kills).c_str();
+    glRasterPos3f(0.3f, k, 2.0f);
+    while(*str)
+    {
+    	glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    	str++;
+    }
+    
     str = std::to_string(winner[winDex].hits).c_str();
-    glRasterPos3f(0.5f, k, 2.0f);
+    glRasterPos3f(0.6f, k, 2.0f);
     while(*str)
     {
     	glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
@@ -243,7 +254,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 		}
     	
 
-    	glRasterPos3f(-0.5f, k, 2.0f);
+    	glRasterPos3f(-0.7f, k, 2.0f);
     	while(*str)
     	{
     		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
@@ -254,15 +265,23 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     	//std::cout << "Finding " << count << "th place.........\n";
     	str = dead[l].name.c_str();
 
-    	glRasterPos3f(-0.2f, k, 2.0f);
+    	glRasterPos3f(-0.4f, k, 2.0f);
     	while(*str)
     	{
     		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
     		str++;
     	}
 
-    	str = std::to_string(dead[l].hits).c_str();
-    	glRasterPos3f(0.5f, k, 2.0f);
+    	str = std::to_string(dead[l].kills).c_str();
+    	glRasterPos3f(0.3f, k, 2.0f);
+    	while(*str)
+    	{
+    		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    		str++;
+    	}
+    	
+      str = std::to_string(dead[l].hits).c_str();
+    	glRasterPos3f(0.6f, k, 2.0f);
     	while(*str)
     	{
     		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
@@ -346,6 +365,8 @@ void Game::initGameState()
     int  health = 3;
     int range = 1;
     int radar = 4;
+    int ammo = 6;
+
     std::vector<std::pair<int,int>> obstacleLocations;
     std::vector<std::pair<int,int>> treeLocations;
     std::vector<std::pair<int,int>> rockLocations;
@@ -697,6 +718,17 @@ void Game::initGameState()
                     attributePoints = 4;
                 }
             }
+            else if (id == "AMMO")
+            {
+                stringstream(args) >> ammo;
+                if (ammo < 1){
+                  ammo = 1;
+                  cout << "Invalid ammo amount, defaulting to 1\n";
+                } else if (ammo > 10) {
+                    printf("%d ammo might be a little excesive, setting to 10.\n", ammo);
+                    ammo = 10;
+                }
+            }
             else if (id != "")
             {
                 std::cout << "BAD ARGUMENT: " << id << '\n';
@@ -733,6 +765,7 @@ void Game::initGameState()
                     , range
                     , 0
                     , radar
+                    , ammo
                     , AINames[i]));
         printf("Actor %d name: %s\n", i, AINames[i].c_str());
     }
