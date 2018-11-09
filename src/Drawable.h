@@ -90,8 +90,12 @@ class Obstacles : public Drawable
 {
 public:
     Obstacles( int, GLfloat, GLfloat, int, int);
-
+    void regrow(int turn); 
     void draw(int, int);
+protected:
+    int destroyed;
+    int regrow_rate;
+friend class GameField;
 };
 
 
