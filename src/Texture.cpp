@@ -15,6 +15,7 @@ GLuint treeTex[10];     /*!<Texture array for the trees */
 GLuint bushTex[10];     /*!<Texture array for the bushes */
 GLuint rockTex[10];     /*!<Texture array for the rocks */
 GLuint sfxTex[20];   /*<Texture array for the special effects */
+GLuint waterTex[20];
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -24,7 +25,7 @@ GLuint sfxTex[20];   /*<Texture array for the special effects */
 *******************************************************************************/
 int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> gameimgs,
                    std::vector <std::string> trees, std::vector <std::string> rocks, 
-                   std::vector <std::string> bushes)
+                   std::vector <std::string> bushes, std::vector <std::string> waters)
 {
     // Load in the tank texure information
     cout << "\nLoading Tank Textures:";
@@ -95,6 +96,25 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
 
         glBindTexture(GL_TEXTURE_2D, bushTex[i]);
     }
+
+    cout << "\nLoading Water Textures:\n";
+    // Load in the bush texure information
+    for( int i = 0; i < waters.size(); i++ )
+    {
+        const char *c = waters[i].c_str();
+        cout << c << "  ";
+        waterTex[i] = SOIL_load_OGL_texture(
+                     c,
+                     SOIL_LOAD_AUTO,
+                     SOIL_CREATE_NEW_ID,
+                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+        if(waterTex[i] == 0)
+        return false;
+
+        glBindTexture(GL_TEXTURE_2D, bushTex[i]);
+    }
+
 
     cout << "\nLoading UI Textures:\n";
     // Load in constant game images

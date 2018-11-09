@@ -5,7 +5,7 @@
 * *****************************************************************************/
 
 #include "Drawable.h"
-
+#include <iostream>
 /***************************************************************************//**
 * @author Chezka Gaddi
 * @brief Constructor
@@ -35,7 +35,9 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
       tex = ((rand() % 3) + 10);
     }else if( id == 2){ //It's a Bushes
       tex = ((rand() % 4) + 20);
-    }else{
+    }else if( id == 3){ //It's a Waters
+      tex = 0 + 30;
+    }else {
       tex = 1; //default to tree if we got a bad id
     }
 }
@@ -63,6 +65,9 @@ void Obstacles::draw(int, int)
       glBindTexture(GL_TEXTURE_2D, rockTex[tex-10]);
     }else if( tex >= 20 && tex <= 29){ //It's a Bushes
       glBindTexture(GL_TEXTURE_2D, bushTex[tex-20]);
+    }else if( tex >= 30 && tex <= 39){ //It's a Waters
+      std::cout << "Drawing a Water square\n";
+      glBindTexture(GL_TEXTURE_2D, waterTex[tex - 30]);
     }
 
     glBegin(GL_QUADS);

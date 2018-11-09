@@ -9,9 +9,9 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxB
 xxxxTxxxxxTxxxxxTxxxxxTxxxxBBT
 xxTTBTTxTTBTTxTTBTTxTTBTTxxTTB
 xxRxRxRxRxRxRxRxRxRxRxRxRxxRxR
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxRxxxxxRxxxxxRxxxxxRxxxxxxxx
+xxxxxxxxxxxWxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxWWWxxxxxxxxxxxxxxxxx
+xxxRxxxxxRxWxxxRxxxxxRxxxxxxxx
 xxTTTxxxTTTxxxTTTxxxTTTxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -40,6 +40,7 @@ OBSTACLE_IMAGE images/tree/tree.png images/rock/rock.png
 TREE_IMAGE images/tree/tree.png images/tree/treeb.png images/tree/treec.png images/tree/treed.png
 BUSH_IMAGE images/bush/bush1.png images/bush/bush2.png images/bush/bush3.png images/bush/bush4.png
 ROCK_IMAGE images/rock/rock.png images/rock/rockb.png images/rock/rockc.png
+WATER_IMAGE images/Water/waterTex.png images/Water/waterTexNS.png images/Water/waterTexES.png images/Water/waterTexSS.png images/Water/waterTexWS.png images/Water/waterTexNES.png images/Water/waterTexSES.png images/Water/waterTexSWS.png images/Water/waterTexNWS.png images/Water/waterTexNWES.png images/Water/waterTexNESS.png images/Water/waterTexSEWS.png images/Water/waterTexNWSS.png images/Water/waterTexPond.png
 
 #TANK RULES
 #DAMAGE <STAT>
