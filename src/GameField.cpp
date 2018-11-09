@@ -361,7 +361,6 @@ void GameField::runMoves(ActorInfo &a)
 
     a.x += xoff;
     a.y += yoff;
-    std::cout << "Actor with ID: " << a.id << " at position: [" << a.x << ", " << a.y << "] is calling checkObjectStrike and it's health is: " << a.health << "\n";
     hitObj = checkObjectStrike(a);
     if (a.id > 0 && obstacleAt(a.x, a.y) == 'R'){
       a.x -= xoff;
@@ -455,14 +454,9 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   int hits = 0;
 
 
-  if (a.id > 0 || a.health < 0)
-  { //Get the non projectiles back out of here
-  		  std::cout << "Actor is a tank, or it's dead\n";
+  if (a.id > 0 || a.health < 0) //Get the non projectiles back out of here
           return false;
-  }
 
-  std::cout << "Actor id is: " << a.id  << " it's position is: [" << a.x << ", " << a.y << "] and it's health is: " << a.health << endl;
-  std::cout << "At position [" << a.x << ", " << a.y << "] tempOb = " << tempOb << endl;
 
   if (tempOb == 0){  //if the spot is empty then we couldn't have hit anything
           //printf("Nothing hit at (%d, %d): %d Health: %d\n", a.x, a.y, tempOb, a.health);
@@ -473,7 +467,6 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   			 //Bushes don't stop bullets 
           //We technically dont need this now since bushes dont do anything, but we can make them destroyable later?
           //printf("Bush hit.  Not stopping.\n");
-  		  std::cout << "Would hit a bush or some water, but neither stops a bullet\n";
           return false;
   }
   else if(tempOb == 'R')
@@ -886,7 +879,6 @@ ActorInfo & GameField::actorInfoById(int id)
  */
 int GameField::obstacleAt(int x, int y)
 {
-	std::cout << "Obstacle at: [" << x << ", " << y << "] should return as: " << fieldMap.obstacleMap[x + y * fieldMap.width] << endl;
     return fieldMap.obstacleMap[x + y * fieldMap.width];
 
 }
