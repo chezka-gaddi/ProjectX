@@ -862,6 +862,17 @@ std::vector<ActorInfo> GameField::getActors()
     return actors;
 }
 /**
+ * @author David Donahue
+ * @par Description:
+ * Get the current set of actors
+ */
+std::vector<ActorInfo> *GameField::getActorsPointer()
+{
+    std::vector<ActorInfo> *temp;
+    temp = &actors;
+    return temp;
+}
+/**
  * @author Jon McKee
  * @par Description:
  * Get the current set of SFX

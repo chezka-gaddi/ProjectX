@@ -351,14 +351,51 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
  *******************************************************************************/
 void Game::executeTurn()
 {
-  if(isplayable(tankGame->getActors()))
+  printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
+  if(tankGame->getTurnCount() == max_turns){
+    printf("Finding Early Winner.\n");
+    std::vector<ActorInfo> *actors = tankGame->getActorsPointer();
+    int actorId=0;
+    int currMaxHealth=0;
+    bool tie = false;
+    for (auto a : *actors){ //clear out non tanks
+       if (a.id < 0){
+         printf("Clearing out projectile.\n");
+         a.health = 0;
+       }
+    }
+    tankGame->cull();  //remove the old tanks
+    for (auto a : *actors){
+      if (a.health > currMaxHealth){
+        actorId = a.id;
+        tie = false;
+        currMaxHealth=a.health;
+        printf("Found a max: %d \n", actorId);
+      }else if (a.health == currMaxHealth){
+        printf("Found a duplicate.\n");
+        tie = true;
+      }
+    }
+    printf("Found a duplicate tie value: %d \n", tie);
+    if (tie == true){ //If it is a tie clear out all tanks to get to draw screen
+      for (auto &a : *actors){
+          printf("Health: %d \n", a.health);
+          a.health = 0;
+          printf("Health: %d \n", a.health);
+      }
+    }else if (tie == false){
+      for (auto &a : *actors){
+        if (a.id != actorId){
+                a.health = 0;
+        }
+      }
+    }
+    tankGame->turnCount++;
+    tankGame->cull();
+  }else if(isplayable(tankGame->getActors()))
   {
     tankGame->nextTurn();
-    turn++;
-  }
-
-  else
-  {
+  }else{
     ofstream fout("results.txt", ios::out | ios::app);
     fout << tankGame->getWinner() << endl;
     fout.close();
@@ -391,9 +428,7 @@ int TimerEvent::idle_speed = 750;
 void Game::initGameState()
 {
   Drawable *temp = nullptr;
-
   // Load game field
-
   temp = new GameFieldDrawable();
   Obstacles* tempOb;
   constants.push_back(temp);
@@ -403,12 +438,13 @@ void Game::initGameState()
   std::string configLine;
   int ai_speed = 1000;
   int width = 15;
-  int  height = 9;
+  int height = 9;
   int damage = 1;
-  int  health = 3;
+  int health = 3;
   int range = 1;
   int radar = 4;
   int ammo = 6;
+  int maxT = 20;
 
   std::vector<std::pair<int,int>> obstacleLocations;
   std::vector<std::pair<int,int>> treeLocations;
@@ -548,15 +584,32 @@ void Game::initGameState()
       if(width < 15)
       {
         width = 15;
-        cout << "Invalid width parameter, defaulting to 15.\n";
+        cout << "\nInvalid width parameter, defaulting to 15.\n";
       }
       else if(width > 50)
       {
         width = 50;
-        cout << "Width parameter too high, defaulting to 50.\n";
+        cout << "\nWidth parameter too high, defaulting to 50.\n";
       }
       fieldx = width;
       Drawable::scalar = (3.75/width)/.25;
+      cout << "...done.\n";
+    }
+    else if(id == "MAXTURNS")
+    {
+      cout << "Reducing camping spots...\n";
+      stringstream(args) >> maxT;
+      if(maxT < 1)
+      {
+        maxT = 1;
+        cout << "Invalid max_turn parameter, defaulting to 1.\n";
+      }
+      else if(maxT > 200)
+      {
+        width = 200;
+        cout << "Max turns set too high, defaulting to 200.\n";
+      }
+      max_turns = maxT;
       cout << "...done.\n";
     }
     else if(id == "HEIGHT")
