@@ -677,7 +677,6 @@ void Game::initGameState()
           gameImages.push_back(args.substr(0, i));
           args = args.substr(i + 1);
         }
-
       }
     }
     else if(id == "TREE_IMAGE")
@@ -939,7 +938,6 @@ void Game::initGameState()
         temp = new Obstacles( 3, convertGLXCoordinate( w.first ), convertGLYCoordinate( w.second ), w.first, w.second );
         waters.push_back(temp);
     }
-  
     cout << "...done.\n" << endl;
   }
 
