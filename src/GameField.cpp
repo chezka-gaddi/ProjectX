@@ -681,15 +681,15 @@ void GameField::nextTurn()
                             actors[i].shots++;
                             actors[i].ammo--;
                         } else if (atk != STAY) {
-                            printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
+                            //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
                             actors[i].ammo = actors[i].max_ammo;
-                            printf("Back up to %d bullets.\n",actors[i].ammo);
+                            //printf("Back up to %d bullets.\n",actors[i].ammo);
                         }
                     }
             
             }else if (action == 4) {
               actors[i].ammo = actors[i].max_ammo;
-              printf("Reloading... Reloading... Reloading\n");
+              //printf("Reloading... Reloading... Reloading\n");
             }
             --act_ap;
             
