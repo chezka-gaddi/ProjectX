@@ -207,7 +207,7 @@ TEST_CASE("Actors are culled and do not move after collision")
 
     g.nextTurn(); //tank 1 will fire up at the other tanks
 
-    std::vector<int> ref = {3, 0, 0, 1}; //Tank 2 hit, Tank 3 and 1 remain
+    std::vector<int> ref = {3, 2, 0, 1}; //Tank 2 hit, Tank 3 and 1 remain
     REQUIRE(g.getMap() == ref);
 
 }
@@ -232,7 +232,7 @@ TEST_CASE("Collision is checked when firing point-blank")
 
     g.nextTurn(); //tank 1 will fire up at the other tanks, point blank on t2
 
-    std::vector<int> ref = {3, 0, 1}; //Tank 2 hit, Tank 3 and 1 remain
+    std::vector<int> ref = {3, 2, 1}; //Tank 2 hit, Tank 3 and 1 remain
 
     //failure looks like {0, 2, 1}
     REQUIRE(g.getMap() == ref);

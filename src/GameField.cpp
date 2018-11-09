@@ -237,6 +237,7 @@ void GameField::runMoves(ActorInfo &a)
     pos.game_y = a.y;
     pos.health = a.health;
     pos.id = a.id;
+    pos.ammo = a.ammo;
     //get the AI's desired move
     MapData fog = fieldMap;
     create_fog_of_war(fog, a);
@@ -361,7 +362,7 @@ void GameField::runMoves(ActorInfo &a)
       a.health--;
     }else if (a.id < 0 && obstacleAt(a.x, a.y) == 'C'){
       a.health--;
-      crate_o_doom(a.x, a.y);
+      crate_o_doom(a.x, a.y, a);
       removeObstacle(a.x, a.y);
       hitObj == true;
     }
@@ -383,6 +384,7 @@ void GameField::runMoves(ActorInfo &a)
                 tHealth - actors[i].health;
                 actors[i].health -= a.health; //deal full health damage to target
                 hit += tHealth - 1;
+                a.hits++; //A tank hit is still a hit right?
                 if (actors[i].health <= 0)
                 {
                   SFX.push_back(make_pair(actors[i].x, actors[i].y));
@@ -390,7 +392,7 @@ void GameField::runMoves(ActorInfo &a)
                   actors[i].damage = 0;
                   actors[i].id = 0;
                   actors[i].range = 0;
-                  a.hits++; //A tank hit is still a hit right?
+                  a.kills++;
                 }
             }else if(actors[i].id < 0) //Check if we ran into a projectile (What we are doesn't matter)
             {
@@ -413,6 +415,7 @@ void GameField::runMoves(ActorInfo &a)
                 actors[i].damage = 0;
                 actors[i].id = 0;
                 actors[i].range = 0;
+                actorInfoById(-a.id).kills++;  //give our owner a hit
               }
             }
         }
@@ -485,7 +488,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
           {
            // printf("Found the crate at (%d, %d) with projectile at (%d,%d).\n",c->gridx, c->gridy, a.x, a.y);
             c->health--;
-            hits+= crate_o_doom(c->gridx, c->gridy);//Bang the drum
+            hits+= crate_o_doom(c->gridx, c->gridy, a);//Bang the drum
             actorInfoById(-a.id).hits += hits; 
             return true;
           }
@@ -497,7 +500,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
 * @author Jon McKee
 * @brief  Crate destruction
 ******************************************************************************/
-bool  GameField::crate_o_doom(int x, int y)
+bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
 {
     //Steal the good parts from fog of war
     int radar = 1; //How big the explosion
@@ -529,7 +532,7 @@ bool  GameField::crate_o_doom(int x, int y)
                   if (c->gridx == x_iter && c->gridy == y_iter && c->health > 0)
                   {
                     c->health--;
-                    hit = crate_o_doom(c->gridx, c->gridy); //Chain reaction
+                    hit = crate_o_doom(c->gridx, c->gridy, a); //Chain reaction
                   }
                 }
                 break;
@@ -554,8 +557,9 @@ bool  GameField::crate_o_doom(int x, int y)
                     {
                       act.health = 0;
                       act.id = 0;
+                      actorInfoById(-a.id).kills++; 
                     }
-                    hit++;
+                    actorInfoById(-a.id).hits++;
                   }
                 }
                 break;        
@@ -641,6 +645,7 @@ void GameField::nextTurn()
             pos.health = actors[i].health;
             pos.id = actors[i].id;
             pos.ap = act_ap;
+            pos.ammo = actors[i].ammo;
             action = actors[i].act_p->spendAP(fog_of_war, pos);
             if ( action == 1)
             {
@@ -661,7 +666,7 @@ void GameField::nextTurn()
 
                     if (actors[i].id > 0) //tanks attacking
                     {
-                        if (atk != STAY)
+                        if (atk != STAY && actors[i].ammo >= 1)
                         {
                             actors[i].heading = atk;
                             ProjectileActor * proj = new ProjectileActor(atk);
@@ -674,9 +679,17 @@ void GameField::nextTurn()
                             newProjectile.y = actors[i].y;
                             actors.insert(actors.begin() + i + 1, newProjectile);
                             actors[i].shots++;
+                            actors[i].ammo--;
+                        } else if (atk != STAY) {
+                            //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
+                            actors[i].ammo = actors[i].max_ammo;
+                            //printf("Back up to %d bullets.\n",actors[i].ammo);
                         }
                     }
             
+            }else if (action == 4) {
+              actors[i].ammo = actors[i].max_ammo;
+              //printf("Reloading... Reloading... Reloading\n");
             }
             --act_ap;
             

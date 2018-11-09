@@ -132,8 +132,8 @@ static bool isplayable(std::vector<ActorInfo> actorInfo)
 void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 {
 
-  const char *str;
-  std::string scoreDetails[3] = {"Place:", "PLayer Number:", "Hits:"};
+	const char *str;
+	std::string scoreDetails[4] = {"Place:", "Player Number:", "Kills:","Hits:"};
 
   float color[] = {1.0f, 1.0f, 1.0f};
 
@@ -142,38 +142,49 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   glLoadIdentity();
   glEnable(GL_TEXTURE_2D);
 
-  glPushMatrix();
-  glTranslatef(0.0f, 0.0f, -5.0f);
-  glBindTexture(GL_TEXTURE_2D, gameTex[7]);
-  glBegin(GL_QUADS);
-  glTexCoord2f(0.0f, 0.0f);
-  glVertex3f(-0.5f, -0.5f,  1.0f);
-  glTexCoord2f(1.0f, 0.0f);
-  glVertex3f( 0.5f, -0.5f,  1.0f);
-  glTexCoord2f(1.0f, 1.0f);
-  glVertex3f( 0.5f,  0.5f,  1.0f);
-  glTexCoord2f(0.0f, 1.0f);
-  glVertex3f(-0.5f,  0.5f,  1.0f);
-  glEnd();
-  glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, -5.0f);
+    glBindTexture(GL_TEXTURE_2D, gameTex[7]);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.8f, -0.3f,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( 0.8f, -0.3f,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( 0.8f,  0.8f,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.8f,  0.8f,  1.0f);
+    glEnd();
+    glPopMatrix();
 
   glDisable(GL_TEXTURE_2D);
 
-  float j = -0.5f;
-  bool flag = false;
+    float j = -0.7f;
+    bool flag = false;
 
-  glPushMatrix();
-  glTranslatef(0.0f, 0.0f, -5.0f);
-  glColor3fv(color);
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, -5.0f);
+	  glColor3fv(color);
 
-  for(int i = 0; i < 3; i++)
-  {
-    glRasterPos3f(j, -0.5f, 2.0f);
-    str = scoreDetails[i].c_str();
-    while(*str)
+    for(int i = 0; i < 4; i++)
     {
-      glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
-      str++;
+    	glRasterPos3f(j, -0.3f, 2.0f);
+    	str = scoreDetails[i].c_str();
+    	while(*str)
+    	{
+    		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    		str++;
+    	}
+    	if(!flag)
+    	{
+    		j += 0.3;
+    		flag = true;
+    	}
+    	else
+      {
+    		j += 0.7;
+        flag = false;
+      }
     }
     if(!flag)
     {
@@ -184,9 +195,9 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
       j += 0.7;
   }
 
-  int count = 1;
-  int winDex = 0;
-  float k = -0.6;
+    int count = 1;
+    int winDex = 0;
+    float k = -0.5;
 
   if(winner.size() != 0)
   {
@@ -194,7 +205,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
       winDex++;
 
     str = "1st";
-    glRasterPos3f(-0.5f, k, 2.0f);
+    glRasterPos3f(-0.7f, k, 2.0f);
     while(*str)
     {
       glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
@@ -202,15 +213,23 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     }
 
     str = winner[winDex].name.c_str();
-    glRasterPos3f(-0.2f, k, 2.0f);
+    glRasterPos3f(-0.4f, k, 2.0f);
     while(*str)
     {
       glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
       str++;
     }
 
+    str = std::to_string(winner[winDex].kills).c_str();
+    glRasterPos3f(0.3f, k, 2.0f);
+    while(*str)
+    {
+    	glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    	str++;
+    }
+    
     str = std::to_string(winner[winDex].hits).c_str();
-    glRasterPos3f(0.5f, k, 2.0f);
+    glRasterPos3f(0.6f, k, 2.0f);
     while(*str)
     {
       glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
@@ -222,16 +241,61 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     for(int l = dead.size() - 1; l >= 0; l--)
     {
 
-      if(count < 4)
-        switch(count)
-        {
-          case 2:
-            str = "2nd";
-            break;
-          case 3:
-            str = "3rd";
-            break;
-        }
+    	if(count < 4)
+    		switch(count)
+    		{
+    			case 2:
+    				str = "2nd";
+    				break;
+    			case 3:
+    				str = "3rd";
+    				break;
+    		}
+
+    	else
+    	{
+			std::string s = std::to_string(count);
+			s += "th";
+			str = s.c_str();  //use char const* as target type    	}
+		}
+    	
+
+    	glRasterPos3f(-0.7f, k, 2.0f);
+    	while(*str)
+    	{
+    		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    		str++;
+    	}
+
+
+    	//std::cout << "Finding " << count << "th place.........\n";
+    	str = dead[l].name.c_str();
+
+    	glRasterPos3f(-0.4f, k, 2.0f);
+    	while(*str)
+    	{
+    		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    		str++;
+    	}
+
+    	str = std::to_string(dead[l].kills).c_str();
+    	glRasterPos3f(0.3f, k, 2.0f);
+    	while(*str)
+    	{
+    		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    		str++;
+    	}
+    	
+      str = std::to_string(dead[l].hits).c_str();
+    	glRasterPos3f(0.6f, k, 2.0f);
+    	while(*str)
+    	{
+    		glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+    		str++;
+    	}
+
+    	k += -0.1f;
+    	count++;
 
       else
       {
@@ -337,94 +401,40 @@ float Drawable::scalar = 1.0;
 int TimerEvent::idle_speed = 750;
 void Game::initGameState()
 {
-  Drawable *temp = nullptr;
+    Drawable *temp = nullptr;
 
-  // Load game field
+    // Load game field
 
-  temp = new GameFieldDrawable();
-  constants.push_back(temp);
-  std::vector<string> AINames;
-  std::cout << "Game::Loading config.txt\n";
-  ifstream fin("config.txt");
-  std::string configLine;
-  int ai_speed = 1000;
-  int width = 15;
-  int  height = 9;
-  int damage = 1;
-  int  health = 3;
-  int range = 1;
-  int radar = 4;
-  std::vector<std::pair<int,int>> obstacleLocations;
-  std::vector<std::pair<int,int>> treeLocations;
-  std::vector<std::pair<int,int>> rockLocations;
-  std::vector<std::pair<int,int>> bushLocations;
-  std::vector<std::pair<int,int>> tankLocations;
-  std::vector<std::pair<int,int>> specialLocations;
+    temp = new GameFieldDrawable();
+    constants.push_back(temp);
+    std::vector<string> AINames;
+    std::cout << "Game::Loading config.txt\n";
+    ifstream fin("config.txt");
+    std::string configLine;
+    int ai_speed = 1000;
+    int width = 15;
+    int  height = 9;
+    int damage = 1;
+    int  health = 3;
+    int range = 1;
+    int radar = 4;
+    int ammo = 6;
 
-  std::vector<std::string> tankImages;
-  std::vector<std::string> gameImages;
-  std::vector<std::string> treeImages;
-  std::vector<std::string> rockImages;
-  std::vector<std::string> bushImages;
-  std::string name;
-  int attributePoints = 0;
-  srand(time(0));
+    std::vector<std::pair<int,int>> obstacleLocations;
+    std::vector<std::pair<int,int>> treeLocations;
+    std::vector<std::pair<int,int>> rockLocations;
+    std::vector<std::pair<int,int>> bushLocations;
+    std::vector<std::pair<int,int>> tankLocations;
+    std::vector<std::pair<int,int>> specialLocations;
 
-  ofstream fout("results.txt", ios::out | ios::app);
-
-  if (!fin){
-    cout << "FAILED TO LOAD CONFIG\n";
-    exit(1);
-  }
-  if (!fout){
-    cout << "UNABLE OPEN RESULTS FILE (results.txt)\n";
-  }
-
-  while (!fin.eof())
-  {
-    getline(fin, configLine);
-    if (configLine[0] != '#') //ignore comment lines
-    {
-      if (configLine == "MAP")
-      {
-        cout << "Building the map...\n";
-        for ( int y = 0; y < height; y++)
-        {
-          if (y == height/3)
-            cout << "  Planting trees...\n";
-          else if (y == height/3*2)
-            cout << "  Moving rocks...\n";
-          else if (y == height-1)
-            cout << "  Trimming bushes...\n";
-          getline(fin, configLine);
-          //cout << configLine << endl;
-
-          for(int x = 0; x < width; x++)
-          {
-            switch (configLine[x]){
-              case 'B':
-              case 'b':
-                bushLocations.push_back(std::pair<int,int> (x, y));
-                break;
-              case 'R':
-              case 'r':
-                rockLocations.push_back(std::pair<int,int> (x, y));
-                break;
-              case 'T':
-              case 't':
-                treeLocations.push_back(std::pair<int,int> (x, y));
-                break;
-              case 'C':
-              case 'c':
-                specialLocations.push_back(std::pair<int,int> (x, y));
-                break;
-              case 'X':
-              case 'x':
-              case ' ':
-                break;
-              default:
-                obstacleLocations.push_back(std::pair<int, int> (x, y));
-                break;
+    std::vector<std::string> tankImages;
+    std::vector<std::string> gameImages;
+    std::vector<std::string> treeImages;
+    std::vector<std::string> rockImages;
+    std::vector<std::string> bushImages;
+    std::string name;
+    int attributePoints = 0;
+    srand(time(0));
 
             }
             /*
@@ -549,14 +559,20 @@ void Game::initGameState()
               taken = true;
               printf ("Invalid obstacle location: (%d, %d) aleady taken by tank\n", x, y);
             }
-          }
-          if (!taken)
-          {
-            for (int i = 0; i < obstacleLocations.size(); i ++){
-              if (obstacleLocations[i].first == x && obstacleLocations[i].second == y){
-                taken = true;
-                printf ("Invalid obstacle location: (%d, %d) aleady taken by object\n", x, y);
-              }
+            else if (id == "AMMO")
+            {
+                stringstream(args) >> ammo;
+                if (ammo < 1){
+                  ammo = 1;
+                  cout << "Invalid ammo amount, defaulting to 1\n";
+                } else if (ammo > 10) {
+                    printf("%d ammo might be a little excesive, setting to 10.\n", ammo);
+                    ammo = 10;
+                }
+            }
+            else if (id != "")
+            {
+                std::cout << "BAD ARGUMENT: " << id << '\n';
             }
           }
           if (!taken && id == "TREE"){
@@ -609,12 +625,32 @@ void Game::initGameState()
             args = args.substr(i + 1);
           }
 
-        }
-      }
-      else if( id == "ROCK_IMAGE" )
-      {
-        bool done = false;
-        while (!done)
+    fout << "Players: ";
+    for (int i = 0; i < AINames.size(); i++)
+            fout << AINames[i] << " ";
+    fout << "Winner: ";
+    fout.close();
+    cout << "Creating Player Tanks...\n";
+    for (int i = 0; i < startActorPointers.size(); ++i)
+    {
+        startActors.push_back(ActorInfo(startActorPointers[i]
+                    , health
+                    , damage
+                    , tankLocations[i].first
+                    , tankLocations[i].second
+                    , i + 1
+                    , range
+                    , 0
+                    , radar
+                    , ammo
+                    , AINames[i]));
+        printf("Actor %d name: %s\n", i, AINames[i].c_str());
+    }
+    cout << "  ...Done" << endl;
+    // Create a stats menu for up to 4 tanks
+    for( auto actTemp : startActors)
+    {
+        if (actTemp.id <= 4)
         {
           if (args.find(' ') == string::npos)
           {
