@@ -728,7 +728,6 @@ void GameField::nextTurn()
                 }
               }
 #endif
-
     for (int i = 0; i < actors.size() && actors[i].health != 0; ++i)
     {
         act_ap = actors[i].range;
