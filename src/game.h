@@ -63,6 +63,7 @@ public:
     vector <Obstacles *> bushes;        /*!<Holds the bushes drawables */
     vector <Obstacles *> rocks;         /*!<Holds the rocks drawables */
     vector <Obstacles *> trees;         /*!<Holds the trees drawables */
+    vector <Drawable *> waters;		   /*!<Holds the waters drawables */
     vector <Drawable *> specials;       /*!<Holds other special drawables */
     vector <Drawable *> sfx;           /*!<Holds the sfx drawables */
 

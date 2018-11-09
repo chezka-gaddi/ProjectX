@@ -475,6 +475,10 @@ void Game::initGameState()
               case 't':
                 treeLocations.push_back(std::pair<int,int> (x, y));
                 break;
+              case 'W':
+              case 'w':
+                waterLocations.push_back(std::pair<int,int> (x, y));
+                break;
               case 'C':
               case 'c':
                 specialLocations.push_back(std::pair<int,int> (x, y));
@@ -602,7 +606,7 @@ void Game::initGameState()
       gameImages.push_back(name);
       cout << "...done\n";
     }
-    else if(id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH" || id == "CRATE")
+    else if(id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH" || id == "CRATE" || id =="WATER")
     {
       int x,y;
       bool taken;
@@ -647,7 +651,10 @@ void Game::initGameState()
         {
           specialLocations.push_back(std::pair<int,int> (x, y));
         }
-        else
+        else if (!taken && id == "WATER"){
+                  		  waterLocations.push_back(std::pair<int,int> (x, y));
+        }
+                        else
         {
           obstacleLocations.push_back(std::pair<int,int> (x, y));
         }
@@ -710,6 +717,25 @@ void Game::initGameState()
 
           }
         }
+            else if( id == "WATER_IMAGE" )
+            {
+                bool done = false;
+                while (!done)
+                {
+                    if (args.find(' ') == string::npos)
+                    {
+                        done = true;
+                        waterImages.push_back(args);
+                    }
+                    else
+                    {
+                        i = args.find(' ');
+                        waterImages.push_back(args.substr(0, i));
+                        args = args.substr(i + 1);
+                    }
+
+                }
+            }
         else if(id == "BUSH_IMAGE")
         {
           bool done = false;
@@ -823,8 +849,8 @@ void Game::initGameState()
     }}
 
     glEnable(GL_TEXTURE_2D);
-    if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages))
-      cout << "Failed to open image(s).\n" << endl;
+    if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages, waterImages))
+        cout << "Failed to open image(s).\n" << endl;
     glDisable(GL_TEXTURE_2D);
 
     cout << "Loading Shared Objects...\n";
@@ -906,6 +932,14 @@ void Game::initGameState()
       tempOb = new Obstacles(2, convertGLXCoordinate(b.first), convertGLYCoordinate(b.second), b.first, b.second);
       bushes.push_back(tempOb);
     }
+        cout << "  ...drilling for moisture\n";
+    for (auto w : waterLocations)
+    {
+        tankGame->addObstacle(w.first, w.second, 'W');
+        temp = new Obstacles( 2, convertGLXCoordinate( w.first ), convertGLYCoordinate( w.second ), w.first, w.second );
+        waters.push_back(temp);
+    }
+  
     cout << "...done.\n" << endl;
   }
 
