@@ -166,6 +166,8 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   glTranslatef(0.0f, 0.0f, -5.0f);
   glColor3fv(color);
 
+  if(winner.size() != 0)
+  {
   for(int i = 0; i < 4; i++)
   {
     glRasterPos3f(j, -0.3f, 2.0f);
@@ -191,8 +193,6 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   int winDex = 0;
   float k = -0.5;
 
-  if(winner.size() != 0)
-  {
     while(winner[winDex].name == "default\n" && winDex < winner.size())
       winDex++;
 
@@ -323,17 +323,21 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   }
   else
   {
+    printf("Draw Game.\n");
+    glRasterPos3f(-0.05f, -0.3f, 2.0f);
     std::string s = "DRAW";
     str = s.c_str();
     while(*str)
     {
       glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
+      str++;
     }
   }
 
   system("sleep 1.");
   glutSwapBuffers();
   system("sleep 5.");
+  printf("Exiting!\n");
 }
 
 
