@@ -705,13 +705,14 @@ void GameField::nextTurn()
     int tSize, tId;
     MapData fog_of_war = fieldMap;
     //printf("Turn number: %d\n",turnCount);
-              for (Obstacles* t : gameptr->trees)
-              {
-                if (t->health <= 0)
-                {
-                  t->regrow(turnCount);
-                }
-              }
+#ifndef TESTING
+    for (Obstacles* t : gameptr->trees)
+    {
+      if (t->health <= 0)
+      {
+        t->regrow(turnCount);
+      }
+    }
               for (Obstacles* r : gameptr->rocks)
               {
                 if (r->health <= 0)
@@ -726,7 +727,7 @@ void GameField::nextTurn()
                   b->regrow(turnCount);
                 }
               }
-    
+#endif
 
     for (int i = 0; i < actors.size() && actors[i].health != 0; ++i)
     {
