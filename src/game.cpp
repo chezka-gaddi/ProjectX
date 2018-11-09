@@ -521,8 +521,7 @@ void Game::initGameState()
             }
           }
         }
-      }
-    
+    }else{ 
     int i = configLine.find(' '); //index of first space
     std::string id = configLine.substr(0, i); //separate the identefier from the argumets
     std::string args = configLine.substr(i+1);
@@ -854,7 +853,7 @@ void Game::initGameState()
         }
 
       }
-    }
+    }}
 
     glEnable(GL_TEXTURE_2D);
     if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages))
