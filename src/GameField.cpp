@@ -428,15 +428,15 @@ void GameField::runMoves(ActorInfo &a)
             }else if(actors[i].id < 0) //Check if we ran into a projectile (What we are doesn't matter)
             {
                 //printf("Projectile or Tank hit a projectile.\n");
-                hit += actors[i].health; //store future damage
+                hit += actors[i].damage; //store future damage
                 actors[i].health -= a.health; //Destroy the projectile
                 if (a.id > 0 && -actors[i].id != a.id) //Give the owner a hit, but not a self hit and not a missile to missle hit
                   actorInfoById(-actors[i].id).hits++; 
             }else if(a.id < 0) //If we're a projectile and we hit a tank
             {
               //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
-              actors[i].health -= a.health; //damage the tank
-              hit += a.health;
+              actors[i].health -= a.damage; //damage the tank
+              hit += a.damage;
               if (a.id != -actors[i].id)      //no self hits
                 actorInfoById(-a.id).hits++;  //give our owner a hit
               if (actors[i].health <= 0)
@@ -491,9 +491,10 @@ bool GameField::checkObjectStrike(ActorInfo &a)
           {
             //printf("Found Rock strike, log it.\n");
             r->health -= a.damage;
-            if (r->health < 0)
+            if (r->health <= 0)
             {
                     r->health = 0;
+                    r->destroyed = turnCount;
             }
                 
             return true;
@@ -508,6 +509,11 @@ bool GameField::checkObjectStrike(ActorInfo &a)
           {
             //printf("Found tree strike, chop it.\n");
             t->health -= a.damage;
+            if (t->health <= 0)
+            {
+              t->health = 0;
+              t->destroyed = 0;
+            }
             return true;
           }
     }
@@ -698,7 +704,29 @@ void GameField::nextTurn()
     int act_ap;
     int tSize, tId;
     MapData fog_of_war = fieldMap;
-
+    //printf("Turn number: %d\n",turnCount);
+              for (Obstacles* t : gameptr->trees)
+              {
+                if (t->health <= 0)
+                {
+                  t->regrow(turnCount);
+                }
+              }
+              for (Obstacles* r : gameptr->rocks)
+              {
+                if (r->health <= 0)
+                {
+                  r->regrow(turnCount);
+                }
+              }
+              for (Obstacles* b : gameptr->bushes)
+              {
+                if (b->health <= 0)
+                {
+                  b->regrow(turnCount);
+                }
+              }
+    
 
     for (int i = 0; i < actors.size() && actors[i].health != 0; ++i)
     {

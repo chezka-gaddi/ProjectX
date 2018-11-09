@@ -395,6 +395,7 @@ void Game::initGameState()
   // Load game field
 
   temp = new GameFieldDrawable();
+  Obstacles* tempOb;
   constants.push_back(temp);
   std::vector<string> AINames;
   std::cout << "Game::Loading config.txt\n";
@@ -855,8 +856,8 @@ void Game::initGameState()
     for(auto o : obstacleLocations)
     {
       tankGame->addObstacle(o.first, o.second);
-      temp = new Obstacles((rand() % 3), convertGLXCoordinate(o.first), convertGLYCoordinate(o.second), o.first, o.second);
-      constants.push_back(temp);
+      tempOb = new Obstacles((rand() % 3), convertGLXCoordinate(o.first), convertGLYCoordinate(o.second), o.first, o.second);
+      constants.push_back(tempOb);
     }
     cout << "  ...hiding the ammo\n";
     for(auto c : specialLocations)
@@ -869,22 +870,22 @@ void Game::initGameState()
     for(auto t : treeLocations)
     {
       tankGame->addObstacle(t.first, t.second, 'T');
-      temp = new Obstacles(0, convertGLXCoordinate(t.first), convertGLYCoordinate(t.second), t.first, t.second);
-      trees.push_back(temp);
+      tempOb = new Obstacles(0, convertGLXCoordinate(t.first), convertGLYCoordinate(t.second), t.first, t.second);
+      trees.push_back(tempOb);
     }
     cout << "  ...petting the rocks\n";
     for(auto r : rockLocations)
     {
       tankGame->addObstacle(r.first, r.second, 'R'); //No driving over rocks
-      temp = new Obstacles(1, convertGLXCoordinate(r.first), convertGLYCoordinate(r.second), r.first, r.second);
-      rocks.push_back(temp);
+      tempOb = new Obstacles(1, convertGLXCoordinate(r.first), convertGLYCoordinate(r.second), r.first, r.second);
+      rocks.push_back(tempOb);
     }
     cout << "  ...finding some shrubberies\n";
     for(auto b : bushLocations)
     {
       tankGame->addObstacle(b.first, b.second, 'B');
-      temp = new Obstacles(2, convertGLXCoordinate(b.first), convertGLYCoordinate(b.second), b.first, b.second);
-      bushes.push_back(temp);
+      tempOb = new Obstacles(2, convertGLXCoordinate(b.first), convertGLYCoordinate(b.second), b.first, b.second);
+      bushes.push_back(tempOb);
     }
     cout << "...done.\n" << endl;
   }
