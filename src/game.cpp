@@ -936,7 +936,7 @@ void Game::initGameState()
     for (auto w : waterLocations)
     {
         tankGame->addObstacle(w.first, w.second, 'W');
-        temp = new Obstacles( 2, convertGLXCoordinate( w.first ), convertGLYCoordinate( w.second ), w.first, w.second );
+        temp = new Obstacles( 3, convertGLXCoordinate( w.first ), convertGLYCoordinate( w.second ), w.first, w.second );
         waters.push_back(temp);
     }
   
