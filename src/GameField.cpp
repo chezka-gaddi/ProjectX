@@ -627,20 +627,61 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
 
     MapData new_map = map;
     std::fill(new_map.map.begin(), new_map.map.end(), 0);
-    std::fill(new_map.obstacleMap.begin(), new_map.obstacleMap.end(), false);
+    std::fill(new_map.obstacleMap.begin(), new_map.obstacleMap.end(), 0);
+    new_map.healthMap.resize(new_map.width * new_map.height);
+    std::fill(new_map.healthMap.begin(), new_map.healthMap.end(), 0);
 
-int value;
+    int value;
     for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
     {
         for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
         {
-                value = y_iter * map.width + x_iter;  
-                new_map.map[value] = map.map[value];
-                new_map.obstacleMap[value] = map.obstacleMap[value];
+          value = y_iter * map.width + x_iter;  
+          if (map.obstacleMap[value] != 'T')
+            new_map.map[value] = map.map[value];
+          new_map.obstacleMap[value] = map.obstacleMap[value];
+          if (map.obstacleMap[value] == 0 && map.map[value] != 0){
+            for (auto act : actors){
+              if ( act.x == x_iter && act.y == y_iter && act.health > 0) {
+                      new_map.healthMap[value] = act.health;
+              }
+            } 
+            switch(obstacleAt(x_iter, y_iter)){ //now that we stole the internals do our stuff
+              case 'T':
+                for (auto t : gameptr->trees)
+                {
+                  if (t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
+                  {
+                    new_map.healthMap[value] = t->health;
+                  }
+                }
+                break;
+              case 'C':
+                for (auto c : gameptr->specials)
+                {
+                  new_map.healthMap[value] = 1;
+                }
+                break;
+              case 'R':
+                for (auto r : gameptr->rocks)
+                {
+                  if (r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
+                  {
+                    new_map.healthMap[value] = r->health;
+                  }
+                }
+                break;
+              case 'B':
+                for (auto b : gameptr->bushes)
+                {
+                  new_map.healthMap[value] = 1;
+                }
+                break;        
+            }
+          }
         }
 
     }
-
     map = new_map;
 
 }
