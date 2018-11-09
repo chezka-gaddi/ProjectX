@@ -666,7 +666,7 @@ void GameField::nextTurn()
 
                     if (actors[i].id > 0) //tanks attacking
                     {
-                        if (atk != STAY)
+                        if (atk != STAY && actors[i].ammo >= 1)
                         {
                             actors[i].heading = atk;
                             ProjectileActor * proj = new ProjectileActor(atk);
@@ -679,9 +679,17 @@ void GameField::nextTurn()
                             newProjectile.y = actors[i].y;
                             actors.insert(actors.begin() + i + 1, newProjectile);
                             actors[i].shots++;
+                            actors[i].ammo--;
+                        } else if (atk != STAY) {
+                            printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
+                            actors[i].ammo = actors[i].max_ammo;
+                            printf("Back up to %d bullets.\n",actors[i].ammo);
                         }
                     }
             
+            }else if (action == 4) {
+              actors[i].ammo = actors[i].max_ammo;
+              printf("Reloading... Reloading... Reloading\n");
             }
             --act_ap;
             
