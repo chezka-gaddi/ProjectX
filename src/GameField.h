@@ -99,6 +99,7 @@ public:
     int getHeight();
     std::vector<int> getMap();
     std::vector<ActorInfo> getActors();
+    std::vector<ActorInfo> * getActorsPointer();
     std::vector<std::pair<int,int>> getSFX();
     void clearSFX();
     MapData getMapData();
@@ -110,6 +111,6 @@ public:
     /*******************************/
     /************setters************/
     /*******************************/
-
+friend class Game;
 };
 #endif //SLACKERS_PLATFORM_GAMEFIELD_H

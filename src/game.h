@@ -70,6 +70,7 @@ private:
     int fieldx;
     int fieldy;
     int idle_speed;
+    int max_turns = 200;
 };
 
 #endif //__GAME_H
