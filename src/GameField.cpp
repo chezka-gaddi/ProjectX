@@ -285,7 +285,8 @@ void GameField::runMoves(ActorInfo &a)
                     || obstacleAt(a.x, a.y - 1) == 'R' 
                     || obstacleAt(a.x, a.y - 1) == 'T' 
                     || obstacleAt(a.x, a.y - 1) == 'C' 
-                    || obstacleAt(a.x, a.y - 1) == 'B'))
+                    || obstacleAt(a.x, a.y - 1) == 'B'
+                    || obstacleAt(a.x, a.y - 1) == 'W'))
             yoff = -1;
         else
             a.health--;
@@ -296,7 +297,8 @@ void GameField::runMoves(ActorInfo &a)
                                     || obstacleAt(a.x, a.y + 1) == 'R' 
                                     || obstacleAt(a.x, a.y + 1) == 'T' 
                                     || obstacleAt(a.x, a.y + 1) == 'C' 
-                                    || obstacleAt(a.x, a.y + 1) == 'B'))
+                                    || obstacleAt(a.x, a.y + 1) == 'B'
+                                    || obstacleAt(a.x, a.y + 1) == 'W'))
             yoff = 1;
         else
             a.health--;
@@ -307,7 +309,8 @@ void GameField::runMoves(ActorInfo &a)
                     || obstacleAt(a.x - 1, a.y) == 'R' 
                     || obstacleAt(a.x - 1, a.y) == 'T' 
                     || obstacleAt(a.x - 1, a.y) == 'C' 
-                    || obstacleAt(a.x - 1, a.y) == 'B'))
+                    || obstacleAt(a.x - 1, a.y) == 'B'
+                    || obstacleAt(a.x - 1, a.y) == 'W'))
             xoff = -1;
         else
             a.health--;
@@ -318,7 +321,8 @@ void GameField::runMoves(ActorInfo &a)
                                    || obstacleAt(a.x + 1, a.y) == 'R' 
                                    || obstacleAt(a.x + 1, a.y) == 'T' 
                                    || obstacleAt(a.x + 1, a.y) == 'C' 
-                                   || obstacleAt(a.x + 1, a.y) == 'B' ))
+                                   || obstacleAt(a.x + 1, a.y) == 'B'
+                                   || obstacleAt(a.x + 1, a.y) == 'W' ))
             xoff = 1;
         else
             a.health--;
@@ -328,7 +332,8 @@ void GameField::runMoves(ActorInfo &a)
                                || obstacleAt(a.x-1,a.y-1)== 'R' 
                                || obstacleAt(a.x-1,a.y-1)== 'T' 
                                || obstacleAt(a.x-1,a.y-1)== 'C' 
-                               || obstacleAt(a.x-1,a.y-1) == 'B'))
+                               || obstacleAt(a.x-1,a.y-1) == 'B'
+                               || obstacleAt(a.x-1,a.y-1) == 'W'))
         {
             yoff = -1;
             xoff = -1;
@@ -342,7 +347,8 @@ void GameField::runMoves(ActorInfo &a)
                                 || obstacleAt(a.x+1, a.y-1) == 'R' 
                                 || obstacleAt(a.x+1, a.y-1) == 'T' 
                                 || obstacleAt(a.x+1, a.y-1) == 'C' 
-                                || obstacleAt(a.x+1, a.y-1) == 'B'))
+                                || obstacleAt(a.x+1, a.y-1) == 'B'
+                                || obstacleAt(a.x+1, a.y-1) == 'W'))
         {
                 yoff = -1;
                 xoff = 1;
@@ -356,7 +362,8 @@ void GameField::runMoves(ActorInfo &a)
                                                || obstacleAt(a.x-1,a.y+1) == 'R' 
                                                || obstacleAt(a.x-1,a.y+1) == 'T' 
                                                || obstacleAt(a.x-1,a.y+1) == 'C' 
-                                               || obstacleAt(a.x-1,a.y+1) == 'B'))
+                                               || obstacleAt(a.x-1,a.y+1) == 'B'
+                                               || obstacleAt(a.x-1,a.y+1) == 'W'))
         {
             yoff = 1;
             xoff = -1;
@@ -370,7 +377,8 @@ void GameField::runMoves(ActorInfo &a)
                                                               || obstacleAt(a.x+1, a.y+1) == 'R'
                                                               || obstacleAt(a.x+1, a.y+1) == 'T' 
                                                               || obstacleAt(a.x+1, a.y+1) == 'C' 
-                                                              || obstacleAt(a.x+1, a.y+1) == 'B'))
+                                                              || obstacleAt(a.x+1, a.y+1) == 'B'
+                                                              || obstacleAt(a.x+1, a.y+1) == 'W'))
         {
             yoff = 1;
             xoff = 1;
@@ -385,6 +393,7 @@ void GameField::runMoves(ActorInfo &a)
 
     a.x += xoff;
     a.y += yoff;
+    std::cout << "Actor with ID: " << a.id << " at position: [" << a.x << ", " << a.y << "] is calling checkObjectStrike and it's health is: " << a.health << "\n";
     hitObj = checkObjectStrike(a);
     if (a.id > 0 && obstacleAt(a.x, a.y) == 'R'){
       a.x -= xoff;
@@ -477,11 +486,17 @@ void GameField::runMoves(ActorInfo &a)
 bool GameField::checkObjectStrike(ActorInfo &a)
 {
   int tempOb = obstacleAt(a.x, a.y);
-  std::cout << "At position [" << a.x << ", " << a.y << "] tempOb = " << tempOb << endl;
   int hits = 0;
-  if (a.id > 0 || a.health < 0) //Get the non projectiles back out of here
-          return false;
 
+
+  if (a.id > 0 || a.health < 0)
+  { //Get the non projectiles back out of here
+  		  std::cout << "Actor is a tank, or it's dead\n";
+          return false;
+  }
+
+  std::cout << "Actor id is: " << a.id  << " it's position is: [" << a.x << ", " << a.y << "] and it's health is: " << a.health << endl;
+  std::cout << "At position [" << a.x << ", " << a.y << "] tempOb = " << tempOb << endl;
 
   if (tempOb == 0){  //if the spot is empty then we couldn't have hit anything
           //printf("Nothing hit at (%d, %d): %d Health: %d\n", a.x, a.y, tempOb, a.health);
