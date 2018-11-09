@@ -1,19 +1,19 @@
 WIDTH 30
-HEIGHT 13
+HEIGHT 14
 MAP
-xRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-xxxxxxRxxxxxxxxxxxxxxxxxxxRxxR
-RxxRRRRxxRRRRRRRRRRRRRRRxxRxxR
-RxxBxBxxxRxxxxxxxBxxxxxxxxRBBR
-RTxRRRRRRRxxRRRRRRRRRRRRRRRxxR
-RxxxxxRxxBxxRxxxxRxxBxxRxxxxxR
-RRRRRRRxxRRRRxRxxRxxRxxRxxRRRR
-RxxxxxRxxRxxxxRxxRxxRxxRxxxxxR
-RxTRxxRxxRxxRRRxxRxxRxxRRRRxxR
-RxxRxxRxxxxxxxRxxxxxRTxRxxxBxR
-RxTRRRRRRRRRRxRRRRRRRxxRxxRxxR
-RxxxxxxxxxxxxxxxxxxxRxxxxxRxxx
-RRRRRRRRRRRRRRRRRRRRRRRRRRRRRx
+xxxxxxxxRRRRRRxxxxxxxxRRRRRRxx
+xxxxxxxTxxRRxxTxxxxxxTxxRRxxTx
+xxxxxxTTTBTTTBTTxxxxTTTBTTTBTT
+xxxxxCxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxB
+xxxxTxxxxxTxxxxxTxxxxxTxxxxBBT
+xxTTBTTxTTBTTxTTBTTxTTBTTxxTTB
+xxRxRxRxRxRxRxRxRxRxRxRxRxxRxR
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxRxxxxxRxxxxxRxxxxxRxxxxxxxx
+xxTTTxxxTTTxxxTTTxxxTTTxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 #AI LIST: AI <NAME> <STARTX> <STARTY>
 AI SimpleAI 0 0 images/Yellow/tankY_U.png images/Yellow/tankY_R.png images/Yellow/tankY_D.png images/Yellow/tankY_L.png images/Yellow/bulletY.png
@@ -29,8 +29,6 @@ AI SimpleAI 12 10 images/Purple/tankP_U.png images/Purple/tankP_R.png images/Pur
 AI SimpleAI 22 10 images/SkyBlue/tankSB_U.png images/SkyBlue/tankSB_R.png images/SkyBlue/tankSB_D.png images/SkyBlue/tankSB_L.png images/SkyBlue/bulletSB.png
 AI SimpleAI 14 8 images/Tiger/tankTi_U.png images/Tiger/tankTi_R.png images/Tiger/tankTi_D.png images/Tiger/tankTi_L.png images/Tiger/bulletTi.png
 
-AI SimpleAI 22 20 images/SkyBlue/tankSB_U.png images/SkyBlue/tankSB_R.png images/SkyBlue/tankSB_D.png images/SkyBlue/tankSB_L.png images/SkyBlue/bulletSB.png
-AI SimpleAI 2 18 images/Tiger/tankTi_U.png images/Tiger/tankTi_R.png images/Tiger/tankTi_D.png images/Tiger/tankTi_L.png images/Tiger/bulletTi.png
 #AI IDLE SPEED: AI_SPEED <750>
 AI_SPEED 750
 
@@ -48,8 +46,7 @@ ROCK_IMAGE images/rock/rock.png images/rock/rockb.png images/rock/rockc.png
 #HEALTH <STAT>
 #RANGE <STAT>
 DAMAGE 1
-HEALTH 2
-RADAR 4
+HEALTH 3
+RADAR 15
 AP 4
 SPECIAL 1
-AMMO 6
