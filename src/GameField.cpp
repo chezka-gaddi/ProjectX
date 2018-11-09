@@ -365,6 +365,13 @@ void GameField::runMoves(ActorInfo &a)
       removeObstacle(a.x, a.y);
       hitObj == true;
     }
+    else if(a.id > 0 && obstacleAt(a.x, a.y) == 'W'){
+      a.x -= xoff;
+      a.y -= yoff;
+      hitObj == true;
+      a.health--;
+    }
+
     if (a.health > 0 && hitObj == false)
     {
       for (int i = 0; i < actors.size(); ++i ) //check each actor
@@ -436,16 +443,22 @@ void GameField::runMoves(ActorInfo &a)
 bool GameField::checkObjectStrike(ActorInfo &a)
 {
   int tempOb = obstacleAt(a.x, a.y);
+  std::cout << "At position [" << a.x << ", " << a.y << "] tempOb = " << tempOb << endl;
   int hits = 0;
   if (a.id > 0 || a.health < 0) //Get the non projectiles back out of here
           return false;
+
+
   if (tempOb == 0){  //if the spot is empty then we couldn't have hit anything
           //printf("Nothing hit at (%d, %d): %d Health: %d\n", a.x, a.y, tempOb, a.health);
           return false;
   }
-  else if (tempOb == 'B'){ //Bushes don't stop bullets 
+
+  else if (tempOb == 'B' || tempOb == 'W'){
+  			 //Bushes don't stop bullets 
           //We technically dont need this now since bushes dont do anything, but we can make them destroyable later?
           //printf("Bush hit.  Not stopping.\n");
+  		  std::cout << "Would hit a bush or some water, but neither stops a bullet\n";
           return false;
   }
   else if(tempOb == 'R')
@@ -858,7 +871,9 @@ ActorInfo & GameField::actorInfoById(int id)
  */
 int GameField::obstacleAt(int x, int y)
 {
+	std::cout << "Obstacle at: [" << x << ", " << y << "] should return as: " << fieldMap.obstacleMap[x + y * fieldMap.width] << endl;
     return fieldMap.obstacleMap[x + y * fieldMap.width];
+
 }
 
 std::string GameField::getWinner()
