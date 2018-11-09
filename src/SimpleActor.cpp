@@ -77,7 +77,7 @@ void SimpleActor::setMove(direction d)
  *
  * @parm[in] pointsAvailable - available points for distribution
  */
-attributes SimpleActor::setAttribute(int pointsAvailable)
+attributes SimpleActor::setAttribute(int pointsAvailable, attributes baseStats)
 {
     attributes tankAttributes;
     int basicDistribution = pointsAvailable / 4;
