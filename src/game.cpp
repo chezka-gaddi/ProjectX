@@ -332,7 +332,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
  *******************************************************************************/
 void Game::executeTurn()
 {
-  printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
+  //printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
   if(tankGame->getTurnCount() == max_turns){
     printf("Finding Early Winner.\n");
     std::vector<ActorInfo> *actors = tankGame->getActorsPointer();
@@ -341,7 +341,7 @@ void Game::executeTurn()
     bool tie = false;
     for (auto a : *actors){ //clear out non tanks
        if (a.id < 0){
-         printf("Clearing out projectile.\n");
+         //printf("Clearing out projectile.\n");
          a.health = 0;
        }
     }
@@ -351,13 +351,13 @@ void Game::executeTurn()
         actorId = a.id;
         tie = false;
         currMaxHealth=a.health;
-        printf("Found a max: %d \n", actorId);
+        //printf("Found a max: %d \n", actorId);
       }else if (a.health == currMaxHealth){
         printf("Found a duplicate.\n");
         tie = true;
       }
     }
-    printf("Found a duplicate tie value: %d \n", tie);
+    //printf("Found a duplicate tie value: %d \n", tie);
     if (tie == true){ //If it is a tie clear out all tanks to get to draw screen
       for (auto &a : *actors){
           printf("Health: %d \n", a.health);
