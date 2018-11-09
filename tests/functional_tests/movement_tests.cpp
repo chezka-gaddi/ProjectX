@@ -40,7 +40,7 @@ SCENARIO("The tank moves around the gamefield")
         REQUIRE(tank != nullptr);
 
         // Load Tanks
-        ActorInfo   tank_s(tank, 100, 0, 1, 1, 2);
+        ActorInfo   tank_s(tank, 100, 0, 1, 1, 2, 5);
 
         // Add a tank into a vector of actors
         std::vector<ActorInfo> actor_list = {tank_s};
@@ -143,7 +143,7 @@ SCENARIO("The tank encounters a wall")
         REQUIRE(tank != nullptr);
 
         // Load Tanks
-        ActorInfo   tank_s(tank, 100, 0, 0, 0, 2);
+        ActorInfo   tank_s(tank, 100, 0, 0, 0, 2, 5);
 
         // Add a tank into a vector of actors
         std::vector<ActorInfo> actor_list = {tank_s};
@@ -226,8 +226,8 @@ SCENARIO("Tanks drive right into each other")
         tank_1 = new SimpleActor();
         tank_2 = new SimpleActor();
 
-        ActorInfo tank_1_s(tank_1, 100, 1000, 0, 0, 1);
-        ActorInfo tank_2_s(tank_2, 100, 1000, 2, 0, 2);
+        ActorInfo tank_1_s(tank_1, 100, 1000, 0, 0, 1, 5);
+        ActorInfo tank_2_s(tank_2, 100, 1000, 2, 0, 2, 5);
 
         std::vector<ActorInfo> actor_list = {tank_1_s, tank_2_s};
 

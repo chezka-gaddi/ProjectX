@@ -40,7 +40,7 @@ Game::Game(gameMode mode) : turn(0)
  *******************************************************************************/
 Game::~Game()
 {
-  for( auto temp : objects )
+  for(auto temp : objects)
     delete temp;
 
   delete tankGame;
@@ -56,7 +56,7 @@ Game::~Game()
  * @param[in] x - integer to be converted
  * @return x_gl - GLfloat conversion of x
  *******************************************************************************/
-float Game::convertGLXCoordinate( int x )
+float Game::convertGLXCoordinate(int x)
 {
   float fscaler;
   fscaler = x * (4.0717* pow(fieldx, -1.031));
@@ -87,7 +87,7 @@ float Game::convertGLXCoordinate( int x )
  * @param[in] y - integer to be converted
  * @return y_gl - GLfloat conversion of y
  *******************************************************************************/
-float Game::convertGLYCoordinate( int y )
+float Game::convertGLYCoordinate(int y)
 {
   // Formula: fscalar = y * (3.1923fieldy^-1.08)
   //float fscalar = y * 2.7/(fieldy);
@@ -114,7 +114,7 @@ static bool isplayable(std::vector<ActorInfo> actorInfo)
 {
   int tankCount = 0;
 
-  for (auto a : actorInfo)
+  for(auto a : actorInfo)
     tankCount += (a.id > 0) ? 1 : 0;
 
 
@@ -133,12 +133,12 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 {
 
   const char *str;
-  std::string scoreDetails[3] = {"Place:", "PLayer Number:", "Hits:"};
+  std::string scoreDetails[4] = {"Place:", "Player Number:", "Kills:","Hits:"};
 
   float color[] = {1.0f, 1.0f, 1.0f};
 
 
-  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
   glEnable(GL_TEXTURE_2D);
 
@@ -147,33 +147,43 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   glBindTexture(GL_TEXTURE_2D, gameTex[7]);
   glBegin(GL_QUADS);
   glTexCoord2f(0.0f, 0.0f);
-  glVertex3f(-0.5f, -0.5f,  1.0f);
+  glVertex3f(-0.8f, -0.3f,  1.0f);
   glTexCoord2f(1.0f, 0.0f);
-  glVertex3f( 0.5f, -0.5f,  1.0f);
+  glVertex3f(0.8f, -0.3f,  1.0f);
   glTexCoord2f(1.0f, 1.0f);
-  glVertex3f( 0.5f,  0.5f,  1.0f);
+  glVertex3f(0.8f,  0.8f,  1.0f);
   glTexCoord2f(0.0f, 1.0f);
-  glVertex3f(-0.5f,  0.5f,  1.0f);
+  glVertex3f(-0.8f,  0.8f,  1.0f);
   glEnd();
   glPopMatrix();
 
   glDisable(GL_TEXTURE_2D);
 
-  float j = -0.5f;
+  float j = -0.7f;
   bool flag = false;
 
   glPushMatrix();
   glTranslatef(0.0f, 0.0f, -5.0f);
   glColor3fv(color);
 
-  for(int i = 0; i < 3; i++)
+  for(int i = 0; i < 4; i++)
   {
-    glRasterPos3f(j, -0.5f, 2.0f);
+    glRasterPos3f(j, -0.3f, 2.0f);
     str = scoreDetails[i].c_str();
     while(*str)
     {
-      glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+      glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
       str++;
+    }
+    if(!flag)
+    {
+      j += 0.3;
+      flag = true;
+    }
+    else
+    {
+      j += 0.7;
+      flag = false;
     }
     if(!flag)
     {
@@ -186,7 +196,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 
   int count = 1;
   int winDex = 0;
-  float k = -0.6;
+  float k = -0.5;
 
   if(winner.size() != 0)
   {
@@ -194,26 +204,34 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
       winDex++;
 
     str = "1st";
-    glRasterPos3f(-0.5f, k, 2.0f);
+    glRasterPos3f(-0.7f, k, 2.0f);
     while(*str)
     {
-      glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+      glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
       str++;
     }
 
     str = winner[winDex].name.c_str();
-    glRasterPos3f(-0.2f, k, 2.0f);
+    glRasterPos3f(-0.4f, k, 2.0f);
     while(*str)
     {
-      glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+      glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
+      str++;
+    }
+
+    str = std::to_string(winner[winDex].kills).c_str();
+    glRasterPos3f(0.3f, k, 2.0f);
+    while(*str)
+    {
+      glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
       str++;
     }
 
     str = std::to_string(winner[winDex].hits).c_str();
-    glRasterPos3f(0.5f, k, 2.0f);
+    glRasterPos3f(0.6f, k, 2.0f);
     while(*str)
     {
-      glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+      glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
       str++;
     }
     k += -0.1f;
@@ -237,40 +255,47 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
       {
         std::string s = std::to_string(count);
         s += "th";
-        str = s.c_str();  //use char const* as target type    	}
+        str = s.c_str();  //use char const* as target type      }
       }
 
 
-  glRasterPos3f(-0.5f, k, 2.0f);
-  while(*str)
-  {
-    glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
-    str++;
-  }
+      glRasterPos3f(-0.7f, k, 2.0f);
+      while(*str)
+      {
+        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
+        str++;
+      }
 
 
-  //std::cout << "Finding " << count << "th place.........\n";
-  str = dead[l].name.c_str();
+      //std::cout << "Finding " << count << "th place.........\n";
+      str = dead[l].name.c_str();
 
-  glRasterPos3f(-0.2f, k, 2.0f);
-  while(*str)
-  {
-    glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
-    str++;
-  }
+      glRasterPos3f(-0.4f, k, 2.0f);
+      while(*str)
+      {
+        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
+        str++;
+      }
 
-  str = std::to_string(dead[l].hits).c_str();
-  glRasterPos3f(0.5f, k, 2.0f);
-  while(*str)
-  {
-    glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
-    str++;
-  }
+      str = std::to_string(dead[l].kills).c_str();
+      glRasterPos3f(0.3f, k, 2.0f);
+      while(*str)
+      {
+        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
+        str++;
+      }
 
-  k += -0.1f;
-  count++;
-  }
+      str = std::to_string(dead[l].hits).c_str();
+      glRasterPos3f(0.6f, k, 2.0f);
+      while(*str)
+      {
+        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
+        str++;
+      }
 
+      k += -0.1f;
+      count++;
+    }
   }
   else
   {
@@ -278,13 +303,13 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     str = s.c_str();
     while(*str)
     {
-      glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *str);
+      glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
     }
   }
 
-system("sleep 1.");
-glutSwapBuffers();
-system("sleep 5.");
+  system("sleep 1.");
+  glutSwapBuffers();
+  system("sleep 5.");
 }
 
 
@@ -372,36 +397,39 @@ void Game::initGameState()
 
   ofstream fout("results.txt", ios::out | ios::app);
 
-  if (!fin){
+  if(!fin)
+  {
     cout << "FAILED TO LOAD CONFIG\n";
     exit(1);
   }
-  if (!fout){
+  if(!fout)
+  {
     cout << "UNABLE OPEN RESULTS FILE (results.txt)\n";
   }
 
-  while (!fin.eof())
+  while(!fin.eof())
   {
     getline(fin, configLine);
-    if (configLine[0] != '#') //ignore comment lines
+    if(configLine[0] != '#')  //ignore comment lines
     {
-      if (configLine == "MAP")
+      if(configLine == "MAP")
       {
         cout << "Building the map...\n";
-        for ( int y = 0; y < height; y++)
+        for(int y = 0; y < height; y++)
         {
-          if (y == height/3)
+          if(y == height/3)
             cout << "  Planting trees...\n";
-          else if (y == height/3*2)
+          else if(y == height/3*2)
             cout << "  Moving rocks...\n";
-          else if (y == height-1)
+          else if(y == height-1)
             cout << "  Trimming bushes...\n";
           getline(fin, configLine);
           //cout << configLine << endl;
 
           for(int x = 0; x < width; x++)
           {
-            switch (configLine[x]){
+            switch(configLine[x])
+            {
               case 'B':
               case 'b':
                 bushLocations.push_back(std::pair<int,int> (x, y));
@@ -450,7 +478,7 @@ void Game::initGameState()
       std::string args = configLine.substr(i+1);
 
       //AI settings
-      if (id == "AI") //AI to load
+      if(id == "AI")  //AI to load
       {
         cout << "Checking player " << AINames.size()+1 << "...";
         int x, y;
@@ -458,11 +486,11 @@ void Game::initGameState()
         AINames.push_back(args.substr(0, i));
         std::stringstream(args.substr(i+1)) >> x >> y;
         tankLocations.push_back(std::pair<int,int>(x,y));
-        for (int x=0;x < tankLocations.size(); x++)
+        for(int x=0; x < tankLocations.size(); x++)
         {
-          for( int y = x + 1; y < tankLocations.size(); y++)
+          for(int y = x + 1; y < tankLocations.size(); y++)
           {
-            if (tankLocations.at(x) == tankLocations.at(y))
+            if(tankLocations.at(x) == tankLocations.at(y))
             {
               cout << "Tanks cannot spawn on the same tile!" << endl;
               exit(1);
@@ -476,7 +504,7 @@ void Game::initGameState()
         args = args.substr(i+1);
         cout << "  colorizing tank...";
 
-        for( int x = 0; x < 5; x++ )
+        for(int x = 0; x < 5; x++)
         {
           i = args.find(' ');    //skip y
           name = args.substr(0,i);
@@ -485,11 +513,11 @@ void Game::initGameState()
         }
         cout << "  ...done.\n";
       }
-      else if (id == "AI_SPEED")
+      else if(id == "AI_SPEED")
       {
         cout << "Speeding up the AI's...  ";
         stringstream(args) >> ai_speed;
-        if (ai_speed > 1000)
+        if(ai_speed > 1000)
         {
           cout << "Speeds above 1000 are extremely slow, defaulting at 1000\n";
           ai_speed = 1000;
@@ -499,14 +527,17 @@ void Game::initGameState()
         cout << "...done.\n";
       }
       //field params
-      else if (id == "WIDTH")
+      else if(id == "WIDTH")
       {
         cout << "S t r e t c h i n g   t h e   m a p . . .  ";
         stringstream(args) >> width;
-        if (width < 15) {
+        if(width < 15)
+        {
           width = 15;
           cout << "Invalid width parameter, defaulting to 15.\n";
-        } else if (width > 50) {
+        }
+        else if(width > 50)
+        {
           width = 50;
           cout << "Width parameter too high, defaulting to 50.\n";
         }
@@ -514,71 +545,89 @@ void Game::initGameState()
         Drawable::scalar = (3.75/width)/.25;
         cout << "...done.\n";
       }
-      else if (id == "HEIGHT")
+      else if(id == "HEIGHT")
       {
         cout << "Elon\n    gati\n        ng t\n            he ma\n                p...  ";
         stringstream(args) >> height;
-        if (height < 9){
+        if(height < 9)
+        {
           height = 9;
           cout << "Invalid height parameter, defaulting to 9.\n";
-        } else if (height > 21) {
+        }
+        else if(height > 21)
+        {
           height = 21;
           cout << "Height parameter too high, defaulting to 21.\n";
         }
         fieldy = height;
         cout << "...done.\n";
       }
-      else if (id == "FIELDIMAGE")
+      else if(id == "FIELDIMAGE")
       {
         cout << "Painting the background...\n";
         stringstream(args) >> name;
         gameImages.push_back(name);
         cout << "...done\n";
       }
-      else if (id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH" || id == "CRATE")
+      else if(id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH" || id == "CRATE")
       {
         int x,y;
         bool taken;
         stringstream(args) >> x >> y;
-        if (x > width - 1 || x < 0 || y > height - 1 || y < 0)
+        if(x > width - 1 || x < 0 || y > height - 1 || y < 0)
         {
-          printf ("Invalid obstacle location: (%d, %d). Ranges: (0-%d, 0-%d)\n", x, y, width-1, height-1);
-        }else {
-          for (int i = 0; i < tankLocations.size(); i ++){
-            if (tankLocations[i].first == x && tankLocations[i].second == y){
+          printf("Invalid obstacle location: (%d, %d). Ranges: (0-%d, 0-%d)\n", x, y, width-1, height-1);
+        }
+        else
+        {
+          for(int i = 0; i < tankLocations.size(); i ++)
+          {
+            if(tankLocations[i].first == x && tankLocations[i].second == y)
+            {
               taken = true;
-              printf ("Invalid obstacle location: (%d, %d) aleady taken by tank\n", x, y);
+              printf("Invalid obstacle location: (%d, %d) aleady taken by tank\n", x, y);
             }
           }
-          if (!taken)
+          if(!taken)
           {
-            for (int i = 0; i < obstacleLocations.size(); i ++){
-              if (obstacleLocations[i].first == x && obstacleLocations[i].second == y){
+            for(int i = 0; i < obstacleLocations.size(); i ++)
+            {
+              if(obstacleLocations[i].first == x && obstacleLocations[i].second == y)
+              {
                 taken = true;
-                printf ("Invalid obstacle location: (%d, %d) aleady taken by object\n", x, y);
+                printf("Invalid obstacle location: (%d, %d) aleady taken by object\n", x, y);
               }
             }
           }
-          if (!taken && id == "TREE"){
+          if(!taken && id == "TREE")
+          {
             treeLocations.push_back(std::pair<int,int> (x, y));
-          } else if (!taken && id == "ROCK"){
+          }
+          else if(!taken && id == "ROCK")
+          {
             rockLocations.push_back(std::pair<int,int> (x, y));
-          } else if (!taken && id == "BUSH"){
+          }
+          else if(!taken && id == "BUSH")
+          {
             bushLocations.push_back(std::pair<int,int> (x, y));
-          } else if (!taken && id == "CRATE"){
+          }
+          else if(!taken && id == "CRATE")
+          {
             specialLocations.push_back(std::pair<int,int> (x, y));
-          } else {
+          }
+          else
+          {
             obstacleLocations.push_back(std::pair<int,int> (x, y));
           }
           taken = false;
         }
       }
-      else if( id == "OBSTACLE_IMAGE" )
+      else if(id == "OBSTACLE_IMAGE")
       {
         bool done = false;
-        while (!done)
+        while(!done)
         {
-          if (args.find(' ') == string::npos)
+          if(args.find(' ') == string::npos)
           {
             done = true;
             gameImages.push_back(args);
@@ -592,12 +641,12 @@ void Game::initGameState()
 
         }
       }
-      else if( id == "TREE_IMAGE" )
+      else if(id == "TREE_IMAGE")
       {
         bool done = false;
-        while (!done)
+        while(!done)
         {
-          if (args.find(' ') == string::npos)
+          if(args.find(' ') == string::npos)
           {
             done = true;
             treeImages.push_back(args);
@@ -611,12 +660,12 @@ void Game::initGameState()
 
         }
       }
-      else if( id == "ROCK_IMAGE" )
+      else if(id == "ROCK_IMAGE")
       {
         bool done = false;
-        while (!done)
+        while(!done)
         {
-          if (args.find(' ') == string::npos)
+          if(args.find(' ') == string::npos)
           {
             done = true;
             rockImages.push_back(args);
@@ -630,12 +679,12 @@ void Game::initGameState()
 
         }
       }
-      else if( id == "BUSH_IMAGE" )
+      else if(id == "BUSH_IMAGE")
       {
         bool done = false;
-        while (!done)
+        while(!done)
         {
-          if (args.find(' ') == string::npos)
+          if(args.find(' ') == string::npos)
           {
             done = true;
             bushImages.push_back(args);
@@ -650,62 +699,77 @@ void Game::initGameState()
         }
       }
       //Tank params
-      else if (id == "DAMAGE")
+      else if(id == "DAMAGE")
       {
         stringstream(args) >> damage;
-        if (damage < 1){
+        if(damage < 1)
+        {
           damage = 1;
           cout << "Invalid damage value, defaulting to 2\n";
-        } else if (damage > 4) {
+        }
+        else if(damage > 4)
+        {
           printf("%d damage might be a little excesive, setting to 4\n", damage);
           damage = 4;
         }
       }
-      else if (id == "HEALTH")
+      else if(id == "HEALTH")
       {
         stringstream(args) >> health;
-        if (health < 2){
+        if(health < 2)
+        {
           health = 2;
           cout << "Invalid health value, defaulting to 2\n";
-        } else if (health > 8) {
+        }
+        else if(health > 8)
+        {
           printf("%d health might be a little excesive, setting to 5\n", health);
           health = 8;
         }
       }
-      else if (id == "AP")
+      else if(id == "AP")
       {
         stringstream(args) >> range;
-        if (range < 2){
+        if(range < 2)
+        {
           range = 2;
           cout << "Invalid number of action points value, defaulting to 2\n";
-        } else if (range > 5) {
+        }
+        else if(range > 5)
+        {
           printf("%d range might be a little excesive, setting to 5\n", range);
           range = 5;
         }
       }
-      else if (id == "RADAR")
+      else if(id == "RADAR")
       {
         stringstream(args) >> radar;
-        if (radar < 2){
+        if(radar < 2)
+        {
           radar = 2;
           cout << "Invalid radar value, defaulting to 2\n";
-        } else if (radar > width - 1) {
+        }
+        else if(radar > width - 1)
+        {
           printf("%d radar might be a little excesive, setting to %d\n", radar,width - 1);
           radar = width - 1;
         }
       }
-      else if (id == "SPECIAL")
+      else if(id == "SPECIAL")
       {
         stringstream(args) >> attributePoints;
-        if (attributePoints < 1){
+        if(attributePoints < 1)
+        {
           attributePoints = 1;
           cout << "Invalid special value, defaulting to 1\n";
-        } else if (attributePoints > 4) {
+        }
+        else if(attributePoints > 4)
+        {
           printf("%d specials might be a little excesive, setting to 4.\n", attributePoints);
           attributePoints = 4;
         }
       }
-      else if (id != "")
+      else if(id != "")
       {
         std::cout << "BAD ARGUMENT: " << id << '\n';
       }
@@ -725,32 +789,32 @@ void Game::initGameState()
 
 
   fout << "Players: ";
-  for (int i = 0; i < AINames.size(); i++)
+  for(int i = 0; i < AINames.size(); i++)
     fout << AINames[i] << " ";
   fout << "Winner: ";
   fout.close();
   cout << "Creating Player Tanks...\n";
-  for (int i = 0; i < startActorPointers.size(); ++i)
+  for(int i = 0; i < startActorPointers.size(); ++i)
   {
     startActors.push_back(ActorInfo(startActorPointers[i]
-          , health
-          , damage
-          , tankLocations[i].first
-          , tankLocations[i].second
-          , i + 1
-          , range
-          , 0
-          , radar
-          , AINames[i]));
+                                    , health
+                                    , damage
+                                    , tankLocations[i].first
+                                    , tankLocations[i].second
+                                    , i + 1
+                                    , range
+                                    , 0
+                                    , radar
+                                    , AINames[i]));
     printf("Actor %d name: %s\n", i, AINames[i].c_str());
   }
   cout << "  ...Done" << endl;
   // Create a stats menu for up to 4 tanks
-  for( auto actTemp : startActors)
+  for(auto actTemp : startActors)
   {
-    if (actTemp.id <= 4)
+    if(actTemp.id <= 4)
     {
-      temp = new Menu( actTemp.id, actTemp.health, actTemp.shots, actTemp.hits );
+      temp = new Menu(actTemp.id, actTemp.health, actTemp.shots, actTemp.hits);
       objects.push_back(temp);
     }
   }
@@ -762,38 +826,38 @@ void Game::initGameState()
 
   // Add obstacles to the gamefield
   cout << "Placing Obstacles...\n";
-  for (auto o : obstacleLocations)
+  for(auto o : obstacleLocations)
   {
     tankGame->addObstacle(o.first, o.second);
-    temp = new Obstacles( (rand() % 3), convertGLXCoordinate( o.first ), convertGLYCoordinate( o.second ), o.first, o.second );
+    temp = new Obstacles((rand() % 3), convertGLXCoordinate(o.first), convertGLYCoordinate(o.second), o.first, o.second);
     constants.push_back(temp);
   }
   cout << "  ...hiding the ammo\n";
-  for (auto c : specialLocations)
+  for(auto c : specialLocations)
   {
     tankGame->addObstacle(c.first, c.second, 'C');
-    temp = new Crate( convertGLXCoordinate( c.first ), convertGLYCoordinate( c.second ), c.first, c.second );
+    temp = new Crate(convertGLXCoordinate(c.first), convertGLYCoordinate(c.second), c.first, c.second);
     specials.push_back(temp);
   }
   cout << "  ...letting the trees grow\n";
-  for (auto t : treeLocations)
+  for(auto t : treeLocations)
   {
     tankGame->addObstacle(t.first, t.second, 'T');
-    temp = new Obstacles( 0, convertGLXCoordinate( t.first ), convertGLYCoordinate( t.second ), t.first, t.second );
+    temp = new Obstacles(0, convertGLXCoordinate(t.first), convertGLYCoordinate(t.second), t.first, t.second);
     trees.push_back(temp);
   }
   cout << "  ...petting the rocks\n";
-  for (auto r : rockLocations)
+  for(auto r : rockLocations)
   {
     tankGame->addObstacle(r.first, r.second, 'R'); //No driving over rocks
-    temp = new Obstacles( 1, convertGLXCoordinate( r.first ), convertGLYCoordinate( r.second ), r.first, r.second );
+    temp = new Obstacles(1, convertGLXCoordinate(r.first), convertGLYCoordinate(r.second), r.first, r.second);
     rocks.push_back(temp);
   }
   cout << "  ...finding some shrubberies\n";
-  for (auto b : bushLocations)
+  for(auto b : bushLocations)
   {
     tankGame->addObstacle(b.first, b.second, 'B');
-    temp = new Obstacles( 2, convertGLXCoordinate( b.first ), convertGLYCoordinate( b.second ), b.first, b.second );
+    temp = new Obstacles(2, convertGLXCoordinate(b.first), convertGLYCoordinate(b.second), b.first, b.second);
     bushes.push_back(temp);
   }
   cout << "...done.\n" << endl;

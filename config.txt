@@ -28,7 +28,6 @@ AI SimpleAI 12 20 images/Purple/tankP_U.png images/Purple/tankP_R.png images/Pur
 
 AI SimpleAI 22 20 images/SkyBlue/tankSB_U.png images/SkyBlue/tankSB_R.png images/SkyBlue/tankSB_D.png images/SkyBlue/tankSB_L.png images/SkyBlue/bulletSB.png
 AI SimpleAI 2 18 images/Tiger/tankTi_U.png images/Tiger/tankTi_R.png images/Tiger/tankTi_D.png images/Tiger/tankTi_L.png images/Tiger/bulletTi.png
-
 #AI IDLE SPEED: AI_SPEED <750>
 AI_SPEED 750
 
@@ -46,7 +45,8 @@ ROCK_IMAGE images/rock/rock.png images/rock/rockb.png images/rock/rockc.png
 #HEALTH <STAT>
 #RANGE <STAT>
 DAMAGE 1
-HEALTH 3
+HEALTH 2
 RADAR 4
 AP 4
 SPECIAL 1
+AMMO 6
