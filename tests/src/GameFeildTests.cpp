@@ -441,27 +441,27 @@ TEST_CASE("Actor moves diagonal down/right and collides with wall")
 }
 TEST_CASE("Checks for cheaters. Sets cheaters' tanks to have 1 for each attributes")
 {
-   int pointsAvailable = 20;
-   Actor *a = new SimpleActor();
-   Actor *a2 = new SimpleActor();
-   attributes AIAttributes;
-   AIAttributes = a->setAttribute(pointsAvailable);
-   ActorInfo AI(a, AIAttributes.tankHealth, AIAttributes.tankDamage, 1, 1, 1,
-                AIAttributes.tankAP, AIAttributes.tankShots); 
-   ActorInfo AI2(a2, 10, 10, 0, 0, 2, 10, 10); // invalid tank: defaults all to one
-   AI.tankAttributes = AIAttributes;
-   GameField g (2, 2);
-   g.addActor(AI);
-   g.addActor(AI2);
-   g.checkForCheaters(pointsAvailable);
-   REQUIRE(g.getActors().at(0).health >= 4);
-   REQUIRE(g.getActors().at(0).damage >= 4);
-   REQUIRE(g.getActors().at(0).range >= 4);
-   REQUIRE(g.getActors().at(0).shots >= 4);
-   REQUIRE(g.getActors().at(1).health == 1);
-   REQUIRE(g.getActors().at(1).damage == 1);
-   REQUIRE(g.getActors().at(1).range == 1); 
-   REQUIRE(g.getActors().at(1).shots == 1);
+    int pointsAvailable = 20;
+    Actor *a = new SimpleActor();
+    Actor *a2 = new SimpleActor();
+    attributes AIAttributes;
+    AIAttributes = a->setAttribute(pointsAvailable);
+    ActorInfo AI(a, AIAttributes.tankHealth, AIAttributes.tankDamage, 1, 1, 1,
+                 AIAttributes.tankAP, AIAttributes.tankShots);
+    ActorInfo AI2(a2, 10, 10, 0, 0, 2, 10, 10); // invalid tank: defaults all to one
+    AI.tankAttributes = AIAttributes;
+    GameField g (2, 2);
+    g.addActor(AI);
+    g.addActor(AI2);
+    g.checkForCheaters(pointsAvailable);
+    REQUIRE(g.getActors().at(0).health >= 4);
+    REQUIRE(g.getActors().at(0).damage >= 4);
+    REQUIRE(g.getActors().at(0).range >= 4);
+    REQUIRE(g.getActors().at(0).shots >= 4);
+    REQUIRE(g.getActors().at(1).health == 1);
+    REQUIRE(g.getActors().at(1).damage == 1);
+    REQUIRE(g.getActors().at(1).range == 1);
+    REQUIRE(g.getActors().at(1).shots == 1);
 }
 TEST_CASE("GameField updates heading of ActorInfo")
 {
@@ -500,7 +500,7 @@ TEST_CASE("Game Field properly gets attributes from actors")
 
 
 
-    
+
 }
 
 
@@ -515,12 +515,13 @@ TEST_CASE("GameField Calculates Fog of War")
     GameField manager(7, 7, tank_list);
 
     std::vector<int> expected_obstacles = { true, true, true, true, true, true, true,
-                                             true, false, false, false, false, false, true,
-                                             true, false, false, false, false, false, true,
-                                             true, false, false, false, false, false, true,
-                                             true, false, false, false, false, false, true,
-                                             true, false, false, false, false, false, true,
-                                             true, true, true, true, true, true, true};
+                                            true, false, false, false, false, false, true,
+                                            true, false, false, false, false, false, true,
+                                            true, false, false, false, false, false, true,
+                                            true, false, false, false, false, false, true,
+                                            true, false, false, false, false, false, true,
+                                            true, true, true, true, true, true, true
+                                          };
 
     for(int i = 0; i < 7; i++)
     {
@@ -528,13 +529,13 @@ TEST_CASE("GameField Calculates Fog of War")
         manager.addObstacle(i, 6);
     }
     for (int i = 1; i < 6; i++)
-    {   
+    {
         manager.addObstacle(0, i);
         manager.addObstacle(6, i);
     }
 
     REQUIRE(manager.getMapData().obstacleMap == expected_obstacles);
-    
+
     MapData test_map = manager.getMapData();
 
     manager.create_fog_of_war(test_map, test);
@@ -542,8 +543,8 @@ TEST_CASE("GameField Calculates Fog of War")
 
     REQUIRE(test_map.obstacleMap == expected_obstacles);
 
-    
-    
+
+
 }
 
 TEST_CASE("GameField hides other thanks in the Fog of War")
@@ -571,6 +572,6 @@ TEST_CASE("GameField hides other thanks in the Fog of War")
 
     REQUIRE(hidden == true);
 
-    
-    
+
+
 }

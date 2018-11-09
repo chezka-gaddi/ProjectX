@@ -23,7 +23,7 @@ GLuint sfxTex[20];   /*<Texture array for the special effects */
 * Loads and saves all the textures needed for the game in texture arrays.
 *******************************************************************************/
 int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> gameimgs,
-                   std::vector <std::string> trees, std::vector <std::string> rocks, 
+                   std::vector <std::string> trees, std::vector <std::string> rocks,
                    std::vector <std::string> bushes)
 {
     // Load in the tank texure information
@@ -33,14 +33,14 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
         const char *c = images[i].c_str();
         (i%5 == 0) ? cout << "\n" << c << "  " : cout << c << "  ";
         tankTex[i] = SOIL_load_OGL_texture(
-                     c,
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+                         c,
+                         SOIL_LOAD_AUTO,
+                         SOIL_CREATE_NEW_ID,
+                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
         if(tankTex[i] == 0)
-        return false;
-        
+            return false;
+
         glBindTexture(GL_TEXTURE_2D, tankTex[i]);
     }
 
@@ -51,13 +51,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
         const char *c = trees[i].c_str();
         cout << c << "  ";
         treeTex[i] = SOIL_load_OGL_texture(
-                     c,
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+                         c,
+                         SOIL_LOAD_AUTO,
+                         SOIL_CREATE_NEW_ID,
+                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
         if(treeTex[i] == 0)
-        return false;
+            return false;
 
         glBindTexture(GL_TEXTURE_2D, treeTex[i]);
     }
@@ -68,13 +68,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
         const char *c = rocks[i].c_str();
         cout << c << "  ";
         rockTex[i] = SOIL_load_OGL_texture(
-                     c,
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+                         c,
+                         SOIL_LOAD_AUTO,
+                         SOIL_CREATE_NEW_ID,
+                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
         if(rockTex[i] == 0)
-        return false;
+            return false;
 
         glBindTexture(GL_TEXTURE_2D, rockTex[i]);
     }
@@ -85,13 +85,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
         const char *c = bushes[i].c_str();
         cout << c << "  ";
         bushTex[i] = SOIL_load_OGL_texture(
-                     c,
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+                         c,
+                         SOIL_LOAD_AUTO,
+                         SOIL_CREATE_NEW_ID,
+                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
         if(bushTex[i] == 0)
-        return false;
+            return false;
 
         glBindTexture(GL_TEXTURE_2D, bushTex[i]);
     }
@@ -115,13 +115,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
         const char *c = gameimgs[i-1].c_str();
         cout << c << "  ";
         gameTex[i] = SOIL_load_OGL_texture(
-                     c,
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+                         c,
+                         SOIL_LOAD_AUTO,
+                         SOIL_CREATE_NEW_ID,
+                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
         if(gameTex[i] == 0)
-        return false;
+            return false;
 
         glBindTexture(GL_TEXTURE_2D, gameTex[i]);
     }
@@ -177,50 +177,50 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
     cout << "\nLoading SFX Textures:\n";
     // Load in sfx game images
     sfxTex[0] = SOIL_load_OGL_texture(
-                     "images/seffect/explosiona.png",
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+                    "images/seffect/explosiona.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
     if(sfxTex[0] == 0)
         return false;
 
     glBindTexture(GL_TEXTURE_2D, sfxTex[0]);
     sfxTex[1] = SOIL_load_OGL_texture(
-                     "images/seffect/explosionsb.png",
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+                    "images/seffect/explosionsb.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
     if(sfxTex[1] == 0)
         return false;
 
     glBindTexture(GL_TEXTURE_2D, sfxTex[1]);
     sfxTex[2] = SOIL_load_OGL_texture(
-                     "images/seffect/explosionsc.png",
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+                    "images/seffect/explosionsc.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
     if(sfxTex[2] == 0)
         return false;
 
     glBindTexture(GL_TEXTURE_2D, sfxTex[2]);
     sfxTex[3] = SOIL_load_OGL_texture(
-                     "images/seffect/smoke.png",
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+                    "images/seffect/smoke.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
     if(sfxTex[3] == 0)
         return false;
 
     glBindTexture(GL_TEXTURE_2D, sfxTex[3]);
     sfxTex[4] = SOIL_load_OGL_texture(
-                     "images/misc/ammo.png",
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+                    "images/misc/ammo.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
     if(sfxTex[4] == 0)
         return false;

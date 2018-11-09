@@ -25,9 +25,9 @@ direction SimpleAI::move(MapData map, PositionData status)
         {
             //If an enemy is encountered closer than previously encountered
             if ( map.map[x + y*map.width] > 0 &&
-                 map.map[x + y*map.width] != status.id &&
-                 calcDist(status.game_x, status.game_y, x, y) < min_dist &&
-                 calcDist(status.game_x, status.game_y, x, y) > 1)
+                    map.map[x + y*map.width] != status.id &&
+                    calcDist(status.game_x, status.game_y, x, y) < min_dist &&
+                    calcDist(status.game_x, status.game_y, x, y) > 1)
             {
                 min_dist = calcDist(status.game_x, status.game_y, x, y);
 
@@ -36,8 +36,8 @@ direction SimpleAI::move(MapData map, PositionData status)
                     if (status.game_x > x)
                     {
                         if(!map.obstacleMap[status.game_x - 1 + status.game_y * map.width] ||  //check for obstacle
-                        map.obstacleMap[status.game_x - 1 + status.game_y * map.width] == 'T' ||
-                        map.obstacleMap[status.game_x - 1 + status.game_y * map.width] == 'B' )
+                                map.obstacleMap[status.game_x - 1 + status.game_y * map.width] == 'T' ||
+                                map.obstacleMap[status.game_x - 1 + status.game_y * map.width] == 'B' )
                         {
                             ret = LEFT;
                         }
@@ -49,8 +49,8 @@ direction SimpleAI::move(MapData map, PositionData status)
                     else
                     {
                         if(!map.obstacleMap[status.game_x + 1 + status.game_y * map.width] || //check for obstacle
-                        map.obstacleMap[status.game_x + 1 + status.game_y * map.width] == 'T' ||
-                        map.obstacleMap[status.game_x + 1 + status.game_y * map.width] == 'B' )
+                                map.obstacleMap[status.game_x + 1 + status.game_y * map.width] == 'T' ||
+                                map.obstacleMap[status.game_x + 1 + status.game_y * map.width] == 'B' )
                         {
                             ret = RIGHT;
                         }
@@ -66,8 +66,8 @@ direction SimpleAI::move(MapData map, PositionData status)
                     if (status.game_y > y)
                     {
                         if(!map.obstacleMap[status.game_x + (status.game_y - 1)*map.width] || //check for obstacle
-                        map.obstacleMap[status.game_x + (status.game_y - 1)*map.width] == 'T' ||
-                        map.obstacleMap[status.game_x + (status.game_y - 1)*map.width] == 'B' )
+                                map.obstacleMap[status.game_x + (status.game_y - 1)*map.width] == 'T' ||
+                                map.obstacleMap[status.game_x + (status.game_y - 1)*map.width] == 'B' )
                         {
                             ret = UP;
                         }
@@ -79,8 +79,8 @@ direction SimpleAI::move(MapData map, PositionData status)
                     else
                     {
                         if(!map.obstacleMap[status.game_x + (status.game_y + 1)*map.width] || //check for obstacle
-                        map.obstacleMap[status.game_x + (status.game_y + 1)*map.width] == 'T' || 
-                        map.obstacleMap[status.game_x + (status.game_y + 1)*map.width] == 'B' )
+                                map.obstacleMap[status.game_x + (status.game_y + 1)*map.width] == 'T' ||
+                                map.obstacleMap[status.game_x + (status.game_y + 1)*map.width] == 'B' )
                         {
                             ret = DOWN;
                         }
@@ -94,20 +94,44 @@ direction SimpleAI::move(MapData map, PositionData status)
         }
     }
     //Move towards center if we can't find anyone
-    if (x_pos < mWidth - offset && y_pos < mHeight - offset && ret == STAY){ret = DOWNRIGHT;}
-    if (x_pos < mWidth - offset && y_pos > mHeight + offset && ret == STAY){ret = UPRIGHT;}
-    if (x_pos > mWidth + offset && y_pos < mHeight - offset && ret == STAY){ret = DOWNLEFT;}
-    if (x_pos > mWidth + offset && y_pos > mHeight + offset && ret == STAY){ret = UPLEFT;}
-    if (x_pos < mWidth - offset && ret == STAY){ret = RIGHT;}
-    if (y_pos > mHeight + offset && ret == STAY){ret = UP;}
-    if (x_pos > mWidth + offset && ret == STAY){ret = LEFT;}
-    if (y_pos < mHeight - offset && ret == STAY){ret = DOWN;}
+    if (x_pos < mWidth - offset && y_pos < mHeight - offset && ret == STAY)
+    {
+        ret = DOWNRIGHT;
+    }
+    if (x_pos < mWidth - offset && y_pos > mHeight + offset && ret == STAY)
+    {
+        ret = UPRIGHT;
+    }
+    if (x_pos > mWidth + offset && y_pos < mHeight - offset && ret == STAY)
+    {
+        ret = DOWNLEFT;
+    }
+    if (x_pos > mWidth + offset && y_pos > mHeight + offset && ret == STAY)
+    {
+        ret = UPLEFT;
+    }
+    if (x_pos < mWidth - offset && ret == STAY)
+    {
+        ret = RIGHT;
+    }
+    if (y_pos > mHeight + offset && ret == STAY)
+    {
+        ret = UP;
+    }
+    if (x_pos > mWidth + offset && ret == STAY)
+    {
+        ret = LEFT;
+    }
+    if (y_pos < mHeight - offset && ret == STAY)
+    {
+        ret = DOWN;
+    }
     return ret;
 }
 
 /**
  * @author David Donahue
- * @par Description: 
+ * @par Description:
  * Calculates whether or not not too attack, and if so where to attack
  * @param[in] map - The current state of the playfield
  * @param[in] status - The AI's tank's location, health and ID
@@ -123,12 +147,12 @@ direction SimpleAI::attack(MapData map, PositionData status)
         {
             //If an enemy is encountered closer than previously encountered
             if ( map.map[x + y*map.width] && //if there is an actor at X, Y
-                 map.map[x + y*map.width] != status.id && //And it is not you
-                 map.map[x + y*map.width] != -status.id && //And it is not your projectile
-                 calcDist(status.game_x, status.game_y, x, y) < min_dist) //And it is the closest one
+                    map.map[x + y*map.width] != status.id && //And it is not you
+                    map.map[x + y*map.width] != -status.id && //And it is not your projectile
+                    calcDist(status.game_x, status.game_y, x, y) < min_dist) //And it is the closest one
             {
                 if (x == status.game_x || y == status.game_y ||(
-                        abs(x - status.game_x) == abs(status.game_y - y)))
+                            abs(x - status.game_x) == abs(status.game_y - y)))
                 {
                     min_dist = calcDist(status.game_x, status.game_y, x, y);
                     if (status.game_x == x)
@@ -148,7 +172,7 @@ direction SimpleAI::attack(MapData map, PositionData status)
                         ret = (y > status.game_y) ? DOWNRIGHT : UPRIGHT;
                     }
                 }
-            
+
             }
         }
     }
@@ -164,15 +188,15 @@ direction SimpleAI::attack(MapData map, PositionData status)
  */
 attributes SimpleAI::setAttribute(int pointsAvailable)
 {
-   attributes tankAttributes;
+    attributes tankAttributes;
 
-   tankAttributes.tankHealth += pointsAvailable;
+    tankAttributes.tankHealth += pointsAvailable;
 
-   return tankAttributes;
+    return tankAttributes;
 }
 /**
  * @author David Donahue
- * @par Description: 
+ * @par Description:
  * Calculates how many moves it will take to reach a given coordinate
  * @param[in] x1 - starting point x coordinate
  * @param[in] y1 - starting point y coordinate
@@ -190,16 +214,16 @@ int SimpleAI::spendAP(MapData map, PositionData status)
 {
     direction tMove = move(map,status);
     direction tAttack = attack(map,status);
-    
+
     if (tMove == STAY && tAttack != STAY) //If there is nowhere to move, attack
         return 2;
-    
+
     if (tAttack == STAY && tMove != STAY) //If there is nowhere to attack, move
         return 1;
-    
+
     if (tAttack == STAY && tMove == STAY) //If there is nothing to do, end your turn
         return 3;
-    
+
     return (status.ap > 1) ? 1 : 2;
 }
 

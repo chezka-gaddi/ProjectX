@@ -27,16 +27,23 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
     screen_y = y_coor;
     gridx = gx;
     gridy = gy;
-    if (id == 0){ //It's a tree
-      health = 2;
-      tex = ((rand() % 4));
-    }else if( id == 1){ //It's a Rocks
-      health = 4;
-      tex = ((rand() % 3) + 10);
-    }else if( id == 2){ //It's a Bushes
-      tex = ((rand() % 4) + 20);
-    }else{
-      tex = 1; //default to tree if we got a bad id
+    if (id == 0)  //It's a tree
+    {
+        health = 2;
+        tex = ((rand() % 4));
+    }
+    else if( id == 1)   //It's a Rocks
+    {
+        health = 4;
+        tex = ((rand() % 3) + 10);
+    }
+    else if( id == 2)   //It's a Bushes
+    {
+        tex = ((rand() % 4) + 20);
+    }
+    else
+    {
+        tex = 1; //default to tree if we got a bad id
     }
 }
 
@@ -57,12 +64,17 @@ void Obstacles::draw(int, int)
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
     glTranslatef(screen_x, screen_y, -5.0f);
-    if (tex >= 0 && tex <= 9){ //It's a tree
-      glBindTexture(GL_TEXTURE_2D, treeTex[tex]);
-    }else if( tex >= 10 && tex <= 19){ //It's a Rocks
-      glBindTexture(GL_TEXTURE_2D, rockTex[tex-10]);
-    }else if( tex >= 20 && tex <= 29){ //It's a Bushes
-      glBindTexture(GL_TEXTURE_2D, bushTex[tex-20]);
+    if (tex >= 0 && tex <= 9)  //It's a tree
+    {
+        glBindTexture(GL_TEXTURE_2D, treeTex[tex]);
+    }
+    else if( tex >= 10 && tex <= 19)   //It's a Rocks
+    {
+        glBindTexture(GL_TEXTURE_2D, rockTex[tex-10]);
+    }
+    else if( tex >= 20 && tex <= 29)   //It's a Bushes
+    {
+        glBindTexture(GL_TEXTURE_2D, bushTex[tex-20]);
     }
 
     glBegin(GL_QUADS);
