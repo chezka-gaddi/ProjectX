@@ -243,7 +243,6 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
             str = "3rd";
             break;
         }
-
       else
       {
         std::string s = std::to_string(count);
@@ -288,19 +287,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 
       k += -0.1f;
       count++;
-
-
-      glRasterPos3f(-0.5f, k, 2.0f);
-      while(*str)
-      {
-        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
-        str++;
-      }
-
     }
-
-      k += -0.1f;
-      count++;
   }
   else
   {

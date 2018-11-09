@@ -87,7 +87,7 @@ void Obstacles::regrow(int turn){
   if (destroyed == 0)
     return;
 
-  printf("Checking plant on turn %d with %d health destroyed on turn %d\n",turn, health, destroyed);
+  //printf("Checking plant on turn %d with %d health destroyed on turn %d\n",turn, health, destroyed);
 
   if (destroyed+regrow_rate < turn){
     if (id == 0){ //Its a tree
