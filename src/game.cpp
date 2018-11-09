@@ -419,6 +419,7 @@ void Game::initGameState()
   std::vector<std::pair<int,int>> rockLocations;
   std::vector<std::pair<int,int>> bushLocations;
   std::vector<std::pair<int,int>> tankLocations;
+  std::vector<std::pair<int,int>> waterLocations;
   std::vector<std::pair<int,int>> specialLocations;
 
   std::vector<std::string> tankImages;
@@ -426,6 +427,7 @@ void Game::initGameState()
   std::vector<std::string> treeImages;
   std::vector<std::string> rockImages;
   std::vector<std::string> bushImages;
+  std::vector<std::string> waterImages;
   std::string name;
   int attributePoints = 0;
   srand(time(0));
