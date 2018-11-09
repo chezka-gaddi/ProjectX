@@ -193,21 +193,52 @@ void GameField::updateMap()
  * @author Riley Kopp
  ******************************************************************************/
 void GameField::setSPECIAL(int points)
-{   int sum =0;
+{   
+    int sum =0;
+    attributes baseStats;
+    
     for(auto &actor: actors)
     {
-        actor.tankAttributes = actor.act_p->setAttribute(points);
+        baseStats.tankHealth = actor.tankAttributes.tankHealth;
+        baseStats.tankAP = actor.tankAttributes.tankAP;
+        baseStats.tankRadar = actor.tankAttributes.tankRadar;
+        baseStats.tankDamage = actor.tankAttributes.tankDamage;
+        baseStats.tankAmmo = actor.tankAttributes.tankAmmo;
+        
+        actor.tankAttributes = actor.act_p->setAttribute(points, baseStats);
 
         sum = actor.tankAttributes.tankHealth 
                     + actor.tankAttributes.tankAP
                     + actor.tankAttributes.tankRadar 
-                    + actor.tankAttributes.tankDamage;
+                    + actor.tankAttributes.tankDamage
+                    + actor.tankAttributes.tankAmmo;
         if (sum  <= points)
         {
             actor.health += actor.tankAttributes.tankHealth;
             actor.range += actor.tankAttributes.tankAP;
             actor.radar += actor.tankAttributes.tankRadar;
             actor.damage += actor.tankAttributes.tankDamage;
+            actor.ammo += actor.tankAttributes.tankAmmo;
+            if (actor.health > 8){
+              actor.health = 8;
+              printf("Health stat was too high, setting at 8.\n");
+            }
+            if (actor.range > 8){
+              actor.range = 8;
+              printf("AP stat was too high, setting at 8.\n");
+            }
+            if (actor.radar > 16){
+              actor.radar = 16;
+              printf("Radar stat was too high, setting at 16.\n");
+            }
+            if (actor.damage > 8){
+              actor.damage = 8;
+              printf("Damage stat was too high, setting at 8.\n");
+            }
+            if (actor.ammo > 8){
+              actor.ammo = 8;
+              printf("Ammo stat was too high, setting at 8.\n");
+            }
         }
         else
         std::cout << "Tank " 

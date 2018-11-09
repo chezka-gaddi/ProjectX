@@ -162,9 +162,11 @@ direction SimpleAI::attack(MapData map, PositionData status)
  * @param[in] pointsAvailable - available points for the distribution
  * @return attributes of the tank
  */
-attributes SimpleAI::setAttribute(int pointsAvailable)
+attributes SimpleAI::setAttribute(int pointsAvailable, attributes baseStats)
 {
    attributes tankAttributes;
+   
+   myStats = baseStats; 
 
    tankAttributes.tankHealth += pointsAvailable;
 

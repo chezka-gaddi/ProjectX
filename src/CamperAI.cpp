@@ -97,7 +97,7 @@ direction CamperAI::attack(MapData map, PositionData status)
     return retval;
 }
 
-attributes CamperAI::setAttribute(int pointsAvailable)
+attributes CamperAI::setAttribute(int pointsAvailable, attributes baseStats)
 {
     attributes retval;
 
