@@ -18,7 +18,7 @@
 Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
 {
     //id's:
-    // 0 = Tree   1 = Rocks   2 = Bushes  3 = Other
+    // 0 = Tree   1 = Rocks   2 = Bushes  3 = Water   4 = Other
     //Textures:
     //0-9   Trees  - Packaged Trees  0-3   - 4 Trees
     //10-19 Rocks  - Packaged Rocks  10-12 - 3 Rocks
@@ -66,7 +66,6 @@ void Obstacles::draw(int, int)
     }else if( tex >= 20 && tex <= 29){ //It's a Bushes
       glBindTexture(GL_TEXTURE_2D, bushTex[tex-20]);
     }else if( tex >= 30 && tex <= 39){ //It's a Waters
-      std::cout << "Drawing a Water square\n";
       glBindTexture(GL_TEXTURE_2D, waterTex[tex - 30]);
     }
 

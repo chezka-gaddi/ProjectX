@@ -167,6 +167,12 @@ void DisplayEvent::doAction(Game &game)
         stuff = game.bushes[i];
         stuff->draw(game.getX(), game.getY());
     }
+    for( int i = 0; i < game.waters.size(); i++ )
+    {
+        stuff = game.waters[i];
+        stuff->draw(game.getX(), game.getY());
+    }
+
     for( int i = 0; i < game.sfx.size(); i++ )
     {
         stuff = game.sfx[i];
