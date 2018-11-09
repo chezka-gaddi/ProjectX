@@ -66,6 +66,6 @@ void onClose()
  ******************************************************************************/
 void keyboard(unsigned char key, int x, int y)
 {
-  utilityCentral(ai, new KeyboardEvent(key, x, actualY(y)));
+    utilityCentral(ai, new KeyboardEvent(key, x, actualY(y)));
 }
 

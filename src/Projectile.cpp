@@ -36,28 +36,28 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir )
     case RIGHT:
         angle = 0;
         break;
-    
+
     case DOWNRIGHT:
         angle = -45;
         break;
-    
+
     case DOWN:
         angle = -90;
         break;
-    
+
     case DOWNLEFT:
         angle = -135;
         break;
-    
+
     case LEFT:
         angle = 180;
         break;
-    
+
     case UPLEFT:
         angle = 135;
         break;
     }
-    
+
     tex = ((-1 * id) - 1) * 5 + 4;
 }
 

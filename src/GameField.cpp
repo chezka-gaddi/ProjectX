@@ -78,7 +78,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actor
  * Constructor with dimensions and a vector of ActorInfo, and action points
  */
 GameField::GameField(int width, int height, std::vector<ActorInfo> acts
-        , int actionpoints) : actors(acts), ap(actionpoints)
+, int actionpoints) : actors(acts), ap(actionpoints)
 {
     turnCount = 0;
     fieldMap.width = width;
@@ -241,11 +241,11 @@ void GameField::setSPECIAL(int points)
             }
         }
         else
-        std::cout << "Tank " 
-            << actor.id 
-            << " did not provide the correct amount of special points! Points used: " 
-            << sum
-            <<std::endl;
+            std::cout << "Tank "
+                      << actor.id
+                      << " did not provide the correct amount of special points! Points used: "
+                      << sum
+                      <<std::endl;
     }
 }
 /**
@@ -258,7 +258,7 @@ void GameField::runMoves(ActorInfo &a)
 {
 
     int xoff = 0, yoff = 0, tHealth = 0, hit = 0;
-    bool hitObj; 
+    bool hitObj;
     PositionData pos;
     direction dir;
 
@@ -277,7 +277,7 @@ void GameField::runMoves(ActorInfo &a)
     //If it checks out, execute it
     //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
     if (a.health <= 0 || a.id == 0)//We arn't playing this game with dead actors anymore
-            return;
+        return;
     switch (dir)
     {
     case UP:
@@ -350,11 +350,11 @@ void GameField::runMoves(ActorInfo &a)
                                 || obstacleAt(a.x+1, a.y-1) == 'B'
                                 || obstacleAt(a.x+1, a.y-1) == 'W'))
         {
-                yoff = -1;
-                xoff = 1;
+            yoff = -1;
+            xoff = 1;
         }
         else
-                a.health--;
+            a.health--;
         break;
 
     case DOWNLEFT:
@@ -394,16 +394,19 @@ void GameField::runMoves(ActorInfo &a)
     a.x += xoff;
     a.y += yoff;
     hitObj = checkObjectStrike(a);
-    if (a.id > 0 && obstacleAt(a.x, a.y) == 'R'){
-      a.x -= xoff;
-      a.y -= yoff;
-      hitObj == true;
-      a.health--;
-    }else if (a.id < 0 && obstacleAt(a.x, a.y) == 'C'){
-      a.health--;
-      crate_o_doom(a.x, a.y, a);
-      removeObstacle(a.x, a.y);
-      hitObj == true;
+    if (a.id > 0 && obstacleAt(a.x, a.y) == 'R')
+    {
+        a.x -= xoff;
+        a.y -= yoff;
+        hitObj == true;
+        a.health--;
+    }
+    else if (a.id < 0 && obstacleAt(a.x, a.y) == 'C')
+    {
+        a.health--;
+        crate_o_doom(a.x, a.y, a);
+        removeObstacle(a.x, a.y);
+        hitObj == true;
     }
     else if(a.id > 0 && obstacleAt(a.x, a.y) == 'W'){
       a.x -= xoff;
@@ -414,31 +417,57 @@ void GameField::runMoves(ActorInfo &a)
 
     if (a.health > 0 && hitObj == false)
     {
-      for (int i = 0; i < actors.size(); ++i ) //check each actor
-      {
-        if (a.health > 0 && actors[i].health > 0  //Make sure neither is dead
-                         && actors[i].x == a.x    //Make sure we're on the same column
-                         && actors[i].y == a.y    //Make sure we're on the same row
-                         && a.id != actors[i].id) //Make sure our tank doesn't damage itself
+        for (int i = 0; i < actors.size(); ++i ) //check each actor
         {
-            if (a.id > 0 && actors[i].id > 0) //Check tank to tank ramming
+            if (a.health > 0 && actors[i].health > 0  //Make sure neither is dead
+                    && actors[i].x == a.x    //Make sure we're on the same column
+                    && actors[i].y == a.y    //Make sure we're on the same row
+                    && a.id != actors[i].id) //Make sure our tank doesn't damage itself
             {
-                //printf("Tank hit tank\n");
-                //Reverse the move
-                a.x -= xoff;
-                a.y -= yoff;
-                tHealth - actors[i].health;
-                actors[i].health -= a.health; //deal full health damage to target
-                hit += tHealth - 1;
-                a.hits++; //A tank hit is still a hit right?
-                if (actors[i].health <= 0)
+                if (a.id > 0 && actors[i].id > 0) //Check tank to tank ramming
                 {
-                  SFX.push_back(make_pair(actors[i].x, actors[i].y));
-                  actors[i].health = 0;
-                  actors[i].damage = 0;
-                  actors[i].id = 0;
-                  actors[i].range = 0;
-                  a.kills++;
+                    //printf("Tank hit tank\n");
+                    //Reverse the move
+                    a.x -= xoff;
+                    a.y -= yoff;
+                    tHealth - actors[i].health;
+                    actors[i].health -= a.health; //deal full health damage to target
+                    hit += tHealth - 1;
+                    a.hits++; //A tank hit is still a hit right?
+                    if (actors[i].health <= 0)
+                    {
+                        SFX.push_back(make_pair(actors[i].x, actors[i].y));
+                        actors[i].health = 0;
+                        actors[i].damage = 0;
+                        actors[i].id = 0;
+                        actors[i].range = 0;
+                        a.kills++;
+                    }
+                }
+                else if(actors[i].id < 0)  //Check if we ran into a projectile (What we are doesn't matter)
+                {
+                    //printf("Projectile or Tank hit a projectile.\n");
+                    hit += actors[i].health; //store future damage
+                    actors[i].health -= a.health; //Destroy the projectile
+                    if (a.id > 0 && -actors[i].id != a.id) //Give the owner a hit, but not a self hit and not a missile to missle hit
+                        actorInfoById(-actors[i].id).hits++;
+                }
+                else if(a.id < 0)  //If we're a projectile and we hit a tank
+                {
+                    //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
+                    actors[i].health -= a.health; //damage the tank
+                    hit += a.health;
+                    if (a.id != -actors[i].id)      //no self hits
+                        actorInfoById(-a.id).hits++;  //give our owner a hit
+                    if (actors[i].health <= 0)
+                    {
+                        SFX.push_back(make_pair(actors[i].x, actors[i].y));
+                        actors[i].health = 0;
+                        actors[i].damage = 0;
+                        actors[i].id = 0;
+                        actors[i].range = 0;
+                        actorInfoById(-a.id).kills++;  //give our owner a hit
+                    }
                 }
             }else if(actors[i].id < 0) //Check if we ran into a projectile (What we are doesn't matter)
             {
@@ -465,7 +494,6 @@ void GameField::runMoves(ActorInfo &a)
               }
             }
         }
-      }
     }
     a.health -= hit;
     if (a.id < 0 && (a.health <= 0 || hitObj == true))
@@ -514,17 +542,16 @@ bool GameField::checkObjectStrike(ActorInfo &a)
             r->health -= a.damage;
             if (r->health <= 0)
             {
+                //printf("Found Rock strike, log it.\n");
+                r->health -= a.damage;
+                if (r->health < 0)
+                {
                     r->health = 0;
                     r->destroyed = turnCount;
             }
-                
-            return true;
-          }
+        }
     }
-  }else if (tempOb == 'T')
-  {
-    //printf("Tree strike, log it.\n");
-    for (auto &t : gameptr->trees)
+    else if (tempOb == 'T')
     {
           if (t->gridx == a.x && t->gridy == a.y && t->health > 0)
           {
@@ -538,21 +565,22 @@ bool GameField::checkObjectStrike(ActorInfo &a)
             return true;
           }
     }
-  }else if (tempOb == 'C')
-  {
-    //printf("Hit the crate.\n");
-    for ( auto &c : gameptr->specials){
-          if (c->gridx == a.x && c->gridy == a.y && c->health > 0)
-          {
-           // printf("Found the crate at (%d, %d) with projectile at (%d,%d).\n",c->gridx, c->gridy, a.x, a.y);
-            c->health--;
-            hits+= crate_o_doom(c->gridx, c->gridy, a);//Bang the drum
-            actorInfoById(-a.id).hits += hits; 
-            return true;
-          }
+    else if (tempOb == 'C')
+    {
+        //printf("Hit the crate.\n");
+        for ( auto &c : gameptr->specials)
+        {
+            if (c->gridx == a.x && c->gridy == a.y && c->health > 0)
+            {
+                // printf("Found the crate at (%d, %d) with projectile at (%d,%d).\n",c->gridx, c->gridy, a.x, a.y);
+                c->health--;
+                hits+= crate_o_doom(c->gridx, c->gridy, a);//Bang the drum
+                actorInfoById(-a.id).hits += hits;
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 /***************************************************************************//**
 * @author Jon McKee
@@ -569,60 +597,61 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
     int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
     int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
     int hit = 0;
-    
+
     for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
     {
         for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
         {
-          switch(obstacleAt(x_iter, y_iter)){ //now that we stole the internals do our stuff
-              case 'T':
+            switch(obstacleAt(x_iter, y_iter))  //now that we stole the internals do our stuff
+            {
+            case 'T':
                 for (auto &t : gameptr->trees)
                 {
-                  if (t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
-                  {
-                    t->health--;
-                  }
+                    if (t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
+                    {
+                        t->health--;
+                    }
                 }
                 break;
-              case 'C':
+            case 'C':
                 for (auto &c : gameptr->specials)
                 {
-                  if (c->gridx == x_iter && c->gridy == y_iter && c->health > 0)
-                  {
-                    c->health--;
-                    hit = crate_o_doom(c->gridx, c->gridy, a); //Chain reaction
-                  }
+                    if (c->gridx == x_iter && c->gridy == y_iter && c->health > 0)
+                    {
+                        c->health--;
+                        hit = crate_o_doom(c->gridx, c->gridy, a); //Chain reaction
+                    }
                 }
                 break;
-              case 'R':
+            case 'R':
                 for (auto &r : gameptr->rocks)
                 {
-                  if (r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
-                  {
-                    r->health--;
-                  }
+                    if (r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
+                    {
+                        r->health--;
+                    }
                 }
                 break;
-              case 'B':
-              default:
+            case 'B':
+            default:
                 for (auto &act : actors)
                 {
-                  if (act.x == x_iter && act.y == y_iter && act.health > 0)
-                  {
-                    //printf("Hit a tank at (%d, %d)\n",x_iter, y_iter);
-                    act.health--;
-                    if (act.health <= 0)
+                    if (act.x == x_iter && act.y == y_iter && act.health > 0)
                     {
-                      act.health = 0;
-                      act.id = 0;
-                      actorInfoById(-a.id).kills++; 
+                        //printf("Hit a tank at (%d, %d)\n",x_iter, y_iter);
+                        act.health--;
+                        if (act.health <= 0)
+                        {
+                            act.health = 0;
+                            act.id = 0;
+                            actorInfoById(-a.id).kills++;
+                        }
+                        actorInfoById(-a.id).hits++;
                     }
-                    actorInfoById(-a.id).hits++;
-                  }
                 }
-                break;        
-          }
-          SFX.push_back(make_pair(x_iter, y_iter));
+                break;
+            }
+            SFX.push_back(make_pair(x_iter, y_iter));
         }
     }
     //printf("Hit %d number of tanks.\n",hit);
@@ -770,45 +799,49 @@ void GameField::nextTurn()
 
             else if (action == 2)
             {
-                    //PositionData to give the AI
-                    pos.game_x = actors[i].x;
-                    pos.game_y = actors[i].y;
-                    pos.health = actors[i].health;
-                    pos.id = actors[i].id;
+                //PositionData to give the AI
+                pos.game_x = actors[i].x;
+                pos.game_y = actors[i].y;
+                pos.health = actors[i].health;
+                pos.id = actors[i].id;
 
-                    //Get the AI's desired attack
-                    atk = actors[i].act_p->attack(fog_of_war, pos);
+                //Get the AI's desired attack
+                atk = actors[i].act_p->attack(fog_of_war, pos);
 
 
-                    if (actors[i].id > 0) //tanks attacking
+                if (actors[i].id > 0) //tanks attacking
+                {
+                    if (atk != STAY && actors[i].ammo >= 1)
                     {
-                        if (atk != STAY && actors[i].ammo >= 1)
-                        {
-                            actors[i].heading = atk;
-                            ProjectileActor * proj = new ProjectileActor(atk);
-                            newProjectile.range = 6;
-                            newProjectile.id = -actors[i].id;
-                            newProjectile.act_p = proj;
-                            newProjectile.health = 1;
-                            newProjectile.damage = actors[i].damage;
-                            newProjectile.x = actors[i].x;
-                            newProjectile.y = actors[i].y;
-                            actors.insert(actors.begin() + i + 1, newProjectile);
-                            actors[i].shots++;
-                            actors[i].ammo--;
-                        } else if (atk != STAY) {
-                            //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
-                            actors[i].ammo = actors[i].max_ammo;
-                            //printf("Back up to %d bullets.\n",actors[i].ammo);
-                        }
+                        actors[i].heading = atk;
+                        ProjectileActor * proj = new ProjectileActor(atk);
+                        newProjectile.range = 6;
+                        newProjectile.id = -actors[i].id;
+                        newProjectile.act_p = proj;
+                        newProjectile.health = 1;
+                        newProjectile.damage = actors[i].damage;
+                        newProjectile.x = actors[i].x;
+                        newProjectile.y = actors[i].y;
+                        actors.insert(actors.begin() + i + 1, newProjectile);
+                        actors[i].shots++;
+                        actors[i].ammo--;
                     }
-            
-            }else if (action == 4) {
-              actors[i].ammo = actors[i].max_ammo;
-              //printf("Reloading... Reloading... Reloading\n");
+                    else if (atk != STAY)
+                    {
+                        //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
+                        actors[i].ammo = actors[i].max_ammo;
+                        //printf("Back up to %d bullets.\n",actors[i].ammo);
+                    }
+                }
+
+            }
+            else if (action == 4)
+            {
+                actors[i].ammo = actors[i].max_ammo;
+                //printf("Reloading... Reloading... Reloading\n");
             }
             --act_ap;
-            
+
         }
     }
 
@@ -836,13 +869,13 @@ void GameField::checkForCheaters(int pointsAvailable)
     for( auto &a : actors )
     {
         if( a.health + a.damage + a.range + a.shots > pointsAvailable)
-         {
-             a.health = 1;
-             a.damage = 1;
-             a.range = 1;
-             a.shots = 1;
-         }
-     }
+        {
+            a.health = 1;
+            a.damage = 1;
+            a.range = 1;
+            a.shots = 1;
+        }
+    }
 }
 
 /**
@@ -939,12 +972,12 @@ void GameField::cull()
     {
         if (actors[i].health == 0)
         {
-        	if(actors[i].name != "default\n")
-        	{
-        		//std::cout << "Tank Down!! " << actors[i].name << " died\n";
-        		deceased.push_back(actors[i]);
-        		//std::cout << "Current number of dead tanks is: " << deceased.size() << endl;
-        	}
+            if(actors[i].name != "default\n")
+            {
+                //std::cout << "Tank Down!! " << actors[i].name << " died\n";
+                deceased.push_back(actors[i]);
+                //std::cout << "Current number of dead tanks is: " << deceased.size() << endl;
+            }
             if (actors[i].act_p != NULL)
                 delete actors[i].act_p;
             actors.erase(actors.begin()+i);
@@ -1006,7 +1039,7 @@ std::string GameField::getWinner()
 {
     string winner = "none";
     for (auto a : actors)
-      if (a.health > 0 && a.id > 0)
-              winner = a.name;
+        if (a.health > 0 && a.id > 0)
+            winner = a.name;
     return winner;
 }

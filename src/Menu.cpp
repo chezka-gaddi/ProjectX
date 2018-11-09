@@ -26,33 +26,33 @@ Menu::Menu( int id, int hp, int ammo, int hits )
     this->id = id;
     switch(id)
     {
-      case 1:
-      {
+    case 1:
+    {
         strncpy(name, "Player 1", 9);
         screen_x = -0.70;
         screen_y = 0.54;
         break;
-      }
-      case 2:
-      {
+    }
+    case 2:
+    {
         strncpy(name, "Player 2", 9);
         screen_x = 1.7;
         screen_y = 0.54;
         break;
-      }
-      case 3:
-      {
+    }
+    case 3:
+    {
         strncpy(name, "Player 3", 9);
         screen_x = -0.70;
         screen_y = .90;
         break;
-      }
-      case 4:
-      {
+    }
+    case 4:
+    {
         strncpy(name, "Player 4", 9);
         screen_x = 1.7;
         screen_y = .90;
-      }
+    }
     }
     health = hp;
     bullet = ammo;
@@ -121,13 +121,13 @@ void Menu::drawTextBox(GLfloat x, GLfloat y)
     glTranslatef(x - .5, y + 0.6, -5.0f);
     switch (id)
     {
-      case 2:
+    case 2:
         glScalef(-1, 1, 1);
         break;
-      case 3:
+    case 3:
         glScalef(-1, -1, 1);
         break;
-      case 4:
+    case 4:
         glScalef(1, -1, 1);
         break;
     }
@@ -162,16 +162,16 @@ void Menu::drawPlayerStats()
     // Output name of the player
     switch (id)
     {
-      case 1:    
+    case 1:
         drawBitmapText(name, screen_x - 0.13, screen_y + 0.11);
         break;
-      case 2:
+    case 2:
         drawBitmapText(name, screen_x - 1.04, screen_y + 0.11);
         break;
-      case 3:
+    case 3:
         drawBitmapText(name, screen_x + 0.16, screen_y - 0.25);
         break;
-      case 4:  
+    case 4:
         drawBitmapText(name, screen_x - 1.32, screen_y - 0.25);
         break;
     }
@@ -179,41 +179,41 @@ void Menu::drawPlayerStats()
     // Draw health points
     for( int i = 0; i < health ; i++ )
     {
-      switch (id)
-      {
-        case 1:    
-          drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.02, 4 );
-          break;
+        switch (id)
+        {
+        case 1:
+            drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.02, 4 );
+            break;
         case 2:
-          drawIcon(screen_x + 0.75 - (0.14 * i), screen_y - 0.02, 4 );
-          break;
+            drawIcon(screen_x + 0.75 - (0.14 * i), screen_y - 0.02, 4 );
+            break;
         case 3:
-          drawIcon(screen_x - .05 + (0.14 * i), screen_y + 0.05, 4 );
-          break;
-        case 4:  
-          drawIcon(screen_x + 0.75 - (0.14 * i), screen_y + 0.05, 4 );
-          break;
-      }
+            drawIcon(screen_x - .05 + (0.14 * i), screen_y + 0.05, 4 );
+            break;
+        case 4:
+            drawIcon(screen_x + 0.75 - (0.14 * i), screen_y + 0.05, 4 );
+            break;
+        }
     }
 
     // Draw number of hits
     for( int i = 0; i < score ; i++ )
     {
-      switch (id)
-      {
-        case 1:    
-          drawIcon((screen_x - 0.05) + 0.1 * i, screen_y - 0.18, 6 );
-          break;
+        switch (id)
+        {
+        case 1:
+            drawIcon((screen_x - 0.05) + 0.1 * i, screen_y - 0.18, 6 );
+            break;
         case 2:
-          drawIcon(screen_x + 0.75 - 0.1 * i, screen_y - 0.18, 6 );
-          break;
+            drawIcon(screen_x + 0.75 - 0.1 * i, screen_y - 0.18, 6 );
+            break;
         case 3:
-          drawIcon((screen_x - 0.05) + 0.1 * i, screen_y - 0.10, 6 );
-          break;
-        case 4:  
-          drawIcon(screen_x + 0.75 - 0.1 * i, screen_y - 0.10, 6 );
-          break;
-      } 
+            drawIcon((screen_x - 0.05) + 0.1 * i, screen_y - 0.10, 6 );
+            break;
+        case 4:
+            drawIcon(screen_x + 0.75 - 0.1 * i, screen_y - 0.10, 6 );
+            break;
+        }
     }
 }
 

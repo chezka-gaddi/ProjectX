@@ -44,54 +44,65 @@ direction CamperAI::attack(MapData map, PositionData status)
     int wmedian = map.width / 2;
     direction retval;
 
-    if(y_pos >= hmedian && x_pos <= wmedian){
-      switch (turn){
+    if(y_pos >= hmedian && x_pos <= wmedian)
+    {
+        switch (turn)
+        {
         case 1:
-          retval = UPRIGHT;
-          break;
+            retval = UPRIGHT;
+            break;
         case 2:
-          retval = RIGHT;
-          break;
+            retval = RIGHT;
+            break;
         default:
-          retval = UP;
-          break;
-      }
-    }else if(y_pos < hmedian && x_pos <= wmedian){
-      switch (turn){
+            retval = UP;
+            break;
+        }
+    }
+    else if(y_pos < hmedian && x_pos <= wmedian)
+    {
+        switch (turn)
+        {
         case 1:
-          retval = DOWNRIGHT;
-          break;
+            retval = DOWNRIGHT;
+            break;
         case 2:
-          retval = RIGHT;
-          break;
+            retval = RIGHT;
+            break;
         default:
-          retval = DOWN;
-          break;
-      }
-    }else if(y_pos >= hmedian && x_pos > wmedian){
-      switch (turn){
+            retval = DOWN;
+            break;
+        }
+    }
+    else if(y_pos >= hmedian && x_pos > wmedian)
+    {
+        switch (turn)
+        {
         case 1:
-          retval = UPLEFT;
-          break;
+            retval = UPLEFT;
+            break;
         case 2:
-          retval = LEFT;
-          break;
+            retval = LEFT;
+            break;
         default:
-          retval = UP;
-          break;
-      }
-    }else if(y_pos < hmedian && x_pos > wmedian){
-      switch (turn){
+            retval = UP;
+            break;
+        }
+    }
+    else if(y_pos < hmedian && x_pos > wmedian)
+    {
+        switch (turn)
+        {
         case 1:
-          retval = DOWNLEFT;
-          break;
+            retval = DOWNLEFT;
+            break;
         case 2:
-          retval = LEFT;
-          break;
+            retval = LEFT;
+            break;
         default:
-          retval = DOWN;
-          break;
-      }
+            retval = DOWN;
+            break;
+        }
     }
 
     return retval;
@@ -109,13 +120,13 @@ attributes CamperAI::setAttribute(int pointsAvailable, attributes baseStats)
 int CamperAI::spendAP(MapData map, PositionData status)
 {
     if (maxAp == 0)
-      maxAp = status.ap;
+        maxAp = status.ap;
     if (maxAp == status.ap)
-      turn = 0;
+        turn = 0;
     else
-      turn++;
+        turn++;
     if (move(map, status) != STAY)
-            return 1;
+        return 1;
     return 2; // Attack
 }
 

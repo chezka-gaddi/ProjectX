@@ -66,10 +66,10 @@ int main (int argc, char ** argv)
     {
         for(int tank_2 = tank_1 + 1; tank_2 < tanks.size() - 1 ; tank_2++)
         {
-        base_file_name = tanks.at(tank_1) + "vs" + tanks.at(tank_2) + ".round";
-        game_config.open(base_file_name);
+            base_file_name = tanks.at(tank_1) + "vs" + tanks.at(tank_2) + ".round";
+            game_config.open(base_file_name);
             map_id = rand() % maps.size();
-    cout << map_id << endl;
+            cout << map_id << endl;
 
             map.open(maps[map_id]);
             // copy over the map to the game config
@@ -94,14 +94,14 @@ int main (int argc, char ** argv)
             game_config << "SPECIAL 1" << endl;
 
             game_config << "#Images" << endl;
-	    game_config <<"OBSTACLE_IMAGE images/tree/tree.png images/rock/rock.png" << std::endl;
-	    game_config << "TREE_IMAGE images/tree/tree.png images/tree/treeb.png images/tree/treec.png images/tree/treed.png" << endl;
+            game_config <<"OBSTACLE_IMAGE images/tree/tree.png images/rock/rock.png" << std::endl;
+            game_config << "TREE_IMAGE images/tree/tree.png images/tree/treeb.png images/tree/treec.png images/tree/treed.png" << endl;
             game_config << "BUSH_IMAGE images/bush/bush1.png images/bush/bush2.png images/bush/bush3.png images/bush/bush4.png" << endl;
             game_config << "ROCK_IMAGE images/rock/rock.png images/rock/rockb.png images/rock/rockc.png" << endl;
 
 
 
-        game_config.close();
+            game_config.close();
         }
     }
 

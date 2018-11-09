@@ -500,7 +500,7 @@ TEST_CASE("Game Field properly gets attributes from actors")
 
 
 
-    
+
 }
 
 
@@ -515,12 +515,13 @@ TEST_CASE("GameField Calculates Fog of War")
     GameField manager(7, 7, tank_list);
 
     std::vector<int> expected_obstacles = { true, true, true, true, true, true, true,
-                                             true, false, false, false, false, false, true,
-                                             true, false, false, false, false, false, true,
-                                             true, false, false, false, false, false, true,
-                                             true, false, false, false, false, false, true,
-                                             true, false, false, false, false, false, true,
-                                             true, true, true, true, true, true, true};
+                                            true, false, false, false, false, false, true,
+                                            true, false, false, false, false, false, true,
+                                            true, false, false, false, false, false, true,
+                                            true, false, false, false, false, false, true,
+                                            true, false, false, false, false, false, true,
+                                            true, true, true, true, true, true, true
+                                          };
 
     for(int i = 0; i < 7; i++)
     {
@@ -528,13 +529,13 @@ TEST_CASE("GameField Calculates Fog of War")
         manager.addObstacle(i, 6);
     }
     for (int i = 1; i < 6; i++)
-    {   
+    {
         manager.addObstacle(0, i);
         manager.addObstacle(6, i);
     }
 
     REQUIRE(manager.getMapData().obstacleMap == expected_obstacles);
-    
+
     MapData test_map = manager.getMapData();
 
     manager.create_fog_of_war(test_map, test);
@@ -542,8 +543,8 @@ TEST_CASE("GameField Calculates Fog of War")
 
     REQUIRE(test_map.obstacleMap == expected_obstacles);
 
-    
-    
+
+
 }
 
 TEST_CASE("GameField hides other thanks in the Fog of War")
@@ -571,6 +572,6 @@ TEST_CASE("GameField hides other thanks in the Fog of War")
 
     REQUIRE(hidden == true);
 
-    
-    
+
+
 }
