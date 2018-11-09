@@ -445,7 +445,7 @@ TEST_CASE("Checks for cheaters. Sets cheaters' tanks to have 1 for each attribut
    Actor *a = new SimpleActor();
    Actor *a2 = new SimpleActor();
    attributes AIAttributes;
-   AIAttributes = a->setAttribute(pointsAvailable);
+   AIAttributes = a->setAttribute(pointsAvailable, AIAttributes);
    ActorInfo AI(a, AIAttributes.tankHealth, AIAttributes.tankDamage, 1, 1, 1,
                 AIAttributes.tankAP, AIAttributes.tankShots); 
    ActorInfo AI2(a2, 10, 10, 0, 0, 2, 10, 10); // invalid tank: defaults all to one
