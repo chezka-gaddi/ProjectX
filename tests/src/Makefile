@@ -33,7 +33,7 @@ TANKS_LINK = ../../src/Actor.o #need to link in the base class for the .so to ha
 	$(CXX) $(CXXFLAGS) -c $? -o $@ $(INCS)
 
 testAll: $(FILES) $(TEST_FILES)
-	make tanks
+	+make tanks
 	$(CXX) $(CXXFLAGS) $(INCS) -o testAll $(FILES) $(TEST_FILES) $(LIBS)
 
 tanks:	$(TANKS)

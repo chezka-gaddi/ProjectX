@@ -151,8 +151,8 @@ TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are
 {
     SimpleActor * a1 = new SimpleActor(UP, STAY);
     SimpleActor * a2 = new SimpleActor(STAY, STAY);
-    ActorInfo newAI1(a1, 1, 1, 0, 2, 1, 2);
-    ActorInfo newAI2(a2, 1, 1, 0, 1, 2, 1);
+    ActorInfo newAI1(a1, 1, 2, 0, 2, 1, 1, 6);
+    ActorInfo newAI2(a2, 1, 2, 0, 1, 2, 1, 6);
     GameField g (1, 3);
     g.addActor(newAI1);
     g.addActor(newAI2);
@@ -202,13 +202,13 @@ TEST_CASE("Actors take 1 point of damage from the walls of the arena")
 
 TEST_CASE("Actors are culled and do not move after collision")
 {
-    SimpleActor * t1 = new SimpleActor(STAY, UP); //attacker tank
+    SimpleActor * t1 = new SimpleActor(UP, UP); //attacker tank
     SimpleActor * t2 = new SimpleActor(STAY, STAY); //target tanks
     SimpleActor * t3 = new SimpleActor(STAY, STAY);
 
-    ActorInfo t1i (t1, 1, 1, 0, 3, 1);
-    ActorInfo t2i (t2, 1, 1, 0, 1, 2);
-    ActorInfo t3i (t3, 1, 1, 0, 0, 3); //Initial map of {3, 2, 0 ,1}
+    ActorInfo t1i (t1, 1, 1, 0, 3, 1, 1, 6);
+    ActorInfo t2i (t2, 1, 1, 0, 1, 2, 1, 6);
+    ActorInfo t3i (t3, 1, 1, 0, 0, 3, 1, 6); //Initial map of {3, 2, 0 ,1}
 
     std::vector<ActorInfo> tvect(3);
     tvect[0] = t1i;
@@ -231,9 +231,9 @@ TEST_CASE("Collision is checked when firing point-blank")
     SimpleActor * t2 = new SimpleActor(STAY, STAY); //target tanks
     SimpleActor * t3 = new SimpleActor(STAY, STAY);
 
-    ActorInfo t1i (t1, 1, 1, 0, 2, 1);
-    ActorInfo t2i (t2, 1, 1, 0, 1, 2);
-    ActorInfo t3i (t3, 1, 1, 0, 0, 3); //Initial map of {3, 2, 1}
+    ActorInfo t1i (t1, 1, 1, 0, 2, 1, 1, 6);
+    ActorInfo t2i (t2, 1, 1, 0, 1, 2, 1, 6);
+    ActorInfo t3i (t3, 1, 1, 0, 0, 3, 1, 6); //Initial map of {3, 2, 1}
 
     std::vector<ActorInfo> tvect(3);
     tvect[0] = t1i;
@@ -526,7 +526,7 @@ TEST_CASE("Game Field properly gets attributes from actors")
 TEST_CASE("GameField Calculates Fog of War")
 {
     SimpleActor * actor_1 = new SimpleActor(STAY, STAY);
-    ActorInfo test(actor_1, 1,1, 3,3, 2, 1, 1, 2);
+    ActorInfo test(actor_1, 1, 1, 3, 3, 2, 1, 1, 0, 3);
 
     std::vector<ActorInfo> tank_list;
     tank_list.push_back(test);

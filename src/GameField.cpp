@@ -759,7 +759,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
 #endif
     for(int i = 0; i < actors.size() && actors[i].health != 0; ++i)
     {
-      act_ap = actors[i].range;
+      act_ap = actors[i].AP;
       while(act_ap > 0 && actors[i].id != 0)
       {
         fog_of_war = fieldMap;
@@ -794,7 +794,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
             {
               actors[i].heading = atk;
               ProjectileActor * proj = new ProjectileActor(atk);
-              newProjectile.range = actors[i].range;
+              newProjectile.AP = actors[i].range;
               newProjectile.id = -actors[i].id;
               newProjectile.act_p = proj;
               newProjectile.health = 1;
@@ -847,12 +847,13 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   {
     for(auto &a : actors)
     {
-      if(a.health + a.damage + a.range + a.shots > pointsAvailable)
+      if(a.health + a.damage + a.AP + a.shots + a.range > pointsAvailable)
       {
         a.health = 1;
         a.damage = 1;
         a.range = 1;
         a.shots = 1;
+        a.AP = 1;
       }
     }
   }
