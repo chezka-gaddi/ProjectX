@@ -441,27 +441,27 @@ TEST_CASE("Actor moves diagonal down/right and collides with wall")
 }
 TEST_CASE("Checks for cheaters. Sets cheaters' tanks to have 1 for each attributes")
 {
-    int pointsAvailable = 20;
-    Actor *a = new SimpleActor();
-    Actor *a2 = new SimpleActor();
-    attributes AIAttributes;
-    AIAttributes = a->setAttribute(pointsAvailable);
-    ActorInfo AI(a, AIAttributes.tankHealth, AIAttributes.tankDamage, 1, 1, 1,
-                 AIAttributes.tankAP, AIAttributes.tankShots);
-    ActorInfo AI2(a2, 10, 10, 0, 0, 2, 10, 10); // invalid tank: defaults all to one
-    AI.tankAttributes = AIAttributes;
-    GameField g (2, 2);
-    g.addActor(AI);
-    g.addActor(AI2);
-    g.checkForCheaters(pointsAvailable);
-    REQUIRE(g.getActors().at(0).health >= 4);
-    REQUIRE(g.getActors().at(0).damage >= 4);
-    REQUIRE(g.getActors().at(0).range >= 4);
-    REQUIRE(g.getActors().at(0).shots >= 4);
-    REQUIRE(g.getActors().at(1).health == 1);
-    REQUIRE(g.getActors().at(1).damage == 1);
-    REQUIRE(g.getActors().at(1).range == 1);
-    REQUIRE(g.getActors().at(1).shots == 1);
+   int pointsAvailable = 20;
+   Actor *a = new SimpleActor();
+   Actor *a2 = new SimpleActor();
+   attributes AIAttributes;
+   AIAttributes = a->setAttribute(pointsAvailable, AIAttributes);
+   ActorInfo AI(a, AIAttributes.tankHealth, AIAttributes.tankDamage, 1, 1, 1,
+                AIAttributes.tankAP, AIAttributes.tankShots); 
+   ActorInfo AI2(a2, 10, 10, 0, 0, 2, 10, 10); // invalid tank: defaults all to one
+   AI.tankAttributes = AIAttributes;
+   GameField g (2, 2);
+   g.addActor(AI);
+   g.addActor(AI2);
+   g.checkForCheaters(pointsAvailable);
+   REQUIRE(g.getActors().at(0).health >= 4);
+   REQUIRE(g.getActors().at(0).damage >= 4);
+   REQUIRE(g.getActors().at(0).range >= 4);
+   REQUIRE(g.getActors().at(0).shots >= 4);
+   REQUIRE(g.getActors().at(1).health == 1);
+   REQUIRE(g.getActors().at(1).damage == 1);
+   REQUIRE(g.getActors().at(1).range == 1); 
+   REQUIRE(g.getActors().at(1).shots == 1);
 }
 TEST_CASE("GameField updates heading of ActorInfo")
 {

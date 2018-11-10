@@ -18,9 +18,9 @@ direction CamperAI::move(MapData map, PositionData status)
 
     direction retval = DOWN;
     if((y_pos == 0 && x_pos == 0) ||
-            (y_pos == map.height - 1 && x_pos == 0) ||
-            (x_pos == map.width - 1 && y_pos == 0) ||
-            (x_pos == map.width - 1 && y_pos == map.height - 1))
+       (y_pos == map.height - 1 && x_pos == 0) ||
+       (x_pos == map.width - 1 && y_pos == 0) ||
+       (x_pos == map.width - 1 && y_pos == map.height - 1))
         retval = STAY;
     else if(y_pos <= median)
         retval = UP;
@@ -108,7 +108,7 @@ direction CamperAI::attack(MapData map, PositionData status)
     return retval;
 }
 
-attributes CamperAI::setAttribute(int pointsAvailable)
+attributes CamperAI::setAttribute(int pointsAvailable, attributes baseStats)
 {
     attributes retval;
 

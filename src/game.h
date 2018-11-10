@@ -60,9 +60,10 @@ public:
     
     vector <Drawable *> objects;       /*!<Holds all of the current actors */
     vector <Drawable *> constants;     /*!<Holds the GameFieldDrawable and menus */
-    vector <Drawable *> bushes;        /*!<Holds the bushes drawables */
-    vector <Drawable *> rocks;         /*!<Holds the rocks drawables */
-    vector <Drawable *> trees;         /*!<Holds the trees drawables */
+    vector <Obstacles *> bushes;        /*!<Holds the bushes drawables */
+    vector <Obstacles *> rocks;         /*!<Holds the rocks drawables */
+    vector <Obstacles *> trees;         /*!<Holds the trees drawables */
+    vector <Drawable *> waters;		   /*!<Holds the waters drawables */
     vector <Drawable *> specials;       /*!<Holds other special drawables */
     vector <Drawable *> sfx;           /*!<Holds the sfx drawables */
 
@@ -70,6 +71,7 @@ private:
     int fieldx;
     int fieldy;
     int idle_speed;
+    int max_turns = 200;
 };
 
 #endif //__GAME_H

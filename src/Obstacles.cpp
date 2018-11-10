@@ -5,7 +5,7 @@
 * *****************************************************************************/
 
 #include "Drawable.h"
-
+#include <iostream>
 /***************************************************************************//**
 * @author Chezka Gaddi
 * @brief Constructor
@@ -18,7 +18,7 @@
 Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
 {
     //id's:
-    // 0 = Tree   1 = Rocks   2 = Bushes  3 = Other
+    // 0 = Tree   1 = Rocks   2 = Bushes  3 = Water   4 = Other
     //Textures:
     //0-9   Trees  - Packaged Trees  0-3   - 4 Trees
     //10-19 Rocks  - Packaged Rocks  10-12 - 3 Rocks
@@ -27,23 +27,21 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
     screen_y = y_coor;
     gridx = gx;
     gridy = gy;
-    if (id == 0)  //It's a tree
-    {
-        health = 2;
-        tex = ((rand() % 4));
-    }
-    else if( id == 1)   //It's a Rocks
-    {
-        health = 4;
-        tex = ((rand() % 3) + 10);
-    }
-    else if( id == 2)   //It's a Bushes
-    {
-        tex = ((rand() % 4) + 20);
-    }
-    else
-    {
-        tex = 1; //default to tree if we got a bad id
+    if (id == 0){ //It's a tree
+      health = 2;
+      tex = ((rand() % 4));
+      regrow_rate = 8;
+    }else if( id == 1){ //It's a Rocks
+      health = 4;
+      tex = ((rand() % 3) + 10);
+      regrow_rate = 10;
+    }else if( id == 2){ //It's a Bushes
+      tex = ((rand() % 4) + 20);
+      regrow_rate = 4;
+    }else if( id == 3){ //It's a Waters
+      tex = 0 + 30;
+    }else {
+      tex = 1; //default to tree if we got a bad id
     }
 }
 
@@ -64,17 +62,14 @@ void Obstacles::draw(int, int)
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
     glTranslatef(screen_x, screen_y, -5.0f);
-    if (tex >= 0 && tex <= 9)  //It's a tree
-    {
-        glBindTexture(GL_TEXTURE_2D, treeTex[tex]);
-    }
-    else if( tex >= 10 && tex <= 19)   //It's a Rocks
-    {
-        glBindTexture(GL_TEXTURE_2D, rockTex[tex-10]);
-    }
-    else if( tex >= 20 && tex <= 29)   //It's a Bushes
-    {
-        glBindTexture(GL_TEXTURE_2D, bushTex[tex-20]);
+    if (tex >= 0 && tex <= 9){ //It's a tree
+      glBindTexture(GL_TEXTURE_2D, treeTex[tex]);
+    }else if( tex >= 10 && tex <= 19){ //It's a Rocks
+      glBindTexture(GL_TEXTURE_2D, rockTex[tex-10]);
+    }else if( tex >= 20 && tex <= 29){ //It's a Bushes
+      glBindTexture(GL_TEXTURE_2D, bushTex[tex-20]);
+    }else if( tex >= 30 && tex <= 39){ //It's a Waters
+      glBindTexture(GL_TEXTURE_2D, waterTex[tex - 30]);
     }
 
     glBegin(GL_QUADS);
@@ -90,4 +85,22 @@ void Obstacles::draw(int, int)
 
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
+}
+
+void Obstacles::regrow(int turn){
+  if (destroyed == 0)
+    return;
+
+  //printf("Checking plant on turn %d with %d health destroyed on turn %d\n",turn, health, destroyed);
+
+  if (destroyed+regrow_rate < turn){
+    if (id == 0){ //Its a tree
+      health = 2;
+    }else if( id == 1){ //Its a Rocks
+      health = 4;
+    }else if( id == 2){ //Its a Bushes
+      health = 1;
+    }
+  }
+  destroyed = 0;
 }
