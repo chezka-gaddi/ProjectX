@@ -61,7 +61,7 @@ clean-lib: clean
 	rm -rf libraries/libCTF.so
 
 clean-all: clean-lib
-	rm -rf $(TANK_PATH)*
+	@rm -rf $(TANK_PATH)*
 
 dev: clean-lib
 	make gen-library -j8
@@ -91,8 +91,8 @@ gen-library: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	cp $(TANKS:.so=.h) buildsrc/
 	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
 	# Change tanks src to point to new directory
-	# sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
-	# sed -i 's#include "#include "src/#g' buildsrc/PongAI.h
+	sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
+	sed -i 's#include "#include "src/#g' buildsrc/PongAI.h
 
 push-to-git: clean-lib
 	mkdir -p buildsrc
@@ -100,6 +100,6 @@ push-to-git: clean-lib
 	make gen-library -j8
 	git --git-dir=buildsrc/.git --work-tree=buildsrc checkout -b pre-release
 	git --git-dir=buildsrc/.git --work-tree=buildsrc add .
-	git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 4.00"
-	git --git-dir=buildsrc/.git --work-tree=buildsrc status
-	git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release
+	#git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 4.00"
+	#git --git-dir=buildsrc/.git --work-tree=buildsrc status
+	#git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release

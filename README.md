@@ -22,7 +22,9 @@ Want instant communication with the Dev team? Join our
 ## Fixed
 - Damage 
   - Fixed some inconsistencies between tank and projectile damages.
-
+- SimpleAI
+  - SimpleAI will now move even when it can't see the whole map.
+  - Fixed incorrect header prototype.
 
 ## Release 3.10
 ## What's new?
