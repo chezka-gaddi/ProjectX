@@ -132,6 +132,7 @@ TEST_CASE("SimpleActor moves when nextTurn() is called")
     GameField g (2, 2);
     g.addActor(newAI);
     a->setMove(UP);
+    a->setAttack(STAY);
     std::vector<int> ref = {0, 1, 0, 0};
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
@@ -148,13 +149,17 @@ TEST_CASE("Actors are prevented from moving off the map")
 }
 TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are culled")
 {
-    SimpleActor * a1 = new SimpleActor(STAY, UP);
-    SimpleActor * a2 = new SimpleActor(UP, STAY);
+    SimpleActor * a1 = new SimpleActor(UP, STAY);
+    SimpleActor * a2 = new SimpleActor(STAY, STAY);
     ActorInfo newAI1(a1, 1, 1, 0, 2, 1, 2);
-    ActorInfo newAI2(a2, 1, 1, 0, 0, 2, 2);
+    ActorInfo newAI2(a2, 1, 1, 0, 1, 2, 1);
     GameField g (1, 3);
     g.addActor(newAI1);
     g.addActor(newAI2);
+    a1->setAttack(UP);
+    a1->setMove(STAY);
+    a2->setAttack(STAY);
+    a2->setMove(STAY);
     std::vector<int> ref = {0, 0, 1};
     g.nextTurn();
     REQUIRE(g.getMap() == ref);
@@ -162,7 +167,7 @@ TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are
 TEST_CASE("Actors move until their range is depleted")
 {
     SimpleActor * a = new SimpleActor(STAY, DOWN);
-    ActorInfo newAI(a, 10, 1, 0, 0, 1, 3, 6);
+    ActorInfo newAI(a, 10, 1, 0, 1, 1, 3, 6);
     GameField g (1,4);
     g.addActor(newAI);
     std::vector<int> ref = {0, 0, 0, 1};
@@ -192,7 +197,7 @@ TEST_CASE("Actors take 1 point of damage from the walls of the arena")
     a->setMove(UP);
     a->setAttack(STAY);
     g.nextTurn();
-    REQUIRE(g.getActors().back().health == 1); //check for damage from the wall
+    REQUIRE(g.getActors().back().health == 5); //check for damage from the wall
 }
 
 TEST_CASE("Actors are culled and do not move after collision")
@@ -259,15 +264,17 @@ TEST_CASE("SimpleActor shot counter incremented on attacking")
 }
 TEST_CASE("SimpleActor hit counter incremented on hiting an enemy")
 {
-    SimpleActor * a1 = new SimpleActor(STAY, UP);
-    SimpleActor * a2 = new SimpleActor(STAY, STAY);
+    SimpleActor * a1 = new SimpleActor(UP, STAY);
+    SimpleActor * a2 = new SimpleActor(DOWN, STAY);
 
-    ActorInfo AI1(a1, 10, 1, 0, 1, 1, 1);
-    ActorInfo AI2(a2, 10, 1, 0, 0, 2, 1);
+    ActorInfo AI1(a1, 10, 1, 0, 1, 1, 1, 6);
+    ActorInfo AI2(a2, 10, 1, 0, 0, 2, 1, 6);
 
     GameField g (1, 2);
     g.addActor(AI1);
     g.addActor(AI2);
+    a1->setAttack(UP);
+    a2->setAttack(DOWN);
     g.nextTurn();
 
     REQUIRE(g.actorInfoById(1).hits == 1);
@@ -331,6 +338,7 @@ TEST_CASE("Actors take 1 point of damage from hitting obstacles")
     g.addActor(newAI);
     g.addObstacle(0, 1);
     a->setMove(UP);
+    a->setAttack(STAY);
     g.nextTurn();
     REQUIRE(g.actorInfoById(1).health== 1); //check for damage from the obstacle
 }
@@ -348,15 +356,17 @@ TEST_CASE("Actors do not take damage when shooting an obstacle point-blank")
 TEST_CASE("Actors take 1 point of damage from the wall trying to move up/left")
 {
     SimpleActor *a = new SimpleActor(UPLEFT, STAY);
-    ActorInfo newAI(a, 3, 1, 1, 0, 1, 2); // set up to hit upper wall
+    ActorInfo newAI(a, 2, 1, 1, 0, 1, 2); // set up to hit upper wall
     GameField g (2, 2);
     g.addActor(newAI);
+    a->setMove(UPLEFT);
     g.nextTurn();
     REQUIRE(g.getActors().back().health == 1);
     SimpleActor *a2 = new SimpleActor(UPLEFT, STAY);
-    ActorInfo newAI2(a2, 3, 1, 0, 1, 1, 2); // setup to hit left wall
+    ActorInfo newAI2(a2, 2, 1, 0, 1, 1, 2); // setup to hit left wall
     GameField g2 (2, 2);
     g.addActor(newAI2);
+    a2->setMove(UPLEFT);
     g.nextTurn();
     REQUIRE(g.getActors().back().health == 1);
 }
@@ -466,7 +476,7 @@ TEST_CASE("Checks for cheaters. Sets cheaters' tanks to have 1 for each attribut
    REQUIRE(g.getActors().at(0).health >= 4);
    REQUIRE(g.getActors().at(0).damage >= 4);
    REQUIRE(g.getActors().at(0).range >= 4);
-   REQUIRE(g.getActors().at(0).shots >= 4);
+   REQUIRE(g.getActors().at(0).shots == 0);
    REQUIRE(g.getActors().at(1).health == 1);
    REQUIRE(g.getActors().at(1).damage == 1);
    REQUIRE(g.getActors().at(1).range == 1); 
@@ -548,7 +558,7 @@ TEST_CASE("GameField Calculates Fog of War")
     MapData test_map = manager.getMapData();
 
     manager.create_fog_of_war(test_map, test);
-    std::fill(expected_obstacles.begin(), expected_obstacles.end(), false);
+//std::fill(expected_obstacles.begin(), expected_obstacles.end(), false);
 
     REQUIRE(test_map.obstacleMap == expected_obstacles);
 
@@ -561,7 +571,7 @@ TEST_CASE("GameField hides other thanks in the Fog of War")
     SimpleActor * actor_1 = new SimpleActor(STAY, STAY);
     SimpleActor * actor_2 = new SimpleActor(STAY, STAY);
     ActorInfo test(actor_1, 1,1, 3,3, 2, 1, 1, 2);
-    ActorInfo test_hidden(actor_2, 1,1,0 ,0, 21, 1, 1, 2);
+    ActorInfo test_hidden(actor_2, 1,1,0 ,0, 2,1, 1, 1, 2);
 
     bool hidden = true;
 
