@@ -504,7 +504,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   else if(tempOb == 'R')
   {
     //printf("Rock strike, log it.\n");
-    for(auto& r : gameptr->rocks)
+    for(auto* r : gameptr->rocks)
     {
       if(r->gridx == a.x && r->gridy == a.y && r->health > 0)
       {
@@ -521,7 +521,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   }
     else if(tempOb == 'T')
     {
-      for(auto& t : gameptr->trees)
+      for(auto* t : gameptr->trees)
       {
         if(t->gridx == a.x && t->gridy == a.y && t->health > 0)
         {
@@ -530,7 +530,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
           if(t->health <= 0)
           {
             t->health = 0;
-            t->destroyed = 0;
+            t->destroyed = turnCount;
           }
           return true;
         }
@@ -539,7 +539,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
     else if(tempOb == 'C')
     {
       //printf("Hit the crate.\n");
-      for(auto &c : gameptr->specials)
+      for(auto* &c : gameptr->specials)
       {
         if(c->gridx == a.x && c->gridy == a.y && c->health > 0)
         {
@@ -581,6 +581,8 @@ bool GameField::checkObjectStrike(ActorInfo &a)
               if(t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
               {
                 t->health--;
+                if (t->health <= 0)
+                  t->destroyed = turnCount;
               }
             }
             break;
@@ -600,6 +602,8 @@ bool GameField::checkObjectStrike(ActorInfo &a)
               if(r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
               {
                 r->health--;
+                if (r->health <= 0)
+                  r->destroyed = turnCount;
               }
             }
             break;
@@ -731,21 +735,21 @@ bool GameField::checkObjectStrike(ActorInfo &a)
     MapData fog_of_war = fieldMap;
     //printf("Turn number: %d\n",turnCount);
 #ifndef TESTING
-    for(Obstacles* t : gameptr->trees)
+    for(Obstacles* &t : gameptr->trees)
     {
       if(t->health <= 0)
       {
         t->regrow(turnCount);
       }
     }
-    for(Obstacles* r : gameptr->rocks)
+    for(Obstacles* &r : gameptr->rocks)
     {
       if(r->health <= 0)
       {
         r->regrow(turnCount);
       }
     }
-    for(Obstacles* b : gameptr->bushes)
+    for(Obstacles* &b : gameptr->bushes)
     {
       if(b->health <= 0)
       {

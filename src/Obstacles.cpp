@@ -30,11 +30,11 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
     if (id == 0){ //It's a tree
       health = 2;
       tex = ((rand() % 4));
-      regrow_rate = 8;
+      regrow_rate = 2;
     }else if( id == 1){ //It's a Rocks
       health = 4;
       tex = ((rand() % 3) + 10);
-      regrow_rate = 10;
+      regrow_rate = 4;
     }else if( id == 2){ //It's a Bushes
       tex = ((rand() % 4) + 20);
       regrow_rate = 4;
