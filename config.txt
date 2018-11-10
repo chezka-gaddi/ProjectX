@@ -2,7 +2,7 @@ WIDTH 30
 HEIGHT 14
 MAP
 xxxxxxxxRRRRRRxxxxxxxxRRRRRRxx
-xxxxxxxTxxRRxxTxxxxxxTxxRRxxTx
+xxxxxxxTWWRRWWTxxxxxxTWWRRWWTx
 xxxxxxTTTBTTTBTTxxxxTTTBTTTBTT
 xxxxxCxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxB
@@ -11,8 +11,8 @@ xxTTBTTxTTBTTxTTBTTxTTBTTxxTTB
 xxRxRxRxRxRxRxRxRxRxRxRxRxxRxR
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxRxxxxxRxxxxxRxxxxxRxxxxxxxx
-xxTTTxxxTTTxxxTTTxxxTTTxxxxxxx
+xxxRxxxxxRxxxxxRxxxxWRxxxxxxxx
+xxTTTxxxTTTxxxTTTWWWTTTxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 #AI LIST: AI <NAME> <STARTX> <STARTY>

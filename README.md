@@ -1,6 +1,29 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Release 4.00
+## What's new?
+- Updated Scoreboard
+  - The scoreboard now lists more interesting facts about the tanks and has support for a draw.
+- Reloading
+  - Tanks now have a limited number of ammunition.  After they reach the limit they will have to reload.
+  - A tank can reload by sending back action number 4 or the tank will automatically reload if it has no ammo and it attempts to fire.
+- Water
+  - New title type added that cannot be passed by tanks.  Projectiles on the other hand of no problem flying above the water.
+- Health Map
+  - When a tank is sent a map object there is now an additional map called the health map.  It will list the health of all the objects the tank can see.
+- Attributes
+  - Tanks now recieve a copy of there base stats when asked for their choice of special point spending.
+- MaxTurns
+  - The number of max turns can now be set in the config file.
+- New formula for calculating field size display.
+- Behind the scene caps for special points when dealing with a large special amount 
+
+## Fixed
+- Damage 
+  - Fixed some inconsistencies between tank and projectile damages.
+
+
 ## Release 3.10
 ## What's new?
 - Scoreboard
