@@ -411,6 +411,7 @@ void Game::initGameState()
   int health = 3;
   int range = 1;
   int radar = 4;
+  int ap = 1;
   int ammo = 6;
   int maxT = 20;
 
@@ -787,16 +788,16 @@ void Game::initGameState()
         }
         else if(id == "AP")
         {
-          stringstream(args) >> range;
-          if(range < 2)
+          stringstream(args) >> ap;
+          if(ap < 2)
           {
-            range = 2;
+            ap = 2;
             cout << "Invalid number of action points value, defaulting to 2\n";
           }
-          else if(range > 5)
+          else if(ap > 5)
           {
-            printf("%d range might be a little excesive, setting to 5\n", range);
-            range = 5;
+            printf("%d range might be a little excesive, setting to 5\n", ap);
+            ap = 5;
           }
         }
         else if(id == "RADAR")
@@ -811,6 +812,20 @@ void Game::initGameState()
           {
             printf("%d radar might be a little excesive, setting to %d\n", radar,width - 1);
             radar = width - 1;
+          }
+        }
+        else if(id == "RANGE")
+        {
+          stringstream(args) >> range;
+          if(range < 1)
+          {
+            range = 1;
+            cout << "Invalid range value, defaulting to 1\n";
+          }
+          else if(range > 10)
+          {
+            printf("%d range might be a little excesive, setting to %d\n", range, 10);
+            range = 10;
           }
         }
         else if(id == "SPECIAL")
@@ -874,6 +889,7 @@ void Game::initGameState()
                                       , tankLocations[i].first
                                       , tankLocations[i].second
                                       , i + 1
+                                      , ap
                                       , range
                                       , 0
                                       , radar

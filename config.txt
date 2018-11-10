@@ -50,5 +50,6 @@ WATER_IMAGE images/Water/waterTex.png images/Water/waterTexNS.png images/Water/w
 DAMAGE 1
 HEALTH 3
 RADAR 4 
-AP 4
+AP 1
 SPECIAL 1
+RANGE 1

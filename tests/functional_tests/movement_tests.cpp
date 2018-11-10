@@ -40,7 +40,7 @@ SCENARIO("The tank moves around the gamefield")
         REQUIRE(tank != nullptr);
 
         // Load Tanks
-        ActorInfo   tank_s(tank, 100, 0, 1, 1, 2, 5);
+        ActorInfo   tank_s(tank, 100, 0, 1, 1, 2, 6);
 
         // Add a tank into a vector of actors
         std::vector<ActorInfo> actor_list = {tank_s};

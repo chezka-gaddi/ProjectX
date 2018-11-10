@@ -215,7 +215,7 @@ void GameField::setSPECIAL(int points)
     if(sum  <= points)
     {
       actor.health += actor.tankAttributes.tankHealth;
-      actor.range += actor.tankAttributes.tankAP;
+      actor.AP += actor.tankAttributes.tankAP;
       actor.radar += actor.tankAttributes.tankRadar;
       actor.damage += actor.tankAttributes.tankDamage;
       actor.ammo += actor.tankAttributes.tankAmmo;
@@ -224,9 +224,9 @@ void GameField::setSPECIAL(int points)
         actor.health = 8;
         printf("Health stat was too high, setting at 8.\n");
       }
-      if(actor.range > 8)
+      if(actor.AP > 8)
       {
-        actor.range = 8;
+        actor.AP = 8;
         printf("AP stat was too high, setting at 8.\n");
       }
       if(actor.radar > 16)
@@ -431,7 +431,7 @@ void GameField::runMoves(ActorInfo &a)
             actors[i].health = 0;
             actors[i].damage = 0;
             actors[i].id = 0;
-            actors[i].range = 0;
+            actors[i].AP = 0;
             a.kills++;
           }
         }
@@ -456,7 +456,7 @@ void GameField::runMoves(ActorInfo &a)
             actors[i].health = 0;
             actors[i].damage = 0;
             actors[i].id = 0;
-            actors[i].range = 0;
+            actors[i].AP = 0;
             actorInfoById(-a.id).kills++;  //give our owner a hit
           }
         }
@@ -794,7 +794,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
             {
               actors[i].heading = atk;
               ProjectileActor * proj = new ProjectileActor(atk);
-              newProjectile.range = 6;
+              newProjectile.range = actors[i].range;
               newProjectile.id = -actors[i].id;
               newProjectile.act_p = proj;
               newProjectile.health = 1;
