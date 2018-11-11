@@ -409,7 +409,7 @@ void Game::initGameState()
   int height = 9;
   int damage = 1;
   int health = 3;
-  int range = 1;
+  int range = 4;
   int radar = 4;
   int ap = 1;
   int ammo = 6;
