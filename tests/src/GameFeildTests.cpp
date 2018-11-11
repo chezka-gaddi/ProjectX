@@ -499,6 +499,7 @@ TEST_CASE("GameField updates heading of ActorInfo")
 TEST_CASE("Game Field properly gets attributes from actors")
 {
     SimpleActor * actor_1 = new SimpleActor(UPRIGHT, STAY);
+    attributes baseStats;
 
     ActorInfo test(actor_1, 1, 1, 0, 1, 1, 2);
     std::vector<ActorInfo> output;
@@ -508,7 +509,7 @@ TEST_CASE("Game Field properly gets attributes from actors")
 
     GameField manager(2, 2, vect);
 
-    manager.setSPECIAL(4);
+    manager.setSPECIAL(4, baseStats);
 
     output = manager.getActors();
 
