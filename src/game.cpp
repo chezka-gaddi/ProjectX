@@ -414,6 +414,7 @@ void Game::initGameState()
   int ap = 1;
   int ammo = 6;
   int maxT = 20;
+  attributes baseStats;
 
   std::vector<std::pair<int,int>> obstacleLocations;
   std::vector<std::pair<int,int>> treeLocations;
@@ -910,7 +911,14 @@ void Game::initGameState()
 
     cout << "Initializing Game...\n";
     tankGame = new GameField(width, height, startActors, displayWrapper, this);
-    tankGame->setSPECIAL(attributePoints);
+    baseStats.tankHealth = health;
+    baseStats.tankDamage = damage;
+    baseStats.tankAP = ap;
+    baseStats.tankAmmo = ammo;
+    baseStats.tankRadar = radar;
+    baseStats.tankRange = range;
+    
+    tankGame->setSPECIAL(attributePoints, baseStats);
     cout << "...Done\n" << endl;
 
 // Add obstacles to the gamefield

@@ -192,26 +192,20 @@ void GameField::updateMap()
  * Prompts the actors to choose attributes to specialize int
  * @author Riley Kopp
  ******************************************************************************/
-void GameField::setSPECIAL(int points)
+void GameField::setSPECIAL(int points, const attributes baseStats)
 {
   int sum =0;
-  attributes baseStats;
 
   for(auto &actor: actors)
   {
-    baseStats.tankHealth = actor.tankAttributes.tankHealth;
-    baseStats.tankAP = actor.tankAttributes.tankAP;
-    baseStats.tankRadar = actor.tankAttributes.tankRadar;
-    baseStats.tankDamage = actor.tankAttributes.tankDamage;
-    baseStats.tankAmmo = actor.tankAttributes.tankAmmo;
-
     actor.tankAttributes = actor.act_p->setAttribute(points, baseStats);
 
     sum = actor.tankAttributes.tankHealth
           + actor.tankAttributes.tankAP
           + actor.tankAttributes.tankRadar
           + actor.tankAttributes.tankDamage
-          + actor.tankAttributes.tankAmmo;
+          + actor.tankAttributes.tankAmmo
+          + actor.tankAttributes.tankRange;
     if(sum  <= points)
     {
       actor.health += actor.tankAttributes.tankHealth;
