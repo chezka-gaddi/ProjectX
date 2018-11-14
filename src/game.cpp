@@ -409,10 +409,12 @@ void Game::initGameState()
   int height = 9;
   int damage = 1;
   int health = 3;
-  int range = 1;
+  int range = 4;
   int radar = 4;
+  int ap = 1;
   int ammo = 6;
   int maxT = 20;
+  attributes baseStats;
 
   std::vector<std::pair<int,int>> obstacleLocations;
   std::vector<std::pair<int,int>> treeLocations;
@@ -440,7 +442,7 @@ void Game::initGameState()
   }
   if(!fout)
   {
-    cout << "UNABLE OPEN RESULTS FILE (results.txt)\n";
+    cout << "UNABLE OPEN RESULTS FILE (results.txt).  Game will play but results will not be saved.\n";
   }
   while(!fin.eof())
   {
@@ -463,35 +465,42 @@ void Game::initGameState()
 
           for(int x = 0; x < width; x++)
           {
-            switch(configLine[x])
+            if (x >= configLine.size())
             {
-              case 'B':
-              case 'b':
-                bushLocations.push_back(std::pair<int,int> (x, y));
-                break;
-              case 'R':
-              case 'r':
-                rockLocations.push_back(std::pair<int,int> (x, y));
-                break;
-              case 'T':
-              case 't':
-                treeLocations.push_back(std::pair<int,int> (x, y));
-                break;
-              case 'W':
-              case 'w':
-                waterLocations.push_back(std::pair<int,int> (x, y));
-                break;
-              case 'C':
-              case 'c':
-                specialLocations.push_back(std::pair<int,int> (x, y));
-                break;
-              case 'X':
-              case 'x':
-              case ' ':
-                break;
-              default:
-                obstacleLocations.push_back(std::pair<int, int> (x, y));
-                break;
+                obstacleLocations.push_back(std::pair<int,int> (x,y));
+            }
+            else
+            {
+              switch(configLine[x])
+              {
+                case 'B':
+                case 'b':
+                  bushLocations.push_back(std::pair<int,int> (x, y));
+                  break;
+                case 'R':
+                case 'r':
+                  rockLocations.push_back(std::pair<int,int> (x, y));
+                  break;
+                case 'T':
+                case 't':
+                  treeLocations.push_back(std::pair<int,int> (x, y));
+                  break;
+                case 'W':
+                case 'w':
+                  waterLocations.push_back(std::pair<int,int> (x, y));
+                  break;
+                case 'C':
+                case 'c':
+                  specialLocations.push_back(std::pair<int,int> (x, y));
+                  break;
+                case 'X':
+                case 'x':
+                case ' ':
+                  break;
+                default:
+                  obstacleLocations.push_back(std::pair<int, int> (x, y));
+                  break;
+              }
             }
           }
         }
@@ -787,16 +796,16 @@ void Game::initGameState()
         }
         else if(id == "AP")
         {
-          stringstream(args) >> range;
-          if(range < 2)
+          stringstream(args) >> ap;
+          if(ap < 2)
           {
-            range = 2;
+            ap = 2;
             cout << "Invalid number of action points value, defaulting to 2\n";
           }
-          else if(range > 5)
+          else if(ap > 5)
           {
-            printf("%d range might be a little excesive, setting to 5\n", range);
-            range = 5;
+            printf("%d range might be a little excesive, setting to 5\n", ap);
+            ap = 5;
           }
         }
         else if(id == "RADAR")
@@ -807,10 +816,24 @@ void Game::initGameState()
             radar = 2;
             cout << "Invalid radar value, defaulting to 2\n";
           }
-          else if(radar > width - 1)
+          else if(radar > width)
           {
-            printf("%d radar might be a little excesive, setting to %d\n", radar,width - 1);
-            radar = width - 1;
+            printf("%d radar might be a little excesive, setting to %d\n", radar, width);
+            radar = width;
+          }
+        }
+        else if(id == "RANGE")
+        {
+          stringstream(args) >> range;
+          if(range < 1)
+          {
+            range = 1;
+            cout << "Invalid range value, defaulting to 1\n";
+          }
+          else if(range > 10)
+          {
+            printf("%d range might be a little excesive, setting to %d\n", range, 10);
+            range = 10;
           }
         }
         else if(id == "SPECIAL")
@@ -874,6 +897,7 @@ void Game::initGameState()
                                       , tankLocations[i].first
                                       , tankLocations[i].second
                                       , i + 1
+                                      , ap
                                       , range
                                       , 0
                                       , radar
@@ -894,7 +918,14 @@ void Game::initGameState()
 
     cout << "Initializing Game...\n";
     tankGame = new GameField(width, height, startActors, displayWrapper, this);
-    tankGame->setSPECIAL(attributePoints);
+    baseStats.tankHealth = health;
+    baseStats.tankDamage = damage;
+    baseStats.tankAP = ap;
+    baseStats.tankAmmo = ammo;
+    baseStats.tankRadar = radar;
+    baseStats.tankRange = range;
+    
+    tankGame->setSPECIAL(attributePoints, baseStats);
     cout << "...Done\n" << endl;
 
 // Add obstacles to the gamefield
@@ -902,7 +933,7 @@ void Game::initGameState()
     for(auto o : obstacleLocations)
     {
       tankGame->addObstacle(o.first, o.second);
-      tempOb = new Obstacles((rand() % 3), convertGLXCoordinate(o.first), convertGLYCoordinate(o.second), o.first, o.second);
+      tempOb = new Obstacles(50, convertGLXCoordinate(o.first), convertGLYCoordinate(o.second), o.first, o.second);
       constants.push_back(tempOb);
     }
     cout << "  ...hiding the ammo\n";

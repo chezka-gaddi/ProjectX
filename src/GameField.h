@@ -52,7 +52,7 @@ protected:
     Game *gameptr = nullptr;
 
 public:
-    void setSPECIAL(int points);
+    void setSPECIAL(int points, const attributes baseStats);
     /**
      * Each turn will be as follows:
      * a tank will have the option to move and then a tank will fire, once all of the tanks have fired
