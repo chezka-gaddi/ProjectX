@@ -321,7 +321,7 @@ void Game::executeTurn()
 {
   //printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
   if(tankGame->getTurnCount() == max_turns){
-    printf("Finding Early Winner.\n");
+    //printf("Finding Early Winner.\n");
     std::vector<ActorInfo> *actors = tankGame->getActorsPointer();
     int actorId=0;
     int currMaxHealth=0;
@@ -340,16 +340,16 @@ void Game::executeTurn()
         currMaxHealth=a.health;
         //printf("Found a max: %d \n", actorId);
       }else if (a.health == currMaxHealth){
-        printf("Found a duplicate.\n");
+        //printf("Found a duplicate.\n");
         tie = true;
       }
     }
     //printf("Found a duplicate tie value: %d \n", tie);
     if (tie == true){ //If it is a tie clear out all tanks to get to draw screen
       for (auto &a : *actors){
-          printf("Health: %d \n", a.health);
+          //printf("Health: %d \n", a.health);
           a.health = 0;
-          printf("Health: %d \n", a.health);
+          //printf("Health: %d \n", a.health);
       }
     }else if (tie == false){
       for (auto &a : *actors){
@@ -433,7 +433,7 @@ void Game::initGameState()
   std::string name;
   int attributePoints = 0;
   srand(time(0));
-  ofstream fout("results.txt", ios::out | ios::in);
+  ofstream fout("results.txt", ios::out | ios::in | ios::app);
 
   if(!fin)
   {
@@ -884,10 +884,6 @@ void Game::initGameState()
 
 
     fout << "Players: ";
-    for(int i = 0; i < AINames.size(); i++)
-      fout << AINames[i] << " ";
-    fout << "Winner: ";
-    fout.close();
     cout << "Creating Player Tanks...\n";
     for(int i = 0; i < startActorPointers.size(); ++i)
     {
@@ -904,8 +900,11 @@ void Game::initGameState()
 																			, ammo
                                       , AINames[i]));
       printf("Actor %d name: %s\n", i, AINames[i].c_str());
+      fout << AINames[i] << " ";
     }
+    fout << "Winner: ";
     cout << "  ...Done" << endl;
+    fout.close();
 // Create a stats menu for up to 4 tanks
     for(auto actTemp : startActors)
     {

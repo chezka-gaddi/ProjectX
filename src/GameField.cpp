@@ -415,9 +415,14 @@ void GameField::runMoves(ActorInfo &a)
           //Reverse the move
           a.x -= xoff;
           a.y -= yoff;
-          tHealth - actors[i].health;
+          tHealth = actors[i].health;
           actors[i].health -= a.health; //deal full health damage to target
-          hit += tHealth - 1;
+          if (a.health == 1)
+            hit += tHealth;
+          else if (tHealth > a.health)
+            hit += a.health - 1;
+          else
+            hit += tHealth;
           a.hits++; //A tank hit is still a hit right?
           if(actors[i].health <= 0)
           {

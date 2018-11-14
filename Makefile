@@ -36,6 +36,7 @@ TANK_PATH= ./tanks/
 TANKS = $(SRC_PATH)SimpleAI.cpp
 TANKS += $(SRC_PATH)PongAI.cpp
 TANKS += $(SRC_PATH)CamperAI.cpp
+TANKS += $(SRC_PATH)StationaryAI.cpp
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
