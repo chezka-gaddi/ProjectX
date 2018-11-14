@@ -1,6 +1,12 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Release 4.02
+## Fixed
+- Modified max radar range to be equal to map width.
+- Changed undestructible object sprite so it no longer looks like destructible objects
+- Added MAXTURNS option into the config file
+
 ## Release 4.01
 ## Fixed
 - Range now properly scales the distance a projectile can travel. Previously, they were stuck at 6.

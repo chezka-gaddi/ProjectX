@@ -9,10 +9,11 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxB
 xxxxTxxxxxTxxxxxTxxxxxTxxxxBBT
 xxTTBTTxTTBTTxTTBTTxTTBTTxxTTB
 xxRxRxRxRxRxRxRxRxRxRxRxRxxRxR
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxRxxxxxRxxxxxRxxxxWRxxxxxxxx
+Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+OxxRxxxxxRxxxxxRxxxxWRxxxxxxxx
 xxTTTxxxTTTxxxTTTWWWTTTxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 #AI LIST: AI <NAME> <STARTX> <STARTY>
@@ -42,6 +43,9 @@ BUSH_IMAGE images/bush/bush1.png images/bush/bush2.png images/bush/bush3.png ima
 ROCK_IMAGE images/rock/rock.png images/rock/rockb.png images/rock/rockc.png
 WATER_IMAGE images/Water/waterTex.png images/Water/waterTexNS.png images/Water/waterTexES.png images/Water/waterTexSS.png images/Water/waterTexWS.png images/Water/waterTexNES.png images/Water/waterTexSES.png images/Water/waterTexSWS.png images/Water/waterTexNWS.png images/Water/waterTexEWS.png images/Water/waterTexNSS.png images/Water/waterTexNWES.png images/Water/waterTexNESS.png images/Water/waterTexSEWS.png images/Water/waterTexNWSS.png images/Water/waterTexPond.png
 
+#Max Turns
+#MAXTURNS 200
+MAXTURNS 200
 
 #TANK RULES
 #STAT <AMMOUNT>
@@ -49,7 +53,7 @@ WATER_IMAGE images/Water/waterTex.png images/Water/waterTexNS.png images/Water/w
 DAMAGE 1
 HEALTH 3
 RADAR 4 
-AP 1
+AP 2
 SPECIAL 1
 RANGE 4
 AMMO 6
