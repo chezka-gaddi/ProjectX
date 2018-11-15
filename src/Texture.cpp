@@ -39,8 +39,9 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
                          SOIL_CREATE_NEW_ID,
                          SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
 
-        if(tankTex[i] == 0)
-            return false;
+        if(tankTex[i] == 0){
+          return false;
+        }
 
         glBindTexture(GL_TEXTURE_2D, tankTex[i]);
     }
