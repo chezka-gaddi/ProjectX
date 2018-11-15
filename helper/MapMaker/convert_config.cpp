@@ -13,10 +13,10 @@ using namespace std;
 
 struct pos
 {
-   int x;
-   int y;
+    int x;
+    int y;
 
-   pos(int new_x, int new_y):x(new_x), y(new_y){};
+    pos(int new_x, int new_y):x(new_x), y(new_y) {};
 };
 
 int main (int argc, char ** argv)
@@ -61,7 +61,7 @@ int main (int argc, char ** argv)
     output << "HEIGHT " << height << endl;
 
 
-    for(int y = 0; y < height;y++)
+    for(int y = 0; y < height; y++)
     {
         getline(ascii, temp);
         for(int x = 0; x < width; x++)
@@ -69,7 +69,7 @@ int main (int argc, char ** argv)
             if (temp[x] == 'O')
                 output << "OBSTACLE " << x << " " << y  << endl;
             else if(temp[x] == 'T')
-               Spawns.push_back(pos(x, y));
+                Spawns.push_back(pos(x, y));
         }
     }
 

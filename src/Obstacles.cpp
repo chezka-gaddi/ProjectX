@@ -5,7 +5,7 @@
 * *****************************************************************************/
 
 #include "Drawable.h"
-
+#include <iostream>
 /***************************************************************************//**
 * @author Chezka Gaddi
 * @brief Constructor
@@ -18,7 +18,7 @@
 Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
 {
     //id's:
-    // 0 = Tree   1 = Rocks   2 = Bushes  3 = Other
+    // 0 = Tree   1 = Rocks   2 = Bushes  3 = Water   4 = Other
     //Textures:
     //0-9   Trees  - Packaged Trees  0-3   - 4 Trees
     //10-19 Rocks  - Packaged Rocks  10-12 - 3 Rocks
@@ -30,11 +30,18 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
     if (id == 0){ //It's a tree
       health = 2;
       tex = ((rand() % 4));
+      regrow_rate = 2;
     }else if( id == 1){ //It's a Rocks
       health = 4;
       tex = ((rand() % 3) + 10);
+      regrow_rate = 4;
     }else if( id == 2){ //It's a Bushes
       tex = ((rand() % 4) + 20);
+      regrow_rate = 4;
+    }else if( id == 3){ //It's a Waters
+      tex = 0 + 30;
+    }else if (id == 50){
+      tex = 50;
     }else{
       tex = 1; //default to tree if we got a bad id
     }
@@ -63,8 +70,11 @@ void Obstacles::draw(int, int)
       glBindTexture(GL_TEXTURE_2D, rockTex[tex-10]);
     }else if( tex >= 20 && tex <= 29){ //It's a Bushes
       glBindTexture(GL_TEXTURE_2D, bushTex[tex-20]);
+    }else if( tex >= 30 && tex <= 39){ //It's a Waters
+      glBindTexture(GL_TEXTURE_2D, waterTex[tex - 30]);
+    }else if( tex >= 50 && tex <= 50){ //It's a hedgehog
+      glBindTexture(GL_TEXTURE_2D, sfxTex[tex-45]);
     }
-
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-0.16f * scalar, -0.19f * scalar,  1.0f);
@@ -78,4 +88,22 @@ void Obstacles::draw(int, int)
 
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
+}
+
+void Obstacles::regrow(int turn){
+  if (destroyed == 0)
+    return;
+
+  //printf("Checking plant on turn %d with %d health destroyed on turn %d\n",turn, health, destroyed);
+
+  if (destroyed+regrow_rate < turn){
+    if (id == 0){ //Its a tree
+      health = 2;
+    }else if( id == 1){ //Its a Rocks
+      health = 4;
+    }else if( id == 2){ //Its a Bushes
+      health = 1;
+    }
+  }
+  destroyed = 0;
 }

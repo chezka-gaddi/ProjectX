@@ -67,7 +67,7 @@ public:
 class Menu : public Drawable
 {
 public:
-    char name[9];       /*!<Name of the player to be displayed */
+    char name[20];       /*!<Name of the player to be displayed */
     int health;         /*!<Player's health */
     int bullet;         /*!<Current bullet count */
     int score;          /*!<Current score */
@@ -90,8 +90,12 @@ class Obstacles : public Drawable
 {
 public:
     Obstacles( int, GLfloat, GLfloat, int, int);
-
+    void regrow(int turn); 
     void draw(int, int);
+protected:
+    int destroyed;
+    int regrow_rate;
+friend class GameField;
 };
 
 

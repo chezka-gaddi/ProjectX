@@ -36,6 +36,7 @@ TANK_PATH= ./tanks/
 TANKS = $(SRC_PATH)SimpleAI.cpp
 TANKS += $(SRC_PATH)PongAI.cpp
 TANKS += $(SRC_PATH)CamperAI.cpp
+TANKS += $(SRC_PATH)StationaryAI.cpp
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
@@ -61,25 +62,20 @@ clean-lib: clean
 	rm -rf libraries/libCTF.so
 
 clean-all: clean-lib
-	rm -rf $(TANK_PATH)*
+	@rm -rf $(TANK_PATH)*
 
 dev: clean-lib
 	make gen-library -j8
 
-gen-library: $(FILES:.cpp=.o)
+gen-library: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	@mkdir -p buildsrc/$(LIB_PATH)
 	@mkdir -p buildsrc/$(SRC_PATH)
 	@mkdir -p buildsrc/$(TANK_PATH)
 	@mkdir -p buildsrc/images	
 	#echo "Building object library"
-	g++ -o buildsrc/$(LIB_PATH)libCTF.so -shared $(CXXFLAGS) $? $(SOFLAGS)
-	#echo :Building pre-compiled header"
-	#$(CXX) -x c++-header $(CXXFLAGS) $(INCS) -o build/src/Actor.h.gch -c src/Actor.h $(LIBS)
+	g++ -o buildsrc/$(LIB_PATH)libCTF.so -shared $(CXXFLAGS) $< $(SOFLAGS)
 	#echo "Building platform"
-	$(CXX) $(CXXFLAGS) $(INCS) -o $(SRC_PATH)main.o -c $(SRC_PATH)main.cpp $(LIBS)
-	$(CXX) $(CXXFLAGS) $(INCS) -o buildsrc/platform src/main.o $? $(LIBS)
-	#echo "Building Sample Tank"	
-	$(CXX) $(CXXFLAGS) -shared src/SimpleAI.cpp -o buildsrc/$(TANK_PATH)SimpleAI.so $(SOFLAGS)
+	$(CXX) $(CXXFLAGS) $(INCS) -o buildsrc/platform $(FILES:.cpp=.o) $(LIBS)
 	#echo "Copying support files"
 	cp -R src/buildsrc/ .
 	cp config.txt	buildsrc/config.sample
@@ -92,12 +88,14 @@ gen-library: $(FILES:.cpp=.o)
 	cp src/MapData.h buildsrc/src/
 	cp src/direction.h buildsrc/src/
 	cp src/PositionData.h buildsrc/src/
-	cp src/$(TANKS:.so=.cpp) buildsrc/
-	cp src/$(TANKS:.so=.h) buildsrc/
+	cp $(TANKS) buildsrc/
+	cp $(TANKS:.cpp=.h) buildsrc/
 	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
 	# Change tanks src to point to new directory
 	sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
 	sed -i 's#include "#include "src/#g' buildsrc/PongAI.h
+	sed -i 's#include "#include "src/#g' buildsrc/StationaryAI.h
+	sed -i 's#include "#include "src/#g' buildsrc/CamperAI.h
 
 push-to-git: clean-lib
 	mkdir -p buildsrc
@@ -105,6 +103,6 @@ push-to-git: clean-lib
 	make gen-library -j8
 	git --git-dir=buildsrc/.git --work-tree=buildsrc checkout -b pre-release
 	git --git-dir=buildsrc/.git --work-tree=buildsrc add .
-	git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 3.01"
-	git --git-dir=buildsrc/.git --work-tree=buildsrc status
-	git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release
+	#git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 4.00"
+	#git --git-dir=buildsrc/.git --work-tree=buildsrc status
+	#git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release

@@ -1,6 +1,7 @@
 /** @file */
 
 #include "MapData.h"
+#include <iostream>
 
 std::ostream& operator<<(std::ostream& os, const MapData& md)
 {
@@ -99,5 +100,15 @@ MapData::MapData(int w, int h) : width(w), height(h)
     std::fill(map.begin(), map.end(), 0);
     std::fill(obstacleMap.begin(), obstacleMap.end(), false);
 }
+void MapData::printMap(std::vector<int> tMap){
+    for (int i = 0; i < height; i++){
+            for (int j=0; j < width;j++){
+                    std::cout << tMap[j+i*width] << " ";
+                    if (j = width-1) 
+                            std::cout << "\n";
+            }
+    }
+}
+
 
 MapData::MapData() {}

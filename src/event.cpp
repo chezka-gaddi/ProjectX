@@ -61,16 +61,19 @@ void updateDrawables(Game &game)
     vector <ActorInfo> actors = game.tankGame->getActors();
     vector <std::pair<int,int>> SFX = game.tankGame->getSFX();
     //for( auto obs : game.constants )
-        //game.objects.push_back( obs );
+    //game.objects.push_back( obs );
 
     for( auto act : actors )
     {
-        if( act.health > 0 && act.id > 0 )
+        if( act.health > 0 && act.id > 0)
         {
             temp_draw = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y ), act.heading );
             game.objects.push_back( temp_draw );
-            temp_draw = new Menu( act.id, act.health, act.shots, act.hits );
-            game.objects.push_back( temp_draw );
+            if (act.id <= 4)
+            {
+                temp_draw = new Menu( act.id, act.health, act.shots, act.hits );
+                game.objects.push_back( temp_draw );
+            }
         }
 
         else if( act.id < 0 && act.health > 0)
@@ -93,22 +96,22 @@ void updateDrawables(Game &game)
     overlap = false;
     for (auto sfx : SFX )
     {
-      //printf("Adding explosion. At (%d,%d)\n", sfx.first, sfx.second);
-      for (int i = 0; i < game.sfx.size();i++)
-      {
-        if (game.sfx[i]->screen_x == game.convertGLXCoordinate(sfx.first) 
-            && game.sfx[i]->screen_y == game.convertGLYCoordinate(sfx.second))
+        //printf("Adding explosion. At (%d,%d)\n", sfx.first, sfx.second);
+        for (int i = 0; i < game.sfx.size(); i++)
         {
-          overlap = true;
-          break;
+            if (game.sfx[i]->screen_x == game.convertGLXCoordinate(sfx.first)
+                    && game.sfx[i]->screen_y == game.convertGLYCoordinate(sfx.second))
+            {
+                overlap = true;
+                break;
+            }
         }
-      }
-      if (!overlap)
-      {
-        temp_draw = new sfxDrawable(game.convertGLXCoordinate( sfx.first ), game.convertGLYCoordinate(sfx.second));
-        game.sfx.push_back(temp_draw);
-      }
-      overlap = false;
+        if (!overlap)
+        {
+            temp_draw = new sfxDrawable(game.convertGLXCoordinate( sfx.first ), game.convertGLYCoordinate(sfx.second));
+            game.sfx.push_back(temp_draw);
+        }
+        overlap = false;
     }
     game.tankGame->clearSFX();
 }
@@ -129,44 +132,52 @@ void DisplayEvent::doAction(Game &game)
 
     updateDrawables(game);
     Drawable *stuff;
+    
+    if (game.ui == true){
 
     for( int i = 0; i < game.constants.size(); i++ )
     {
         stuff = game.constants[i];
         stuff->draw(game.getX(), game.getY());
     }
-    
+
     for( int i = 0; i < game.specials.size(); i++ )
     {
         stuff = game.specials[i];
         if (stuff->health > 0 )
-          stuff->draw(game.getX(), game.getY());
+            stuff->draw(game.getX(), game.getY());
     }
-    
+
     for( int i = 0; i < game.objects.size(); i++ )
     {
         stuff = game.objects[i];
         stuff->draw(game.getX(), game.getY());
     }
-    
+
     for( int i = 0; i < game.trees.size(); i++ )
     {
         stuff = game.trees[i];
         if (stuff->health > 0 )
-          stuff->draw(game.getX(), game.getY());
+            stuff->draw(game.getX(), game.getY());
     }
-    
+
     for( int i = 0; i < game.rocks.size(); i++ )
     {
         stuff = game.rocks[i];
         if (stuff->health > 0 )
-                stuff->draw(game.getX(), game.getY());
+            stuff->draw(game.getX(), game.getY());
     }
     for( int i = 0; i < game.bushes.size(); i++ )
     {
         stuff = game.bushes[i];
         stuff->draw(game.getX(), game.getY());
     }
+    for( int i = 0; i < game.waters.size(); i++ )
+    {
+        stuff = game.waters[i];
+        stuff->draw(game.getX(), game.getY());
+    }
+
     for( int i = 0; i < game.sfx.size(); i++ )
     {
         stuff = game.sfx[i];
@@ -175,6 +186,7 @@ void DisplayEvent::doAction(Game &game)
     game.sfx.clear();
     system("sleep 0.2");
     glutSwapBuffers();
+    }else {}
 }
 
 
@@ -213,10 +225,11 @@ void ReshapeEvent::doAction(Game &game)
  * @param[in] tick - the number of milliseconds to wait before the next timer
  *    tick
  ******************************************************************************/
-TimerEvent::TimerEvent(int &value) { 
-  if (TimerEvent::idle_speed != 0)
-    value = TimerEvent::idle_speed; 
-  tick = TimerEvent::idle_speed;
+TimerEvent::TimerEvent(int &value)
+{
+    if (TimerEvent::idle_speed != 0)
+        value = TimerEvent::idle_speed;
+    tick = TimerEvent::idle_speed;
 }
 
 
@@ -231,8 +244,8 @@ TimerEvent::TimerEvent(int &value) {
  ******************************************************************************/
 void TimerEvent::doAction(Game &game)
 {
-  idle_speed = game.getAISpeed();
-  game.executeTurn();
+    idle_speed = game.getAISpeed();
+    game.executeTurn();
 }
 
 
@@ -268,6 +281,6 @@ void KeyboardEvent::doAction(Game &game)
 {
     if(key == ESCAPE_KEY || key == 'Q' || key == 'q')
     {
-        game.earlyOut();  
+        game.earlyOut();
     }
 }

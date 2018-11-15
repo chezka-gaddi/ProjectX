@@ -1,8 +1,8 @@
 #ifndef __CAMPER_AI_H
 #define __CAMPER_AI_H
 
-#include "Actor.h"
-#include "direction.h"
+#include "src/Actor.h"
+#include "src/direction.h"
 #include <cmath>
 #include <iostream>
 
@@ -27,7 +27,7 @@ public:
     virtual direction attack(MapData map, PositionData status);
 
     // The Overwritten set attribute  function.
-    virtual attributes setAttribute(int pointsAvailable);
+    virtual attributes setAttribute(int pointsAvailable, attributes baseStats);
 
     // The Overwritten spendAP  function.
     virtual int spendAP(MapData map, PositionData status);
@@ -38,6 +38,8 @@ public:
 protected:
     int turn = 0;
     int maxAp = 0;
+    bool corner = false;
+    int attacks[6] = {8};
 };
 
 #endif

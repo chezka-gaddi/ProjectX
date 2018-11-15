@@ -27,7 +27,7 @@ ProjectileActor::ProjectileActor(direction d) : dir(d) {}
  * @author Brad Peterson
  *
  * @par Description:
- * 
+ *
 ******************************************************************************/
 direction ProjectileActor::move(MapData map, PositionData status)
 {
@@ -56,14 +56,14 @@ direction ProjectileActor::attack(MapData map, PositionData status)
 
 /**************************************************************************//**
  * @author Brad Peterson
- * 
+ *
  * @par Description
  * Returns attributes of projectile
  *
  * @returns projAttributes - attributes of projectile
  *
 ******************************************************************************/
-attributes ProjectileActor::setAttribute(int pointsAvailable)
+attributes ProjectileActor::setAttribute(int pointsAvailable, attributes baseStats)
 {
     attributes projAttributes;
     return projAttributes;

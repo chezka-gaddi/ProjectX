@@ -32,6 +32,7 @@ class GameField
 protected:
     /*!< this is all of the actors on the field: tanks + projectiles */
     std::vector<ActorInfo> actors;
+    std::vector<ActorInfo> deceased;
     std::vector<std::pair<int,int>> SFX;
 
     int turnCount; /*!< The turn count number */
@@ -47,11 +48,11 @@ protected:
     //Action points for each actor
     int ap;
     bool checkObjectStrike(ActorInfo &a);
-    bool crate_o_doom(int x, int y);
+    bool crate_o_doom(int x, int y, ActorInfo &a);
     Game *gameptr = nullptr;
 
 public:
-    void setSPECIAL(int points);
+    void setSPECIAL(int points, const attributes baseStats);
     /**
      * Each turn will be as follows:
      * a tank will have the option to move and then a tank will fire, once all of the tanks have fired
@@ -67,6 +68,7 @@ public:
      */
     void cull();
     std::string getWinner();
+    std::vector<ActorInfo> getDeceased(){return deceased;};
 
     /**
      * this will find all the actors in a single cell
@@ -97,6 +99,7 @@ public:
     int getHeight();
     std::vector<int> getMap();
     std::vector<ActorInfo> getActors();
+    std::vector<ActorInfo> * getActorsPointer();
     std::vector<std::pair<int,int>> getSFX();
     void clearSFX();
     MapData getMapData();
@@ -108,6 +111,6 @@ public:
     /*******************************/
     /************setters************/
     /*******************************/
-
+friend class Game;
 };
 #endif //SLACKERS_PLATFORM_GAMEFIELD_H

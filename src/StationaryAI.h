@@ -1,5 +1,5 @@
-#ifndef __PONG_AI_H
-#define __PONG_AI_H
+#ifndef __STATIONARY_AI_H
+#define __STATIONARY_AI_H
 
 #include "Actor.h"
 #include "direction.h"
@@ -8,12 +8,12 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Description: This AI acts like a paddle from pong. It will move vertically
-//               and shoot each turn
+/// Description: This AI finds a corner and starts shooting. It's like an 8
+//                year old playing call of duty.
 ///////////////////////////////////////////////////////////////////////////////
 
 
-class PongAI : public Actor
+class StationaryAI : public Actor
 {
     // The direction moved from last turn
     direction LastDir;
@@ -32,8 +32,12 @@ public:
     // The Overwritten spendAP  function.
     virtual int spendAP(MapData map, PositionData status);
 
-    PongAI();
-    ~PongAI();
+    StationaryAI();
+    ~StationaryAI();
+
+protected:
+    int turn = 0;
+    int maxAp = 0;
 };
 
 #endif

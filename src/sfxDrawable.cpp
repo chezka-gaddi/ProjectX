@@ -23,7 +23,7 @@ sfxDrawable::sfxDrawable( GLfloat x_coor, GLfloat y_coor )
     screen_x = x_coor;
     screen_y = y_coor;
 
-    
+
     tex = (rand() % 3);
 }
 

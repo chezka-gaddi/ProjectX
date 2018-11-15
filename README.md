@@ -1,6 +1,67 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Release 4.02
+## Fixed
+- Modified max radar range to be equal to map width.
+- Changed undestructible object sprite so it no longer looks like destructible objects
+- Added MAXTURNS option into the config file
+- Fixed ramming algorithm.  If a tank has 1 health and they ram another tank they will die.  If a tank has more than 1 health and the ramming damage would kill them, there health is instead set to 1.
+- Added support for maps down to 5x5.  Sizes below 15x9 will fill in missing squares with unpassible objects.
+
+## Release 4.01
+## Fixed
+- Range now properly scales the distance a projectile can travel. Previously, they were stuck at 6.
+- baseStats are now properly passed to tanks during setAttributes.  Previously, a freshly initalized variable was passed resulting in all 0's.
+- Default values have been set:
+  - Health = 3   - The amount of health a tank starts with
+  - Damage = 1   - The amount of damage a tank's projectile does
+  - AP = 2       - The amount of Action points a tank starts with.
+  - Ammo = 6     - The amount of ammo a tank starts with before needing to reload
+  - Radar = 4    - How far a tanks Radar expands to
+  - Range = 4    - How many spaces a projectile travels per turn
+  - Shots = 0    - This is a counter, no matter how many points you put here, it will stay 0.
+- Reduced size of program. 
+## Release 4.00
+## What's new?
+- Updated Scoreboard
+  - The scoreboard now lists more interesting facts about the tanks and has support for a draw.
+- Reloading
+  - Tanks now have a limited number of ammunition.  After they reach the limit they will have to reload.
+  - A tank can reload by sending back action number 4 or the tank will automatically reload if it has no ammo and it attempts to fire.
+- Water
+  - New title type added that cannot be passed by tanks.  Projectiles on the other hand of no problem flying above the water.
+- Health Map
+  - When a tank is sent a map object there is now an additional map called the health map.  It will list the health of all the objects the tank can see.
+- Attributes
+  - Tanks now recieve a copy of there base stats when asked for their choice of special point spending.
+- MaxTurns
+  - The number of max turns can now be set in the config file.
+- New formula for calculating field size display.
+- Behind the scene caps for special points when dealing with a large special amount 
+
+## Fixed
+- Damage 
+  - Fixed some inconsistencies between tank and projectile damages.
+- SimpleAI
+  - SimpleAI will now move even when it can't see the whole map.
+  - Fixed incorrect header prototype.
+
+## Release 3.10
+## What's new?
+- Scoreboard
+  - At the end of the game a list of the top 3 players will be displayed.
+- Crate_o_Fun
+  - A new crate was added that has a surprise for anyone that shoots it.
+- Tanks
+  - Additional tank colors have been added to the map.
+- Maps
+  - All maps have been updated with destructible objects so that they can now be 
+- Default Map
+  - The default map has been updated to support up to 10 Tanks.
+- SimpleAI
+  - Adjusted SimpleAI so that it will no longer refuse to play the game if it can't see.
+
 ## Release 3.01
 ### What's new?
 - Object health
