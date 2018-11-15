@@ -41,7 +41,7 @@ Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn)
     health = hp;
     bullet = ammo;
     score = hits;
-    tex = 4;
+    tex = (id-1) * 5 + 0;
 }
 
 
@@ -70,12 +70,15 @@ void Menu::draw(int x, int y)
 *
 * Draws the health and hit icons.
 * *****************************************************************************/
-void drawIcon(GLfloat x, GLfloat y, GLuint icon)
+void drawIcon(GLfloat x, GLfloat y, GLuint icon, bool tank)
 {
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
     glTranslatef(x - 0.85, y + 0.65, -5.0f);
-    glBindTexture(GL_TEXTURE_2D, gameTex[icon]);
+    if(!tank)
+    	glBindTexture(GL_TEXTURE_2D, gameTex[icon]);
+    else
+    	glBindTexture(GL_TEXTURE_2D, tankTex[icon]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-0.06f, -0.06f,  1.0f);
@@ -137,14 +140,16 @@ void Menu::drawPlayerStats()
     // Draw health points
     for( int i = 0; i < health ; i++ )
     {
-    	drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.02, 4 );
+    	drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.02, 4, false );
     }
 
     // Draw number of hits
     for( int i = 0; i < score ; i++ )
     {
-    	drawIcon((screen_x - 0.05) + 0.1 * i, screen_y - 0.18, 6 );
+    	drawIcon((screen_x - 0.05) + 0.1 * i, screen_y - 0.18, 6, false );
     }
+
+    drawIcon((screen_x + 1), screen_y, tex, true);
 }
 
 
