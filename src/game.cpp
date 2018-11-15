@@ -601,6 +601,22 @@ void Game::initGameState()
       }
       cout << "...done.\n";
     }
+    else if(id == "HEIGHT")
+    {
+      cout << "Elon\n    gati\n        ng t\n            he ma\n                p...  ";
+      stringstream(args) >> height;
+      if(height < 5)
+      {
+        height = 5;
+        printf("Invalid height parameter, defaulting to %d.\n", height);
+      }
+      else if(height > 21)
+      {
+        height = 21;
+        cout << "Height parameter too high, defaulting to 21.\n";
+      }
+      cout << "...done.\n";
+    }
     else if(id == "MAXTURNS")
     {
       cout << "Reducing camping spots...\n";
@@ -618,21 +634,10 @@ void Game::initGameState()
       max_turns = maxT;
       cout << "...done.\n";
     }
-    else if(id == "HEIGHT")
+    else if(id == "DISABLEGUI")
     {
-      cout << "Elon\n    gati\n        ng t\n            he ma\n                p...  ";
-      stringstream(args) >> height;
-      if(height < 5)
-      {
-        height = 5;
-        printf("Invalid height parameter, defaulting to %d.\n", height);
-      }
-      else if(height > 21)
-      {
-        height = 21;
-        cout << "Height parameter too high, defaulting to 21.\n";
-      }
-      cout << "...done.\n";
+      cout << "Hiding Everything\n";
+      ui = false; 
     }
     else if(id == "FIELDIMAGE")
     {
