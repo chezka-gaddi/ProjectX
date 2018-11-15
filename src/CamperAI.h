@@ -1,8 +1,8 @@
 #ifndef __CAMPER_AI_H
 #define __CAMPER_AI_H
 
-#include "Actor.h"
-#include "direction.h"
+#include "src/Actor.h"
+#include "src/direction.h"
 #include <cmath>
 #include <iostream>
 
@@ -38,6 +38,8 @@ public:
 protected:
     int turn = 0;
     int maxAp = 0;
+    bool corner = false;
+    int attacks[6] = {8};
 };
 
 #endif

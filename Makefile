@@ -88,8 +88,8 @@ gen-library: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	cp src/MapData.h buildsrc/src/
 	cp src/direction.h buildsrc/src/
 	cp src/PositionData.h buildsrc/src/
-	cp $(TANKS:.so=.cpp) buildsrc/
-	cp $(TANKS:.so=.h) buildsrc/
+	cp $(TANKS) buildsrc/
+	cp $(TANKS:.cpp=.h) buildsrc/
 	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
 	# Change tanks src to point to new directory
 	sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
