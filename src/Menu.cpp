@@ -5,6 +5,7 @@
 * *****************************************************************************/
 
 #include "Drawable.h"
+#include <iostream>
 
 
 void drawBitmapText( char *string, GLfloat x, GLfloat y );
@@ -21,39 +22,22 @@ void drawBitmapText( char *string, GLfloat x, GLfloat y );
 * @param[in] hp - health
 * @param[in] ammo - ammo count
 * *****************************************************************************/
-Menu::Menu( int id, int hp, int ammo, int hits )
+Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn)
 {
     this->id = id;
-    switch(id)
-    {
-    case 1:
-    {
-        strncpy(name, "Player 1", 9);
-        screen_x = -0.70;
-        screen_y = 0.54;
-        break;
-    }
-    case 2:
-    {
-        strncpy(name, "Player 2", 9);
-        screen_x = 1.7;
-        screen_y = 0.54;
-        break;
-    }
-    case 3:
-    {
-        strncpy(name, "Player 3", 9);
-        screen_x = -0.70;
-        screen_y = .90;
-        break;
-    }
-    case 4:
-    {
-        strncpy(name, "Player 4", 9);
-        screen_x = 1.7;
-        screen_y = .90;
-    }
-    }
+    for(int j = 0; j < 20; j++)
+    	name[j] = '\0';
+
+	int i = 0;
+
+	while(nameIn[i] != '\0')
+	{
+	name[i] = nameIn[i];
+	i++;
+	}
+
+	screen_x = -0.70;
+	screen_y = 0.54;
     health = hp;
     bullet = ammo;
     score = hits;
@@ -69,7 +53,7 @@ Menu::Menu( int id, int hp, int ammo, int hits )
 * *****************************************************************************/
 void Menu::draw(int x, int y)
 {
-    glEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
     glColor4ub(255,255,255,255);
     glPushMatrix();
 
@@ -119,18 +103,6 @@ void Menu::drawTextBox(GLfloat x, GLfloat y)
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
     glTranslatef(x - .5, y + 0.6, -5.0f);
-    switch (id)
-    {
-    case 2:
-        glScalef(-1, 1, 1);
-        break;
-    case 3:
-        glScalef(-1, -1, 1);
-        break;
-    case 4:
-        glScalef(1, -1, 1);
-        break;
-    }
     glBindTexture(GL_TEXTURE_2D, gameTex[5]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
@@ -159,61 +131,19 @@ void Menu::drawPlayerStats()
     drawTextBox(screen_x, screen_y);
 
 
-    // Output name of the player
-    switch (id)
-    {
-    case 1:
-        drawBitmapText(name, screen_x - 0.13, screen_y + 0.11);
-        break;
-    case 2:
-        drawBitmapText(name, screen_x - 1.04, screen_y + 0.11);
-        break;
-    case 3:
-        drawBitmapText(name, screen_x + 0.16, screen_y - 0.25);
-        break;
-    case 4:
-        drawBitmapText(name, screen_x - 1.32, screen_y - 0.25);
-        break;
-    }
+    //Output name of the player
+    drawBitmapText(name, screen_x - 0.13, screen_y + 0.11);
 
     // Draw health points
     for( int i = 0; i < health ; i++ )
     {
-        switch (id)
-        {
-        case 1:
-            drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.02, 4 );
-            break;
-        case 2:
-            drawIcon(screen_x + 0.75 - (0.14 * i), screen_y - 0.02, 4 );
-            break;
-        case 3:
-            drawIcon(screen_x - .05 + (0.14 * i), screen_y + 0.05, 4 );
-            break;
-        case 4:
-            drawIcon(screen_x + 0.75 - (0.14 * i), screen_y + 0.05, 4 );
-            break;
-        }
+    	drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.02, 4 );
     }
 
     // Draw number of hits
     for( int i = 0; i < score ; i++ )
     {
-        switch (id)
-        {
-        case 1:
-            drawIcon((screen_x - 0.05) + 0.1 * i, screen_y - 0.18, 6 );
-            break;
-        case 2:
-            drawIcon(screen_x + 0.75 - 0.1 * i, screen_y - 0.18, 6 );
-            break;
-        case 3:
-            drawIcon((screen_x - 0.05) + 0.1 * i, screen_y - 0.10, 6 );
-            break;
-        case 4:
-            drawIcon(screen_x + 0.75 - 0.1 * i, screen_y - 0.10, 6 );
-            break;
-        }
+    	drawIcon((screen_x - 0.05) + 0.1 * i, screen_y - 0.18, 6 );
     }
 }
 

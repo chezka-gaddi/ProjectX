@@ -758,6 +758,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
       act_ap = actors[i].range;
       while(act_ap > 0 && actors[i].id != 0)
       {
+        actors[i].id > 0 ? gameptr->actTurn = actors[i].id : gameptr->actTurn = -actors[i].id;
         fog_of_war = fieldMap;
         create_fog_of_war(fog_of_war, actors[i]);
         pos.game_x = actors[i].x;

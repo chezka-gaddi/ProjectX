@@ -72,7 +72,7 @@ public:
     int bullet;         /*!<Current bullet count */
     int score;          /*!<Current score */
 
-    Menu( int, int, int, int );
+    Menu( int, int, int, int, std::string );
 
     void drawTextBox( GLfloat, GLfloat );
     void drawPlayerStats();

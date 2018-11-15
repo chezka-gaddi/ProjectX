@@ -40,6 +40,7 @@ public:
     GameField *tankGame;               /*!<Pointer to the game manager */
     gameMode g_mode;                   /*!<Type of game to be ran */
     int turn;
+    int actTurn;
 
     Game();
     Game(gameMode mode);
@@ -72,6 +73,7 @@ private:
     int fieldy;
     int idle_speed;
     int max_turns = 200;
+    int activeId;
 };
 
 #endif //__GAME_H
