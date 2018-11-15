@@ -414,6 +414,9 @@ void Game::initGameState()
   int ap = 1;
   int ammo = 6;
   int maxT = 20;
+  int hPad = 0;
+  int wPad = 0;
+  int x = 0, y = 0;
   attributes baseStats;
 
   std::vector<std::pair<int,int>> obstacleLocations;
@@ -452,7 +455,23 @@ void Game::initGameState()
       if(configLine == "MAP")
       {
         cout << "Building the map...\n";
-        for(int y = 0; y < height; y++)
+        if (height < 9){
+          hPad = (9 - height) / 2;
+          height = 9;
+          //cout << "hPad: " << hPad << endl;
+        }
+        if (width < 15){
+          wPad = (15 - width) / 2;
+          width = 15;
+          //cout << "wPad: " << wPad << endl;
+        }
+        for (y=0; y < hPad; y++) {
+          for (x = 0; x < width; x++){
+            obstacleLocations.push_back(std::pair<int, int> (x, y));       
+          }
+        }
+        //cout << "Y equals: " << y << endl;
+        for(y; y < height - hPad; y++)
         {
           if(y == height/3)
             cout << "  Planting trees...\n";
@@ -462,16 +481,17 @@ void Game::initGameState()
             cout << "  Trimming bushes...\n";
           getline(fin, configLine);
           //cout << configLine << endl;
-
-          for(int x = 0; x < width; x++)
+          for(x = 0; x < width; x++)
           {
-            if (x >= configLine.size())
+            if (x >= configLine.size() + wPad)
             {
-                obstacleLocations.push_back(std::pair<int,int> (x,y));
+                obstacleLocations.push_back(std::pair<int,int> (x, y));
+            }else if(x < wPad){
+                obstacleLocations.push_back(std::pair<int,int> (x, y));
             }
             else
             {
-              switch(configLine[x])
+              switch(configLine[x-wPad])
               {
                 case 'B':
                 case 'b':
@@ -504,6 +524,12 @@ void Game::initGameState()
             }
           }
         }
+        cout << endl;
+        for (y; y < height; y++) {
+          for (x = 0; x < width; x++){
+            obstacleLocations.push_back(std::pair<int, int> (x, y));       
+          }
+        }
     }else{ 
     int i = configLine.find(' '); //index of first space
     std::string id = configLine.substr(0, i); //separate the identefier from the argumets
@@ -516,7 +542,8 @@ void Game::initGameState()
       i = args.find(' ');
       AINames.push_back(args.substr(0, i));
       std::stringstream(args.substr(i+1)) >> x >> y;
-      tankLocations.push_back(std::pair<int,int>(x,y));
+      printf("\nTank at: Actual: %d, %d Modified: %d, %d.\n",x, y, x+wPad,y+hPad); 
+      tankLocations.push_back(std::pair<int,int>(x+wPad,y+hPad));
       for(int x=0; x < tankLocations.size(); x++)
       {
         for(int y = x + 1; y < tankLocations.size(); y++)
@@ -562,18 +589,16 @@ void Game::initGameState()
     {
       cout << "S t r e t c h i n g   t h e   m a p . . .  ";
       stringstream(args) >> width;
-      if(width < 15)
+      if(width < 5)
       {
-        width = 15;
-        cout << "\nInvalid width parameter, defaulting to 15.\n";
+        width < 5;
+        printf("\nInvalid width parameter, defaulting to %d.\n", width);
       }
       else if(width > 50)
       {
         width = 50;
         cout << "\nWidth parameter too high, defaulting to 50.\n";
       }
-      fieldx = width;
-      Drawable::scalar = (3.75/width)/.25;
       cout << "...done.\n";
     }
     else if(id == "MAXTURNS")
@@ -597,17 +622,16 @@ void Game::initGameState()
     {
       cout << "Elon\n    gati\n        ng t\n            he ma\n                p...  ";
       stringstream(args) >> height;
-      if(height < 9)
+      if(height < 5)
       {
-        height = 9;
-        cout << "Invalid height parameter, defaulting to 9.\n";
+        height = 5;
+        printf("Invalid height parameter, defaulting to %d.\n", height);
       }
       else if(height > 21)
       {
         height = 21;
         cout << "Height parameter too high, defaulting to 21.\n";
       }
-      fieldy = height;
       cout << "...done.\n";
     }
     else if(id == "FIELDIMAGE")
@@ -872,6 +896,10 @@ void Game::initGameState()
       }
     }}
 
+    Drawable::scalar = (3.75/width)/.25;
+    fieldx = width;
+    fieldy = height;
+    
     glEnable(GL_TEXTURE_2D);
     if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages, waterImages))
         cout << "Failed to open image(s).\n" << endl;
@@ -916,6 +944,7 @@ void Game::initGameState()
     }
 
     cout << "Initializing Game...\n";
+    //printf("Height: %d  Width: %d\n",height, width);
     tankGame = new GameField(width, height, startActors, displayWrapper, this);
     baseStats.tankHealth = health;
     baseStats.tankDamage = damage;
