@@ -69,7 +69,7 @@ void updateDrawables(Game &game)
         {
             temp_draw = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y ), act.heading );
             game.objects.push_back( temp_draw );
-            if (act.id == game.actTurn)
+            if (act.id <= 4)
             {
                 temp_draw = new Menu( act.id, act.health, act.shots, act.hits );
                 game.objects.push_back( temp_draw );
