@@ -439,13 +439,63 @@ void Game::initGameState()
   std::string name;
   int attributePoints = 0;
   srand(time(0));
-  ofstream fout("results.txt", ios::out | ios::in | ios::app);
+  ofstream fout;
 
   if(!fin)
   {
-    cout << "FAILED TO LOAD CONFIG FILE\n";
+      cout << "FAILED TO LOAD CONFIG FILE\n";
+      cout << "Attempting to generate config file...\n";
+      fin.close();
+      fin.open("config.sample");
+      fout.open("config.txt", ios::out | ios::in | ios::app);
+      fout << "WIDTH 30\n";
+      fout << "HEIGHT 14\n";
+      fout << "MAP\n"; 
+      fout << "xxxxxxxxRRRRRRxxxxxxxxRRRRRRxx\n";
+      fout << "xxxxxxxTWWRRWWTxxxxxxTWWRRWWTx\n";
+      fout << "xxxxxxTTTBTTTBTTxxxxTTTBTTTBTT\n";
+      fout << "xxxxxCxxxxxxxxxxxxxxxxxxxxxxxx\n";
+      fout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxB\n";
+      fout << "xxxxTxxxxxTxxxxxTxxxxxTxxxxBBT\n";
+      fout << "xxTTBTTxTTBTTxTTBTTxTTBTTxxTTB\n";
+      fout << "xxRxRxRxRxRxRxRxRxRxRxRxRxxRxR\n";
+      fout << "Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+      fout << "Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+      fout << "OxxRxxxxxRxxxxxRxxxxWRxxxxxxxx\n";
+      fout << "xxTTTxxxTTTxxxTTTWWWTTTxxxxxxx\n";
+      fout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+      fout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+      fout << "#AI IDLE SPEED: AI_SPEED <750>\n";
+      fout << "AI_SPEED 750\n\n";
+      fout << "#FIELDIMAGE <MAP FILE>\n";
+      fout << "FIELDIMAGE images/green.png\n\n";
+      fout << "#OBSTACLE_IMAGE <IMAGE1> [<IMAGE2>]\n";
+      fout << "OBSTACLE_IMAGE images/tree/tree.png images/rock/rock.png\n";
+      fout << "TREE_IMAGE images/tree/tree.png images/tree/treeb.png images/tree/treec.png images/tree/treed.png\n";
+      fout << "BUSH_IMAGE images/bush/bush1.png images/bush/bush2.png images/bush/bush3.png images/bush/bush4.png\n";
+      fout << "ROCK_IMAGE images/rock/rock.png images/rock/rockb.png images/rock/rockc.png\n";
+      fout << "WATER_IMAGE images/Water/waterTex.png images/Water/waterTexNS.png images/Water/waterTexES.png images/Water/waterTexSS.png images/Water/waterTexWS.png images/Water/waterTexNES.png images/Water/waterTexSES.png images/Water/waterTexSWS.png images/Water/waterTexNWS.png images/Water/waterTexEWS.png images/Water/waterTexNSS.png images/Water/waterTexNWES.png images/Water/waterTexNESS.png images/Water/waterTexSEWS.png images/Water/waterTexNWSS.png images/Water/waterTexPond.png\n\n";
+      fout << "#Max Turns\n";
+      fout << "#MAXTURNS 200\n";
+      fout << "MAXTURNS 200\n\n";
+      fout << "#TANK RULES\n";
+      fout << "#STAT <AMMOUNT>\n";
+      fout << "#VALID STATS: DAMAGE, HEALTH, RADAR, AP, SPECIAL, RANGE, AMMO\n";
+      fout << "DAMAGE 1\n";
+      fout << "HEALTH 3\n";
+      fout << "RADAR 4\n";
+      fout << "AP 2\n";
+      fout << "SPECIAL 1\n";
+      fout << "RANGE 4\n";
+      fout << "AMMO 6\n";
+
+      fin.close();
+      fout.close();
+    cout << "   ...done.\n";
+    cout << "Please add tanks to the new config.txt and re-run the platform.\n";
     exit(1);
   }
+  fout.open("results.txt", ios::out | ios::in | ios::app);
   if(!fout)
   {
     cout << "UNABLE OPEN RESULTS FILE (results.txt).  Game will play but results will not be saved.\n";
