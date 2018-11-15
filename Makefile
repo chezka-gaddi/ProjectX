@@ -94,6 +94,8 @@ gen-library: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	# Change tanks src to point to new directory
 	sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
 	sed -i 's#include "#include "src/#g' buildsrc/PongAI.h
+	sed -i 's#include "#include "src/#g' buildsrc/StationaryAI.h
+	sed -i 's#include "#include "src/#g' buildsrc/CamperAI.h
 
 push-to-git: clean-lib
 	mkdir -p buildsrc

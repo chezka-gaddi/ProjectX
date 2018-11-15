@@ -1,29 +1,20 @@
-#WIDTH 30
-#HEIGHT 14
-#MAP
-#xxxxxxxxRRRRRRxxxxxxxxRRRRRRxx
-#xxxxxxxTWWRRWWTxxxxxxTWWRRWWTx
-#xxxxxxTTTBTTTBTTxxxxTTTBTTTBTT
-#xxxxxCxxxxxxxxxxxxxxxxxxxxxxxx
-#xxxxxxxxxxxxxxxxxxxxxxxxxxxxxB
-#xxxxTxxxxxTxxxxxTxxxxxTxxxxBBT
-#xxTTBTTxTTBTTxTTBTTxTTBTTxxTTB
-#xxRxRxRxRxRxRxRxRxRxRxRxRxxRxR
-#Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-#Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-#OxxRxxxxxRxxxxxRxxxxWRxxxxxxxx
-#xxTTTxxxTTTxxxTTTWWWTTTxxxxxxx
-#xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-#xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-HEIGHT 5
-WIDTH 5
+WIDTH 30
+HEIGHT 14
 MAP
-xxxxx
-xxxxx
-xxxxx
-xxxxx
-xxxxx
+xxxxxxxxRRRRRRxxxxxxxxRRRRRRxx
+xxxxxxxTWWRRWWTxxxxxxTWWRRWWTx
+xxxxxxTTTBTTTBTTxxxxTTTBTTTBTT
+xxxxxCxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxB
+xxxxTxxxxxTxxxxxTxxxxxTxxxxBBT
+xxTTBTTxTTBTTxTTBTTxTTBTTxxTTB
+xxRxRxRxRxRxRxRxRxRxRxRxRxxRxR
+Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+OxxRxxxxxRxxxxxRxxxxWRxxxxxxxx
+xxTTTxxxTTTxxxTTTWWWTTTxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 #AI LIST: AI <NAME> <STARTX> <STARTY>
 AI CamperAI 0 0 images/Yellow/tankY_U.png images/Yellow/tankY_R.png images/Yellow/tankY_D.png images/Yellow/tankY_L.png images/Yellow/bulletY.png

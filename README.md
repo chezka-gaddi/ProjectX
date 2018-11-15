@@ -6,6 +6,8 @@ Want instant communication with the Dev team? Join our
 - Modified max radar range to be equal to map width.
 - Changed undestructible object sprite so it no longer looks like destructible objects
 - Added MAXTURNS option into the config file
+- Fixed ramming algorithm.  If a tank has 1 health and they ram another tank they will die.  If a tank has more than 1 health and the ramming damage would kill them, there health is instead set to 1.
+- Added support for maps down to 5x5.  Sizes below 15x9 will fill in missing squares with unpassible objects.
 
 ## Release 4.01
 ## Fixed
