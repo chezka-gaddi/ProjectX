@@ -664,8 +664,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
       for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
       {
         value = y_iter * map.width + x_iter;
-        if(map.obstacleMap[value] != 'T')
-          new_map.map[value] = map.map[value];
+        new_map.map[value] = map.map[value];
         new_map.obstacleMap[value] = map.obstacleMap[value];
         if(map.obstacleMap[value] == 0 && map.map[value] != 0)
         {
