@@ -409,7 +409,7 @@ void GameField::runMoves(ActorInfo &a)
          && actors[i].y == a.y    //Make sure we're on the same row
          && a.id != actors[i].id) //Make sure our tank doesn't damage itself
       {
-        if(a.id > 0 && actors[i].id > 0)  //Check tank to tank ramming
+        if(a.id > 0 && actors[i].id > 0 && actors[i].id != a.id)  //Check tank to tank ramming
         {
           //printf("Tank hit tank\n");
           //Reverse the move
@@ -417,12 +417,13 @@ void GameField::runMoves(ActorInfo &a)
           a.y -= yoff;
           tHealth = actors[i].health;
           actors[i].health -= a.health; //deal full health damage to target
-          if (a.health == 1)
-            hit += tHealth;
-          else if (tHealth > a.health)
-            hit += a.health - 1;
-          else
-            hit += tHealth;
+          if (a.health == 1){
+            hit += a.health; //tank kills self
+          }else if (tHealth >= a.health){
+            hit += a.health - 1;//Does survive
+          }else{
+            hit += tHealth; //Tank survives 
+          }
           a.hits++; //A tank hit is still a hit right?
           if(actors[i].health <= 0)
           {
@@ -759,7 +760,9 @@ bool GameField::checkObjectStrike(ActorInfo &a)
     for(int i = 0; i < actors.size() && actors[i].health != 0; ++i)
     {
       act_ap = actors[i].AP;
+#ifndef TESTING
       actors[i].id > 0 ? gameptr->actTurn = actors[i].id : gameptr->actTurn = -actors[i].id;
+#endif
       while(act_ap > 0 && actors[i].id != 0)
       {
         fog_of_war = fieldMap;
