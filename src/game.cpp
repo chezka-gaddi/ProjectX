@@ -465,6 +465,7 @@ void Game::initGameState()
       fout << "xxTTTxxxTTTxxxTTTWWWTTTxxxxxxx\n";
       fout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
       fout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+      fout << "#AI LIST: AI <NAME> <STARTX> <STARTY> <UPIMAGE> <RIGHTIMAGE> <DOWNIMAGE> <LEFTIMAGE> <BULLETIMAGE>\n\n";
       fout << "#AI IDLE SPEED: AI_SPEED <750>\n";
       fout << "AI_SPEED 750\n\n";
       fout << "#FIELDIMAGE <MAP FILE>\n";
