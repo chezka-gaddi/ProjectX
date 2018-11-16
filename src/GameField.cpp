@@ -446,7 +446,7 @@ void GameField::runMoves(ActorInfo &a)
         else if(a.id < 0)  //If we're a projectile and we hit a tank
         {
           //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
-          actors[i].health -= a.health; //damage the tank
+          actors[i].health -= a.damage; //damage the tank
           hit += a.health;
           if(a.id != -actors[i].id)       //no self hits
             actorInfoById(-a.id).hits++;  //give our owner a hit
