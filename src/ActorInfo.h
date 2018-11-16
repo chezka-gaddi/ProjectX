@@ -32,6 +32,7 @@ struct ActorInfo
     int y;
     int id;
     int range;
+    int AP;
     int hits;
     int shots;
     int radar;
@@ -48,12 +49,13 @@ struct ActorInfo
               , int xpos //x
               , int ypos //y
               , int i    //id
+              , int ap = 1 //Action points
               , int r = 0 //Range
               , int s = 0 //Shots
               , int v = 0 //Radar
               , int b = 1 //ammo
               , std::string n = "default") 
-                   : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), range(r), hits(0), shots(s), tankAttributes(), radar(v), max_health(h), ammo(b), max_ammo(b), name(n), kills(0), heading(RIGHT){}  
+                   : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), AP(ap), range(r), hits(0), shots(s), tankAttributes(), radar(v), max_health(h), ammo(b), max_ammo(b), name(n), kills(0), heading(RIGHT){}  
     ActorInfo() : act_p(NULL), health(0), damage(0), x(0), y(0), id(0), range(0), hits(0), shots(0), max_health(0), ammo(0), max_ammo(0), heading(RIGHT){}
 };
 

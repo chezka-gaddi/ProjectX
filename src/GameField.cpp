@@ -192,30 +192,24 @@ void GameField::updateMap()
  * Prompts the actors to choose attributes to specialize int
  * @author Riley Kopp
  ******************************************************************************/
-void GameField::setSPECIAL(int points)
+void GameField::setSPECIAL(int points, const attributes baseStats)
 {
   int sum =0;
-  attributes baseStats;
 
   for(auto &actor: actors)
   {
-    baseStats.tankHealth = actor.tankAttributes.tankHealth;
-    baseStats.tankAP = actor.tankAttributes.tankAP;
-    baseStats.tankRadar = actor.tankAttributes.tankRadar;
-    baseStats.tankDamage = actor.tankAttributes.tankDamage;
-    baseStats.tankAmmo = actor.tankAttributes.tankAmmo;
-
     actor.tankAttributes = actor.act_p->setAttribute(points, baseStats);
 
     sum = actor.tankAttributes.tankHealth
           + actor.tankAttributes.tankAP
           + actor.tankAttributes.tankRadar
           + actor.tankAttributes.tankDamage
-          + actor.tankAttributes.tankAmmo;
+          + actor.tankAttributes.tankAmmo
+          + actor.tankAttributes.tankRange;
     if(sum  <= points)
     {
       actor.health += actor.tankAttributes.tankHealth;
-      actor.range += actor.tankAttributes.tankAP;
+      actor.AP += actor.tankAttributes.tankAP;
       actor.radar += actor.tankAttributes.tankRadar;
       actor.damage += actor.tankAttributes.tankDamage;
       actor.ammo += actor.tankAttributes.tankAmmo;
@@ -224,9 +218,9 @@ void GameField::setSPECIAL(int points)
         actor.health = 8;
         printf("Health stat was too high, setting at 8.\n");
       }
-      if(actor.range > 8)
+      if(actor.AP > 8)
       {
-        actor.range = 8;
+        actor.AP = 8;
         printf("AP stat was too high, setting at 8.\n");
       }
       if(actor.radar > 16)
@@ -415,15 +409,21 @@ void GameField::runMoves(ActorInfo &a)
          && actors[i].y == a.y    //Make sure we're on the same row
          && a.id != actors[i].id) //Make sure our tank doesn't damage itself
       {
-        if(a.id > 0 && actors[i].id > 0)  //Check tank to tank ramming
+        if(a.id > 0 && actors[i].id > 0 && actors[i].id != a.id)  //Check tank to tank ramming
         {
           //printf("Tank hit tank\n");
           //Reverse the move
           a.x -= xoff;
           a.y -= yoff;
-          tHealth - actors[i].health;
+          tHealth = actors[i].health;
           actors[i].health -= a.health; //deal full health damage to target
-          hit += tHealth - 1;
+          if (a.health == 1){
+            hit += a.health; //tank kills self
+          }else if (tHealth >= a.health){
+            hit += a.health - 1;//Does survive
+          }else{
+            hit += tHealth; //Tank survives 
+          }
           a.hits++; //A tank hit is still a hit right?
           if(actors[i].health <= 0)
           {
@@ -431,7 +431,7 @@ void GameField::runMoves(ActorInfo &a)
             actors[i].health = 0;
             actors[i].damage = 0;
             actors[i].id = 0;
-            actors[i].range = 0;
+            actors[i].AP = 0;
             a.kills++;
           }
         }
@@ -446,7 +446,7 @@ void GameField::runMoves(ActorInfo &a)
         else if(a.id < 0)  //If we're a projectile and we hit a tank
         {
           //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
-          actors[i].health -= a.health; //damage the tank
+          actors[i].health -= a.damage; //damage the tank
           hit += a.health;
           if(a.id != -actors[i].id)       //no self hits
             actorInfoById(-a.id).hits++;  //give our owner a hit
@@ -456,7 +456,7 @@ void GameField::runMoves(ActorInfo &a)
             actors[i].health = 0;
             actors[i].damage = 0;
             actors[i].id = 0;
-            actors[i].range = 0;
+            actors[i].AP = 0;
             actorInfoById(-a.id).kills++;  //give our owner a hit
           }
         }
@@ -504,7 +504,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   else if(tempOb == 'R')
   {
     //printf("Rock strike, log it.\n");
-    for(auto& r : gameptr->rocks)
+    for(auto* r : gameptr->rocks)
     {
       if(r->gridx == a.x && r->gridy == a.y && r->health > 0)
       {
@@ -521,7 +521,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   }
     else if(tempOb == 'T')
     {
-      for(auto& t : gameptr->trees)
+      for(auto* t : gameptr->trees)
       {
         if(t->gridx == a.x && t->gridy == a.y && t->health > 0)
         {
@@ -530,7 +530,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
           if(t->health <= 0)
           {
             t->health = 0;
-            t->destroyed = 0;
+            t->destroyed = turnCount;
           }
           return true;
         }
@@ -539,7 +539,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
     else if(tempOb == 'C')
     {
       //printf("Hit the crate.\n");
-      for(auto &c : gameptr->specials)
+      for(auto* &c : gameptr->specials)
       {
         if(c->gridx == a.x && c->gridy == a.y && c->health > 0)
         {
@@ -581,6 +581,8 @@ bool GameField::checkObjectStrike(ActorInfo &a)
               if(t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
               {
                 t->health--;
+                if (t->health <= 0)
+                  t->destroyed = turnCount;
               }
             }
             break;
@@ -600,6 +602,8 @@ bool GameField::checkObjectStrike(ActorInfo &a)
               if(r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
               {
                 r->health--;
+                if (r->health <= 0)
+                  r->destroyed = turnCount;
               }
             }
             break;
@@ -660,8 +664,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
       for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
       {
         value = y_iter * map.width + x_iter;
-        if(map.obstacleMap[value] != 'T')
-          new_map.map[value] = map.map[value];
+        new_map.map[value] = map.map[value];
         new_map.obstacleMap[value] = map.obstacleMap[value];
         if(map.obstacleMap[value] == 0 && map.map[value] != 0)
         {
@@ -731,21 +734,21 @@ bool GameField::checkObjectStrike(ActorInfo &a)
     MapData fog_of_war = fieldMap;
     //printf("Turn number: %d\n",turnCount);
 #ifndef TESTING
-    for(Obstacles* t : gameptr->trees)
+    for(Obstacles* &t : gameptr->trees)
     {
       if(t->health <= 0)
       {
         t->regrow(turnCount);
       }
     }
-    for(Obstacles* r : gameptr->rocks)
+    for(Obstacles* &r : gameptr->rocks)
     {
       if(r->health <= 0)
       {
         r->regrow(turnCount);
       }
     }
-    for(Obstacles* b : gameptr->bushes)
+    for(Obstacles* &b : gameptr->bushes)
     {
       if(b->health <= 0)
       {
@@ -755,7 +758,10 @@ bool GameField::checkObjectStrike(ActorInfo &a)
 #endif
     for(int i = 0; i < actors.size() && actors[i].health != 0; ++i)
     {
-      act_ap = actors[i].range;
+      act_ap = actors[i].AP;
+#ifndef TESTING
+      actors[i].id > 0 ? gameptr->actTurn = actors[i].id : gameptr->actTurn = -actors[i].id;
+#endif
       while(act_ap > 0 && actors[i].id != 0)
       {
         actors[i].id > 0 ? gameptr->actTurn = actors[i].id : gameptr->actTurn = -actors[i].id;
@@ -791,7 +797,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
             {
               actors[i].heading = atk;
               ProjectileActor * proj = new ProjectileActor(atk);
-              newProjectile.range = 6;
+              newProjectile.AP = actors[i].range;
               newProjectile.id = -actors[i].id;
               newProjectile.act_p = proj;
               newProjectile.health = 1;
@@ -844,12 +850,13 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   {
     for(auto &a : actors)
     {
-      if(a.health + a.damage + a.range + a.shots > pointsAvailable)
+      if(a.health + a.damage + a.AP + a.shots + a.range > pointsAvailable)
       {
         a.health = 1;
         a.damage = 1;
         a.range = 1;
         a.shots = 1;
+        a.AP = 1;
       }
     }
   }

@@ -1,8 +1,8 @@
-#ifndef __CAMPER_AI_H
-#define __CAMPER_AI_H
+#ifndef __STATIONARY_AI_H
+#define __STATIONARY_AI_H
 
-#include "src/Actor.h"
-#include "src/direction.h"
+#include "Actor.h"
+#include "direction.h"
 #include <cmath>
 #include <iostream>
 
@@ -13,7 +13,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-class CamperAI : public Actor
+class StationaryAI : public Actor
 {
     // The direction moved from last turn
     direction LastDir;
@@ -32,14 +32,12 @@ public:
     // The Overwritten spendAP  function.
     virtual int spendAP(MapData map, PositionData status);
 
-    CamperAI();
-    ~CamperAI();
+    StationaryAI();
+    ~StationaryAI();
 
 protected:
     int turn = 0;
     int maxAp = 0;
-    bool corner = false;
-    int attacks[6] = {8};
 };
 
 #endif

@@ -132,6 +132,8 @@ void DisplayEvent::doAction(Game &game)
 
     updateDrawables(game);
     Drawable *stuff;
+    
+    if (game.ui == true){
 
     for( int i = 0; i < game.constants.size(); i++ )
     {
@@ -184,6 +186,7 @@ void DisplayEvent::doAction(Game &game)
     game.sfx.clear();
     system("sleep 0.2");
     glutSwapBuffers();
+    }else {}
 }
 
 
