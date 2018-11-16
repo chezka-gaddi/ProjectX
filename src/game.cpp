@@ -362,7 +362,7 @@ void Game::executeTurn()
     tankGame->cull();
   }else if(isplayable(tankGame->getActors()))
   {
-    tankGame->nextTurn();
+    tankGame->nextTurn();    
   }else{
     ofstream fout("results.txt", ios::out | ios::app);
     fout << tankGame->getWinner() << endl;
@@ -1003,11 +1003,12 @@ void Game::initGameState()
     cout << "  ...Done" << endl;
     fout.close();
 // Create a stats menu for up to 4 tanks
+    int count = 0;
     for(auto actTemp : startActors)
     {
-      if(actTemp.id <= 4)
+      if(actTemp.id > 0)
       {
-        temp = new Menu(actTemp.id, actTemp.health, actTemp.shots, actTemp.hits);
+        temp = new Menu(actTemp.id, actTemp.health, actTemp.shots, actTemp.hits, actTemp.name);
         objects.push_back(temp);
       }
     }
