@@ -591,12 +591,14 @@ void Game::initGameState()
     //AI settings
     if(id == "AI")  //AI to load
     {
-      cout << "Checking player " << AINames.size()+1 << "...";
+      if (AINames.size() == 0 )
+        cout << "Waking up the tank commanders...\n"; 
+      cout << "   Checking player " << AINames.size()+1 << "...";
       int x, y;
       i = args.find(' ');
       AINames.push_back(args.substr(0, i));
       std::stringstream(args.substr(i+1)) >> x >> y;
-      printf("\nTank at: Actual: %d, %d Modified: %d, %d.\n",x, y, x+wPad,y+hPad); 
+      //printf("\nTank at: Actual: %d, %d Modified: %d, %d.\n",x, y, x+wPad,y+hPad); 
       tankLocations.push_back(std::pair<int,int>(x+wPad,y+hPad));
       for(int x=0; x < tankLocations.size(); x++)
       {
@@ -620,13 +622,13 @@ void Game::initGameState()
       {
         i = args.find(' ');    //skip y
         name = args.substr(0,i);
-        printf("Image name: %s",name.c_str());
+        //printf("Image name: %s",name.c_str());
         AIImages.push_back(name);
         args = args.substr(i+1);
         if (args == AIImages[x])
                 break;
       }
-      printf(". Array size: %d\n",(int)AIImages.size());
+      //printf(". Array size: %d\n",(int)AIImages.size());
       if (AIImages.size() != 5){
 				tankImages.insert(std::end(tankImages), std::begin(AIDefImg), std::end(AIDefImg));        
       }else{
@@ -637,7 +639,7 @@ void Game::initGameState()
     }
     else if(id == "AI_SPEED")
     {
-      cout << "Speeding up the AI's...  ";
+      cout << "Speeding up the AI's...  \n";
       stringstream(args) >> ai_speed;
       if(ai_speed > 1500)
       {
@@ -646,7 +648,7 @@ void Game::initGameState()
       }
       TimerEvent::idle_speed = ai_speed;
       idle_speed = ai_speed;
-      cout << "...done.\n";
+      cout << "   ...done.\n";
     }
     //field params
     else if(id == "WIDTH")
@@ -679,7 +681,7 @@ void Game::initGameState()
         height = 21;
         cout << "Height parameter too high, defaulting to 21.\n";
       }
-      cout << "...done.\n";
+      cout << "\n                                                                   ...done.\n";
     }
     else if(id == "MAXTURNS")
     {
@@ -696,19 +698,20 @@ void Game::initGameState()
         cout << "Max turns set too high, defaulting to 200.\n";
       }
       max_turns = maxT;
-      cout << "...done.\n";
+      cout << "   ...done.\n";
     }
     else if(id == "DISABLEGUI")
     {
       cout << "Hiding Everything\n";
       ui = false; 
+      cout << "   ...done.\n";
     }
     else if(id == "FIELDIMAGE")
     {
       cout << "Painting the background...\n";
       stringstream(args) >> name;
       gameImages.push_back(name);
-      cout << "...done\n";
+      cout << "   ...done\n";
     }
     else if(id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH" || id == "CRATE" || id =="WATER")
     {
@@ -1013,7 +1016,7 @@ void Game::initGameState()
       }
     }
 
-    cout << "Initializing Game...\n";
+    cout << "Finalizing game settings...\n";
     //printf("Height: %d  Width: %d\n",height, width);
     tankGame = new GameField(width, height, startActors, displayWrapper, this);
     baseStats.tankHealth = health;
@@ -1024,7 +1027,7 @@ void Game::initGameState()
     baseStats.tankRange = range;
     
     tankGame->setSPECIAL(attributePoints, baseStats);
-    cout << "...Done\n" << endl;
+    cout << "   ...Done\n" << endl;
 
 // Add obstacles to the gamefield
     cout << "Placing Obstacles...\n";
