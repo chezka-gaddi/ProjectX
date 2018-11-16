@@ -417,12 +417,17 @@ void GameField::runMoves(ActorInfo &a)
           a.y -= yoff;
           tHealth = actors[i].health;
           actors[i].health -= a.health; //deal full health damage to target
-          if (a.health == 1){
+          if(a.health == 1)
+          {
             hit += a.health; //tank kills self
-          }else if (tHealth >= a.health){
+          }
+          else if(tHealth >= a.health)
+          {
             hit += a.health - 1;//Does survive
-          }else{
-            hit += tHealth; //Tank survives 
+          }
+          else
+          {
+            hit += tHealth; //Tank survives
           }
           a.hits++; //A tank hit is still a hit right?
           if(actors[i].health <= 0)
@@ -519,282 +524,303 @@ bool GameField::checkObjectStrike(ActorInfo &a)
       }
     }
   }
-    else if(tempOb == 'T')
+  else if(tempOb == 'T')
+  {
+    for(auto* t : gameptr->trees)
     {
-      for(auto* t : gameptr->trees)
+      if(t->gridx == a.x && t->gridy == a.y && t->health > 0)
       {
-        if(t->gridx == a.x && t->gridy == a.y && t->health > 0)
+        //printf("Found tree strike, chop it.\n");
+        t->health -= a.damage;
+        if(t->health <= 0)
         {
-          //printf("Found tree strike, chop it.\n");
-          t->health -= a.damage;
-          if(t->health <= 0)
+          t->health = 0;
+          t->set_destroyed(turnCount);
+        }
+        return true;
+      }
+    }
+  }
+  else if(tempOb == 'C')
+  {
+    //printf("Hit the crate.\n");
+    for(auto* &c : gameptr->specials)
+    {
+      if(c->gridx == a.x && c->gridy == a.y && c->health > 0)
+      {
+        // printf("Found the crate at (%d, %d) with projectile at (%d,%d).\n",c->gridx, c->gridy, a.x, a.y);
+        c->health--;
+        hits+= crate_o_doom(c->gridx, c->gridy, a);//Bang the drum
+        actorInfoById(-a.id).hits += hits;
+        return true;
+      }
+    }
+  }
+  return false;
+}
+/***************************************************************************//**
+* @author Jon McKee
+* @brief  Crate destruction
+******************************************************************************/
+bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
+{
+  //Steal the good parts from fog of war
+  int radar = 1; //How big the explosion
+  int x_pos = x;
+  int y_pos = y;
+  int x_max_radar_range = radar + x_pos >= fieldMap.width ? fieldMap.width - 1 : radar + x_pos;
+  int y_max_radar_range = radar + y_pos >= fieldMap.height ? fieldMap.height - 1 : radar + y_pos;
+  int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
+  int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
+  int hit = 0;
+
+  for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
+  {
+    for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
+    {
+      switch(obstacleAt(x_iter, y_iter))  //now that we stole the internals do our stuff
+      {
+        case 'T':
+          for(auto &t : gameptr->trees)
           {
-            t->health = 0;
-            t->set_destroyed(turnCount);
+            if(t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
+            {
+              t->health--;
+              if(t->health <= 0)
+                t->destroyed = turnCount;
+            }
           }
-          return true;
-        }
-      }
-    }
-    else if(tempOb == 'C')
-    {
-      //printf("Hit the crate.\n");
-      for(auto* &c : gameptr->specials)
-      {
-        if(c->gridx == a.x && c->gridy == a.y && c->health > 0)
-        {
-          // printf("Found the crate at (%d, %d) with projectile at (%d,%d).\n",c->gridx, c->gridy, a.x, a.y);
-          c->health--;
-          hits+= crate_o_doom(c->gridx, c->gridy, a);//Bang the drum
-          actorInfoById(-a.id).hits += hits;
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-  /***************************************************************************//**
-  * @author Jon McKee
-  * @brief  Crate destruction
-  ******************************************************************************/
-  bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
-  {
-    //Steal the good parts from fog of war
-    int radar = 1; //How big the explosion
-    int x_pos = x;
-    int y_pos = y;
-    int x_max_radar_range = radar + x_pos >= fieldMap.width ? fieldMap.width - 1 : radar + x_pos;
-    int y_max_radar_range = radar + y_pos >= fieldMap.height ? fieldMap.height - 1 : radar + y_pos;
-    int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
-    int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
-    int hit = 0;
-
-    for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
-    {
-      for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
-      {
-        switch(obstacleAt(x_iter, y_iter))  //now that we stole the internals do our stuff
-        {
-          case 'T':
-            for(auto &t : gameptr->trees)
+          break;
+        case 'C':
+          for(auto &c : gameptr->specials)
+          {
+            if(c->gridx == x_iter && c->gridy == y_iter && c->health > 0)
             {
-              if(t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
-              {
-                t->health--;
-                if (t->health <= 0)
-                  t->destroyed = turnCount;
-              }
+              c->health--;
+              hit = crate_o_doom(c->gridx, c->gridy, a); //Chain reaction
             }
-            break;
-          case 'C':
-            for(auto &c : gameptr->specials)
+          }
+          break;
+        case 'R':
+          for(auto &r : gameptr->rocks)
+          {
+            if(r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
             {
-              if(c->gridx == x_iter && c->gridy == y_iter && c->health > 0)
-              {
-                c->health--;
-                hit = crate_o_doom(c->gridx, c->gridy, a); //Chain reaction
-              }
+              r->health--;
+              if(r->health <= 0)
+                r->destroyed = turnCount;
             }
-            break;
-          case 'R':
-            for(auto &r : gameptr->rocks)
-            {
-              if(r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
-              {
-                r->health--;
-                if (r->health <= 0)
-                  r->destroyed = turnCount;
-              }
-            }
-            break;
-          case 'B':
-          default:
-            for(auto &act : actors)
-            {
-              if(act.x == x_iter && act.y == y_iter && act.health > 0)
-              {
-                //printf("Hit a tank at (%d, %d)\n",x_iter, y_iter);
-                act.health--;
-                if(act.health <= 0)
-                {
-                  act.health = 0;
-                  act.id = 0;
-                  actorInfoById(-a.id).kills++;
-                }
-                actorInfoById(-a.id).hits++;
-              }
-            }
-            break;
-        }
-        SFX.push_back(make_pair(x_iter, y_iter));
-      }
-    }
-    //printf("Hit %d number of tanks.\n",hit);
-    return hit;
-
-  }
-  /***************************************************************************//**
-  * @author Riley Kopp
-  * @brief
-  * turns the map into just what the current tank can see based off radar
-  ******************************************************************************/
-  void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
-  {
-
-    if(current_actor.id <= 0)
-      return;
-
-    int radar = current_actor.radar;
-    int x_pos = current_actor.x;
-    int y_pos = current_actor.y;
-    int x_max_radar_range = radar + x_pos >= map.width ? map.width - 1 : radar + x_pos;
-    int y_max_radar_range = radar + y_pos >= map.height ? map.height - 1 : radar + y_pos;
-    int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
-    int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
-
-    MapData new_map = map;
-    std::fill(new_map.map.begin(), new_map.map.end(), 0);
-    std::fill(new_map.obstacleMap.begin(), new_map.obstacleMap.end(), 0);
-    new_map.healthMap.resize(new_map.width * new_map.height);
-    std::fill(new_map.healthMap.begin(), new_map.healthMap.end(), 0);
-
-    int value;
-    for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
-    {
-      for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
-      {
-        value = y_iter * map.width + x_iter;
-        new_map.map[value] = map.map[value];
-        new_map.obstacleMap[value] = map.obstacleMap[value];
-        if(map.obstacleMap[value] == 0 && map.map[value] != 0)
-        {
-          for(auto act : actors)
+          }
+          break;
+        case 'B':
+        default:
+          for(auto &act : actors)
           {
             if(act.x == x_iter && act.y == y_iter && act.health > 0)
             {
-              new_map.healthMap[value] = act.health;
+              //printf("Hit a tank at (%d, %d)\n",x_iter, y_iter);
+              act.health--;
+              if(act.health <= 0)
+              {
+                act.health = 0;
+                act.id = 0;
+                actorInfoById(-a.id).kills++;
+              }
+              actorInfoById(-a.id).hits++;
             }
           }
-        }
-        switch(obstacleAt(x_iter, y_iter))
-        {
-          case 'T':
-            for(auto t : gameptr->trees)
-            {
-              if(t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
-              {
-                new_map.healthMap[value] = t->health;
-              }
-            }
-            break;
-          case 'C':
-            for(auto c : gameptr->specials)
-            {
-              new_map.healthMap[value] = 1;
-            }
-            break;
-          case 'R':
-            for(auto r : gameptr->rocks)
-            {
-              if(r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
-              {
-                new_map.healthMap[value] = r->health;
-              }
-            }
-            break;
-          case 'B':
-            for(auto b : gameptr->bushes)
-            {
-              new_map.healthMap[value] = 1;
-            }
-            break;
-        }
+          break;
       }
+      SFX.push_back(make_pair(x_iter, y_iter));
     }
-    map = new_map;
-
   }
-  /**
-   * @author David Donahue
-   * @par Description:
-   * Executes the move and attack phase of each AI's turn and increments the turn counter.
-   * AI's are culled
-   */
+  //printf("Hit %d number of tanks.\n",hit);
+  return hit;
 
-  void GameField::nextTurn()
+}
+/***************************************************************************//**
+* @author Riley Kopp
+* @brief
+* turns the map into just what the current tank can see based off radar
+******************************************************************************/
+void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
+{
+
+  if(current_actor.id <= 0)
+    return;
+
+  int radar = current_actor.radar;
+  int x_pos = current_actor.x;
+  int y_pos = current_actor.y;
+  int x_max_radar_range = radar + x_pos >= map.width ? map.width - 1 : radar + x_pos;
+  int y_max_radar_range = radar + y_pos >= map.height ? map.height - 1 : radar + y_pos;
+  int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
+  int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
+
+  MapData new_map = map;
+  std::fill(new_map.map.begin(), new_map.map.end(), 0);
+  std::fill(new_map.obstacleMap.begin(), new_map.obstacleMap.end(), 0);
+  new_map.healthMap.resize(new_map.width * new_map.height);
+  std::fill(new_map.healthMap.begin(), new_map.healthMap.end(), 0);
+
+  int value;
+  for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
   {
-    ++turnCount;
+    for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
+    {
+      value = y_iter * map.width + x_iter;
+      new_map.map[value] = map.map[value];
+      new_map.obstacleMap[value] = map.obstacleMap[value];
+      if(map.obstacleMap[value] == 0 && map.map[value] != 0)
+      {
+        for(auto act : actors)
+        {
+          if(act.x == x_iter && act.y == y_iter && act.health > 0)
+          {
+            new_map.healthMap[value] = act.health;
+          }
+        }
+      }
+      switch(obstacleAt(x_iter, y_iter))
+      {
+        case 'T':
+          for(auto t : gameptr->trees)
+          {
+            if(t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
+            {
+              new_map.healthMap[value] = t->health;
+            }
+          }
+          break;
+        case 'C':
+          for(auto c : gameptr->specials)
+          {
+            new_map.healthMap[value] = 1;
+          }
+          break;
+        case 'R':
+          for(auto r : gameptr->rocks)
+          {
+            if(r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
+            {
+              new_map.healthMap[value] = r->health;
+            }
+          }
+          break;
+        case 'B':
+          for(auto b : gameptr->bushes)
+          {
+            new_map.healthMap[value] = 1;
+          }
+          break;
+      }
+    }
+  }
+  map = new_map;
 
-    direction atk;
-    ActorInfo newProjectile;
-    PositionData pos;
-    int action;
-    int act_ap;
-    int tSize, tId;
-    MapData fog_of_war = fieldMap;
-    //printf("Turn number: %d\n",turnCount);
+}
+/**
+ * @author David Donahue
+ * @par Description:
+ * Executes the move and attack phase of each AI's turn and increments the turn counter.
+ * AI's are culled
+ */
+
+void GameField::nextTurn()
+{
+  ++turnCount;
+
+  direction atk;
+  ActorInfo newProjectile;
+  PositionData pos;
+  int action;
+  int act_ap;
+  int tSize, tId;
+  int j = 0;
+  bool grow = false;
+  MapData fog_of_war = fieldMap;
+  //printf("Turn number: %d\n",turnCount);
 #ifndef TESTING  //Prevent testing from trying to access the unset pointer
-    for(Obstacles* &t : gameptr->trees)
+  for(Obstacles* &t : gameptr->trees)
+  {
+    if(t->health <= 0)
     {
-      if(t->health <= 0)
-      {
-        t->regrow(turnCount);
-      }
+      t->regrow(turnCount);
     }
-    for(Obstacles* &r : gameptr->rocks)
+  }
+  for(Obstacles* &r : gameptr->rocks)
+  {
+    if(r->health <= 0)
     {
-      if(r->health <= 0)
-      {
-        r->regrow(turnCount);
-      }
+      r->regrow(turnCount);
     }
-    for(Obstacles* &b : gameptr->bushes)
+  }
+  for(Obstacles* &b : gameptr->bushes)
+  {
+    if(b->health <= 0)
     {
-      if(b->health <= 0)
-      {
-        b->regrow(turnCount);
-      }
+      b->regrow(turnCount);
     }
+  }
 #endif
-    for(int i = 0; i < actors.size() && actors[i].health != 0; ++i)
-    {
-      act_ap = actors[i].AP;
-#ifndef TESTING //Prevent testing from trying t oaccess the unset pointer
-      actors[i].id > 0 ? gameptr->actTurn = actors[i].id : gameptr->actTurn = -actors[i].id;
+  for(int i = 0; i < actors.size(); ++i)
+  {
+    //Early exit if we hit our freshly merged projectiles
+    if (actors[i].health <= 0)
+            continue;
+    act_ap = actors[i].AP;
+#ifndef TESTING //Prevent testing from trying to access the unset pointer
+    actors[i].id > 0 ? gameptr->actTurn = actors[i].id : gameptr->actTurn = -actors[i].id;
 #endif
-      while(act_ap > 0 && actors[i].id != 0)
+    while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
+    {
+      fog_of_war = fieldMap;
+      create_fog_of_war(fog_of_war, actors[i]);
+      pos.game_x = actors[i].x;
+      pos.game_y = actors[i].y;
+      pos.health = actors[i].health;
+      pos.id = actors[i].id;
+      pos.ap = act_ap;
+      pos.ammo = actors[i].ammo;
+      action = actors[i].act_p->spendAP(fog_of_war, pos);
+      if(action == 1)
       {
-        fog_of_war = fieldMap;
-        create_fog_of_war(fog_of_war, actors[i]);
+        runMoves(actors[i]);
+      }
+
+      else if(action == 2)
+      {
+        //PositionData to give the AI
         pos.game_x = actors[i].x;
         pos.game_y = actors[i].y;
         pos.health = actors[i].health;
         pos.id = actors[i].id;
-        pos.ap = act_ap;
-        pos.ammo = actors[i].ammo;
-        action = actors[i].act_p->spendAP(fog_of_war, pos);
-        if(action == 1)
+
+        //Get the AI's desired attack
+        atk = actors[i].act_p->attack(fog_of_war, pos);
+
+
+        if(actors[i].id > 0)  //tanks attacking
         {
-          runMoves(actors[i]);
-        }
-
-        else if(action == 2)
-        {
-          //PositionData to give the AI
-          pos.game_x = actors[i].x;
-          pos.game_y = actors[i].y;
-          pos.health = actors[i].health;
-          pos.id = actors[i].id;
-
-          //Get the AI's desired attack
-          atk = actors[i].act_p->attack(fog_of_war, pos);
-
-
-          if(actors[i].id > 0)  //tanks attacking
+          if(atk != STAY && actors[i].ammo >= 1)
           {
-            if(atk != STAY && actors[i].ammo >= 1)
+            actors[i].heading = atk;
+            j = i+1;
+            grow = false;
+            while(j < actors.size() && actors[i].id == -actors[j].id && actors[j].id < 0 && actors[j].health > 0)
             {
-              actors[i].heading = atk;
+              if(actors[i].x == actors[j].x && actors[i].y == actors[j].y)
+              {
+                actors[j].scale += .40;
+                actors[j].health += 1;
+                actors[j].damage += actors[i].damage;
+                grow = true;
+                break;
+              }
+              j++;
+            }
+            if (grow == false)
+            {
               ProjectileActor * proj = new ProjectileActor(atk);
               newProjectile.AP = actors[i].range;
               newProjectile.id = -actors[i].id;
@@ -807,237 +833,221 @@ bool GameField::checkObjectStrike(ActorInfo &a)
               actors[i].shots++;
               actors[i].ammo--;
             }
-            else if(atk != STAY)
-            {
-              //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
-              actors[i].ammo = actors[i].max_ammo;
-              //printf("Back up to %d bullets.\n",actors[i].ammo);
-            }
           }
-
+          else if(atk != STAY)
+          {
+            //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
+            actors[i].ammo = actors[i].max_ammo;
+            //printf("Back up to %d bullets.\n",actors[i].ammo);
+          }
         }
-        else if(action == 4)
-        {
-          actors[i].ammo = actors[i].max_ammo;
-          //printf("Reloading... Reloading... Reloading\n");
-        }
-        --act_ap;
 
       }
-    //Combine projectiles, but only if we're on a tanks ending turn
-    if (actors[i].id > 1){
-      int j = i+2;
-      for(int i = 0; i < actors.size() && actors[i].health != 0; ++i)
-      while (-actors[j].id == actors[i].id){
-        if (actors[i+1].id == actors[j].id){
-          actors[i+1].scale += .10;
-          actors[i+1].health += actors[j].health;
-          actors[i+1].damage += actors[j].damage;
-          actors[j].id = 0;
-          actors[j].health = 0;
-          actors[j].damage = 0;
-        }
-        j++;
-      }
-      
-    }
-  }
-    cull();
-    updateMap();
-  }
-  /**
-   * @author David Donahue
-   * @par Description:
-   * Add an actor to the list
-   */
-  void GameField::addActor(ActorInfo a)
-  {
-    actors.push_back(a);
-    updateMap();
-  }
-
-  /**
-   * @author Youki Lewis
-   * @par Description:
-   * Check if points are distributed properly
-   */
-  void GameField::checkForCheaters(int pointsAvailable)
-  {
-    for(auto &a : actors)
-    {
-      if(a.health + a.damage + a.AP + a.shots + a.range > pointsAvailable)
+      else if(action == 4)
       {
-        a.health = 1;
-        a.damage = 1;
-        a.range = 1;
-        a.shots = 1;
-        a.AP = 1;
+        actors[i].ammo = actors[i].max_ammo;
+        //printf("Reloading... Reloading... Reloading\n");
       }
+      --act_ap;
+
     }
   }
+  cull();
+  updateMap();
+}
+/**
+ * @author David Donahue
+ * @par Description:
+ * Add an actor to the list
+ */
+void GameField::addActor(ActorInfo a)
+{
+  actors.push_back(a);
+  updateMap();
+}
 
-  /**
-   * @author David Donahue
-   * @par Description:
-   * Adds an obstacle to the map
-   *
-   * @param[in] x - the x value of the obstacle
-   * @param[in] y - the y value of the obstacle
-   */
-
-  void GameField::addObstacle(int x, int y, int type)
+/**
+ * @author Youki Lewis
+ * @par Description:
+ * Check if points are distributed properly
+ */
+void GameField::checkForCheaters(int pointsAvailable)
+{
+  for(auto &a : actors)
   {
-    fieldMap.obstacleMap[x + fieldMap.width * y] = type;
-  }
-
-  /**
-   * @author David Donahue
-   * @par Description:
-   * Removes an obstacle from the map
-   *
-   * @param[in] x - the x value of the obstacle
-   * @param[in] y - the y value of the obstacle
-   */
-
-  void GameField::removeObstacle(int x, int y)
-  {
-    fieldMap.obstacleMap[x + fieldMap.width * y] = false;
-  }
-
-  /**
-   * @author David Donahue
-   * @par Description:
-   * Get the current set of actors
-   */
-  std::vector<ActorInfo> GameField::getActors()
-  {
-    return actors;
-  }
-  /**
-   * @author David Donahue
-   * @par Description:
-   * Get the current set of actors
-   */
-  std::vector<ActorInfo> *GameField::getActorsPointer()
-  {
-    std::vector<ActorInfo> *temp;
-    temp = &actors;
-    return temp;
-  }
-  /**
-   * @author Jon McKee
-   * @par Description:
-   * Get the current set of SFX
-   */
-  std::vector<std::pair<int,int>> GameField::getSFX()
-  {
-    return SFX;
-  }
-  /**
-   * @author Jon McKee
-   * @par Description:
-   * Clear the current set of SFX
-   */
-  void GameField::clearSFX()
-  {
-    SFX.clear();
-  }
-  /**
-   * @author David Donahue
-   * @par Description:
-   * Get a vector of actors at a given location on the map
-   */
-  std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
-  {
-
-    std::vector<ActorInfo> hits;
-    for(auto a : actors)  //check each actor
+    if(a.health + a.damage + a.AP + a.shots + a.range > pointsAvailable)
     {
-      if(a.x == x && a.y == y)
-        hits.push_back(a);
+      a.health = 1;
+      a.damage = 1;
+      a.range = 1;
+      a.shots = 1;
+      a.AP = 1;
     }
-    return hits;
-
   }
-  /**
-   * @author David Donahue
-   * @par Description:
-   * Remove actors with hp of 0 from the game
-   */
-  void GameField::cull()
+}
+
+/**
+ * @author David Donahue
+ * @par Description:
+ * Adds an obstacle to the map
+ *
+ * @param[in] x - the x value of the obstacle
+ * @param[in] y - the y value of the obstacle
+ */
+
+void GameField::addObstacle(int x, int y, int type)
+{
+  fieldMap.obstacleMap[x + fieldMap.width * y] = type;
+}
+
+/**
+ * @author David Donahue
+ * @par Description:
+ * Removes an obstacle from the map
+ *
+ * @param[in] x - the x value of the obstacle
+ * @param[in] y - the y value of the obstacle
+ */
+
+void GameField::removeObstacle(int x, int y)
+{
+  fieldMap.obstacleMap[x + fieldMap.width * y] = false;
+}
+
+/**
+ * @author David Donahue
+ * @par Description:
+ * Get the current set of actors
+ */
+std::vector<ActorInfo> GameField::getActors()
+{
+  return actors;
+}
+/**
+ * @author David Donahue
+ * @par Description:
+ * Get the current set of actors
+ */
+std::vector<ActorInfo> *GameField::getActorsPointer()
+{
+  std::vector<ActorInfo> *temp;
+  temp = &actors;
+  return temp;
+}
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Get the current set of SFX
+ */
+std::vector<std::pair<int,int>> GameField::getSFX()
+{
+  return SFX;
+}
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Clear the current set of SFX
+ */
+void GameField::clearSFX()
+{
+  SFX.clear();
+}
+/**
+ * @author David Donahue
+ * @par Description:
+ * Get a vector of actors at a given location on the map
+ */
+std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
+{
+
+  std::vector<ActorInfo> hits;
+  for(auto a : actors)  //check each actor
   {
-    for(int i = 0; i < actors.size(); ++i)  //This is used instead of the c++11 version so that we can use the index.
+    if(a.x == x && a.y == y)
+      hits.push_back(a);
+  }
+  return hits;
+
+}
+/**
+ * @author David Donahue
+ * @par Description:
+ * Remove actors with hp of 0 from the game
+ */
+void GameField::cull()
+{
+  for(int i = 0; i < actors.size(); ++i)  //This is used instead of the c++11 version so that we can use the index.
+  {
+    if(actors[i].health == 0)
     {
-      if(actors[i].health == 0)
+      if(actors[i].name != "default\n")
       {
-        if(actors[i].name != "default\n")
-        {
-          //std::cout << "Tank Down!! " << actors[i].name << " died\n";
-          deceased.push_back(actors[i]);
-          //std::cout << "Current number of dead tanks is: " << deceased.size() << endl;
-        }
-        if(actors[i].act_p != NULL)
-          delete actors[i].act_p;
-        actors.erase(actors.begin()+i);
-        --i; // go back one since everything just shifted back
+        //std::cout << "Tank Down!! " << actors[i].name << " died\n";
+        deceased.push_back(actors[i]);
+        //std::cout << "Current number of dead tanks is: " << deceased.size() << endl;
       }
+      if(actors[i].act_p != NULL)
+        delete actors[i].act_p;
+      actors.erase(actors.begin()+i);
+      --i; // go back one since everything just shifted back
     }
-
   }
-  /**
-   * @author David Donahue
-   * @par Description:
-   * Returns the full fieldMap as a MapData struct
-   */
-  MapData GameField::getMapData()
 
+}
+/**
+ * @author David Donahue
+ * @par Description:
+ * Returns the full fieldMap as a MapData struct
+ */
+MapData GameField::getMapData()
+
+{
+  return fieldMap;
+}
+
+/**
+ * @author David Donahue
+ * @par Description:
+ * Finds an actor by its ID and returns a reference to it
+ *
+ * @param[in] id - the ID of the actor
+ * @return Reference to the desired actor or a reference to a 'null' actor
+ *
+ */
+
+ActorInfo & GameField::actorInfoById(int id)
+{
+  for(auto &a : actors)
   {
-    return fieldMap;
+    if(a.id == id)
+      return a;
   }
-
-  /**
-   * @author David Donahue
-   * @par Description:
-   * Finds an actor by its ID and returns a reference to it
-   *
-   * @param[in] id - the ID of the actor
-   * @return Reference to the desired actor or a reference to a 'null' actor
-   *
-   */
-
-  ActorInfo & GameField::actorInfoById(int id)
-  {
-    for(auto &a : actors)
-    {
-      if(a.id == id)
-        return a;
-    }
-    return nullActor;
-  }
+  return nullActor;
+}
 
 
 
-  /**
-   * @author David Donahue
-   * @par Description:
-   * Determines whether a space has an obstacle on it
-   *
-   * @param[in] x - the X coordinate of the tile
-   * @param[in] y - the Y coordinate of the tile
-   * @return true if an obstacle exists at a tile, false if not
-   *
-   */
-  int GameField::obstacleAt(int x, int y)
-  {
-    return fieldMap.obstacleMap[x + y * fieldMap.width];
+/**
+ * @author David Donahue
+ * @par Description:
+ * Determines whether a space has an obstacle on it
+ *
+ * @param[in] x - the X coordinate of the tile
+ * @param[in] y - the Y coordinate of the tile
+ * @return true if an obstacle exists at a tile, false if not
+ *
+ */
+int GameField::obstacleAt(int x, int y)
+{
+  return fieldMap.obstacleMap[x + y * fieldMap.width];
 
-  }
+}
 
-  std::string GameField::getWinner()
-  {
-    string winner = "none";
-    for(auto a : actors)
-      if(a.health > 0 && a.id > 0)
-        winner = a.name;
-    return winner;
-  }
+std::string GameField::getWinner()
+{
+  string winner = "none";
+  for(auto a : actors)
+    if(a.health > 0 && a.id > 0)
+      winner = a.name;
+  return winner;
+}

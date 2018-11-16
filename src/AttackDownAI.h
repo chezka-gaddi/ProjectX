@@ -8,15 +8,13 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Description: This AI finds a corner and starts shooting.
+/// Description: This AI finds a corner and starts shooting. It's like an 8
+//                year old playing call of duty.
 ///////////////////////////////////////////////////////////////////////////////
 
 
-class CamperAI : public Actor
+class AttackDownAI : public Actor
 {
-    // The direction moved from last turn
-    direction LastDir;
-
 public:
 
     // The Overwritten Move function.
@@ -31,14 +29,9 @@ public:
     // The Overwritten spendAP  function.
     virtual int spendAP(MapData map, PositionData status);
 
-    CamperAI();
-    ~CamperAI();
+    AttackDownAI();
+    ~AttackDownAI();
 
-protected:
-    int turn = 0;
-    int maxAp = 0;
-    bool corner = false;
-    int attacks[6] = {8};
 };
 
 #endif

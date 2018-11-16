@@ -52,6 +52,7 @@ public:
     void initGameState();
     void closeDown();
     void earlyOut();
+    void createConfig();
     float convertGLXCoordinate( int );
     float convertGLYCoordinate( int );
 
