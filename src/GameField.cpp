@@ -824,8 +824,24 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         --act_ap;
 
       }
+    //Combine projectiles, but only if we're on a tanks ending turn
+    if (actors[i].id > 1){
+      int j = i+2;
+      for(int i = 0; i < actors.size() && actors[i].health != 0; ++i)
+      while (-actors[j].id == actors[i].id){
+        if (actors[i+1].id == actors[j].id){
+          actors[i+1].scale += .10;
+          actors[i+1].health += actors[j].health;
+          actors[i+1].damage += actors[j].damage;
+          actors[j].id = 0;
+          actors[j].health = 0;
+          actors[j].damage = 0;
+        }
+        j++;
+      }
+      
     }
-
+  }
     cull();
     updateMap();
   }

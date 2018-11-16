@@ -53,6 +53,7 @@ void InitEvent::doAction(Game &game)
 void updateDrawables(Game &game)
 {
     Drawable *temp_draw = nullptr;
+    Projectile *temp_proj = nullptr;
 
     bool overlap = false;
     if(!game.objects.empty())
@@ -87,8 +88,9 @@ void updateDrawables(Game &game)
             }
             if(overlap != true)
             {
-                temp_draw = new Projectile( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y), act.heading );
-                game.objects.push_back(temp_draw);
+                temp_proj = new Projectile( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y), act.heading );
+                temp_proj->sizeMod = act.scale;
+                game.objects.push_back(temp_proj);
             }
             overlap = false;
         }

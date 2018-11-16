@@ -113,6 +113,8 @@ public:
     Projectile(int ID, GLfloat x, GLfloat y, direction dir);
 
     void draw(int, int);
+
+    float sizeMod = 1;
 };
 
 

@@ -40,6 +40,7 @@ struct ActorInfo
     int ammo;
     int max_health;
     int max_ammo;
+    float scale = 1;
     std::string name = "default\n";
     attributes tankAttributes;
     direction heading;

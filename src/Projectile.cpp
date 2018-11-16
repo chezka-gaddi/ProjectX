@@ -77,13 +77,13 @@ void Projectile::draw(int x, int y)
     glBindTexture(GL_TEXTURE_2D, tankTex[tex]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.07f * scalar, -0.07f * scalar,  1.0f);
+    glVertex3f(-0.07f * scalar * sizeMod, -0.07f * scalar * sizeMod,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.07f * scalar, -0.07f * scalar,  1.0f);
+    glVertex3f( 0.07f * scalar * sizeMod, -0.07f * scalar * sizeMod,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.07f * scalar,  0.07f * scalar,  1.0f);
+    glVertex3f( 0.07f * scalar * sizeMod,  0.07f * scalar * sizeMod,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.07f * scalar,  0.07f * scalar,  1.0f);
+    glVertex3f(-0.07f * scalar * sizeMod,  0.07f * scalar * sizeMod,  1.0f);
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
