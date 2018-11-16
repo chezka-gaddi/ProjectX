@@ -73,7 +73,7 @@ gen-library: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	@mkdir -p buildsrc/$(TANK_PATH)
 	@mkdir -p buildsrc/images	
 	#echo "Building object library"
-	g++ -o buildsrc/$(LIB_PATH)libCTF.so -shared $(CXXFLAGS) $< $(SOFLAGS)
+	g++ -o buildsrc/$(LIB_PATH)libCTF.so -shared $(CXXFLAGS) $(FILES:.cpp=.o) $(SOFLAGS)
 	#echo "Building platform"
 	$(CXX) $(CXXFLAGS) $(INCS) -o buildsrc/platform $(FILES:.cpp=.o) $(LIBS)
 	#echo "Copying support files"
