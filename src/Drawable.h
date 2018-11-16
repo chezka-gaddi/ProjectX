@@ -95,6 +95,7 @@ public:
 protected:
     int destroyed;
     int regrow_rate;
+    void set_destroyed(int d);
 friend class GameField;
 };
 

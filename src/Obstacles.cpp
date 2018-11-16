@@ -104,6 +104,10 @@ void Obstacles::regrow(int turn){
     }else if( id == 2){ //Its a Bushes
       health = 1;
     }
+    destroyed = 0;
   }
-  destroyed = 0;
+}
+
+void Obstacles::set_destroyed(int d){
+  destroyed = d;
 }

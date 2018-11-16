@@ -513,7 +513,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         if(r->health < 0)
         {
           r->health = 0;
-          r->destroyed = turnCount;
+          r->set_destroyed(turnCount);
         }
         return true;
       }
@@ -530,7 +530,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
           if(t->health <= 0)
           {
             t->health = 0;
-            t->destroyed = turnCount;
+            t->set_destroyed(turnCount);
           }
           return true;
         }
@@ -733,7 +733,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
     int tSize, tId;
     MapData fog_of_war = fieldMap;
     //printf("Turn number: %d\n",turnCount);
-#ifndef TESTING
+#ifndef TESTING  //Prevent testing from trying to access the unset pointer
     for(Obstacles* &t : gameptr->trees)
     {
       if(t->health <= 0)
@@ -759,7 +759,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
     for(int i = 0; i < actors.size() && actors[i].health != 0; ++i)
     {
       act_ap = actors[i].AP;
-#ifndef TESTING
+#ifndef TESTING //Prevent testing from trying t oaccess the unset pointer
       actors[i].id > 0 ? gameptr->actTurn = actors[i].id : gameptr->actTurn = -actors[i].id;
 #endif
       while(act_ap > 0 && actors[i].id != 0)
