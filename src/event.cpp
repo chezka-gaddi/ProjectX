@@ -61,8 +61,6 @@ void updateDrawables(Game &game)
 
     vector <ActorInfo> actors = game.tankGame->getActors();
     vector <std::pair<int,int>> SFX = game.tankGame->getSFX();
-    //for( auto obs : game.constants )
-    //game.objects.push_back( obs );
 
     for( auto act : actors )
     {

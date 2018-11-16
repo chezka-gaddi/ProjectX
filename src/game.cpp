@@ -320,7 +320,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 void Game::executeTurn()
 {
   //printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
-  if(tankGame->getTurnCount() == max_turns){
+  if(tankGame->getTurnCount() >= max_turns){
     //printf("Finding Early Winner.\n");
     std::vector<ActorInfo> *actors = tankGame->getActorsPointer();
     int actorId=0;
@@ -351,7 +351,7 @@ void Game::executeTurn()
           a.health = 0;
           //printf("Health: %d \n", a.health);
       }
-    }else if (tie == false){
+    }else if (tie == false){ //No tie, kill off all tanks
       for (auto &a : *actors){
         if (a.id != actorId){
                 a.health = 0;
@@ -359,11 +359,11 @@ void Game::executeTurn()
       }
     }
     tankGame->turnCount++;
-    tankGame->cull();
-  }else if(isplayable(tankGame->getActors()))
+    tankGame->cull();//Let game play one more turn and quit itself
+  }else if(isplayable(tankGame->getActors()))//If we still have tanks keep playing
   {
-    tankGame->nextTurn();    
-  }else{
+    tankGame->nextTurn();
+  }else{ //If maxturns is not hit, and no longer playable print results
     ofstream fout("results.txt", ios::out | ios::app);
     fout << tankGame->getWinner() << endl;
     fout.close();

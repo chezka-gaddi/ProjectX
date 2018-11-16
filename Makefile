@@ -1,5 +1,6 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -fPIC
+PROFILE = -pg
 INCS = -I./ -Isrc/
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
@@ -42,10 +43,10 @@ TANKS += $(SRC_PATH)AttackDownAI.cpp
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
 platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
-	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o platform $(FILES:.cpp=.o) $(LIBS)
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $? -o $@ 
+	$(CXX) $(CXXFLAGS) $(PROFILE) -c $? -o $@ 
 
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)

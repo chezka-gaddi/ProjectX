@@ -45,7 +45,7 @@ WATER_IMAGE images/Water/waterTex.png images/Water/waterTexNS.png images/Water/w
 
 #Max Turns
 #MAXTURNS 200
-MAXTURNS 20
+MAXTURNS 2
 
 #TANK RULES
 #STAT <AMMOUNT>
