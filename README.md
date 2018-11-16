@@ -6,6 +6,11 @@ Want instant communication with the Dev team? Join our
 - Modified max radar range to be equal to map width.
 - Changed undestructible object sprite so it no longer looks like destructible objects
 - Added MAXTURNS option into the config file
+- Fixed ramming algorithm.  If a tank has 1 health and they ram another tank they will die.  If a tank has more than 1 health and the ramming damage would kill them, there health is instead set to 1.
+- Added support for maps down to 5x5.  Sizes below 15x9 will fill in missing squares with unpassible objects.
+- Remove the tree hiding feature.  The hidden object implementation was unfinished before the feature freeze, but the hidding while in a tree made it through.  This has been corrected and removed.
+- Default images for tanks.  If a tank does not provide any images it will instead use a default set of images.
+- Default config file. If a config.txt file is not detected, the game will attempt to write a new one and prompt the user to add their tanks to the new configuration file.
 
 ## Release 4.01
 ## Fixed

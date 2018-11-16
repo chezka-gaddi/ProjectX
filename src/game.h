@@ -40,6 +40,8 @@ public:
     GameField *tankGame;               /*!<Pointer to the game manager */
     gameMode g_mode;                   /*!<Type of game to be ran */
     int turn;
+    int actTurn = 0;
+    bool ui = true;
 
     Game();
     Game(gameMode mode);
@@ -66,6 +68,7 @@ public:
     vector <Drawable *> waters;		   /*!<Holds the waters drawables */
     vector <Drawable *> specials;       /*!<Holds other special drawables */
     vector <Drawable *> sfx;           /*!<Holds the sfx drawables */
+    
 
 private:
     int fieldx;
