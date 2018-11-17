@@ -253,7 +253,7 @@ void GameField::setSPECIAL(int points, const attributes baseStats)
  * Executes the move phase of an AI's turn
  * AI's are culled
  */
-void GameField::runMoves(ActorInfo &a)
+void GameField::runMoves(ActorInfo &a, MapData &fog)
 {
 
   int xoff = 0, yoff = 0, tHealth = 0, hit = 0;
@@ -269,8 +269,6 @@ void GameField::runMoves(ActorInfo &a)
   pos.id = a.id;
   pos.ammo = a.ammo;
   //get the AI's desired move
-  MapData fog = fieldMap;
-  create_fog_of_war(fog, a);
   dir = a.act_p->move(fog, pos);
   a.heading = (dir == STAY) ? a.heading : dir;
   //If it checks out, execute it
@@ -785,7 +783,7 @@ void GameField::nextTurn()
       action = actors[i].act_p->spendAP(fog_of_war, pos);
       if(action == 1)
       {
-        runMoves(actors[i]);
+        runMoves(actors[i], fog_of_war );
       }
 
       else if(action == 2)
@@ -853,7 +851,7 @@ void GameField::nextTurn()
     }
   }
   cull();
-  updateMap();
+	updateMap();
 }
 /**
  * @author David Donahue
@@ -924,9 +922,9 @@ std::vector<ActorInfo> GameField::getActors()
   return actors;
 }
 /**
- * @author David Donahue
+ * @author Jon McKee
  * @par Description:
- * Get the current set of actors
+ * Get a const version of the current set of actors
  */
 std::vector<ActorInfo> *GameField::getActorsPointer()
 {
@@ -937,9 +935,27 @@ std::vector<ActorInfo> *GameField::getActorsPointer()
 /**
  * @author Jon McKee
  * @par Description:
+ * Get the current set of actors
+ */
+const std::vector<ActorInfo> &GameField::getActorsConst()
+{
+  return actors;
+}
+/**
+ * @author Jon McKee
+ * @par Description:
  * Get the current set of SFX
  */
 std::vector<std::pair<int,int>> GameField::getSFX()
+{
+  return SFX;
+}
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Get the current set of SFX
+ */
+const std::vector<std::pair<int,int>> &GameField::getSFXConst()
 {
   return SFX;
 }

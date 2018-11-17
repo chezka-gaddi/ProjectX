@@ -16,6 +16,7 @@
 #include "ActorInfo.h"
 #include "direction.h"
 #include <iostream>
+#include <ctime>
 
 /***************************************************************************//**
 * @class GameField
@@ -43,7 +44,7 @@ protected:
     //callback function to update the dispaly with the map, actors, and turn count
     void (*displayCallback)(MapData, std::vector<ActorInfo>, int);
     void updateMap();
-    void runMoves(ActorInfo &a);
+    void runMoves(ActorInfo &a, MapData &fog);
     ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
     //Action points for each actor
     int ap;
@@ -100,7 +101,9 @@ public:
     std::vector<int> getMap();
     std::vector<ActorInfo> getActors();
     std::vector<ActorInfo> * getActorsPointer();
+    const std::vector<ActorInfo> &getActorsConst();
     std::vector<std::pair<int,int>> getSFX();
+    const std::vector<std::pair<int,int>> &getSFXConst();
     void clearSFX();
     MapData getMapData();
     ActorInfo & actorInfoById(int id);

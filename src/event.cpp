@@ -59,8 +59,8 @@ void updateDrawables(Game &game)
     if(!game.objects.empty())
         game.objects.clear();
 
-    vector <ActorInfo> actors = game.tankGame->getActors();
-    vector <std::pair<int,int>> SFX = game.tankGame->getSFX();
+    const vector<ActorInfo> &actors = game.tankGame->getActors();
+    const vector<std::pair<int,int>> &SFX = game.tankGame->getSFX();
 
     for( auto act : actors )
     {
@@ -130,10 +130,10 @@ void DisplayEvent::doAction(Game &game)
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glLoadIdentity();
 
+    if (game.ui == true){
     updateDrawables(game);
     Drawable *stuff;
     
-    if (game.ui == true){
 
     for( int i = 0; i < game.constants.size(); i++ )
     {
@@ -153,7 +153,7 @@ void DisplayEvent::doAction(Game &game)
         stuff = game.objects[i];
         stuff->draw(game.getX(), game.getY());
     }
-
+    
     for( int i = 0; i < game.trees.size(); i++ )
     {
         stuff = game.trees[i];

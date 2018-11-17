@@ -1,6 +1,7 @@
 CXX = g++
-CXXFLAGS = -g -std=c++11 -fPIC
+CXXFLAGS = -g -O2 -std=c++11 -fPIC
 PROFILE = -pg
+PROFILE += -fprofile-arcs -ftest-coverage
 INCS = -I./ -Isrc/
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
@@ -52,7 +53,7 @@ platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
 tanks/%.so: src/%.cpp ./src/Actor.o
-	$(CXX) $(CXXFLAGS) $(INCS) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
 tanks: $(TANKS:%.cpp=%.so)
 

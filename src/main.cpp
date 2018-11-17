@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 
     glutMainLoop();
 
-    std::cout << "\n\n\n GAME OVER \n\n\n";
+    std::cout << "\n GAME OVER \n";
 
     return 0;
 }
