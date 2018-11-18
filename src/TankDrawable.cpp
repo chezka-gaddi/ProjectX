@@ -108,7 +108,41 @@ void TankDrawable::draw(int x, int y)
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-0.13f * scalar,  0.1f * scalar,  1.0f);
     glEnd();
+    
+    if (health <= max_health*.66666){
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glLoadIdentity();
+    glTranslatef(screen_x, screen_y, -5.0f);
+    glRotatef(angle,0,0,1);
+    glBindTexture(GL_TEXTURE_2D, sfxTex[3]);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.05f * scalar, .3f * scalar,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( 0.0f * scalar, .3f * scalar,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( 0.0f * scalar,  0.1f * scalar,  1.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.05f * scalar,  0.1f * scalar,  1.0f);
+    glEnd();
+    if (health <= max_health*.5){ 
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.0f * scalar, .3f * scalar,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( 0.05f * scalar, .3f * scalar,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( 0.05f * scalar,  0.1f * scalar,  1.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.0f * scalar,  0.1f * scalar,  1.0f);
+    glEnd();
+    }
+  }
 
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }
+void TankDrawable::setHealth(int h){health = h;}
+void TankDrawable::setMax_health(int mh){max_health = mh;}

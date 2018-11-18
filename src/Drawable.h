@@ -27,6 +27,7 @@ public:
     GLfloat screen_y;   /*!<The scren y coordinate of the drawable */
 
     int health;         /*!<The health value of the drawable */
+    int max_health;
     GLuint tex;            /*!<Texture to draw object with */
 
     Drawable() {}
@@ -131,6 +132,8 @@ public:
     TankDrawable( int ID, GLfloat x, GLfloat y, direction dir);
 
     void draw(int, int);
+    void setHealth(int h);
+    void setMax_health(int mh);
 };
 
 /***************************************************************************//**

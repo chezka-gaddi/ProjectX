@@ -136,7 +136,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   std::string scoreDetails[4] = {"Place:", "Player Number:", "Kills:","Hits:"};
 
   float color[] = {1.0f, 1.0f, 1.0f};
-
+  float pause;
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
@@ -302,9 +302,13 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     }
   }
 
-  system("sleep 1.");
+  //system("sleep 1.");
+  pause = ((.0013*TimerEvent::idle_speed)-.01)*1500000;
+  pause >= 0 ? usleep(pause) : usleep(0);
   glutSwapBuffers();
-  system("sleep 5.");
+  //system("sleep 5.");
+  pause = ((.0066*TimerEvent::idle_speed)-.05)*1500000;
+  pause >= 0 ? usleep(pause) : usleep(0);
   printf("Exiting!\n");
 }
 

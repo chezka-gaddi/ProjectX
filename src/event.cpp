@@ -54,6 +54,7 @@ void updateDrawables(Game &game)
 {
     Drawable *temp_draw = nullptr;
     Projectile *temp_proj = nullptr;
+    TankDrawable *temp_tank = nullptr;
 
     bool overlap = false;
     if(!game.objects.empty())
@@ -66,8 +67,10 @@ void updateDrawables(Game &game)
     {
         if( act.health > 0 && act.id > 0)
         {
-            temp_draw = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y ), act.heading );
-            game.objects.push_back( temp_draw );
+            temp_tank = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y ), act.heading );
+            temp_tank->setHealth(act.health);
+            temp_tank->setMax_health(act.max_health);
+            game.objects.push_back( temp_tank );
             if (act.id == game.actTurn)
             {
                 temp_draw = new Menu( act.id, act.health, act.shots, act.hits, act.name );
@@ -129,6 +132,7 @@ void DisplayEvent::doAction(Game &game)
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glLoadIdentity();
+    float pause;
 
     if (game.ui == true){
     updateDrawables(game);
@@ -184,7 +188,9 @@ void DisplayEvent::doAction(Game &game)
         stuff->draw(game.getX(), game.getY());
     }
     game.sfx.clear();
-    system("sleep 0.2");
+    //system("sleep 0.2");
+    pause = ((.0003*TimerEvent::idle_speed)-.002)*1500000;
+    pause >= 0 ? usleep(pause) : usleep(0);
     glutSwapBuffers();
     }else {}
 }
