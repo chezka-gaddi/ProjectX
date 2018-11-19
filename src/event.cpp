@@ -60,14 +60,15 @@ void updateDrawables(Game &game)
     if(!game.objects.empty())
         game.objects.clear();
 
-    const vector<ActorInfo> &actors = game.tankGame->getActors();
+    vector<ActorInfo> *actors = game.tankGame->getActorsPointer();
     const vector<std::pair<int,int>> &SFX = game.tankGame->getSFX();
 
-    for( auto act : actors )
+    for( auto &act : *actors )
     {
         if( act.health > 0 && act.id > 0)
         {
-            temp_tank = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y ), act.heading, game.tankGame->getTurnCount() );
+            temp_tank = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y ), act.heading, game.tankGame->getTurnCount(), act.sMod );
+            act.sMod = !act.sMod;
             temp_tank->setHealth(act.health);
             temp_tank->setMax_health(act.max_health);
             game.objects.push_back( temp_tank );
@@ -80,7 +81,7 @@ void updateDrawables(Game &game)
 
         else if( act.id < 0 && act.health > 0)
         {
-            for(auto actor : actors)
+            for(auto actor : *actors)
             {
                 if (actor.x == act.x && actor.y == act.y && actor.id != act.id && actor.health != 0)
                 {

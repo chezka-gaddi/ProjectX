@@ -205,8 +205,8 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
 
     if(sfxTex[0] == 0)
         return false;
-
     glBindTexture(GL_TEXTURE_2D, sfxTex[0]);
+
     sfxTex[1] = SOIL_load_OGL_texture(
                     "images/seffect/explosionsb.png",
                     SOIL_LOAD_AUTO,

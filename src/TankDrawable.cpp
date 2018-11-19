@@ -18,12 +18,13 @@
 * @param[in] x_coor - coordinate to spawn tank
 * @param[in] y_coor - coordinate to spawn tank
 * *****************************************************************************/
-TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, int t = 0 )
+TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, int t = 0, bool s = false )
 {
     screen_x = x_coor;
     screen_y = y_coor;
     id = ID;
     turn = t;
+    sMod = s;
 
     // Acesses the right image for the tanks
     //  0 is the up image,
@@ -113,7 +114,7 @@ void TankDrawable::draw(int x, int y)
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-0.13f * scalar,  0.1f * scalar,  1.0f);
     glEnd();
-    
+    //First smoke    
     if (health <= max_health*.66666){
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
@@ -121,7 +122,7 @@ void TankDrawable::draw(int x, int y)
       glTranslatef(screen_x, screen_y, -5.0f);
       glBindTexture(GL_TEXTURE_2D, sfxTex[3]);
 
-      if (turn % 2 == 0) {
+      if (sMod == 0) {
         glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 1.0f);
         glVertex3f(-0.05f * scalar, .3f * scalar,  1.0f);
@@ -144,9 +145,9 @@ void TankDrawable::draw(int x, int y)
         glVertex3f(-0.05f * scalar,  0.1f * scalar,  1.0f);
         glEnd();
       }
-
+      //second smoke
       if (health <= max_health*.5){ 
-        if (turn % 2 != 0) {
+        if (sMod != 0) {
           glBegin(GL_QUADS);
           glTexCoord2f(0.0f, 1.0f);
           glVertex3f(-0.0f * scalar, .3f * scalar,  1.0f);
@@ -170,22 +171,50 @@ void TankDrawable::draw(int x, int y)
           glEnd();
         }
       }
-      if (health <= max_health*.3){ 
+      //fire
+      //if (health <= max_health*.3){ 
+      if (health <= max_health){ 
           glEnable(GL_BLEND);
           glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
           glLoadIdentity();
           glTranslatef(screen_x, screen_y, -5.0f);
           glBindTexture(GL_TEXTURE_2D, sfxTex[8]);
           
+          //sizing width .05  height .05
+          //left
           glBegin(GL_QUADS);
-          glTexCoord2f(0.0f, 1.0f);
-          glVertex3f(-0.3f * scalar, -0.2f * scalar,  1.0f);
-          glTexCoord2f(1.0f, 1.0f);
-          glVertex3f( 0.05f * scalar, -0.2f * scalar,  1.0f);
-          glTexCoord2f(1.0f, 0.0f);
-          glVertex3f( 0.05f * scalar,  0.1f * scalar,  1.0f);
           glTexCoord2f(0.0f, 0.0f);
-          glVertex3f(-0.3f * scalar,  0.1f * scalar,  1.0f);
+          glVertex3f( -0.07f * scalar, -0.05f * scalar,  1.0f);
+          glTexCoord2f(1.0f, 0.0f);
+          glVertex3f( -0.02f * scalar, -0.05f * scalar,  1.0f);
+          glTexCoord2f(1.0f, 1.0f);
+          glVertex3f( -0.02f * scalar,  0.0f * scalar,  1.0f);
+          glTexCoord2f(0.0f, 1.0f);
+          glVertex3f( -0.07f * scalar,  0.0f * scalar,  1.0f);
+          glEnd();
+          
+          //right
+          glBegin(GL_QUADS);
+          glTexCoord2f(0.0f, 0.0f);
+          glVertex3f( 0.01f * scalar, 0.01f * scalar,  1.0f);
+          glTexCoord2f(1.0f, 0.0f);
+          glVertex3f( 0.06f * scalar, 0.01f * scalar,  1.0f);
+          glTexCoord2f(1.0f, 1.0f);
+          glVertex3f( 0.06f * scalar,  0.06f * scalar,  1.0f);
+          glTexCoord2f(0.0f, 1.0f);
+          glVertex3f( 0.01f * scalar,  0.06f * scalar,  1.0f);
+          glEnd();
+          
+          //middle
+          glBegin(GL_QUADS);
+          glTexCoord2f(0.0f, 0.0f);
+          glVertex3f( -0.04f * scalar, -0.04f * scalar,  1.0f);
+          glTexCoord2f(1.0f, 0.0f);
+          glVertex3f( 0.01f * scalar, -0.04f * scalar,  1.0f);
+          glTexCoord2f(1.0f, 1.0f);
+          glVertex3f( 0.01f * scalar,  0.01f * scalar,  1.0f);
+          glTexCoord2f(0.0f, 1.0f);
+          glVertex3f( -0.04f * scalar,  0.01f * scalar,  1.0f);
           glEnd();
         }
     }
