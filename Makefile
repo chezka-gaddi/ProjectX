@@ -66,6 +66,7 @@ clean-lib: clean
 
 clean-all: clean-lib
 	@rm -rf $(TANK_PATH)*
+	@rm -rf coverage
 
 dev: clean-lib
 	make gen-library -j8
