@@ -170,6 +170,24 @@ void TankDrawable::draw(int x, int y)
           glEnd();
         }
       }
+      if (health <= max_health*.3){ 
+          glEnable(GL_BLEND);
+          glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+          glLoadIdentity();
+          glTranslatef(screen_x, screen_y, -5.0f);
+          glBindTexture(GL_TEXTURE_2D, sfxTex[8]);
+          
+          glBegin(GL_QUADS);
+          glTexCoord2f(0.0f, 1.0f);
+          glVertex3f(-0.3f * scalar, -0.2f * scalar,  1.0f);
+          glTexCoord2f(1.0f, 1.0f);
+          glVertex3f( 0.05f * scalar, -0.2f * scalar,  1.0f);
+          glTexCoord2f(1.0f, 0.0f);
+          glVertex3f( 0.05f * scalar,  0.1f * scalar,  1.0f);
+          glTexCoord2f(0.0f, 0.0f);
+          glVertex3f(-0.3f * scalar,  0.1f * scalar,  1.0f);
+          glEnd();
+        }
     }
 
     glPopMatrix();

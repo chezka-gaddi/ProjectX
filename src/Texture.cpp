@@ -257,6 +257,42 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
         return false;
 
     glBindTexture(GL_TEXTURE_2D, sfxTex[5]);
+    sfxTex[6] = SOIL_load_OGL_texture(
+                    "images/seffect/bTrail.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+    if(sfxTex[6] == 0)
+        return false;
+    glBindTexture(GL_TEXTURE_2D, sfxTex[6]);
+    sfxTex[7] = SOIL_load_OGL_texture(
+                    "images/seffect/campfire.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+    if(sfxTex[7] == 0)
+        return false;
+    glBindTexture(GL_TEXTURE_2D, sfxTex[7]);
+    sfxTex[8] = SOIL_load_OGL_texture(
+                    "images/seffect/fire.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+    if(sfxTex[8] == 0)
+        return false;
+    glBindTexture(GL_TEXTURE_2D, sfxTex[8]);
+    sfxTex[9] = SOIL_load_OGL_texture(
+                    "images/seffect/marsh.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+    if(sfxTex[9] == 0)
+        return false;
+    glBindTexture(GL_TEXTURE_2D, sfxTex[9]);
 
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
