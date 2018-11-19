@@ -71,7 +71,7 @@ void updateDrawables(Game &game)
             game.objects.push_back( temp_draw );
             if (act.id == game.actTurn)
             {
-                temp_draw = new Menu( act.id, act.health, act.shots, act.hits, act.name );
+                temp_draw = new Menu( act.id, act.health, act.ammo, act.hits, act.name );
                 game.objects.push_back( temp_draw );
             }
         }
