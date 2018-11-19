@@ -67,7 +67,7 @@ void updateDrawables(Game &game)
     {
         if( act.health > 0 && act.id > 0)
         {
-            temp_tank = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y ), act.heading );
+            temp_tank = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y ), act.heading, game.tankGame->getTurnCount() );
             temp_tank->setHealth(act.health);
             temp_tank->setMax_health(act.max_health);
             game.objects.push_back( temp_tank );

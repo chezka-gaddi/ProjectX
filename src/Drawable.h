@@ -128,8 +128,9 @@ class TankDrawable : public Drawable
 {
 public:
     int angle;
+    int turn;
 
-    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir);
+    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t);
 
     void draw(int, int);
     void setHealth(int h);
