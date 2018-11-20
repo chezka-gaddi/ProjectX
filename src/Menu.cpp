@@ -109,13 +109,13 @@ void Menu::drawTextBox(GLfloat x, GLfloat y)
     glBindTexture(GL_TEXTURE_2D, gameTex[5]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, -0.22f,  1.0f);
+    glVertex3f(-0.5f, -1.5f,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.5f, -0.22f,  1.0f);
+    glVertex3f( 3.0f, -1.5f,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.5f,  0.22f,  1.0f);
+    glVertex3f( 3.0f,  2.0f,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f,  0.22f,  1.0f);
+    glVertex3f(-0.5f,  2.0f,  1.0f);
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
@@ -135,21 +135,26 @@ void Menu::drawPlayerStats()
 
 
     //Output name of the player
-    drawBitmapText(name, screen_x - 0.13, screen_y + 0.11);
+    drawBitmapText(name, screen_x - 0.13, screen_y + 0.24);
 
     // Draw health points
     for( int i = 0; i < health ; i++ )
     {
-    	drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.02, 4, false );
+    	drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.04, 4, false );
     }
 
     // Draw number of hits
     for( int i = 0; i < score ; i++ )
     {
-    	drawIcon((screen_x - 0.05) + 0.1 * i, screen_y - 0.18, 6, false );
+    	drawIcon((screen_x + 2.05) + 0.1 * i, screen_y - 0.04, 6, false );
     }
 
-    drawIcon((screen_x + 1), screen_y, tex, true);
+    for( int i = 0; i < bullet ; i++ )
+    {
+    	drawIcon((screen_x + 1.38) + 0.1 * i, screen_y - 0.04, tex + 4, true );
+    }
+
+    drawIcon((screen_x + 3.25), screen_y, tex, true);
 }
 
 

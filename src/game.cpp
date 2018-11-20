@@ -1008,7 +1008,7 @@ void Game::initGameState()
     {
       if(actTemp.id > 0)
       {
-        temp = new Menu(actTemp.id, actTemp.health, actTemp.shots, actTemp.hits, actTemp.name);
+        temp = new Menu(actTemp.id, actTemp.health, actTemp.ammo, actTemp.hits, actTemp.name);
         objects.push_back(temp);
       }
     }
