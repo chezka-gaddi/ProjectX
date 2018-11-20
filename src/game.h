@@ -41,6 +41,7 @@ public:
     gameMode g_mode;                   /*!<Type of game to be ran */
     int turn;
     int actTurn = 0;
+    int modCounter = 7;
     bool ui = true;
 
     Game();

@@ -172,8 +172,7 @@ void TankDrawable::draw(int x, int y)
         }
       }
       //fire
-      //if (health <= max_health*.3){ 
-      if (health <= max_health){ 
+      if (health <= max_health*.3){ 
           glEnable(GL_BLEND);
           glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
           glLoadIdentity();

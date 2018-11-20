@@ -74,7 +74,7 @@ void updateDrawables(Game &game)
             game.objects.push_back( temp_tank );
             if (act.id == game.actTurn)
             {
-                temp_draw = new Menu( act.id, act.health, act.shots, act.hits, act.name );
+                temp_draw = new Menu( act.id, act.health, act.ammo, act.hits, act.name, act.heading, game.modCounter );
                 game.objects.push_back( temp_draw );
             }
         }
@@ -136,7 +136,12 @@ void DisplayEvent::doAction(Game &game)
     float pause;
 
     if (game.ui == true){
+    game.modCounter++;
+    if (game.modCounter > 7)
+           game.modCounter = 0; 
+    
     updateDrawables(game);
+    
     Drawable *stuff;
     
 

@@ -72,8 +72,10 @@ public:
     int health;         /*!<Player's health */
     int bullet;         /*!<Current bullet count */
     int score;          /*!<Current score */
+    int angle = 0;
+    int bTex;
 
-    Menu( int, int, int, int, std::string);
+    Menu( int, int, int, int, std::string, direction, int);
 
     void drawTextBox( GLfloat, GLfloat );
     void drawPlayerStats();

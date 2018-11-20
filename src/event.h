@@ -57,6 +57,7 @@ class DisplayEvent : public Event
 {
 public:
     void doAction(Game &);
+    int modCounter = 7;
 };
 
 

@@ -59,6 +59,9 @@ tanks: $(TANKS:%.cpp=%.so)
 
 clean:
 	rm -rf platform results.txt src/*.o
+	rm -rf *.gc*
+	rm -rf gprofresults.txt
+	rm -rf gmon.out
 
 clean-lib: clean
 	rm -rf buildsrc

@@ -979,15 +979,15 @@ void Game::initGameState()
   cout << "  ...Done" << endl;
   fout.close();
 // Create a stats menu for up to 4 tanks
-  int count = 0;
-  for(auto actTemp : startActors)
-  {
-    if(actTemp.id > 0)
+    int count = 0;
+   /* for(auto actTemp : startActors)
     {
-      temp = new Menu(actTemp.id, actTemp.health, actTemp.shots, actTemp.hits, actTemp.name);
-      objects.push_back(temp);
-    }
-  }
+      if(actTemp.id > 0)
+      {
+        temp = new Menu(actTemp.id, actTemp.health, actTemp.ammo, actTemp.hits, actTemp.name, actTemp.heading);
+        objects.push_back(temp);
+      }
+    }*/
 
   cout << "Finalizing game settings...\n";
   //printf("Height: %d  Width: %d\n",height, width);

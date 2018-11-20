@@ -516,7 +516,9 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         if(r->health < 0)
         {
           r->health = 0;
+#ifndef TESTING
           r->set_destroyed(turnCount);
+#endif
         }
         return true;
       }
@@ -533,7 +535,9 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         if(t->health <= 0)
         {
           t->health = 0;
+#ifndef TESTING
           t->set_destroyed(turnCount);
+#endif
         }
         return true;
       }
