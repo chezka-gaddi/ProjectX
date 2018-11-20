@@ -71,7 +71,7 @@ void updateDrawables(Game &game)
             game.objects.push_back( temp_draw );
             if (act.id == game.actTurn)
             {
-                temp_draw = new Menu( act.id, act.health, act.ammo, act.hits, act.name );
+                temp_draw = new Menu( act.id, act.health, act.ammo, act.hits, act.name, act.heading, game.modCounter );
                 game.objects.push_back( temp_draw );
             }
         }
@@ -130,7 +130,12 @@ void DisplayEvent::doAction(Game &game)
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glLoadIdentity();
 
+    game.modCounter++;
+    if (game.modCounter > 7)
+           game.modCounter = 0; 
+    
     updateDrawables(game);
+    
     Drawable *stuff;
     
     if (game.ui == true){

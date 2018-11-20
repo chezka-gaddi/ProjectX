@@ -22,7 +22,7 @@ void drawBitmapText( char *string, GLfloat x, GLfloat y );
 * @param[in] hp - health
 * @param[in] ammo - ammo count
 * *****************************************************************************/
-Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn)
+Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction dir, int mc)
 {
     this->id = id;
     for(int j = 0; j < 20; j++)
@@ -38,10 +38,35 @@ Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn)
 
 	screen_x = -0.70;
 	screen_y = 0.54;
-    health = hp;
-    bullet = ammo;
-    score = hits;
-    tex = (id-1) * 5 + 0;
+  health = hp;
+  bullet = ammo;
+  score = hits;
+  angle = 0;
+  bTex = (id-1) * 5 + 4;
+  if (mc == 0 || mc == 1 || mc == 7){
+    tex = (id-1) * 5 + 0;//up upright upleft
+    if (mc == 1){
+            angle = -45;
+    }
+    if (mc == 7){
+            angle = 45;
+    }
+  }
+  if (mc == 2){
+    tex = (id-1) * 5 + 1;//right
+  }
+  if (mc == 3 || mc == 4 || mc == 5){
+    tex = (id-1) * 5 + 2;//down downright downleft
+    if (mc == 3){
+            angle = 45;
+    }
+    if (mc == 5){
+            angle = -45;
+    }
+  }
+  if (mc == 6){
+    tex = (id-1) * 5 + 3;//left
+  }
 }
 
 
@@ -70,7 +95,7 @@ void Menu::draw(int x, int y)
 *
 * Draws the health and hit icons.
 * *****************************************************************************/
-void drawIcon(GLfloat x, GLfloat y, GLuint icon, bool tank)
+void drawIcon(GLfloat x, GLfloat y, GLuint icon, bool tank, int angle = 1)
 {
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
@@ -79,6 +104,7 @@ void drawIcon(GLfloat x, GLfloat y, GLuint icon, bool tank)
     	glBindTexture(GL_TEXTURE_2D, gameTex[icon]);
     else
     	glBindTexture(GL_TEXTURE_2D, tankTex[icon]);
+    glRotatef(angle,0,0,1);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-0.06f, -0.06f,  1.0f);
@@ -92,6 +118,69 @@ void drawIcon(GLfloat x, GLfloat y, GLuint icon, bool tank)
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }
+
+/***************************************************************************//**
+* @author Jon McKee
+* @brief drawIcon
+*
+* Draws the health and hit icons.
+* *****************************************************************************/
+void drawAmmo(GLfloat x, GLfloat y, GLuint icon, bool tank, int angle = 1)
+{
+    glEnable(GL_TEXTURE_2D);
+    glPushMatrix();
+    glTranslatef(x - 0.85, y + 0.65, -5.0f);
+    if(!tank)
+    	glBindTexture(GL_TEXTURE_2D, gameTex[icon]);
+    else
+    	glBindTexture(GL_TEXTURE_2D, tankTex[icon]);
+    glRotatef(angle,0,0,1);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.06f, -0.06f,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( 0.06f, -0.06f,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( 0.06f,  0.03f,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.06f,  0.03f,  1.0f);
+    glEnd();
+    glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
+}
+/***************************************************************************//**
+* @author Jon McKee
+* @brief drawIcon
+*
+* Draws the health and hit icons.
+* *****************************************************************************/
+void drawTank(GLfloat x, GLfloat y, GLuint icon, bool tank, int angle)
+{
+    glEnable(GL_TEXTURE_2D);
+    glPushMatrix();
+    if(!tank)
+    	glBindTexture(GL_TEXTURE_2D, gameTex[icon]);
+    else
+    	glBindTexture(GL_TEXTURE_2D, tankTex[icon]);
+    glTranslatef(1.5 ,1.2, -5.0f);
+    glRotatef(angle, 0, 0, 1);
+    glTranslatef(-1.5, -1.2, 5.0f);
+    glTranslatef(x - 0.95, y + 0.75, -5.0f);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.2f, -0.2f,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( 0.06f, -0.2f,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( 0.06f,  0.06f,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.2f,  0.06f,  1.0f);
+    glEnd();
+    glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
+}
+
+
 
 
 
@@ -151,10 +240,10 @@ void Menu::drawPlayerStats()
 
     for( int i = 0; i < bullet ; i++ )
     {
-    	drawIcon((screen_x + 1.38) + 0.1 * i, screen_y - 0.04, tex + 4, true );
+    	drawAmmo((screen_x + 1.38) + 0.1 * i, screen_y - 0.04, bTex, true, 90 );
     }
 
-    drawIcon((screen_x + 3.25), screen_y, tex, true);
+   drawTank((screen_x + 3.25), screen_y, tex, true, angle);
 }
 
 

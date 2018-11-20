@@ -1004,14 +1004,14 @@ void Game::initGameState()
     fout.close();
 // Create a stats menu for up to 4 tanks
     int count = 0;
-    for(auto actTemp : startActors)
+   /* for(auto actTemp : startActors)
     {
       if(actTemp.id > 0)
       {
-        temp = new Menu(actTemp.id, actTemp.health, actTemp.ammo, actTemp.hits, actTemp.name);
+        temp = new Menu(actTemp.id, actTemp.health, actTemp.ammo, actTemp.hits, actTemp.name, actTemp.heading);
         objects.push_back(temp);
       }
-    }
+    }*/
 
     cout << "Initializing Game...\n";
     //printf("Height: %d  Width: %d\n",height, width);
