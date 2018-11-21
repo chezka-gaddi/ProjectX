@@ -73,8 +73,9 @@ public:
     int score;          /*!<Current score */
     int angle = 0;
     int bTex;
+    int turn = 0;
 
-    Menu( int, int, int, int, std::string, direction, int);
+    Menu( int, int, int, int, std::string, direction, int, int);
 
     void drawTextBox( GLfloat, GLfloat );
     void drawPlayerStats();

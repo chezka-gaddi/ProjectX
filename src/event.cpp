@@ -81,7 +81,6 @@ void updateDrawables(Game &game)
     }
     else if(act.id < 0 && act.health > 0)
     {
-      //temp_proj = new Projectile(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, (act.id == game.actTurn || -act.id == game.actTurn));
       std::unique_ptr<Projectile> temp_proj(new Projectile(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, (act.id == game.actTurn || -act.id == game.actTurn)));
       temp_proj->sizeMod = act.scale;
       game.objects.push_back(std::move(temp_proj));
@@ -89,8 +88,7 @@ void updateDrawables(Game &game)
     if(game.actTurn == act.id)
     {
       for(i = 0; i < actors->size() && actors[0][i].id != game.actTurn; i++);
-      //temp_draw = new Menu(actors[0][i].id, actors[0][i].health, actors[0][i].ammo, actors[0][i].hits, actors[0][i].name, actors[0][i].heading, game.modCounter);
-      std::unique_ptr<Menu> temp_draw(new Menu(actors[0][i].id, actors[0][i].health, actors[0][i].ammo, actors[0][i].hits, actors[0][i].name, actors[0][i].heading, game.modCounter));
+      std::unique_ptr<Menu> temp_draw(new Menu(actors[0][i].id, actors[0][i].health, actors[0][i].ammo, actors[0][i].hits, actors[0][i].name, actors[0][i].heading, game.modCounter, game.turn));
       game.objects.push_back(std::move(temp_draw));
       menu = true;
     }

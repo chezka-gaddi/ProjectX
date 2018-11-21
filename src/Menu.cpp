@@ -9,6 +9,7 @@
 
 
 void drawBitmapText( char *string, GLfloat x, GLfloat y );
+void drawBitmapTurn( int turn, GLfloat x, GLfloat y );
 
 
 /***************************************************************************//**
@@ -22,11 +23,12 @@ void drawBitmapText( char *string, GLfloat x, GLfloat y );
 * @param[in] hp - health
 * @param[in] ammo - ammo count
 * *****************************************************************************/
-Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction dir, int mc)
+Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction dir, int mc, int t)
 {
   this->id = id;
   //for(int j = 0; j < 20; j++)
   // 	name[j] = '\0';
+  turn = t;
 
 	int i = 0;
 
@@ -223,6 +225,9 @@ void Menu::drawPlayerStats()
 
     //Output name of the player
     drawBitmapText(name, screen_x - 0.13, screen_y + 0.24);
+    
+    //Output turn
+    drawBitmapTurn(turn, screen_x + 1.40, screen_y + 0.24);
 
     // Draw health points
     for( int i = 0; i < health ; i++ )
@@ -260,6 +265,30 @@ void drawBitmapText( char *string, GLfloat x, GLfloat y )
     glRasterPos3f( x, y, -2.0 );
 
     for( c = string; *c != '\0'; c++ )
+        glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *c );
+    glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, *c );
+}
+
+/***************************************************************************//**
+* @author Jon McKee
+* @brief drawBitmapText
+*
+* Generates the turn string.
+* *****************************************************************************/
+void drawBitmapTurn( int turn, GLfloat x, GLfloat y )
+{
+    glDisable(GL_TEXTURE_2D);
+    std::string temp = "Turn: ";
+    if (turn < 10)
+            temp += "  ";
+    else if (turn < 100)
+            temp += " ";
+    temp += std::to_string(turn);
+    const char *c;
+    glColor3f( 250, 250, 250 );
+    glRasterPos3f( x, y, -2.0 );
+
+    for( c = temp.c_str(); *c != '\0'; c++ )
         glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *c );
     glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, *c );
 }
