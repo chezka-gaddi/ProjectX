@@ -4,6 +4,7 @@
  */
 #include "GameField.h"
 #include "game.h"
+#include <memory>
 #include <iostream>
 
 /**
@@ -473,12 +474,13 @@ void GameField::runMoves(ActorInfo &a, MapData &fog)
     a.damage = 0;
     a.id = 0;
     a.health = 0;
+    a.AP = 0;
+  }else if (a.id > 0 && a.health <= 0){
+    a.damage = 0;
+    a.id = 0;
+    a.health = 0;
+    a.AP = 0;
   }
-  updateMap();
-
-  if(displayCallback != NULL)
-    displayCallback(fieldMap, actors, turnCount);
-
 }
 
 bool GameField::checkObjectStrike(ActorInfo &a)
@@ -517,7 +519,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         {
           r->health = 0;
 #ifndef TESTING
-          r->set_destroyed(turnCount);
+          r->set_destroyed(gameptr->turn);
 #endif
         }
         return true;
@@ -536,7 +538,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         {
           t->health = 0;
 #ifndef TESTING
-          t->set_destroyed(turnCount);
+          t->set_destroyed(gameptr->turn);
 #endif
         }
         return true;
@@ -589,7 +591,7 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
             {
               t->health--;
               if(t->health <= 0)
-                t->destroyed = turnCount;
+                t->destroyed = gameptr->turn;
             }
           }
           break;
@@ -610,7 +612,7 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
             {
               r->health--;
               if(r->health <= 0)
-                r->destroyed = turnCount;
+                r->destroyed = gameptr->turn;
             }
           }
           break;
@@ -730,7 +732,7 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
 
 void GameField::nextTurn()
 {
-  ++turnCount;
+  ++gameptr->turn;
 
   direction atk;
   ActorInfo newProjectile;
@@ -747,32 +749,33 @@ void GameField::nextTurn()
   {
     if(t->health <= 0)
     {
-      t->regrow(turnCount);
+      t->regrow(gameptr->turn);
     }
   }
   for(Obstacles* &r : gameptr->rocks)
   {
     if(r->health <= 0)
     {
-      r->regrow(turnCount);
+      r->regrow(gameptr->turn);
     }
   }
   for(Obstacles* &b : gameptr->bushes)
   {
     if(b->health <= 0)
     {
-      b->regrow(turnCount);
+      b->regrow(gameptr->turn);
     }
   }
 #endif
   for(int i = 0; i < actors.size(); ++i)
   {
     //Early exit if we hit our freshly merged projectiles
-    if (actors[i].health <= 0)
-            continue;
+    //if (actors[i].health <= 0)
+    //        continue;
     act_ap = actors[i].AP;
 #ifndef TESTING //Prevent testing from trying to access the unset pointer
-    actors[i].id > 0 ? gameptr->actTurn = actors[i].id : gameptr->actTurn = -actors[i].id;
+    if (actors[i].id > 0 && actors[i].health > 0)
+      gameptr->actTurn = actors[i].id;
 #endif
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
@@ -815,6 +818,7 @@ void GameField::nextTurn()
               {
                 actors[j].scale += .40;
                 actors[j].health += 1;
+                actors[j].ammo += 1;
                 actors[j].damage += actors[i].damage;
                 grow = true;
                 break;
@@ -831,12 +835,14 @@ void GameField::nextTurn()
               newProjectile.damage = actors[i].damage;
               newProjectile.x = actors[i].x;
               newProjectile.y = actors[i].y;
+              newProjectile.hits = 0;
+              newProjectile.ammo = 1;
+              newProjectile.heading = actors[i].heading;
               actors.insert(actors.begin() + i + 1, newProjectile);
               actors[i].shots++;
               actors[i].ammo--;
             }
-          }
-          else if(atk != STAY)
+          }else if(atk != STAY)
           {
             //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
             actors[i].ammo = actors[i].max_ammo;
@@ -851,11 +857,13 @@ void GameField::nextTurn()
         //printf("Reloading... Reloading... Reloading\n");
       }
       --act_ap;
-
+	    updateMap();
+      displayCallback(fieldMap, actors, gameptr->turn);
     }
   }
   cull();
 	updateMap();
+  displayCallback(fieldMap, actors, gameptr->turn);
 }
 /**
  * @author David Donahue

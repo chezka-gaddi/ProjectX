@@ -17,11 +17,12 @@
 * @param[in] x_coor - coordinate to spawn projectile
 * @param[in] y_coor - coordinate to spawn projectile
 * *****************************************************************************/
-Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir )
+Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, bool t )
 {
     screen_x = x_coor;
     screen_y = y_coor;
     id = ID;
+    turn = t;
 
     switch(dir)
     {
@@ -70,6 +71,8 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir )
 * *****************************************************************************/
 void Projectile::draw(int x, int y)
 {
+    float trailMod = .9; //Scale the trail
+    
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
     glTranslatef(screen_x, screen_y, -5.0f);
@@ -87,4 +90,24 @@ void Projectile::draw(int x, int y)
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
+   
+    if (turn == true){ //Only draw trail on projectiles turn
+      glEnable(GL_TEXTURE_2D);
+      glPushMatrix();
+      glBindTexture(GL_TEXTURE_2D, sfxTex[6]);
+      glTranslatef(screen_x, screen_y, -5.0f);
+      glRotatef(angle,0,0,1);
+      glBegin(GL_QUADS);
+      glTexCoord2f(0.0f, 0.0f);
+      glVertex3f(-0.20f * scalar * sizeMod * trailMod, -0.07f * scalar * sizeMod * trailMod,  1.0f);
+      glTexCoord2f(1.0f, 0.0f);
+      glVertex3f( -0.06f * scalar * sizeMod * trailMod, -0.07f * scalar * sizeMod * trailMod,  1.0f);
+      glTexCoord2f(1.0f, 1.0f);
+      glVertex3f( -0.06f * scalar * sizeMod * trailMod,  0.07f * scalar * sizeMod * trailMod,  1.0f);
+      glTexCoord2f(0.0f, 1.0f);
+      glVertex3f(-0.20f * scalar * sizeMod * trailMod,  0.07f * scalar * sizeMod * trailMod,  1.0f);
+      glEnd();
+      glPopMatrix();
+      glDisable(GL_TEXTURE_2D);
+    }
 }

@@ -20,6 +20,7 @@
 #include <fstream>
 #include <sstream>
 #include <utility>
+#include <memory>
 
 using namespace std;
 
@@ -39,8 +40,8 @@ class Game
 public:
     GameField *tankGame;               /*!<Pointer to the game manager */
     gameMode g_mode;                   /*!<Type of game to be ran */
-    int turn;
-    int actTurn = 0;
+    int turn = 0;
+    int actTurn = 1000; //0 causes issues on first display call
     int modCounter = 7;
     bool ui = true;
 
@@ -62,14 +63,14 @@ public:
 
     int getAISpeed(){return idle_speed;};
     
-    vector <Drawable *> objects;       /*!<Holds all of the current actors */
+    vector <std::unique_ptr<Drawable>> objects;       /*!<Holds all of the current actors */
     vector <Drawable *> constants;     /*!<Holds the GameFieldDrawable and menus */
     vector <Obstacles *> bushes;        /*!<Holds the bushes drawables */
     vector <Obstacles *> rocks;         /*!<Holds the rocks drawables */
     vector <Obstacles *> trees;         /*!<Holds the trees drawables */
     vector <Drawable *> waters;		   /*!<Holds the waters drawables */
     vector <Drawable *> specials;       /*!<Holds other special drawables */
-    vector <Drawable *> sfx;           /*!<Holds the sfx drawables */
+    vector <std::unique_ptr<Drawable>> sfx;           /*!<Holds the sfx drawables */
     
 
 private:

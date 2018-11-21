@@ -1,7 +1,7 @@
 CXX = g++
-CXXFLAGS = -g -O2 -std=c++11 -fPIC
+CXXFLAGS = -g -std=c++11 -fPIC
 PROFILE = -pg
-PROFILE += -fprofile-arcs -ftest-coverage
+#PROFILE += -fprofile-arcs -ftest-coverage
 INCS = -I./ -Isrc/
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
@@ -58,10 +58,11 @@ tanks/%.so: src/%.cpp ./src/Actor.o
 tanks: $(TANKS:%.cpp=%.so)
 
 clean:
-	rm -rf platform results.txt src/*.o
-	rm -rf *.gc*
-	rm -rf gprofresults.txt
-	rm -rf gmon.out
+	@rm -rf platform results.txt src/*.o
+	@rm -rf *.gc*
+	@rm -rf src/*.gc*
+	@rm -rf gprofresults.txt
+	@rm -rf gmon.out
 
 clean-lib: clean
 	rm -rf buildsrc

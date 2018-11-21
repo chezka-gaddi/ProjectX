@@ -49,6 +49,7 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 // Includes
 #include <iostream>
 #include "util.h"
+#include <memory>
 
 // Main
 

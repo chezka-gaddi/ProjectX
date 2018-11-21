@@ -36,7 +36,7 @@ protected:
     std::vector<ActorInfo> deceased;
     std::vector<std::pair<int,int>> SFX;
 
-    int turnCount; /*!< The turn count number */
+    int turnCount = 0; /*!< The turn count number */
     /** struct with width, height, and a vector of ints in
      row major order, 0 for empty tiles and actor id for nonempty. */
     MapData fieldMap;

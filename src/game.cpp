@@ -972,7 +972,7 @@ void Game::initGameState()
                                     , radar
                                     , ammo
                                     , AINames[i]));
-    printf("Actor %d name: %s\n", i, AINames[i].c_str());
+    //printf("Actor %d name: %s\n", i, AINames[i].c_str());
     fout << AINames[i] << " ";
   }
   fout << "Winner: ";

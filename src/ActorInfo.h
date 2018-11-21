@@ -16,6 +16,7 @@
 #include "ProjectileActor.h"
 #include "attributes.h"
 #include <iostream>
+#include <memory>
 
 /*! \struct ActorInfo
     \brief A structure containing Actor stats and info
@@ -26,20 +27,20 @@
 struct ActorInfo
 {
     Actor *act_p;
-    int health;
-    int damage;
+    int health = 0;
+    int damage = 0;
     int x;
     int y;
-    int id;
-    int range;
-    int AP;
-    int hits;
-    int shots;
-    int radar;
-    int kills;
-    int ammo;
-    int max_health;
-    int max_ammo;
+    int id = 0;
+    int range = 0;
+    int AP = 0;
+    int hits = 0;
+    int shots = 0;
+    int radar = 0;
+    int kills = 0;
+    int ammo = 0;
+    int max_health = 0;
+    int max_ammo = 0;
     bool sMod = false;
     float scale = 1;
     std::string name = "default\n";

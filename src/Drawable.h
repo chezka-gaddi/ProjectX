@@ -113,11 +113,12 @@ class Projectile : public Drawable
 public:
     int angle;
 
-    Projectile(int ID, GLfloat x, GLfloat y, direction dir);
+    Projectile(int ID, GLfloat x, GLfloat y, direction dir, bool t);
 
     void draw(int, int);
 
     float sizeMod = 1;
+    bool turn;
 };
 
 
