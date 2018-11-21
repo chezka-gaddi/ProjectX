@@ -732,7 +732,8 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
 
 void GameField::nextTurn()
 {
-  ++gameptr->turn;
+  if (gameptr != nullptr)
+    ++gameptr->turn;
 
   direction atk;
   ActorInfo newProjectile;
@@ -858,12 +859,14 @@ void GameField::nextTurn()
       }
       --act_ap;
 	    updateMap();
-      displayCallback(fieldMap, actors, gameptr->turn);
+      if (gameptr != nullptr)
+        displayCallback(fieldMap, actors, gameptr->turn);
     }
   }
   cull();
 	updateMap();
-  displayCallback(fieldMap, actors, gameptr->turn);
+  if (gameptr != nullptr)
+    displayCallback(fieldMap, actors, gameptr->turn);
 }
 /**
  * @author David Donahue
