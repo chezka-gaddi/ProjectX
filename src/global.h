@@ -11,12 +11,12 @@
 
 extern GLuint gameTex[20];   /*!<Texture array for the game constants */
 
-extern GLuint treeTex[10]; /*!<Texture array for the trees */
-extern GLuint bushTex[10]; /*!<Texture array for the bushes */
-extern GLuint rockTex[10]; /*!<Texture array for the rocks */
+extern GLuint treeTex[20]; /*!<Texture array for the trees */
+extern GLuint bushTex[20]; /*!<Texture array for the bushes */
+extern GLuint rockTex[20]; /*!<Texture array for the rocks */
 extern GLuint sfxTex[20]; /*<Texture array for the special effects */
-extern GLuint waterTex[20];
-// Tank tex has all the tanks images for all 4 tanks.
-extern GLuint tankTex[60];   /*!<Texture array for the tanks and their projectiles */
+extern GLuint waterTex[30];
+// Tank tex has all the tanks images for all 12+ tanks.
+extern GLuint tankTex[80];   /*!<Texture array for the tanks and their projectiles */
 
 #endif

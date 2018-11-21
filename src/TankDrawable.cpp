@@ -106,13 +106,13 @@ void TankDrawable::draw(int x, int y)
 
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.13f * scalar, -0.1f * scalar,  1.0f);
+    glVertex3f(-0.13f * xscalar, -0.1f * yscalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.13f * scalar, -0.1f * scalar,  1.0f);
+    glVertex3f( 0.13f * xscalar, -0.1f * yscalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.13f * scalar,  0.1f * scalar,  1.0f);
+    glVertex3f( 0.13f * xscalar,  0.1f * yscalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.13f * scalar,  0.1f * scalar,  1.0f);
+    glVertex3f(-0.13f * xscalar,  0.1f * yscalar,  1.0f);
     glEnd();
     //First smoke    
     if (health <= max_health*.66666){
@@ -120,29 +120,29 @@ void TankDrawable::draw(int x, int y)
       glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
       glLoadIdentity();
       glTranslatef(screen_x, screen_y, -5.0f);
-      glBindTexture(GL_TEXTURE_2D, sfxTex[3]);
+      glBindTexture(GL_TEXTURE_2D, sfxTex[12]);
 
       if (sMod == 0) {
         glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 1.0f);
-        glVertex3f(-0.05f * scalar, .3f * scalar,  1.0f);
+        glVertex3f(-0.05f * xscalar, .3f * yscalar,  1.0f);
         glTexCoord2f(1.0f, 1.0f);
-        glVertex3f( 0.0f * scalar, .3f * scalar,  1.0f);
+        glVertex3f( 0.0f * xscalar, .3f * yscalar,  1.0f);
         glTexCoord2f(1.0f, 0.0f);
-        glVertex3f( 0.0f * scalar,  0.2f * scalar,  1.0f);
+        glVertex3f( 0.0f * xscalar,  0.2f * yscalar,  1.0f);
         glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(-0.05f * scalar,  0.2f * scalar,  1.0f);
+        glVertex3f(-0.05f * xscalar,  0.2f * yscalar,  1.0f);
         glEnd();
       } else {
       glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 1.0f);
-        glVertex3f(-0.05f * scalar, .2f * scalar,  1.0f);
+        glVertex3f(-0.05f * xscalar, .2f * yscalar,  1.0f);
         glTexCoord2f(1.0f, 1.0f);
-        glVertex3f( 0.0f * scalar, .2f * scalar,  1.0f);
+        glVertex3f( 0.0f * xscalar, .2f * yscalar,  1.0f);
         glTexCoord2f(1.0f, 0.0f);
-        glVertex3f( 0.0f * scalar,  0.1f * scalar,  1.0f);
+        glVertex3f( 0.0f * xscalar,  0.1f * yscalar,  1.0f);
         glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(-0.05f * scalar,  0.1f * scalar,  1.0f);
+        glVertex3f(-0.05f * xscalar,  0.1f * yscalar,  1.0f);
         glEnd();
       }
       //second smoke
@@ -150,24 +150,24 @@ void TankDrawable::draw(int x, int y)
         if (sMod != 0) {
           glBegin(GL_QUADS);
           glTexCoord2f(0.0f, 1.0f);
-          glVertex3f(-0.0f * scalar, .3f * scalar,  1.0f);
+          glVertex3f(-0.0f * xscalar, .3f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 1.0f);
-          glVertex3f( 0.05f * scalar, .3f * scalar,  1.0f);
+          glVertex3f( 0.05f * xscalar, .3f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 0.0f);
-          glVertex3f( 0.05f * scalar,  0.2f * scalar,  1.0f);
+          glVertex3f( 0.05f * xscalar,  0.2f * yscalar,  1.0f);
           glTexCoord2f(0.0f, 0.0f);
-          glVertex3f(-0.0f * scalar,  0.2f * scalar,  1.0f);
+          glVertex3f(-0.0f * xscalar,  0.2f * yscalar,  1.0f);
           glEnd();
         }else{
           glBegin(GL_QUADS);
           glTexCoord2f(0.0f, 1.0f);
-          glVertex3f(-0.0f * scalar, .2f * scalar,  1.0f);
+          glVertex3f(-0.0f * xscalar, .2f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 1.0f);
-          glVertex3f( 0.05f * scalar, .2f * scalar,  1.0f);
+          glVertex3f( 0.05f * xscalar, .2f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 0.0f);
-          glVertex3f( 0.05f * scalar,  0.1f * scalar,  1.0f);
+          glVertex3f( 0.05f * xscalar,  0.1f * yscalar,  1.0f);
           glTexCoord2f(0.0f, 0.0f);
-          glVertex3f(-0.0f * scalar,  0.1f * scalar,  1.0f);
+          glVertex3f(-0.0f * xscalar,  0.1f * yscalar,  1.0f);
           glEnd();
         }
       }
@@ -183,37 +183,37 @@ void TankDrawable::draw(int x, int y)
           //left
           glBegin(GL_QUADS);
           glTexCoord2f(0.0f, 0.0f);
-          glVertex3f( -0.07f * scalar, -0.05f * scalar,  1.0f);
+          glVertex3f( -0.07f * xscalar, -0.05f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 0.0f);
-          glVertex3f( -0.02f * scalar, -0.05f * scalar,  1.0f);
+          glVertex3f( -0.02f * xscalar, -0.05f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 1.0f);
-          glVertex3f( -0.02f * scalar,  0.0f * scalar,  1.0f);
+          glVertex3f( -0.02f * xscalar,  0.0f * yscalar,  1.0f);
           glTexCoord2f(0.0f, 1.0f);
-          glVertex3f( -0.07f * scalar,  0.0f * scalar,  1.0f);
+          glVertex3f( -0.07f * xscalar,  0.0f * yscalar,  1.0f);
           glEnd();
           
           //right
           glBegin(GL_QUADS);
           glTexCoord2f(0.0f, 0.0f);
-          glVertex3f( 0.01f * scalar, 0.01f * scalar,  1.0f);
+          glVertex3f( 0.01f * xscalar, 0.01f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 0.0f);
-          glVertex3f( 0.06f * scalar, 0.01f * scalar,  1.0f);
+          glVertex3f( 0.06f * xscalar, 0.01f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 1.0f);
-          glVertex3f( 0.06f * scalar,  0.06f * scalar,  1.0f);
+          glVertex3f( 0.06f * xscalar,  0.06f * yscalar,  1.0f);
           glTexCoord2f(0.0f, 1.0f);
-          glVertex3f( 0.01f * scalar,  0.06f * scalar,  1.0f);
+          glVertex3f( 0.01f * xscalar,  0.06f * yscalar,  1.0f);
           glEnd();
           
           //middle
           glBegin(GL_QUADS);
           glTexCoord2f(0.0f, 0.0f);
-          glVertex3f( -0.04f * scalar, -0.04f * scalar,  1.0f);
+          glVertex3f( -0.04f * xscalar, -0.04f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 0.0f);
-          glVertex3f( 0.01f * scalar, -0.04f * scalar,  1.0f);
+          glVertex3f( 0.01f * xscalar, -0.04f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 1.0f);
-          glVertex3f( 0.01f * scalar,  0.01f * scalar,  1.0f);
+          glVertex3f( 0.01f * xscalar,  0.01f * yscalar,  1.0f);
           glTexCoord2f(0.0f, 1.0f);
-          glVertex3f( -0.04f * scalar,  0.01f * scalar,  1.0f);
+          glVertex3f( -0.04f * xscalar,  0.01f * yscalar,  1.0f);
           glEnd();
         }
     }

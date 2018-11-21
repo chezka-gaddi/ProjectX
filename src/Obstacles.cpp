@@ -41,7 +41,7 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
     }else if( id == 3){ //It's a Waters
       tex = 0 + 30;
     }else if (id == 50){
-      tex = 50;
+      tex = ((rand() % 2) + 50);
     }else{
       tex = 1; //default to tree if we got a bad id
     }
@@ -73,17 +73,17 @@ void Obstacles::draw(int, int)
     }else if( tex >= 30 && tex <= 39){ //It's a Waters
       glBindTexture(GL_TEXTURE_2D, waterTex[tex - 30]);
     }else if( tex >= 50 && tex <= 50){ //It's a hedgehog
-      glBindTexture(GL_TEXTURE_2D, sfxTex[tex-45]);
+      glBindTexture(GL_TEXTURE_2D, gameTex[tex-48]);
     }
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.16f * scalar, -0.19f * scalar,  1.0f);
+    glVertex3f(-0.16f * xscalar, -0.19f * yscalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.16f * scalar, -0.19f * scalar,  1.0f);
+    glVertex3f( 0.16f * xscalar, -0.19f * yscalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.16f * scalar,  0.19f * scalar,  1.0f);
+    glVertex3f( 0.16f * xscalar,  0.19f * yscalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.16f * scalar,  0.19f * scalar,  1.0f);
+    glVertex3f(-0.16f * xscalar,  0.19f * yscalar,  1.0f);
     glEnd();
 
     glPopMatrix();

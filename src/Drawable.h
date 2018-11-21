@@ -35,11 +35,10 @@ public:
 
     virtual void draw(int, int) = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
 protected:
-    void setScalar(float newScalar){this->scalar = newScalar;};
-    //float getScalar(){return this->scalar;};
     int gridx;
     int gridy; 
-    static float scalar;
+    static float xscalar;
+    static float yscalar;
 friend class Game;
 friend class GameField;
 };

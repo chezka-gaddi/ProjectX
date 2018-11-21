@@ -157,7 +157,7 @@ void DisplayEvent::doAction(Game &game)
 
     for(int i = 0; i < game.objects.size(); i++)
     {
-      game.objects[i]->draw(game.getX(), game.getY());
+      game.objects[i]->draw(game.modCounter, game.getY());
     }
 
     for(int i = 0; i < game.trees.size(); i++)

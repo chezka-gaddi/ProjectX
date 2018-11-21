@@ -40,9 +40,9 @@ Game::Game(gameMode mode) : turn(0)
  *******************************************************************************/
 Game::~Game()
 {
-  for(auto temp : objects)
-    delete temp;
-
+  //for(auto temp : objects)
+    //delete temp;
+  objects.clear();
   delete tankGame;
 }
 
@@ -411,7 +411,8 @@ void displayWrapper(MapData map, std::vector<ActorInfo> actors, int turnCount)
  * Initialize the main GameField and all the Drawables needed to start the game.
  * Reads settings from the file "config.txt"
  *******************************************************************************/
-float Drawable::scalar = 1.0;
+float Drawable::xscalar = 1.0;
+float Drawable::yscalar = 1.0;
 int TimerEvent::idle_speed = 750;
 void Game::initGameState()
 {
@@ -941,7 +942,9 @@ void Game::initGameState()
     }
   }
 
-  Drawable::scalar = (3.75/width)/.25;
+  Drawable::xscalar = (3.75/width)/.32;
+  Drawable::yscalar = Drawable::xscalar;
+  //Drawable::yscalar = (3.75/height)/.50;
   fieldx = width;
   fieldy = height;
 
