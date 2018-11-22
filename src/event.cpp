@@ -52,15 +52,11 @@ void InitEvent::doAction(Game &game)
  ******************************************************************************/
 void updateDrawables(Game &game)
 {
-  //Drawable *temp_draw = nullptr;
-  //Projectile *temp_proj = nullptr;
-  //TankDrawable *temp_tank = nullptr;
   std::unique_ptr<Drawable> temp_draw;
   std::unique_ptr<Projectile> temp_proj;
   std::unique_ptr<TankDrawable> temp_tank;
   int i = 0;
 
-  bool overlap = false;
   bool menu = false;
   if(!game.objects.empty())
     game.objects.clear();
@@ -72,11 +68,13 @@ void updateDrawables(Game &game)
   {
     if(act.id > 0 && act.health > 0)
     {
-      //temp_tank = new TankDrawable(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, game.tankGame->getTurnCount(), act.sMod);
+      //Use smart pointers for better memory management
       std::unique_ptr<TankDrawable> temp_tank(new TankDrawable(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, game.tankGame->getTurnCount(), act.sMod, act.offsetx, act.offsety));
       act.sMod = !act.sMod;
+      //Give our tanks health for sfx drawing
       temp_tank->setHealth(act.health);
       temp_tank->setMax_health(act.max_health);
+      //move the smart pointer into the list
       game.objects.push_back(std::move(temp_tank));
     }
     else if(act.id < 0 && act.health > 0)
@@ -90,30 +88,13 @@ void updateDrawables(Game &game)
       for(i = 0; i < actors->size() && actors[0][i].id != game.actTurn; i++);
       std::unique_ptr<Menu> temp_draw(new Menu(actors[0][i].id, actors[0][i].health, actors[0][i].ammo, actors[0][i].hits, actors[0][i].name, actors[0][i].heading, game.modCounter, game.turn));
       game.objects.push_back(std::move(temp_draw));
-      menu = true;
     }
 
   }
-  overlap = false;
   for(auto sfx : SFX)
   {
-    //printf("Adding explosion. At (%d,%d)\n", sfx.first, sfx.second);
-    for(int i = 0; i < game.sfx.size(); i++)
-    {
-      if(game.sfx[i]->screen_x == game.convertGLXCoordinate(sfx.first)
-         && game.sfx[i]->screen_y == game.convertGLYCoordinate(sfx.second))
-      {
-        overlap = true;
-        break;
-      }
-    }
-    if(!overlap)
-    {
-      //temp_draw = new sfxDrawable(game.convertGLXCoordinate(sfx.first), game.convertGLYCoordinate(sfx.second));
-            std::unique_ptr<Drawable> temp_draw(new sfxDrawable(game.convertGLXCoordinate(sfx.first), game.convertGLYCoordinate(sfx.second)));
-      game.sfx.push_back(std::move(temp_draw));
-    }
-    overlap = false;
+    std::unique_ptr<Drawable> temp_draw(new sfxDrawable(game.convertGLXCoordinate(sfx.first), game.convertGLYCoordinate(sfx.second)));
+    game.sfx.push_back(std::move(temp_draw));
   }
   game.tankGame->clearSFX();
 }

@@ -262,7 +262,7 @@ void GameField::animateMove(ActorInfo &a)
   GLfloat tempx, tempy;
   GLfloat prevx, prevy; 
   GLfloat newx, newy;
-  int samples = 10;
+  int samples = 20;
   int ai_store = TimerEvent::idle_speed;
   TimerEvent::idle_speed = 0;
   switch(a.heading)
@@ -270,11 +270,11 @@ void GameField::animateMove(ActorInfo &a)
     case UP:
       tempy = -1.75 - (ny * y_scalar); //smaller
       prevy = -1.75 - (py * y_scalar); //bigger
-      tempy = tempy - prevy; //-scaler
+      tempy = (prevy - tempy); //-scaler
       tempy = tempy / samples; //scale it
       
       for (int i = 1; i < samples; i++){
-        a.offsety = tempy * i;
+        a.offsety = tempy * (samples - i);
         if (gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
@@ -283,11 +283,10 @@ void GameField::animateMove(ActorInfo &a)
     case DOWN:
       tempy = -1.75 - (ny * y_scalar); //bigger
       prevy = -1.75 - (py * y_scalar); //smaller
-      tempy = prevy - tempy; //scaler
+      tempy = (prevy - tempy); //scaler
       tempy = tempy / samples; //scale it
-      
-      for (int i = samples - 1; i > 0; i--){
-        a.offsety = tempy * i;
+      for (int i = 1; i < samples; i++){
+        a.offsety = tempy * (samples - i);
         if (gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
@@ -296,11 +295,10 @@ void GameField::animateMove(ActorInfo &a)
     case LEFT:
       tempx = .75 - (nx * x_scalar); //smaller
       prevx = .75 - (px * x_scalar); //bigger
-      tempx = tempx - prevx; //-scaler
+      tempx = -(prevx - tempx); //-scaler
       tempx = tempx / samples; //scale it
-      
-      for (int i = samples-1; i > 0; i--){
-        a.offsetx = tempx * i;
+      for (int i = 1; i < samples; i++){
+        a.offsetx = tempx * (samples - i);
         if (gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
@@ -309,23 +307,26 @@ void GameField::animateMove(ActorInfo &a)
     case RIGHT:
       tempx = .75 - (nx * x_scalar); //bigger
       prevx = .75 - (px * x_scalar); //smaller
-      tempx = tempx - prevx; //scaler
+      tempx = -(prevx - tempx); //scaler
       tempx = tempx / samples; //scale it
-      
       for (int i = 1; i < samples; i++){
-        a.offsetx = tempx * i;
+        a.offsetx = tempx * (samples - i);
         if (gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
       break;
-    /*case UPLEFT:
+    case UPLEFT:
       tempy = -1.75 - (ny * y_scalar); //smaller
       prevy = -1.75 - (py * y_scalar); //bigger
-      tempy = tempy - prevy; //-scaler
+      tempy = (prevy - tempy); //-scaler
       tempy = tempy / samples; //scale it
-      
+      tempx = .75 - (nx * x_scalar); //smaller
+      prevx = .75 - (px * x_scalar); //bigger
+      tempx = -(prevx - tempx); //-scaler
+      tempx = tempx / samples; //scale it
       for (int i = 1; i <= samples; i++){
-        a.offsety = tempy * i;
+        a.offsety = tempy * (samples - i);
+        a.offsetx = tempx * (samples - i);
         if (gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
@@ -334,48 +335,62 @@ void GameField::animateMove(ActorInfo &a)
     case UPRIGHT:
       tempy = -1.75 - (ny * y_scalar); //smaller
       prevy = -1.75 - (py * y_scalar); //bigger
-      tempy = tempy - prevy; //-scaler
+      tempy = (prevy - tempy); //-scaler
       tempy = tempy / samples; //scale it
-      
+      tempx = .75 - (nx * x_scalar); //bigger
+      prevx = .75 - (px * x_scalar); //smaller
+      tempx = -(prevx - tempx); //scaler
+      tempx = tempx / samples; //scale it
       for (int i = 1; i <= samples; i++){
-        a.offsety = tempy * i;
+        a.offsety = tempy * (samples - i);
+        a.offsetx = tempx * (samples - i);
         if (gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
       break;
 
     case DOWNLEFT:
-      tempy = -1.75 - (ny * y_scalar); //smaller
-      prevy = -1.75 - (py * y_scalar); //bigger
-      tempy = tempy - prevy; //-scaler
+      tempy = -1.75 - (ny * y_scalar); //bigger
+      prevy = -1.75 - (py * y_scalar); //smaller
+      tempy = (prevy - tempy); //scaler
       tempy = tempy / samples; //scale it
-      
+      tempx = .75 - (nx * x_scalar); //smaller
+      prevx = .75 - (px * x_scalar); //bigger
+      tempx = -(prevx - tempx); //-scaler
+      tempx = tempx / samples; //scale it
       for (int i = 1; i <= samples; i++){
-        a.offsety = tempy * i;
+        a.offsety = tempy * (samples - i);
+        a.offsetx = tempx * (samples - i);
         if (gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
       break;
 
     case DOWNRIGHT:
-      tempy = -1.75 - (ny * y_scalar); //smaller
-      prevy = -1.75 - (py * y_scalar); //bigger
-      tempy = tempy - prevy; //-scaler
+      tempy = -1.75 - (ny * y_scalar); //bigger
+      prevy = -1.75 - (py * y_scalar); //smaller
+      tempy = (prevy - tempy); //scaler
       tempy = tempy / samples; //scale it
-      
+      tempx = .75 - (nx * x_scalar); //bigger
+      prevx = .75 - (px * x_scalar); //smaller
+      tempx = -(prevx - tempx); //scaler
+      tempx = tempx / samples; //scale it
       for (int i = 1; i <= samples; i++){
-        a.offsety = tempy * i;
+        a.offsety = tempy * (samples - i);
+        a.offsetx = tempx * (samples - i);
         if (gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
       break;
-*/
+
     default:
       //not sure what happened so don't move 
       break;
   }
   a.offsety = 0;
   a.offsetx = 0;
+  a.prevx = a.x;
+  a.prevy = a.y;
   TimerEvent::idle_speed = ai_store;
 }
 
@@ -528,10 +543,10 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
     a.health--;
   }
   
-  animateMove(a);
 
   if(a.health > 0 && hitObj == false)
   {
+    animateMove(a);
     for(int i = 0; i < actors.size(); ++i)   //check each actor
     {
       if(a.health > 0 && actors[i].health > 0   //Make sure neither is dead

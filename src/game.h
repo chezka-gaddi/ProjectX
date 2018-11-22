@@ -41,7 +41,7 @@ public:
     GameField *tankGame;               /*!<Pointer to the game manager */
     gameMode g_mode;                   /*!<Type of game to be ran */
     int turn = 0;
-    int actTurn = 1000; //0 causes issues on first display call
+    int actTurn = 0; //0 causes issues on first display call
     int modCounter = 7;
     bool ui = true;
 
