@@ -11,6 +11,8 @@
 #include <string>
 #include "global.h"
 #include "direction.h"
+#include <GL/glut.h>
+#include <GL/freeglut.h>
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -112,8 +114,9 @@ class Projectile : public Drawable
 {
 public:
     int angle;
-
-    Projectile(int ID, GLfloat x, GLfloat y, direction dir, bool t);
+    float offsetx;
+    float offsety;
+    Projectile(int ID, GLfloat x, GLfloat y, direction dir, bool t, float osx, float osy);
 
     void draw(int, int);
 
@@ -133,8 +136,10 @@ public:
     int angle;
     int turn;
     bool sMod;
+    float offsetx;
+    float offsety;
 
-    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, bool sMod);
+    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, bool sMod, float osx, float osy);
 
     void draw(int, int);
     void setHealth(int h);

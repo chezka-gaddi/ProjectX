@@ -31,6 +31,8 @@ struct ActorInfo
     int damage = 0;
     int x;
     int y;
+    int prevx = -1;
+    int prevy = -1;
     int id = 0;
     int range = 0;
     int AP = 0;
@@ -43,6 +45,8 @@ struct ActorInfo
     int max_ammo = 0;
     bool sMod = false;
     float scale = 1;
+    float offsetx = 0;
+    float offsety = 0;
     std::string name = "default\n";
     attributes tankAttributes;
     direction heading;

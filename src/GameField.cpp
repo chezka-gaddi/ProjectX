@@ -6,6 +6,7 @@
 #include "game.h"
 #include <memory>
 #include <iostream>
+#include "event.h"
 
 /**
  * @author David Donahue
@@ -114,6 +115,8 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
   fieldMap.obstacleMap.resize(width * height);
   std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
   std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
+  x_scalar = 4.0717*pow(width, -1.031);
+  y_scalar = 3.1923*pow(height, -1.08);
   updateMap();
   displayCallback = d_callback;
   gameptr = game;
@@ -248,34 +251,159 @@ void GameField::setSPECIAL(int points, const attributes baseStats)
                 <<std::endl;
   }
 }
+void GameField::animateMove(ActorInfo &a)
+{
+  if (a.x == a.prevx && a.y == a.prevy || a.prevx == -1 || a.prevy == -1) //We didn't actually move
+          return; 
+  int px = a.prevx;
+  int py = a.prevy;
+  int nx = a.x;
+  int ny = a.y;
+  GLfloat tempx, tempy;
+  GLfloat prevx, prevy; 
+  GLfloat newx, newy;
+  int samples = 10;
+  int ai_store = TimerEvent::idle_speed;
+  TimerEvent::idle_speed = 0;
+  switch(a.heading)
+  {
+    case UP:
+      tempy = -1.75 - (ny * y_scalar); //smaller
+      prevy = -1.75 - (py * y_scalar); //bigger
+      tempy = tempy - prevy; //-scaler
+      tempy = tempy / samples; //scale it
+      
+      for (int i = 1; i < samples; i++){
+        a.offsety = tempy * i;
+        if (gameptr != nullptr)
+          displayCallback(fieldMap, actors, gameptr->turn);
+      }
+      break;
+    
+    case DOWN:
+      tempy = -1.75 - (ny * y_scalar); //bigger
+      prevy = -1.75 - (py * y_scalar); //smaller
+      tempy = prevy - tempy; //scaler
+      tempy = tempy / samples; //scale it
+      
+      for (int i = samples - 1; i > 0; i--){
+        a.offsety = tempy * i;
+        if (gameptr != nullptr)
+          displayCallback(fieldMap, actors, gameptr->turn);
+      }
+      break;
+
+    case LEFT:
+      tempx = .75 - (nx * x_scalar); //smaller
+      prevx = .75 - (px * x_scalar); //bigger
+      tempx = tempx - prevx; //-scaler
+      tempx = tempx / samples; //scale it
+      
+      for (int i = samples-1; i > 0; i--){
+        a.offsetx = tempx * i;
+        if (gameptr != nullptr)
+          displayCallback(fieldMap, actors, gameptr->turn);
+      }
+      break;
+
+    case RIGHT:
+      tempx = .75 - (nx * x_scalar); //bigger
+      prevx = .75 - (px * x_scalar); //smaller
+      tempx = tempx - prevx; //scaler
+      tempx = tempx / samples; //scale it
+      
+      for (int i = 1; i < samples; i++){
+        a.offsetx = tempx * i;
+        if (gameptr != nullptr)
+          displayCallback(fieldMap, actors, gameptr->turn);
+      }
+      break;
+    /*case UPLEFT:
+      tempy = -1.75 - (ny * y_scalar); //smaller
+      prevy = -1.75 - (py * y_scalar); //bigger
+      tempy = tempy - prevy; //-scaler
+      tempy = tempy / samples; //scale it
+      
+      for (int i = 1; i <= samples; i++){
+        a.offsety = tempy * i;
+        if (gameptr != nullptr)
+          displayCallback(fieldMap, actors, gameptr->turn);
+      }
+      break;
+
+    case UPRIGHT:
+      tempy = -1.75 - (ny * y_scalar); //smaller
+      prevy = -1.75 - (py * y_scalar); //bigger
+      tempy = tempy - prevy; //-scaler
+      tempy = tempy / samples; //scale it
+      
+      for (int i = 1; i <= samples; i++){
+        a.offsety = tempy * i;
+        if (gameptr != nullptr)
+          displayCallback(fieldMap, actors, gameptr->turn);
+      }
+      break;
+
+    case DOWNLEFT:
+      tempy = -1.75 - (ny * y_scalar); //smaller
+      prevy = -1.75 - (py * y_scalar); //bigger
+      tempy = tempy - prevy; //-scaler
+      tempy = tempy / samples; //scale it
+      
+      for (int i = 1; i <= samples; i++){
+        a.offsety = tempy * i;
+        if (gameptr != nullptr)
+          displayCallback(fieldMap, actors, gameptr->turn);
+      }
+      break;
+
+    case DOWNRIGHT:
+      tempy = -1.75 - (ny * y_scalar); //smaller
+      prevy = -1.75 - (py * y_scalar); //bigger
+      tempy = tempy - prevy; //-scaler
+      tempy = tempy / samples; //scale it
+      
+      for (int i = 1; i <= samples; i++){
+        a.offsety = tempy * i;
+        if (gameptr != nullptr)
+          displayCallback(fieldMap, actors, gameptr->turn);
+      }
+      break;
+*/
+    default:
+      //not sure what happened so don't move 
+      break;
+  }
+  a.offsety = 0;
+  a.offsetx = 0;
+  TimerEvent::idle_speed = ai_store;
+}
+
 /**
  * @author David Donahue
  * @par Description:
  * Executes the move phase of an AI's turn
  * AI's are culled
  */
-void GameField::runMoves(ActorInfo &a, MapData &fog)
+void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
 {
 
   int xoff = 0, yoff = 0, tHealth = 0, hit = 0;
   bool hitObj;
-  PositionData pos;
   direction dir;
 
 
-  //PositionData to give the AI
-  pos.game_x = a.x;
-  pos.game_y = a.y;
-  pos.health = a.health;
-  pos.id = a.id;
-  pos.ammo = a.ammo;
   //get the AI's desired move
   dir = a.act_p->move(fog, pos);
-  a.heading = (dir == STAY) ? a.heading : dir;
+  a.heading = (dir == STAY) ? a.heading : dir; //Not the best move if we chose to stay
   //If it checks out, execute it
   //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
-  if(a.health <= 0 || a.id == 0) //We arn't playing this game with dead actors anymore
+  if(a.health <= 0 || a.id == 0 || dir == STAY) //We arn't playing this game with dead actors anymore
     return;
+  //store prev coordinates
+  a.prevx = a.x;
+  a.prevy = a.y;
+  //try and move
   switch(dir)
   {
     case UP:
@@ -388,16 +516,19 @@ void GameField::runMoves(ActorInfo &a, MapData &fog)
     default:
       break;
   }
-  a.x += xoff;
+  //Set our new positions
+  a.x += xoff; 
   a.y += yoff;
   hitObj = checkObjectStrike(a);
   if(a.id > 0 && (obstacleAt(a.x, a.y) == 'R' || obstacleAt(a.x, a.y) == 'W'))
   {
     a.x -= xoff;
     a.y -= yoff;
-    hitObj == true;
+    hitObj == true;//Allows us to skip the rest of the checking if we ran into a rock or water
     a.health--;
   }
+  
+  animateMove(a);
 
   if(a.health > 0 && hitObj == false)
   {
@@ -429,15 +560,8 @@ void GameField::runMoves(ActorInfo &a, MapData &fog)
             hit += tHealth; //Tank survives
           }
           a.hits++; //A tank hit is still a hit right?
-          if(actors[i].health <= 0)
-          {
-            SFX.push_back(make_pair(actors[i].x, actors[i].y));
-            actors[i].health = 0;
-            actors[i].damage = 0;
-            actors[i].id = 0;
-            actors[i].AP = 0;
-            a.kills++;
-          }
+          if (checkHealth(actors[i]))
+                  a.kills++;
         }
         else if(actors[i].id < 0)  //Check if we ran into a projectile (What we are doesn't matter)
         {
@@ -454,33 +578,33 @@ void GameField::runMoves(ActorInfo &a, MapData &fog)
           hit += a.health;
           if(a.id != -actors[i].id)       //no self hits
             actorInfoById(-a.id).hits++;  //give our owner a hit
-          if(actors[i].health <= 0)
-          {
-            SFX.push_back(make_pair(actors[i].x, actors[i].y));
-            actors[i].health = 0;
-            actors[i].damage = 0;
-            actors[i].id = 0;
-            actors[i].AP = 0;
-            actorInfoById(-a.id).kills++;  //give our owner a hit
-          }
+          if (checkHealth(actors[i]))
+                  actorInfoById(-a.id).kills++;
         }
       }
     }
   }
   a.health -= hit;
-  if(a.id < 0 && (a.health <= 0 || hitObj == true))
-  {
+  checkHealth(a, hitObj);
+}
+
+bool GameField::checkHealth(ActorInfo &a, bool object)
+{
+  if (a.id < 0 && (a.health <= 0 || object == true))
+  {   
     SFX.push_back(make_pair(a.x, a.y));
     a.damage = 0;
     a.id = 0;
     a.health = 0;
-    a.AP = 0;
+    return true;
   }else if (a.id > 0 && a.health <= 0){
     a.damage = 0;
     a.id = 0;
     a.health = 0;
     a.AP = 0;
+    return true;
   }
+  return false;
 }
 
 bool GameField::checkObjectStrike(ActorInfo &a)
@@ -791,7 +915,7 @@ void GameField::nextTurn()
       action = actors[i].act_p->spendAP(fog_of_war, pos);
       if(action == 1)
       {
-        runMoves(actors[i], fog_of_war );
+        runMoves(actors[i], fog_of_war, pos );
       }
 
       else if(action == 2)

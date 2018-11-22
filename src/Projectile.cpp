@@ -17,10 +17,12 @@
 * @param[in] x_coor - coordinate to spawn projectile
 * @param[in] y_coor - coordinate to spawn projectile
 * *****************************************************************************/
-Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, bool t )
+Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, bool t, float osx = 1, float osy = 1)
 {
     screen_x = x_coor;
     screen_y = y_coor;
+    offsetx = osx;
+    offsety = osy;
     id = ID;
     turn = t;
 
@@ -75,7 +77,7 @@ void Projectile::draw(int x, int y)
     
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
-    glTranslatef(screen_x, screen_y, -5.0f);
+    glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
     glRotatef(angle,0,0,1);
     glBindTexture(GL_TEXTURE_2D, tankTex[tex]);
     glBegin(GL_QUADS);
@@ -95,7 +97,7 @@ void Projectile::draw(int x, int y)
       glEnable(GL_TEXTURE_2D);
       glPushMatrix();
       glBindTexture(GL_TEXTURE_2D, sfxTex[x % 4]);
-      glTranslatef(screen_x, screen_y, -5.0f);
+      glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
       glRotatef(angle,0,0,1);
       glBegin(GL_QUADS);
       glTexCoord2f(0.0f, 0.0f);

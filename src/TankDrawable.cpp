@@ -18,10 +18,12 @@
 * @param[in] x_coor - coordinate to spawn tank
 * @param[in] y_coor - coordinate to spawn tank
 * *****************************************************************************/
-TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, int t = 0, bool s = false )
+TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, int t = 0, bool s = false, GLfloat osx = 1, GLfloat osy = 1)
 {
     screen_x = x_coor;
     screen_y = y_coor;
+    offsetx = osx;
+    offsety = osy;
     id = ID;
     turn = t;
     sMod = s;
@@ -100,7 +102,7 @@ void TankDrawable::draw(int x, int y)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
-    glTranslatef(screen_x, screen_y, -5.0f);
+    glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
     glRotatef(angle,0,0,1);
     glBindTexture(GL_TEXTURE_2D, tankTex[tex]);
 
@@ -119,7 +121,7 @@ void TankDrawable::draw(int x, int y)
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
       glLoadIdentity();
-      glTranslatef(screen_x, screen_y, -5.0f);
+      glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
       glBindTexture(GL_TEXTURE_2D, sfxTex[12]);
 
       if (sMod == 0) {
@@ -176,7 +178,7 @@ void TankDrawable::draw(int x, int y)
           glEnable(GL_BLEND);
           glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
           glLoadIdentity();
-          glTranslatef(screen_x, screen_y, -5.0f);
+          glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
           glBindTexture(GL_TEXTURE_2D, sfxTex[8]);
           
           //sizing width .05  height .05

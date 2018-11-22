@@ -302,11 +302,9 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     }
   }
 
-  //system("sleep 1.");
   pause = ((.0013*TimerEvent::idle_speed)-.01)*1500000;
   pause >= 0 ? usleep(pause) : usleep(0);
   glutSwapBuffers();
-  //system("sleep 5.");
   pause = ((.0066*TimerEvent::idle_speed)-.05)*1500000;
   pause >= 0 ? usleep(pause) : usleep(0);
   printf("Exiting!\n");

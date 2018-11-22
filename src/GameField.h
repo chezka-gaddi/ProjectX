@@ -17,6 +17,8 @@
 #include "direction.h"
 #include <iostream>
 #include <ctime>
+#include <GL/glut.h>
+#include <GL/freeglut.h>
 
 /***************************************************************************//**
 * @class GameField
@@ -44,12 +46,16 @@ protected:
     //callback function to update the dispaly with the map, actors, and turn count
     void (*displayCallback)(MapData, std::vector<ActorInfo>, int);
     void updateMap();
-    void runMoves(ActorInfo &a, MapData &fog);
+    void runMoves(ActorInfo &a, MapData &fog, PositionData &pos);
     ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
     //Action points for each actor
     int ap;
+    GLfloat y_scalar = 0;
+    GLfloat x_scalar = 0;
     bool checkObjectStrike(ActorInfo &a);
     bool crate_o_doom(int x, int y, ActorInfo &a);
+    bool checkHealth(ActorInfo &a, bool object = true);
+    void animateMove(ActorInfo &a);
     Game *gameptr = nullptr;
 
 public:
@@ -87,7 +93,7 @@ public:
     GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int));
     GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), Game *);
     GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), int ap);
-    GameField(int width, int height, std::vector<ActorInfo> startActors, int actonpoints);
+    GameField(int width, int height, std::vector<ActorInfo> startActors, int actionpoints);
 
 
     ~GameField();

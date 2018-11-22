@@ -73,7 +73,7 @@ void updateDrawables(Game &game)
     if(act.id > 0 && act.health > 0)
     {
       //temp_tank = new TankDrawable(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, game.tankGame->getTurnCount(), act.sMod);
-      std::unique_ptr<TankDrawable> temp_tank(new TankDrawable(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, game.tankGame->getTurnCount(), act.sMod));
+      std::unique_ptr<TankDrawable> temp_tank(new TankDrawable(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, game.tankGame->getTurnCount(), act.sMod, act.offsetx, act.offsety));
       act.sMod = !act.sMod;
       temp_tank->setHealth(act.health);
       temp_tank->setMax_health(act.max_health);
@@ -81,7 +81,7 @@ void updateDrawables(Game &game)
     }
     else if(act.id < 0 && act.health > 0)
     {
-      std::unique_ptr<Projectile> temp_proj(new Projectile(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, (act.id == game.actTurn || -act.id == game.actTurn)));
+      std::unique_ptr<Projectile> temp_proj(new Projectile(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, (act.id == game.actTurn || -act.id == game.actTurn), act.offsetx, act.offsety));
       temp_proj->sizeMod = act.scale;
       game.objects.push_back(std::move(temp_proj));
     }
