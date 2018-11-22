@@ -8,6 +8,7 @@ Want instant communication with the Dev team? Join our
 ## New
 - Brand new scoreboard
   - Noone asked for it, but we delivered it anyway.  There is now a single scoreboard that displays the current tank's information allowing for stat tracking of more than 4 tanks at a time.
+  - We also added a spinning image of the current tank to help identify which tank is yours.
 ## Release 4.02
 ## Fixed
 - Modified max radar range to be allowed up to map width.
