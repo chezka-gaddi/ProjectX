@@ -1,6 +1,13 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Release 4.03
+## Fixed
+- Issue where when running moves the user was not updated with the current AP.
+- Minor optimization issues.
+## New
+- Brand new scoreboard
+  - Noone asked for it, but we delivered it anyway.  There is now a single scoreboard that displays the current tank's information allowing for stat tracking of more than 4 tanks at a time.
 ## Release 4.02
 ## Fixed
 - Modified max radar range to be allowed up to map width.

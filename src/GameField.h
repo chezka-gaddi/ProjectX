@@ -43,7 +43,7 @@ protected:
     //callback function to update the dispaly with the map, actors, and turn count
     void (*displayCallback)(MapData, std::vector<ActorInfo>, int);
     void updateMap();
-    void runMoves(ActorInfo &a);
+    void runMoves(ActorInfo &a, PositionData &pos);
     ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
     //Action points for each actor
     int ap;

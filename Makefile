@@ -40,8 +40,11 @@ TANKS += $(SRC_PATH)StationaryAI.cpp
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
-platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
+platform: tanksdir $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
+
+tanksdir:
+	@mkdir -p tanks
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $? -o $@ 

@@ -253,21 +253,13 @@ void GameField::setSPECIAL(int points, const attributes baseStats)
  * Executes the move phase of an AI's turn
  * AI's are culled
  */
-void GameField::runMoves(ActorInfo &a)
+void GameField::runMoves(ActorInfo &a, PositionData &pos)
 {
 
   int xoff = 0, yoff = 0, tHealth = 0, hit = 0;
   bool hitObj;
-  PositionData pos;
   direction dir;
 
-
-  //PositionData to give the AI
-  pos.game_x = a.x;
-  pos.game_y = a.y;
-  pos.health = a.health;
-  pos.id = a.id;
-  pos.ammo = a.ammo;
   //get the AI's desired move
   MapData fog = fieldMap;
   create_fog_of_war(fog, a);
@@ -775,7 +767,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         action = actors[i].act_p->spendAP(fog_of_war, pos);
         if(action == 1)
         {
-          runMoves(actors[i]);
+          runMoves(actors[i], pos);
         }
 
         else if(action == 2)
