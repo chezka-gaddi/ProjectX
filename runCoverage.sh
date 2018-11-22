@@ -1,5 +1,5 @@
 #!/bin/bash
-#make clean-all
+make clean-all
 make -j8
 
 echo ""

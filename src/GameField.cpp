@@ -262,7 +262,7 @@ void GameField::animateMove(ActorInfo &a)
   GLfloat tempx, tempy;
   GLfloat prevx, prevy; 
   GLfloat newx, newy;
-  int samples = 20;
+  int samples = 5;
   int ai_store = TimerEvent::idle_speed;
   TimerEvent::idle_speed = 0;
   switch(a.heading)
