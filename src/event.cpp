@@ -62,7 +62,7 @@ void updateDrawables(Game &game)
     game.objects.clear();
 
   vector<ActorInfo> *actors = game.tankGame->getActorsPointer();
-  const vector<std::pair<int,int>> &SFX = game.tankGame->getSFX();
+  vector<std::pair<int,int>> *SFX = game.tankGame->getSFXPointer();
 
   for(auto &act : *actors)
   {
@@ -91,7 +91,7 @@ void updateDrawables(Game &game)
     }
 
   }
-  for(auto sfx : SFX)
+  for(auto &sfx : *SFX)
   {
     std::unique_ptr<Drawable> temp_draw(new sfxDrawable(game.convertGLXCoordinate(sfx.first), game.convertGLYCoordinate(sfx.second)));
     game.sfx.push_back(std::move(temp_draw));
@@ -116,10 +116,6 @@ void DisplayEvent::doAction(Game &game)
 
   if(game.ui == true)
   {
-    game.modCounter++;
-    if(game.modCounter > 7)
-      game.modCounter = 0;
-
     if(game.turn > 0)
       updateDrawables(game);
 

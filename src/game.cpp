@@ -302,11 +302,9 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     }
   }
 
-  pause = ((.0013*TimerEvent::idle_speed)-.01)*1500000;
-  pause >= 0 ? usleep(pause) : usleep(0);
+  sleep(1);
   glutSwapBuffers();
-  pause = ((.0066*TimerEvent::idle_speed)-.05)*1500000;
-  pause >= 0 ? usleep(pause) : usleep(0);
+  sleep(4);
   printf("Exiting!\n");
 }
 
@@ -618,6 +616,20 @@ void Game::initGameState()
           }
           TimerEvent::idle_speed = ai_speed;
           idle_speed = ai_speed;
+          cout << "   ...done.\n";
+        }
+        else if(id == "ANIMATION_SPEED")
+        {
+          cout << "Greasing the wheels...  \n";
+          stringstream(args) >> aniSpeed;
+          if(aniSpeed > 30)
+          {
+            cout << "Speeds above 30 are slow, defaulting to 30\n";
+            aniSpeed = 30;
+          }else if (aniSpeed < 0){
+            cout << "Speed below 0 are now allowed, defaulting to 0\n";
+            aniSpeed = 0;
+          }
           cout << "   ...done.\n";
         }
         //field params
@@ -979,16 +991,7 @@ void Game::initGameState()
   fout << "Winner: ";
   cout << "  ...Done" << endl;
   fout.close();
-// Create a stats menu for up to 4 tanks
-    int count = 0;
-   /* for(auto actTemp : startActors)
-    {
-      if(actTemp.id > 0)
-      {
-        temp = new Menu(actTemp.id, actTemp.health, actTemp.ammo, actTemp.hits, actTemp.name, actTemp.heading);
-        objects.push_back(temp);
-      }
-    }*/
+  int count = 0;
 
   cout << "Finalizing game settings...\n";
   //printf("Height: %d  Width: %d\n",height, width);
@@ -1010,11 +1013,13 @@ void Game::initGameState()
     taken = false;
     for(auto tank : tankLocations)
     {
-      if(tank.first == o.first && tank.second == o.second)
+      if(tank.first == o.first && tank.second == o.second){
         taken = true;
+      printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
+      }
     }
 
-    if(taken = false)
+    if(taken == false)
     {
       tankGame->addObstacle(o.first, o.second);
       tempOb = new Obstacles(50, convertGLXCoordinate(o.first), convertGLYCoordinate(o.second), o.first, o.second);
@@ -1024,9 +1029,21 @@ void Game::initGameState()
   cout << "  ...hiding the ammo\n";
   for(auto c : specialLocations)
   {
+    taken = false;
+    for(auto tank : tankLocations)
+    {
+      if(tank.first == c.first && tank.second == c.second){
+        taken = true;
+        printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
+      }
+    }
+
+    if(taken == false)
+    {
     tankGame->addObstacle(c.first, c.second, 'C');
     temp = new Crate(convertGLXCoordinate(c.first), convertGLYCoordinate(c.second), c.first, c.second);
     specials.push_back(temp);
+    }
   }
   cout << "  ...letting the trees grow\n";
   for(auto t : treeLocations)
@@ -1038,9 +1055,21 @@ void Game::initGameState()
   cout << "  ...petting the rocks\n";
   for(auto r : rockLocations)
   {
+    taken = false;
+    for(auto tank : tankLocations)
+    {
+      if(tank.first == r.first && tank.second == r.second){
+        taken = true;
+      printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
+      }
+    }
+
+    if(taken == false)
+    {
     tankGame->addObstacle(r.first, r.second, 'R'); //No driving over rocks
     tempOb = new Obstacles(1, convertGLXCoordinate(r.first), convertGLYCoordinate(r.second), r.first, r.second);
     rocks.push_back(tempOb);
+    }
   }
   cout << "  ...finding some shrubberies\n";
   for(auto b : bushLocations)
@@ -1052,9 +1081,21 @@ void Game::initGameState()
   cout << "  ...drilling for moisture\n";
   for(auto w : waterLocations)
   {
+    taken = false;
+    for(auto tank : tankLocations)
+    {
+      if(tank.first == w.first && tank.second == w.second){
+        taken = true;
+      printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
+      }
+    }
+
+    if(taken == false)
+    {
     tankGame->addObstacle(w.first, w.second, 'W');
     temp = new Obstacles(3, convertGLXCoordinate(w.first), convertGLYCoordinate(w.second), w.first, w.second);
     waters.push_back(temp);
+    }
   }
   cout << "...done.\n" << endl;
 }

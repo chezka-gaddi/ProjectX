@@ -62,6 +62,7 @@ public:
     int getY(){return fieldy;};
 
     int getAISpeed(){return idle_speed;};
+    int getAniSpeed(){return aniSpeed;};
     
     vector <std::unique_ptr<Drawable>> objects;       /*!<Holds all of the current actors */
     vector <Drawable *> constants;     /*!<Holds the GameFieldDrawable and menus */
@@ -79,6 +80,7 @@ private:
     int idle_speed;
     int max_turns = 200;
     int activeId;
+    int aniSpeed = 15;
 };
 
 #endif //__GAME_H

@@ -253,17 +253,16 @@ void GameField::setSPECIAL(int points, const attributes baseStats)
 }
 void GameField::animateMove(ActorInfo &a)
 {
-  if (a.x == a.prevx && a.y == a.prevy || a.prevx == -1 || a.prevy == -1) //We didn't actually move
-          return; 
+  if(a.x == a.prevx && a.y == a.prevy || a.prevx == -1 || a.prevy == -1)  //We didn't actually move
+    return;
   int px = a.prevx;
   int py = a.prevy;
   int nx = a.x;
   int ny = a.y;
   GLfloat tempx, tempy;
-  GLfloat prevx, prevy; 
+  GLfloat prevx, prevy;
   GLfloat newx, newy;
-  int samples = 5;
-  int ai_store = TimerEvent::idle_speed;
+  int samples = gameptr->getAniSpeed();
   TimerEvent::idle_speed = 0;
   switch(a.heading)
   {
@@ -272,22 +271,23 @@ void GameField::animateMove(ActorInfo &a)
       prevy = -1.75 - (py * y_scalar); //bigger
       tempy = (prevy - tempy); //-scaler
       tempy = tempy / samples; //scale it
-      
-      for (int i = 1; i < samples; i++){
+
+      for(int i = 1; i < samples; i++)
+      {
         a.offsety = tempy * (samples - i);
-        if (gameptr != nullptr)
+        if(gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
       break;
-    
     case DOWN:
       tempy = -1.75 - (ny * y_scalar); //bigger
       prevy = -1.75 - (py * y_scalar); //smaller
       tempy = (prevy - tempy); //scaler
       tempy = tempy / samples; //scale it
-      for (int i = 1; i < samples; i++){
+      for(int i = 1; i < samples; i++)
+      {
         a.offsety = tempy * (samples - i);
-        if (gameptr != nullptr)
+        if(gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
       break;
@@ -297,9 +297,10 @@ void GameField::animateMove(ActorInfo &a)
       prevx = .75 - (px * x_scalar); //bigger
       tempx = -(prevx - tempx); //-scaler
       tempx = tempx / samples; //scale it
-      for (int i = 1; i < samples; i++){
+      for(int i = 1; i < samples; i++)
+      {
         a.offsetx = tempx * (samples - i);
-        if (gameptr != nullptr)
+        if(gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
       break;
@@ -309,9 +310,10 @@ void GameField::animateMove(ActorInfo &a)
       prevx = .75 - (px * x_scalar); //smaller
       tempx = -(prevx - tempx); //scaler
       tempx = tempx / samples; //scale it
-      for (int i = 1; i < samples; i++){
+      for(int i = 1; i < samples; i++)
+      {
         a.offsetx = tempx * (samples - i);
-        if (gameptr != nullptr)
+        if(gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
       break;
@@ -324,10 +326,11 @@ void GameField::animateMove(ActorInfo &a)
       prevx = .75 - (px * x_scalar); //bigger
       tempx = -(prevx - tempx); //-scaler
       tempx = tempx / samples; //scale it
-      for (int i = 1; i <= samples; i++){
+      for(int i = 1; i <= samples; i++)
+      {
         a.offsety = tempy * (samples - i);
         a.offsetx = tempx * (samples - i);
-        if (gameptr != nullptr)
+        if(gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
       break;
@@ -341,10 +344,11 @@ void GameField::animateMove(ActorInfo &a)
       prevx = .75 - (px * x_scalar); //smaller
       tempx = -(prevx - tempx); //scaler
       tempx = tempx / samples; //scale it
-      for (int i = 1; i <= samples; i++){
+      for(int i = 1; i <= samples; i++)
+      {
         a.offsety = tempy * (samples - i);
         a.offsetx = tempx * (samples - i);
-        if (gameptr != nullptr)
+        if(gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
       break;
@@ -358,10 +362,11 @@ void GameField::animateMove(ActorInfo &a)
       prevx = .75 - (px * x_scalar); //bigger
       tempx = -(prevx - tempx); //-scaler
       tempx = tempx / samples; //scale it
-      for (int i = 1; i <= samples; i++){
+      for(int i = 1; i <= samples; i++)
+      {
         a.offsety = tempy * (samples - i);
         a.offsetx = tempx * (samples - i);
-        if (gameptr != nullptr)
+        if(gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
       break;
@@ -375,23 +380,24 @@ void GameField::animateMove(ActorInfo &a)
       prevx = .75 - (px * x_scalar); //smaller
       tempx = -(prevx - tempx); //scaler
       tempx = tempx / samples; //scale it
-      for (int i = 1; i <= samples; i++){
+      for(int i = 1; i <= samples; i++)
+      {
         a.offsety = tempy * (samples - i);
         a.offsetx = tempx * (samples - i);
-        if (gameptr != nullptr)
+        if(gameptr != nullptr)
           displayCallback(fieldMap, actors, gameptr->turn);
       }
       break;
 
     default:
-      //not sure what happened so don't move 
+      //not sure what happened so don't move
       break;
   }
   a.offsety = 0;
   a.offsetx = 0;
   a.prevx = a.x;
   a.prevy = a.y;
-  TimerEvent::idle_speed = ai_store;
+  TimerEvent::idle_speed = gameptr->getAISpeed();
 }
 
 /**
@@ -404,7 +410,8 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
 {
 
   int xoff = 0, yoff = 0, tHealth = 0, hit = 0;
-  bool hitObj;
+  bool hitObj = false;
+  bool redraw = false;
   direction dir;
 
 
@@ -532,21 +539,22 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
       break;
   }
   //Set our new positions
-  a.x += xoff; 
+  a.x += xoff;
   a.y += yoff;
-  hitObj = checkObjectStrike(a);
+  hitObj = checkObjectStrike(a); //Check if our projectile hit a non-actor
+  //Check if we're a tank that hit a rock or water
   if(a.id > 0 && (obstacleAt(a.x, a.y) == 'R' || obstacleAt(a.x, a.y) == 'W'))
   {
     a.x -= xoff;
     a.y -= yoff;
-    hitObj == true;//Allows us to skip the rest of the checking if we ran into a rock or water
+    hitObj = true;//Allows us to skip the rest of the checking if we ran into a rock or water
+    redraw = true;//Allows us to skip animation
     a.health--;
   }
-  
 
+  //Run the main loop through actors to see if we hit one
   if(a.health > 0 && hitObj == false)
   {
-    animateMove(a);
     for(int i = 0; i < actors.size(); ++i)   //check each actor
     {
       if(a.health > 0 && actors[i].health > 0   //Make sure neither is dead
@@ -554,65 +562,86 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
          && actors[i].y == a.y    //Make sure we're on the same row
          && a.id != actors[i].id) //Make sure our tank doesn't damage itself
       {
-        if(a.id > 0 && actors[i].id > 0 && actors[i].id != a.id)  //Check tank to tank ramming
+        //Check tank to tank ramming
+        if(a.id > 0 && actors[i].id > 0)
         {
           //printf("Tank hit tank\n");
           //Reverse the move
           a.x -= xoff;
           a.y -= yoff;
+          //Store target tanks health
           tHealth = actors[i].health;
-          actors[i].health -= a.health; //deal full health damage to target
+          actors[i].health -= a.health; //deal our full health damage to target
+          //Logic for ramming
           if(a.health == 1)
           {
             hit += a.health; //tank kills self
           }
           else if(tHealth >= a.health)
           {
-            hit += a.health - 1;//Does survive
+            hit += a.health - 1;//prevent tank's death (at least from ramming)
           }
-          else
+          else //Otherwise take damage as normal
           {
             hit += tHealth; //Tank survives
           }
           a.hits++; //A tank hit is still a hit right?
-          if (checkHealth(actors[i]))
-                  a.kills++;
+          if(checkHealth(actors[i]))
+            a.kills++;
+          redraw = true; //This is the end of the road for this move, don't animate
         }
         else if(actors[i].id < 0)  //Check if we ran into a projectile (What we are doesn't matter)
         {
           //printf("Projectile or Tank hit a projectile.\n");
           hit += actors[i].damage; //store future damage
-          actors[i].health -= a.health; //Destroy the projectile
-          if(a.id > 0 && -actors[i].id != a.id)  //Give the owner a hit, but not a self hit and not a missile to missle hit
+          actors[i].health = 0; //Destroy the projectile
+          if(a.id > 0 && -actors[i].id != a.id){  //Give the owner a hit, but not a self hit and not a missile to missle hit
             actorInfoById(-actors[i].id).hits++;
+            if (a.health -= hit <= 0) //Give the owner a kill if we suicided
+                    actorInfoById(-actors[i].id != a.id);
+          }
+          redraw = true; //We hit something, don't animate more
         }
         else if(a.id < 0)  //If we're a projectile and we hit a tank
         {
           //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
           actors[i].health -= a.damage; //damage the tank
-          hit += a.health;
-          if(a.id != -actors[i].id)       //no self hits
+          hit += a.health + 1; //should be enough to kill us
+          if(a.id != -actors[i].id)       //no self hits which shouldn't be possible
             actorInfoById(-a.id).hits++;  //give our owner a hit
-          if (checkHealth(actors[i]))
-                  actorInfoById(-a.id).kills++;
+          if(checkHealth(actors[i]))
+            actorInfoById(-a.id).kills++; //get a kill
+          redraw = true;
         }
       }
     }
   }
   a.health -= hit;
   checkHealth(a, hitObj);
+  if(!redraw || hitObj){
+    animateMove(a);
+  }
+  else if (redraw && !hitObj);
+  {
+    updateMap();
+    if(gameptr != nullptr)
+      displayCallback(fieldMap, actors, gameptr->turn);
+  }
 }
 
 bool GameField::checkHealth(ActorInfo &a, bool object)
 {
-  if (a.id < 0 && (a.health <= 0 || object == true))
-  {   
+  if(a.health <= 0) //if whatever we have has no health left
+  {
     SFX.push_back(make_pair(a.x, a.y));
     a.damage = 0;
     a.id = 0;
     a.health = 0;
+    a.AP = 0;
     return true;
-  }else if (a.id > 0 && a.health <= 0){
+  }
+  else if(a.id < 0 && object) //If our projectile impacted on an object
+  {
     a.damage = 0;
     a.id = 0;
     a.health = 0;
@@ -654,7 +683,8 @@ bool GameField::checkObjectStrike(ActorInfo &a)
       {
         //printf("Found Rock strike, log it.\n");
         r->health -= a.damage;
-        if(r->health < 0)
+        SFX.push_back(make_pair(a.x, a.y));
+        if(r->health <= 0)
         {
           r->health = 0;
 #ifndef TESTING
@@ -673,11 +703,18 @@ bool GameField::checkObjectStrike(ActorInfo &a)
       {
         //printf("Found tree strike, chop it.\n");
         t->health -= a.damage;
+        SFX.push_back(make_pair(a.x, a.y));
         if(t->health <= 0)
         {
           t->health = 0;
 #ifndef TESTING
           t->set_destroyed(gameptr->turn);
+          //If a tree you're hiding under get's destroyed take 1 damage
+          for (auto tTank : actors)
+          {
+                  if (tTank.x == a.x && tTank.y == a.y)
+                          tTank.health--;
+          }
 #endif
         }
         return true;
@@ -871,7 +908,7 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
 
 void GameField::nextTurn()
 {
-  if (gameptr != nullptr)
+  if(gameptr != nullptr)
     ++gameptr->turn;
 
   direction atk;
@@ -909,16 +946,23 @@ void GameField::nextTurn()
 #endif
   for(int i = 0; i < actors.size(); ++i)
   {
-    //Early exit if we hit our freshly merged projectiles
-    //if (actors[i].health <= 0)
-    //        continue;
+    gameptr->modCounter = 0;
+    if(gameptr->modCounter > 7)
+      gameptr->modCounter = 0;
+
     act_ap = actors[i].AP;
 #ifndef TESTING //Prevent testing from trying to access the unset pointer
-    if (actors[i].id > 0 && actors[i].health > 0)
+    if(actors[i].id > 0 && actors[i].health > 0)
       gameptr->actTurn = actors[i].id;
 #endif
+    updateMap();  //Give each actor a fresh map
+    if(gameptr != nullptr)  
+      displayCallback(fieldMap, actors, gameptr->turn);
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
+      gameptr->modCounter++; 
+      if(gameptr->modCounter > 7)
+        gameptr->modCounter = 0;
       fog_of_war = fieldMap;
       create_fog_of_war(fog_of_war, actors[i]);
       pos.game_x = actors[i].x;
@@ -930,7 +974,7 @@ void GameField::nextTurn()
       action = actors[i].act_p->spendAP(fog_of_war, pos);
       if(action == 1)
       {
-        runMoves(actors[i], fog_of_war, pos );
+        runMoves(actors[i], fog_of_war, pos);
       }
 
       else if(action == 2)
@@ -943,7 +987,6 @@ void GameField::nextTurn()
 
         //Get the AI's desired attack
         atk = actors[i].act_p->attack(fog_of_war, pos);
-
 
         if(actors[i].id > 0)  //tanks attacking
         {
@@ -965,7 +1008,7 @@ void GameField::nextTurn()
               }
               j++;
             }
-            if (grow == false)
+            if(grow == false)
             {
               ProjectileActor * proj = new ProjectileActor(atk);
               newProjectile.AP = actors[i].range;
@@ -982,7 +1025,8 @@ void GameField::nextTurn()
               actors[i].shots++;
               actors[i].ammo--;
             }
-          }else if(atk != STAY)
+          }
+          else if(atk != STAY)
           {
             //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
             actors[i].ammo = actors[i].max_ammo;
@@ -997,14 +1041,11 @@ void GameField::nextTurn()
         //printf("Reloading... Reloading... Reloading\n");
       }
       --act_ap;
-	    updateMap();
-      if (gameptr != nullptr)
-        displayCallback(fieldMap, actors, gameptr->turn);
     }
   }
   cull();
-	updateMap();
-  if (gameptr != nullptr)
+  updateMap();
+  if(gameptr != nullptr)
     displayCallback(fieldMap, actors, gameptr->turn);
 }
 /**
@@ -1103,6 +1144,17 @@ const std::vector<ActorInfo> &GameField::getActorsConst()
 std::vector<std::pair<int,int>> GameField::getSFX()
 {
   return SFX;
+}
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Get the current set of SFX
+ */
+std::vector<std::pair<int,int>> *GameField::getSFXPointer()
+{
+  std::vector<std::pair<int,int>> *temp;
+  temp = &SFX;
+  return temp;
 }
 /**
  * @author Jon McKee

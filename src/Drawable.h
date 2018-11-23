@@ -98,8 +98,8 @@ public:
     void regrow(int turn); 
     void draw(int, int);
 protected:
-    int destroyed;
-    int regrow_rate;
+    int destroyed = -1;
+    int regrow_rate = 8;
     void set_destroyed(int d);
 friend class GameField;
 };

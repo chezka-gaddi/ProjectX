@@ -91,7 +91,7 @@ void Obstacles::draw(int, int)
 }
 
 void Obstacles::regrow(int turn){
-  if (destroyed == 0)
+  if (destroyed == -1)
     return;
 
   //printf("Checking plant on turn %d with %d health destroyed on turn %d\n",turn, health, destroyed);
@@ -104,7 +104,7 @@ void Obstacles::regrow(int turn){
     }else if( id == 2){ //Its a Bushes
       health = 1;
     }
-    destroyed = 0;
+    destroyed = -1;
   }
 }
 

@@ -109,6 +109,7 @@ public:
     std::vector<ActorInfo> * getActorsPointer();
     const std::vector<ActorInfo> &getActorsConst();
     std::vector<std::pair<int,int>> getSFX();
+    std::vector<std::pair<int,int>> * getSFXPointer();
     const std::vector<std::pair<int,int>> &getSFXConst();
     void clearSFX();
     MapData getMapData();
