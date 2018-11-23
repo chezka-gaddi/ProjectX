@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++11 -fPIC
-#CXXFLAGS += -g
+CXXFLAGS += -g
 #PROFILE = -pg
 #PROFILE += -fprofile-arcs -ftest-coverage
 INCS = -I./ -Isrc/

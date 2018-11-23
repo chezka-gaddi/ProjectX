@@ -30,16 +30,18 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
     if (id == 0){ //It's a tree
       health = 2;
       tex = ((rand() % 4));
-      regrow_rate = 2;
+      regrow_rate = 3;
     }else if( id == 1){ //It's a Rocks
       health = 4;
       tex = ((rand() % 3) + 10);
-      regrow_rate = 4;
+      regrow_rate = 5;
     }else if( id == 2){ //It's a Bushes
+      health = 9999;
       tex = ((rand() % 4) + 20);
-      regrow_rate = 4;
+      regrow_rate = 2;
     }else if( id == 3){ //It's a Waters
       tex = 0 + 30;
+      regrow_rate = 0;
     }else if (id == 50){
       tex = (8 + 50);
     }else{
@@ -97,11 +99,11 @@ void Obstacles::regrow(int turn){
   //printf("Checking plant on turn %d with %d health destroyed on turn %d\n",turn, health, destroyed);
 
   if (destroyed+regrow_rate < turn){
-    if (id == 0){ //Its a tree
-      health = 2;
-    }else if( id == 1){ //Its a Rocks
-      health = 4;
-    }else if( id == 2){ //Its a Bushes
+    if (tex < 10){ //Its a tree
+      health = 3;
+    }else if( tex < 20){ //Its a Rocks
+      health = 5;
+    }else if( tex < 30){ //Its a Bushes
       health = 1;
     }
     destroyed = -1;

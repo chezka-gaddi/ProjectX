@@ -701,6 +701,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
           r->health = 0;
 #ifndef TESTING
           r->set_destroyed(gameptr->turn);
+          removeObstacle(a.x, a.y);
 #endif
         }
         return true;
@@ -721,6 +722,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
           t->health = 0;
 #ifndef TESTING
           t->set_destroyed(gameptr->turn);
+          removeObstacle(a.x, a.y);
           //If a tree you're hiding under get's destroyed take 1 damage
           for (auto tTank : actors)
           {
@@ -746,6 +748,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         actorInfoById(-a.id).hits += hits;
         for (int i = gameptr->specials.size(); i > 0; i--){
                 if (gameptr->specials[i-1]->health == 0){
+                        removeObstacle(gameptr->specials[i-1]->gridx, gameptr->specials[i-1]->gridy);
                         gameptr->specials.erase(gameptr->specials.begin() + i - 1);
                 }
         }
@@ -783,8 +786,10 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
             if(t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
             {
               t->health--;
-              if(t->health <= 0)
+              if(t->health <= 0){
                 t->destroyed = gameptr->turn;
+                removeObstacle(t->gridx, t->gridy);
+              }
             }
           }
           break;
@@ -804,8 +809,10 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
             if(r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
             {
               r->health--;
-              if(r->health <= 0)
+              if(r->health <= 0){
                 r->destroyed = gameptr->turn;
+                removeObstacle(r->gridx, r->gridy);
+                                }
             }
           }
           break;
@@ -940,25 +947,32 @@ void GameField::nextTurn()
   MapData fog_of_war = fieldMap;
   //printf("Turn number: %d\n",turnCount);
 #ifndef TESTING  //Prevent testing from trying to access the unset pointer
-  for(Obstacles* &t : gameptr->trees)
+  for(Obstacles* t : gameptr->trees)
   {
     if(t->health <= 0)
     {
       t->regrow(gameptr->turn);
+      if (t->health > 0)
+        addObstacle(t->gridx, t->gridy, 'T');
     }
   }
-  for(Obstacles* &r : gameptr->rocks)
+  for(Obstacles* r : gameptr->rocks)
   {
     if(r->health <= 0)
     {
       r->regrow(gameptr->turn);
+      if (r->health > 0)
+        addObstacle(r->gridx, r->gridy, 'R');
     }
   }
-  for(Obstacles* &b : gameptr->bushes)
+  //Currently bushes are non destructible but this will let them regrow when they do
+  for(Obstacles* b : gameptr->bushes)
   {
     if(b->health <= 0)
     {
       b->regrow(gameptr->turn);
+      if (b->health > 0)
+        addObstacle(b->gridx, b->gridy, 'B');
     }
   }
 #endif

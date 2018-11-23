@@ -1,6 +1,28 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Release 5.01
+## Fixes
+- Non-Disappearing objects from obstacle and health map
+  - Trees, Rocks, and (Future)Bushes will now disappear from the obstacle map when destroyed.
+- Tree/Rock Regrowth (And future bushes)
+  - These objects will now regrow after 4 turns back to their original health.  
+  - They will also reappear back on the Obstacle and Health maps.
+- Crates
+  - Crates now properly get removed from the obstacle and health maps when they are destroyed.
+  - They do NOT regrow.
+- Health Adustments:
+  - Trees: 3
+  - Rocks: 5
+  - Crates: 1
+  - Bushes: 9999
+- Regrow Rates:
+  - Currently everything that can regrow regrows at the following rates:
+    - Trees: 3
+    - Rocks: 5
+    - Crates: Never
+    - Bushes: 1
+    - Water: 0
 ## Release 5.00
 ## New
 -	Adjustable Tank Speed config file setting
