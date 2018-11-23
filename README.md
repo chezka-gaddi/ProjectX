@@ -23,11 +23,16 @@ Want instant communication with the Dev team? Join our
   - Explosions are no longer a single static sprite 
 - Memory Management
 	- Switched some heavily used objects to smart pointers to ensure quicker memory cleanup.
+- Projectile stacking
+  - Projectiles from the same tank will no longer be allowed to stack.  Instead if two projectiles are fired by the same tank on 1 turn, the two projectils will merge leaving a single projectile with double health, double damage, and 40% increased size.  (These will increase additively for the amount of projectiles fired)
+  - Note with a tank tha does nothing but constantly fires, large amount of ammo, and moderate to a lot of AP the size of the projectile can get extremely large.
+  - This also has the added benefit that when checking the health map you now know which area 'more' projectiles are coming from because the health stat will be larger for combined projectiles.  
 ## Fixes
 -	Tree's will now regrow properly. (4 turns).
 - Rock's will now appear again. (4 turns).
 - If a tree is destroyed on top of a tank, the tank will now take the appropriate amount of damage (1).
 - Fixed an issue with some tanks moving sideways instead of turning.
+- Potential bug with destroyed create still appearing on health map.
 
 ## Release 4.03
 ## Fixed
@@ -35,7 +40,7 @@ Want instant communication with the Dev team? Join our
 - Minor optimization issues.
 ## New
 - Brand new scoreboard
-  - Noone asked for it, but we delivered it anyway.  There is now a single scoreboard that displays the current tank's information allowing for stat tracking of more than 4 tanks at a time.
+  - Noone asked for it, but we delivered it anyway.  There is now a single scoreboard that displays the current tank's information allowing for stat tracking of more than 4 tanks at a time.  
   - We also added a spinning image of the current tank to help identify which tank is yours.
 ## Release 4.02
 ## Fixed
@@ -48,7 +53,7 @@ Want instant communication with the Dev team? Join our
 - Default config file. If a config.txt file is not detected, the game will attempt to write a new one and prompt the user to add their tanks to the new configuration file.
 - Fixed problem generating libCTF properly.
 - UI Refresh 3.0
-  - With the support for more tanksm the GUI was redrawn now to display the information for the tank whose turn it is including a small representation of the tank. 
+  - With the support for more tanks, the GUI was redrawn now to display the information for the tank whose turn it is including a small representation of the tank. 
 - New Configuration Options
   - Added MAXTURNS option into the config file
     - This will allow the user to override the default value set.

@@ -4,7 +4,7 @@ MAP
 xRxxxxxxRRRRRRxxxxxxxxRRRRRRxx
 TxxxxxxTWWRRWWTxxxxxxTWWRRWWTx
 xxxxxxTTTBTTTBTTxxxxTTTBTTTBTT
-xxxxxCxxxxxxxxxxxxxxxxxxxxxxxx
+xxxccxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxB
 xxxxTxxxxxTxxxxxTxxxxxTxxxxBBT
 xxTTBTTxTTBTTxTTBTTxTTBTTxxTTB
@@ -57,7 +57,7 @@ RANGE 4
 AMMO 6
 
 #AI IDLE SPEED: AI_SPEED <750>
-AI_SPEED 650
+AI_SPEED 750
 
 #ANIMATION SPEED: ANIMATION_SPEED<20>
 ANIMATION_SPEED 20
