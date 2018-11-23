@@ -33,6 +33,9 @@ Want instant communication with the Dev team? Join our
 - If a tree is destroyed on top of a tank, the tank will now take the appropriate amount of damage (1).
 - Fixed an issue with some tanks moving sideways instead of turning.
 - Potential bug with destroyed create still appearing on health map.
+  - Doubly fixed the bug
+## Changes
+- Removed bushes from dispaying a health in the health map.  Since they are not destructible there is currently no need to send their health.
 
 ## Release 4.03
 ## Fixed
