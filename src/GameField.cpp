@@ -744,13 +744,11 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         c->health--;
         hits+= crate_o_doom(c->gridx, c->gridy, a);//Bang the drum
         actorInfoById(-a.id).hits += hits;
-        printf("Size of crates: %d, Health of c: %d\n",gameptr->specials.size(), c->health);
         for (int i = gameptr->specials.size(); i > 0; i--){
                 if (gameptr->specials[i-1]->health == 0){
                         gameptr->specials.erase(gameptr->specials.begin() + i - 1);
                 }
         }
-        printf("Size of crates: %d\n",gameptr->specials.size());
         return true;
       }
     }
