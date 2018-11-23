@@ -47,6 +47,9 @@ TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have eve
 platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o platform $(FILES:.cpp=.o) $(LIBS)
 
+tanksdir:
+	@mkdir -p tanks
+
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(PROFILE) -c $? -o $@ 
 
