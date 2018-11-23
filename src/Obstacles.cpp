@@ -41,7 +41,7 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
     }else if( id == 3){ //It's a Waters
       tex = 0 + 30;
     }else if (id == 50){
-      tex = ((rand() % 2) + 50);
+      tex = (8 + 50);
     }else{
       tex = 1; //default to tree if we got a bad id
     }
@@ -72,8 +72,8 @@ void Obstacles::draw(int, int)
       glBindTexture(GL_TEXTURE_2D, bushTex[tex-20]);
     }else if( tex >= 30 && tex <= 39){ //It's a Waters
       glBindTexture(GL_TEXTURE_2D, waterTex[tex - 30]);
-    }else if( tex >= 50 && tex <= 50){ //It's a hedgehog
-      glBindTexture(GL_TEXTURE_2D, gameTex[tex-48]);
+    }else if( tex >= 50 && tex <= 60){ //It's a hedgehog
+      glBindTexture(GL_TEXTURE_2D, gameTex[tex-50]);
     }
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);

@@ -195,7 +195,7 @@ void Menu::drawTextBox(GLfloat x, GLfloat y)
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
 		glTranslatef(x - .5, y + 0.6, -5.0f);
-    glBindTexture(GL_TEXTURE_2D, gameTex[5]);
+    glBindTexture(GL_TEXTURE_2D, gameTex[3]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-0.5f, -1.5f,  1.0f);
@@ -232,13 +232,13 @@ void Menu::drawPlayerStats()
     // Draw health points
     for( int i = 0; i < health ; i++ )
     {
-    	drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.04, 4, false );
+    	drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.04, 2, false );
     }
 
     // Draw number of hits
     for( int i = 0; i < score ; i++ )
     {
-    	drawIcon((screen_x + 2.05) + 0.1 * i, screen_y - 0.04, 6, false );
+    	drawIcon((screen_x + 2.05) + 0.1 * i, screen_y - 0.04, 4, false );
     }
 
     // Draw Ammo

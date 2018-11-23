@@ -18,11 +18,10 @@ GLuint sfxTex[20];   /*<Texture array for the special effects */
 GLuint waterTex[30];
 
 const std::vector<string> bImages = {"images/bush/bush1.png","images/bush/bush2.png","images/bush/bush3.png","images/bush/bush4.png"};
-const std::vector<string> mImages = {"images/misc/ammo.png","images/misc/hedgehog.png"};
 const std::vector<string> rImages = {"images/rock/rockc.png","images/rock/rockb.png","images/rock/rock.png"};
 const std::vector<string> sImages = {"images/seffect/bTrail.png","images/seffect/bTrail2.png","images/seffect/bTrail3.png","images/seffect/bTrail4.png","images/seffect/campfire.png","images/seffect/explosiona.png","images/seffect/explosionsb.png","images/seffect/explosionsc.png","images/seffect/fire.png","images/seffect/fire2.png","images/seffect/fire3.png","images/seffect/marsh.png","images/seffect/smoke.png","images/seffect/smoke2.png","images/seffect/smoke3.png","images/seffect/smoke4.png"};
 const std::vector<string> tImages = {"images/tree/tree.png","images/tree/treeb.png","images/tree/treec.png","images/tree/treed.png","images/tree/treeS.png","images/tree/trees.png"};
-const std::vector<string> gImages = {"images/UI/background.png","images/UI/green.png","images/misc/hedgehog.png","images/misc/hedgehog.png","images/UI/heart.png","images/UI/textbox.png","images/UI/bomb.png","images/UI/GAME.png","images/UI/hbar.png","images/misc/ammo.png"}; 
+const std::vector<string> gImages = {"images/UI/background.png","images/UI/green.png","images/UI/heart.png","images/UI/textbox.png","images/UI/bomb.png","images/UI/GAME.png","images/UI/hbar.png","images/misc/ammo.png","images/misc/hedgehog.png"}; 
 
 /***************************************************************************//**
 * @author Chezka Gaddi

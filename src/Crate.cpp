@@ -23,7 +23,7 @@ Crate::Crate( GLfloat x_coor, GLfloat y_coor, int actx, int acty )
     screen_y = y_coor;
     gridx = actx;
     gridy = acty;
-    tex = 9;
+    tex = 7;
     health = 1;
 }
 

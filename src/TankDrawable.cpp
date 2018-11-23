@@ -18,7 +18,7 @@
 * @param[in] x_coor - coordinate to spawn tank
 * @param[in] y_coor - coordinate to spawn tank
 * *****************************************************************************/
-TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, int t = 0, bool s = false, GLfloat osx = 1, GLfloat osy = 1)
+TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, int t = 0, int s = 0, GLfloat osx = 1, GLfloat osy = 1)
 {
     screen_x = x_coor;
     screen_y = y_coor;
@@ -49,7 +49,7 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
     case UPRIGHT:
     {
         tex = (ID-1) * 5 + 0;
-        angle = 45;
+        angle = -45;
     }
     break;
     case DOWNRIGHT:
@@ -61,13 +61,13 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
     case UPLEFT:
     {
         tex = (ID-1) * 5 + 0;
-        angle = -45;
+        angle = 45;
     }
     break;
     case DOWNLEFT:
     {
         tex = (ID-1) * 5 + 2;
-        angle = 45;
+        angle = -45;
     }
     break;
     case UP:
@@ -124,7 +124,7 @@ void TankDrawable::draw(int x, int y)
       glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
       glBindTexture(GL_TEXTURE_2D, sfxTex[12]);
 
-      if (sMod == 0) {
+      if (sMod % 2 == 0) {
         glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 1.0f);
         glVertex3f(-0.05f * xscalar, .3f * yscalar,  1.0f);
@@ -137,6 +137,7 @@ void TankDrawable::draw(int x, int y)
         glEnd();
       } else {
       glBegin(GL_QUADS);
+        glRotatef(45, 0, 0, 1);
         glTexCoord2f(0.0f, 1.0f);
         glVertex3f(-0.05f * xscalar, .2f * yscalar,  1.0f);
         glTexCoord2f(1.0f, 1.0f);
@@ -149,7 +150,7 @@ void TankDrawable::draw(int x, int y)
       }
       //second smoke
       if (health <= max_health*.5){ 
-        if (sMod != 0) {
+        if (sMod % 2 == 1 ) {
           glBegin(GL_QUADS);
           glTexCoord2f(0.0f, 1.0f);
           glVertex3f(-0.0f * xscalar, .3f * yscalar,  1.0f);
@@ -162,6 +163,7 @@ void TankDrawable::draw(int x, int y)
           glEnd();
         }else{
           glBegin(GL_QUADS);
+          glRotatef(45, 0, 0, 1);
           glTexCoord2f(0.0f, 1.0f);
           glVertex3f(-0.0f * xscalar, .2f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 1.0f);

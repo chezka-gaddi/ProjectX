@@ -263,7 +263,12 @@ void GameField::animateMove(ActorInfo &a)
   GLfloat prevx, prevy;
   GLfloat newx, newy;
   int samples = gameptr->getAniSpeed();
-  TimerEvent::idle_speed = 0;
+#ifndef TESTING
+  if (a.id < 0)
+    TimerEvent::idle_speed = gameptr->getbullet_speed();
+  else
+    TimerEvent::idle_speed = gameptr->gettank_speed();
+#endif
   switch(a.heading)
   {
     case UP:
@@ -397,7 +402,9 @@ void GameField::animateMove(ActorInfo &a)
   a.offsetx = 0;
   a.prevx = a.x;
   a.prevy = a.y;
+#ifndef TESTING
   TimerEvent::idle_speed = gameptr->getAISpeed();
+#endif
 }
 
 /**
@@ -413,7 +420,6 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
   bool hitObj = false;
   bool redraw = false;
   direction dir;
-
 
   //get the AI's desired move
   dir = a.act_p->move(fog, pos);
@@ -618,15 +624,20 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
   }
   a.health -= hit;
   checkHealth(a, hitObj);
-  if(!redraw || hitObj){
+#ifndef TESTING
+  if(!redraw && !hitObj){
     animateMove(a);
   }
-  else if (redraw && !hitObj);
-  {
+  if(hitObj || redraw){
+    animateMove(a);
     updateMap();
-    if(gameptr != nullptr)
+    //printf("Currently %d number of explosions.\n",SFX.size());
+    if (gameptr != nullptr)
       displayCallback(fieldMap, actors, gameptr->turn);
+    SFX.clear();
   }
+#endif
+  
 }
 
 bool GameField::checkHealth(ActorInfo &a, bool object)
@@ -642,6 +653,7 @@ bool GameField::checkHealth(ActorInfo &a, bool object)
   }
   else if(a.id < 0 && object) //If our projectile impacted on an object
   {
+    SFX.push_back(make_pair(a.x, a.y));
     a.damage = 0;
     a.id = 0;
     a.health = 0;
@@ -683,7 +695,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
       {
         //printf("Found Rock strike, log it.\n");
         r->health -= a.damage;
-        SFX.push_back(make_pair(a.x, a.y));
+        SFX.push_back(make_pair(r->gridx, r->gridy));
         if(r->health <= 0)
         {
           r->health = 0;
@@ -703,7 +715,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
       {
         //printf("Found tree strike, chop it.\n");
         t->health -= a.damage;
-        SFX.push_back(make_pair(a.x, a.y));
+        SFX.push_back(make_pair(t->gridx, t->gridy));
         if(t->health <= 0)
         {
           t->health = 0;
@@ -946,10 +958,6 @@ void GameField::nextTurn()
 #endif
   for(int i = 0; i < actors.size(); ++i)
   {
-    gameptr->modCounter = 0;
-    if(gameptr->modCounter > 7)
-      gameptr->modCounter = 0;
-
     act_ap = actors[i].AP;
 #ifndef TESTING //Prevent testing from trying to access the unset pointer
     if(actors[i].id > 0 && actors[i].health > 0)
@@ -958,11 +966,14 @@ void GameField::nextTurn()
     updateMap();  //Give each actor a fresh map
     if(gameptr != nullptr)  
       displayCallback(fieldMap, actors, gameptr->turn);
+    SFX.clear();
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
+#ifndef TESTING
       gameptr->modCounter++; 
       if(gameptr->modCounter > 7)
         gameptr->modCounter = 0;
+#endif
       fog_of_war = fieldMap;
       create_fog_of_war(fog_of_war, actors[i]);
       pos.game_x = actors[i].x;
@@ -1047,6 +1058,7 @@ void GameField::nextTurn()
   updateMap();
   if(gameptr != nullptr)
     displayCallback(fieldMap, actors, gameptr->turn);
+  SFX.clear();
 }
 /**
  * @author David Donahue

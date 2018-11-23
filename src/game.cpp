@@ -144,7 +144,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 
   glPushMatrix();
   glTranslatef(0.0f, 0.0f, -5.0f);
-  glBindTexture(GL_TEXTURE_2D, gameTex[7]);
+  glBindTexture(GL_TEXTURE_2D, gameTex[5]);
   glBegin(GL_QUADS);
   glTexCoord2f(0.0f, 0.0f);
   glVertex3f(-0.8f, -0.3f,  1.0f);
@@ -620,7 +620,7 @@ void Game::initGameState()
         }
         else if(id == "ANIMATION_SPEED")
         {
-          cout << "Greasing the wheels...  \n";
+          cout << "Slowing down time...  \n";
           stringstream(args) >> aniSpeed;
           if(aniSpeed > 30)
           {
@@ -628,6 +628,34 @@ void Game::initGameState()
             aniSpeed = 30;
           }else if (aniSpeed < 0){
             cout << "Speed below 0 are now allowed, defaulting to 0\n";
+            aniSpeed = 0;
+          }
+          cout << "   ...done.\n";
+        }
+        else if(id == "TANK_SPEED")
+        {
+          cout << "Greasing the wheels...  \n";
+          stringstream(args) >> tank_speed;
+          if(tank_speed > 400)
+          {
+            cout << "Tank speeds above 400 are extremely slow, defaulting to 400\n";
+            tank_speed = 30;
+          }else if (tank_speed < 0){
+            cout << "Tank speed below 0 are now allowed, defaulting to 0\n";
+            tank_speed = 0;
+          }
+          cout << "   ...done.\n";
+        }
+        else if(id == "BULLET_SPEED")
+        {
+          cout << "Putting helium in the bullets...  \n";
+          stringstream(args) >> bullet_speed;
+          if(bullet_speed > 70)
+          {
+            cout << "Bullet speeds above 70 are extremely slow, defaulting to 70\n";
+            bullet_speed = 70;
+          }else if (bullet_speed < 0){
+            cout << "Bullet speeds below 0 are now allowed, defaulting to 0\n";
             aniSpeed = 0;
           }
           cout << "   ...done.\n";

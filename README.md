@@ -1,6 +1,41 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Release 5.00
+## New
+-	Adjustable Tank Speed config file setting
+	- You can now adjust the speed of the tanks independently from the projectiles
+- Adjustable Projectile speed in config file
+	- You can now adjust the speed of the projectiles independently from the tanks
+- Animations
+	- Tanks and Projectiles will now try and move smoothly across the battle field
+	- The number of samples used to smooth out movement can be set in the configuration file
+- Turn Counter
+	- A turn counter now appears in the top right corner
+- AI Speed
+	- This setting will now affect individual AI turns instead of just the game turn
+-	Special Effects
+	- Tanks will now visibily show signs of damage
+		- minor damge smoke
+		- medium damage more smoke
+		- critical damage fire
+	- Projectiles now have trails 
+- Memory Management
+	- Switched some heavily used objects to smart pointers to ensure quicker memory cleanup.
+## Fixes
+-	Tree's will now regrow properly. (4 turns).
+- Rock's will now appear again. (4 turns).
+- If a tree is destroyed on top of a tank, the tank will now take the appropriate amount of damage (1).
+- Fixed an issue with some tanks moving sideways instead of turning.
+
+## Release 4.03
+## Fixed
+- Issue where when running moves the user was not updated with the current AP.
+- Minor optimization issues.
+## New
+- Brand new scoreboard
+  - Noone asked for it, but we delivered it anyway.  There is now a single scoreboard that displays the current tank's information allowing for stat tracking of more than 4 tanks at a time.
+  - We also added a spinning image of the current tank to help identify which tank is yours.
 ## Release 4.02
 ## Fixed
 - Modified max radar range to be allowed up to map width.

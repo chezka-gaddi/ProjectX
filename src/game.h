@@ -63,6 +63,8 @@ public:
 
     int getAISpeed(){return idle_speed;};
     int getAniSpeed(){return aniSpeed;};
+    int getbullet_speed(){return bullet_speed;};
+    int gettank_speed(){return tank_speed;};
     
     vector <std::unique_ptr<Drawable>> objects;       /*!<Holds all of the current actors */
     vector <Drawable *> constants;     /*!<Holds the GameFieldDrawable and menus */
@@ -77,10 +79,12 @@ public:
 private:
     int fieldx;
     int fieldy;
-    int idle_speed;
+    int idle_speed = 750;
     int max_turns = 200;
     int activeId;
     int aniSpeed = 15;
+    int tank_speed = 150;
+    int bullet_speed = 25;
 };
 
 #endif //__GAME_H

@@ -69,7 +69,7 @@ void updateDrawables(Game &game)
     if(act.id > 0 && act.health > 0)
     {
       //Use smart pointers for better memory management
-      std::unique_ptr<TankDrawable> temp_tank(new TankDrawable(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, game.tankGame->getTurnCount(), act.sMod, act.offsetx, act.offsety));
+      std::unique_ptr<TankDrawable> temp_tank(new TankDrawable(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, game.tankGame->getTurnCount(), game.modCounter, act.offsetx, act.offsety));
       act.sMod = !act.sMod;
       //Give our tanks health for sfx drawing
       temp_tank->setHealth(act.health);
@@ -96,7 +96,6 @@ void updateDrawables(Game &game)
     std::unique_ptr<Drawable> temp_draw(new sfxDrawable(game.convertGLXCoordinate(sfx.first), game.convertGLYCoordinate(sfx.second)));
     game.sfx.push_back(std::move(temp_draw));
   }
-  game.tankGame->clearSFX();
 }
 
 
@@ -161,8 +160,9 @@ void DisplayEvent::doAction(Game &game)
     }
     game.sfx.clear();
     game.objects.clear();
-    pause = ((.0003*TimerEvent::idle_speed)-.002)*1500000;
-    pause >= 0 ? usleep(pause) : usleep(0);
+    //pause = ((.0003*TimerEvent::idle_speed)-.002)*1500000;
+    //pause >= 0 ? usleep(pause) : usleep(0);
+    usleep(TimerEvent::idle_speed*265);
     glutSwapBuffers();
   }
   else {} //saved for blank screen

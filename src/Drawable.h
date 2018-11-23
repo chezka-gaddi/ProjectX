@@ -135,11 +135,11 @@ class TankDrawable : public Drawable
 public:
     int angle;
     int turn;
-    bool sMod;
+    int sMod;
     float offsetx;
     float offsety;
 
-    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, bool sMod, float osx, float osy);
+    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, int sMod, float osx, float osy);
 
     void draw(int, int);
     void setHealth(int h);
