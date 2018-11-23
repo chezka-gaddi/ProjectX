@@ -19,7 +19,8 @@ Want instant communication with the Dev team? Join our
 		- minor damge smoke
 		- medium damage more smoke
 		- critical damage fire
-	- Projectiles now have trails 
+	- Projectiles now have trails
+  - Explosions are no longer a single static sprite 
 - Memory Management
 	- Switched some heavily used objects to smart pointers to ensure quicker memory cleanup.
 ## Fixes
