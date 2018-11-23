@@ -894,7 +894,7 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
         case 'C':
           for(auto c : gameptr->specials)
           {
-            new_map.healthMap[value] = 1;
+            new_map.healthMap[value] = c->health;
           }
           break;
         case 'R':
@@ -906,12 +906,13 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
             }
           }
           break;
-        case 'B':
+          //Future use for destructible bushes
+        /*case 'B':
           for(auto b : gameptr->bushes)
           {
             new_map.healthMap[value] = 1;
           }
-          break;
+          break;*/
       }
     }
   }
