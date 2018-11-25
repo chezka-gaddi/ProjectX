@@ -217,30 +217,36 @@ void GameField::setSPECIAL(int points, const attributes baseStats)
       actor.radar += actor.tankAttributes.tankRadar;
       actor.damage += actor.tankAttributes.tankDamage;
       actor.ammo += actor.tankAttributes.tankAmmo;
+      actor.range += actor.tankAttributes.tankRange;
       if(actor.health > 8)
       {
         actor.health = 8;
-        printf("Health stat was too high, setting at 8.\n");
+        printf("Health stat was too high,  clamping to 8.\n");
       }
-      if(actor.AP > 8)
+      if(actor.AP > 6)
       {
-        actor.AP = 8;
-        printf("AP stat was too high, setting at 8.\n");
+        actor.AP = 6;
+        printf("AP stat was too high, clamping to 6.\n");
       }
-      if(actor.radar > 16)
+      if(actor.radar > getWidth())
       {
-        actor.radar = 16;
-        printf("Radar stat was too high, setting at 16.\n");
+        actor.radar = getWidth();
+        printf("Radar stat was too high, clamping to %d.\n", getWidth());
       }
       if(actor.damage > 8)
       {
         actor.damage = 8;
-        printf("Damage stat was too high, setting at 8.\n");
+        printf("Damage stat was too high, clamping at 8.\n");
       }
-      if(actor.ammo > 8)
+      if(actor.ammo > 10)
       {
-        actor.ammo = 8;
-        printf("Ammo stat was too high, setting at 8.\n");
+        actor.ammo = 10;
+        printf("Ammo stat was too high, clamping at 10.\n");
+      }
+      if(actor.range > 10)
+      {
+        actor.range = 10;
+        printf("Range stat was too high, clamping to 10.\n");
       }
     }
     else

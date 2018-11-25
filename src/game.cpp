@@ -876,52 +876,52 @@ void Game::initGameState()
         else if(id == "DAMAGE")
         {
           stringstream(args) >> damage;
-          if(damage < 1)
+          if(damage < 0)
           {
-            damage = 1;
-            cout << "Invalid damage value, defaulting to 2\n";
+            damage = 0;
+            printf("Invalid damage value, defaulting to %d\n", damage);
           }
-          else if(damage > 4)
+          else if(damage > 8)
           {
-            printf("%d damage might be a little excesive, setting to 4\n", damage);
-            damage = 4;
+            printf("%d damage might be a little excesive, setting to 10\n", damage);
+            damage = 8;
           }
         }
         else if(id == "HEALTH")
         {
           stringstream(args) >> health;
-          if(health < 2)
+          if(health < 0)
           {
-            health = 2;
-            cout << "Invalid health value, defaulting to 2\n";
+            health = 0;
+            printf("Invalid health value, defaulting to %d\n", health);
           }
           else if(health > 8)
           {
-            printf("%d health might be a little excesive, setting to 5\n", health);
+            printf("%d health might be a little excesive, setting to 8\n", health);
             health = 8;
           }
         }
         else if(id == "AP")
         {
           stringstream(args) >> ap;
-          if(ap < 2)
+          if(ap < 0)
           {
-            ap = 2;
-            cout << "Invalid number of action points value, defaulting to 2\n";
+            ap = 0;
+            printf("Invalid number of action points value, defaulting to %d\n", ap);
           }
-          else if(ap > 5)
+          else if(ap > 6)
           {
-            printf("%d range might be a little excesive, setting to 5\n", ap);
-            ap = 5;
+            printf("%d range might be a little excesive, setting to 6\n", ap);
+            ap = 6;
           }
         }
         else if(id == "RADAR")
         {
           stringstream(args) >> radar;
-          if(radar < 2)
+          if(radar < 0)
           {
-            radar = 2;
-            cout << "Invalid radar value, defaulting to 2\n";
+            radar = 0;
+            printf("Invalid radar value, defaulting to %d\n", radar );
           }
           else if(radar > width)
           {
@@ -932,10 +932,10 @@ void Game::initGameState()
         else if(id == "RANGE")
         {
           stringstream(args) >> range;
-          if(range < 1)
+          if(range < 0)
           {
-            range = 1;
-            cout << "Invalid range value, defaulting to 1\n";
+            range = 0;
+            printf("Invalid range value, defaulting to %d\n", range);
           }
           else if(range > 10)
           {
@@ -946,24 +946,24 @@ void Game::initGameState()
         else if(id == "SPECIAL")
         {
           stringstream(args) >> attributePoints;
-          if(attributePoints < 1)
+          if(attributePoints < 0)
           {
-            attributePoints = 1;
-            cout << "Invalid special value, defaulting to 1\n";
+            attributePoints = 0;
+            printf("Invalid special value, defaulting to %d\n", attributePoints);
           }
-          else if(attributePoints > 4)
+          else if(attributePoints > 20)
           {
-            printf("%d specials might be a little excesive, setting to 4.\n", attributePoints);
-            attributePoints = 4;
+            printf("%d specials might be a little excesive, setting to 20.\n", attributePoints);
+            attributePoints = 20;
           }
         }
         else if(id == "AMMO")
         {
           stringstream(args) >> ammo;
-          if(ammo < 1)
+          if(ammo < 0)
           {
-            ammo = 1;
-            cout << "Invalid ammo amount, defaulting to 1\n";
+            ammo = 0;
+            printf("Invalid ammo amount, defaulting to %d\n", ammo);
           }
           else if(ammo > 10)
           {
