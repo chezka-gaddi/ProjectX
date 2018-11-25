@@ -160,9 +160,10 @@ void DisplayEvent::doAction(Game &game)
     }
     game.sfx.clear();
     game.objects.clear();
-    //pause = ((.0003*TimerEvent::idle_speed)-.002)*1500000;
-    //pause >= 0 ? usleep(pause) : usleep(0);
-    usleep(TimerEvent::idle_speed*265);
+    //pause = TimerEvent::idle_speed*265;
+    pause = TimerEvent::idle_speed*80;
+    pause >= 0 ? usleep(pause) : usleep(0);
+    //usleep(TimerEvent::idle_speed*265);
     glutSwapBuffers();
   }
   else {} //saved for blank screen

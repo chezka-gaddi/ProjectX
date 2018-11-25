@@ -639,7 +639,7 @@ void Game::initGameState()
           if(tank_speed > 400)
           {
             cout << "Tank speeds above 400 are extremely slow, defaulting to 400\n";
-            tank_speed = 30;
+            tank_speed = 400;
           }else if (tank_speed < 0){
             cout << "Tank speed below 0 are now allowed, defaulting to 0\n";
             tank_speed = 0;

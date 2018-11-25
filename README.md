@@ -1,6 +1,24 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Release
+## Changes
+  - Changed the default settings for the animation configuration.  The lower the number the faster the actor will move.  
+## Balancing
+- New Min and Max stat values:
+             min       max      setAttribute
+  - Damage    0   |     8     |   8
+  - Health    0   |     8     |   8
+  - AP        0   |     6     |   6
+  - Radar     0   | Map Width | Map Width
+  - Range     0   |    10     |   10
+  - Ammo      0   |    10     |   -
+  - Special   0   |    20     |   10
+    - min - The minimum is the minimum value that can be set in the configuration file or assigned to your tank.  
+      * Warning - If you do not add status to your tank when 0 is set, they will stay at 0, nothing will be automatically increased.
+    - max - The maximum value that can be set in the config file
+    - setAttribute - The max a stat can end at.  If this value is exceed the stat will be clamped down to the value in the chart.
+
 ## Release 5.01
 ## Fixes
 - Non-Disappearing objects from obstacle and health map
