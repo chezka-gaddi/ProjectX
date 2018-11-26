@@ -7,7 +7,7 @@
 
 #include "event.h"
 #include <iostream>
-
+#include <memory>
 
 /***************************************************************************//**
  * @author Chezka Gaddi
@@ -37,8 +37,8 @@ InitEvent::InitEvent(int c, int r) : columns(c), rows(r) {}
  ******************************************************************************/
 void InitEvent::doAction(Game &game)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-    game.initGameState();
+  glClear(GL_COLOR_BUFFER_BIT);
+  game.initGameState();
 }
 
 
@@ -52,68 +52,50 @@ void InitEvent::doAction(Game &game)
  ******************************************************************************/
 void updateDrawables(Game &game)
 {
-    Drawable *temp_draw = nullptr;
+  std::unique_ptr<Drawable> temp_draw;
+  std::unique_ptr<Projectile> temp_proj;
+  std::unique_ptr<TankDrawable> temp_tank;
+  int i = 0;
 
-    bool overlap = false;
-    if(!game.objects.empty())
-        game.objects.clear();
+  bool menu = false;
+  if(!game.objects.empty())
+    game.objects.clear();
 
-    vector <ActorInfo> actors = game.tankGame->getActors();
-    vector <std::pair<int,int>> SFX = game.tankGame->getSFX();
-    //for( auto obs : game.constants )
-    //game.objects.push_back( obs );
+  vector<ActorInfo> *actors = game.tankGame->getActorsPointer();
+  vector<std::pair<int,int>> *SFX = game.tankGame->getSFXPointer();
 
-    for( auto act : actors )
+  for(auto &act : *actors)
+  {
+    if(act.id > 0 && act.health > 0)
     {
-        if( act.health > 0 && act.id > 0)
-        {
-            temp_draw = new TankDrawable( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y ), act.heading );
-            game.objects.push_back( temp_draw );
-            if (act.id == game.actTurn)
-            {
-                temp_draw = new Menu( act.id, act.health, act.ammo, act.hits, act.name, act.heading, game.modCounter );
-                game.objects.push_back( temp_draw );
-            }
-        }
-
-        else if( act.id < 0 && act.health > 0)
-        {
-            for(auto actor : actors)
-            {
-                if (actor.x == act.x && actor.y == act.y && actor.id != act.id && actor.health != 0)
-                {
-                    overlap = true;
-                }
-            }
-            if(overlap != true)
-            {
-                temp_draw = new Projectile( act.id, game.convertGLXCoordinate( act.x ), game.convertGLYCoordinate( act.y), act.heading );
-                game.objects.push_back(temp_draw);
-            }
-            overlap = false;
-        }
+      //Use smart pointers for better memory management
+      std::unique_ptr<TankDrawable> temp_tank(new TankDrawable(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, game.tankGame->getTurnCount(), game.modCounter, act.offsetx, act.offsety, act.camp));
+      act.sMod = !act.sMod;
+      //Give our tanks health for sfx drawing
+      temp_tank->setHealth(act.health);
+      temp_tank->setMax_health(act.max_health);
+      //move the smart pointer into the list
+      game.objects.push_back(std::move(temp_tank));
     }
-    overlap = false;
-    for (auto sfx : SFX )
+    else if(act.id < 0 && act.health > 0)
     {
-        //printf("Adding explosion. At (%d,%d)\n", sfx.first, sfx.second);
-        for (int i = 0; i < game.sfx.size(); i++)
-        {
-            if (game.sfx[i]->screen_x == game.convertGLXCoordinate(sfx.first)
-                    && game.sfx[i]->screen_y == game.convertGLYCoordinate(sfx.second))
-            {
-                overlap = true;
-                break;
-            }
-        }
-        if (!overlap)
-        {
-            temp_draw = new sfxDrawable(game.convertGLXCoordinate( sfx.first ), game.convertGLYCoordinate(sfx.second));
-            game.sfx.push_back(temp_draw);
-        }
-        overlap = false;
+      std::unique_ptr<Projectile> temp_proj(new Projectile(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, (act.id == game.actTurn || -act.id == game.actTurn), act.offsetx, act.offsety, act.camp));
+      temp_proj->sizeMod = act.scale;
+      game.objects.push_back(std::move(temp_proj));
     }
-    game.tankGame->clearSFX();
+    if(game.actTurn == act.id)
+    {
+      for(i = 0; i < actors->size() && actors[0][i].id != game.actTurn; i++);
+      std::unique_ptr<Menu> temp_draw(new Menu(actors[0][i].id, actors[0][i].health, actors[0][i].ammo, actors[0][i].hits, actors[0][i].name, actors[0][i].heading, game.modCounter, game.turn));
+      game.objects.push_back(std::move(temp_draw));
+    }
+
+  }
+  for(auto &sfx : *SFX)
+  {
+    std::unique_ptr<Drawable> temp_draw(new sfxDrawable(game.convertGLXCoordinate(sfx.first), game.convertGLYCoordinate(sfx.second)));
+    game.sfx.push_back(std::move(temp_draw));
+  }
 }
 
 
@@ -127,71 +109,64 @@ void updateDrawables(Game &game)
  ******************************************************************************/
 void DisplayEvent::doAction(Game &game)
 {
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    glLoadIdentity();
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glLoadIdentity();
+  float pause;
 
-    game.modCounter++;
-    if (game.modCounter > 7)
-           game.modCounter = 0; 
-    
-    updateDrawables(game);
-    
-    Drawable *stuff;
-    
-    if (game.ui == true){
+  if(game.ui == true)
+  {
+    if(game.turn > 0)
+      updateDrawables(game);
 
-    for( int i = 0; i < game.constants.size(); i++ )
+    for(int i = 0; i < game.constants.size(); i++)
     {
-        stuff = game.constants[i];
-        stuff->draw(game.getX(), game.getY());
+      game.constants[i]->draw(game.getX(), game.getY());
     }
 
-    for( int i = 0; i < game.specials.size(); i++ )
+    for(int i = 0; i < game.specials.size(); i++)
     {
-        stuff = game.specials[i];
-        if (stuff->health > 0 )
-            stuff->draw(game.getX(), game.getY());
+      if(game.specials[i]->health > 0)
+        game.specials[i]->draw(game.getX(), game.getY());
     }
 
-    for( int i = 0; i < game.objects.size(); i++ )
+    for(int i = 0; i < game.objects.size(); i++)
     {
-        stuff = game.objects[i];
-        stuff->draw(game.getX(), game.getY());
+      game.objects[i]->draw(game.modCounter, game.getY());
     }
 
-    for( int i = 0; i < game.trees.size(); i++ )
+    for(int i = 0; i < game.trees.size(); i++)
     {
-        stuff = game.trees[i];
-        if (stuff->health > 0 )
-            stuff->draw(game.getX(), game.getY());
+      if(game.trees[i]->health > 0)
+        game.trees[i]->draw(game.getX(), game.getY());
     }
 
-    for( int i = 0; i < game.rocks.size(); i++ )
+    for(int i = 0; i < game.rocks.size(); i++)
     {
-        stuff = game.rocks[i];
-        if (stuff->health > 0 )
-            stuff->draw(game.getX(), game.getY());
+      if(game.rocks[i]->health > 0)
+        game.rocks[i]->draw(game.getX(), game.getY());
     }
-    for( int i = 0; i < game.bushes.size(); i++ )
+    for(int i = 0; i < game.bushes.size(); i++)
     {
-        stuff = game.bushes[i];
-        stuff->draw(game.getX(), game.getY());
+      game.bushes[i]->draw(game.getX(), game.getY());
     }
-    for( int i = 0; i < game.waters.size(); i++ )
+    for(int i = 0; i < game.waters.size(); i++)
     {
-        stuff = game.waters[i];
-        stuff->draw(game.getX(), game.getY());
+      game.waters[i]->draw(game.getX(), game.getY());
     }
 
-    for( int i = 0; i < game.sfx.size(); i++ )
+    for(int i = 0; i < game.sfx.size(); i++)
     {
-        stuff = game.sfx[i];
-        stuff->draw(game.getX(), game.getY());
+      game.sfx[i]->draw(game.getX(), game.getY());
     }
     game.sfx.clear();
-    system("sleep 0.2");
+    game.objects.clear();
+    //pause = TimerEvent::idle_speed*265;
+    pause = TimerEvent::idle_speed*80;
+    pause >= 0 ? usleep(pause) : usleep(0);
+    //usleep(TimerEvent::idle_speed*265);
     glutSwapBuffers();
-    }else {}
+  }
+  else {} //saved for blank screen
 }
 
 
@@ -214,13 +189,13 @@ ReshapeEvent::ReshapeEvent(int w, int h) : width(w), height(h) {}
  ******************************************************************************/
 void ReshapeEvent::doAction(Game &game)
 {
-    const float ar = width / height;
-    glViewport(0, 10, width, height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum(-ar, ar, -1.0, 1.0, 2.0, 90.0);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+  const float ar = width / height;
+  glViewport(0, 10, width, height);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glFrustum(-ar, ar, -1.0, 1.0, 2.0, 90.0);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 }
 
 
@@ -232,9 +207,9 @@ void ReshapeEvent::doAction(Game &game)
  ******************************************************************************/
 TimerEvent::TimerEvent(int &value)
 {
-    if (TimerEvent::idle_speed != 0)
-        value = TimerEvent::idle_speed;
-    tick = TimerEvent::idle_speed;
+  if(TimerEvent::idle_speed != 0)
+    value = TimerEvent::idle_speed;
+  tick = TimerEvent::idle_speed;
 }
 
 
@@ -249,8 +224,8 @@ TimerEvent::TimerEvent(int &value)
  ******************************************************************************/
 void TimerEvent::doAction(Game &game)
 {
-    idle_speed = game.getAISpeed();
-    game.executeTurn();
+  idle_speed = game.getAISpeed();
+  game.executeTurn();
 }
 
 
@@ -270,7 +245,7 @@ CloseEvent::CloseEvent() {}
  ******************************************************************************/
 void CloseEvent::doAction(Game &game)
 {
-    game.closeDown();
+  game.closeDown();
 }
 
 /***************************************************************************//**
@@ -284,8 +259,8 @@ KeyboardEvent::KeyboardEvent(unsigned char k, int x, int y) : key(k), xLoc(x), y
 
 void KeyboardEvent::doAction(Game &game)
 {
-    if(key == ESCAPE_KEY || key == 'Q' || key == 'q')
-    {
-        game.earlyOut();
-    }
+  if(key == ESCAPE_KEY || key == 'Q' || key == 'q')
+  {
+    game.earlyOut();
+  }
 }

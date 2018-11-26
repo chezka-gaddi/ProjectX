@@ -1,5 +1,8 @@
 CXX = g++
-CXXFLAGS = -g -std=c++11 -fPIC
+CXXFLAGS = -std=c++11 -fPIC
+CXXFLAGS += -g
+#PROFILE = -pg
+#PROFILE += -fprofile-arcs -ftest-coverage
 INCS = -I./ -Isrc/
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
@@ -37,28 +40,33 @@ TANKS = $(SRC_PATH)SimpleAI.cpp
 TANKS += $(SRC_PATH)PongAI.cpp
 TANKS += $(SRC_PATH)CamperAI.cpp
 TANKS += $(SRC_PATH)StationaryAI.cpp
+TANKS += $(SRC_PATH)AttackDownAI.cpp
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
-platform: tanksdir $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
-	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
+platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
+	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o platform $(FILES:.cpp=.o) $(LIBS)
 
 tanksdir:
 	@mkdir -p tanks
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $? -o $@ 
+	$(CXX) $(CXXFLAGS) $(PROFILE) -c $? -o $@ 
 
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
 tanks/%.so: src/%.cpp ./src/Actor.o
-	$(CXX) $(CXXFLAGS) $(INCS) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
 tanks: $(TANKS:%.cpp=%.so)
 
 clean:
-	rm -rf platform results.txt src/*.o
+	@rm -rf platform results.txt src/*.o
+	@rm -rf *.gc*
+	@rm -rf src/*.gc*
+	@rm -rf gprofresults.txt
+	@rm -rf gmon.out
 
 clean-lib: clean
 	rm -rf buildsrc
@@ -66,6 +74,7 @@ clean-lib: clean
 
 clean-all: clean-lib
 	@rm -rf $(TANK_PATH)*
+	@rm -rf coverage
 
 dev: clean-lib
 	make gen-library -j8
@@ -97,8 +106,6 @@ gen-library: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	# Change tanks src to point to new directory
 	sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
 	sed -i 's#include "#include "src/#g' buildsrc/PongAI.h
-	sed -i 's#include "#include "src/#g' buildsrc/StationaryAI.h
-	sed -i 's#include "#include "src/#g' buildsrc/CamperAI.h
 
 push-to-git: clean-lib
 	mkdir -p buildsrc

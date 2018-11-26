@@ -49,19 +49,29 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 // Includes
 #include <iostream>
 #include "util.h"
+#include <memory>
+#include <stdio.h>
 
 // Main
 
 int main(int argc, char **argv)
 {
     gameMode mode = ai;
+    const char *dmode = "-demo";
+
+    printf("%d\n", argc);
+    printf("%s\n", argv[argc-1]);
 
     //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
-    initOpenGL( argc, argv, 1000, 727, mode );
+    if (argc == 2 && strcmp(argv[1], dmode) == 0)
+      initOpenGL( argc, argv, 1900, 1000, mode );
+    else
+      initOpenGL( argc, argv, 1000, 727, mode );
+
 
     glutMainLoop();
 
-    std::cout << "\n\n\n GAME OVER \n\n\n";
+    std::cout << "\n GAME OVER \n";
 
     return 0;
 }

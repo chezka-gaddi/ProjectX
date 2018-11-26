@@ -11,6 +11,8 @@
 #include <string>
 #include "global.h"
 #include "direction.h"
+#include <GL/glut.h>
+#include <GL/freeglut.h>
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -27,6 +29,7 @@ public:
     GLfloat screen_y;   /*!<The scren y coordinate of the drawable */
 
     int health;         /*!<The health value of the drawable */
+    int max_health;
     GLuint tex;            /*!<Texture to draw object with */
 
     Drawable() {}
@@ -34,11 +37,10 @@ public:
 
     virtual void draw(int, int) = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
 protected:
-    void setScalar(float newScalar){this->scalar = newScalar;};
-    //float getScalar(){return this->scalar;};
     int gridx;
     int gridy; 
-    static float scalar;
+    static float xscalar;
+    static float yscalar;
 friend class Game;
 friend class GameField;
 };
@@ -73,8 +75,9 @@ public:
     int score;          /*!<Current score */
     int angle = 0;
     int bTex;
+    int turn = 0;
 
-    Menu( int, int, int, int, std::string, direction, int);
+    Menu( int, int, int, int, std::string, direction, int, int);
 
     void drawTextBox( GLfloat, GLfloat );
     void drawPlayerStats();
@@ -95,8 +98,9 @@ public:
     void regrow(int turn); 
     void draw(int, int);
 protected:
-    int destroyed;
-    int regrow_rate;
+    int destroyed = -1;
+    int regrow_rate = 8;
+    void set_destroyed(int d);
 friend class GameField;
 };
 
@@ -110,10 +114,15 @@ class Projectile : public Drawable
 {
 public:
     int angle;
-
-    Projectile(int ID, GLfloat x, GLfloat y, direction dir);
+    float offsetx;
+    float offsety;
+    bool camp;
+    Projectile(int ID, GLfloat x, GLfloat y, direction dir, bool t, float osx, float osy, bool camping);
 
     void draw(int, int);
+
+    float sizeMod = 1;
+    bool turn;
 };
 
 
@@ -126,10 +135,17 @@ class TankDrawable : public Drawable
 {
 public:
     int angle;
+    int turn;
+    int sMod;
+    float offsetx;
+    float offsety;
+    bool camp;
 
-    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir);
+    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, int sMod, float osx, float osy, bool camping);
 
     void draw(int, int);
+    void setHealth(int h);
+    void setMax_health(int mh);
 };
 
 /***************************************************************************//**

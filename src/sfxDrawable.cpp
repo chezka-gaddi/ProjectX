@@ -24,7 +24,7 @@ sfxDrawable::sfxDrawable( GLfloat x_coor, GLfloat y_coor )
     screen_y = y_coor;
 
 
-    tex = (rand() % 3);
+    tex = (rand() % 3 + 5);
 }
 
 
@@ -49,13 +49,13 @@ void sfxDrawable::draw(int x, int y)
 
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.13f * scalar, -0.1f * scalar,  1.0f);
+    glVertex3f(-0.13f * xscalar, -0.1f * yscalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.13f * scalar, -0.1f * scalar,  1.0f);
+    glVertex3f( 0.13f * xscalar, -0.1f * yscalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.13f * scalar,  0.1f * scalar,  1.0f);
+    glVertex3f( 0.13f * xscalar,  0.1f * yscalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.13f * scalar,  0.1f * scalar,  1.0f);
+    glVertex3f(-0.13f * xscalar,  0.1f * yscalar,  1.0f);
     glEnd();
 
     glPopMatrix();

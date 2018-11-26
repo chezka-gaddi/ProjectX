@@ -16,6 +16,9 @@
 #include "ActorInfo.h"
 #include "direction.h"
 #include <iostream>
+#include <ctime>
+#include <GL/glut.h>
+#include <GL/freeglut.h>
 
 /***************************************************************************//**
 * @class GameField
@@ -35,7 +38,7 @@ protected:
     std::vector<ActorInfo> deceased;
     std::vector<std::pair<int,int>> SFX;
 
-    int turnCount; /*!< The turn count number */
+    int turnCount = 0; /*!< The turn count number */
     /** struct with width, height, and a vector of ints in
      row major order, 0 for empty tiles and actor id for nonempty. */
     MapData fieldMap;
@@ -43,12 +46,16 @@ protected:
     //callback function to update the dispaly with the map, actors, and turn count
     void (*displayCallback)(MapData, std::vector<ActorInfo>, int);
     void updateMap();
-    void runMoves(ActorInfo &a, PositionData &pos);
+    void runMoves(ActorInfo &a, MapData &fog, PositionData &pos);
     ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
     //Action points for each actor
     int ap;
+    GLfloat y_scalar = 0;
+    GLfloat x_scalar = 0;
     bool checkObjectStrike(ActorInfo &a);
     bool crate_o_doom(int x, int y, ActorInfo &a);
+    bool checkHealth(ActorInfo &a, bool object = true);
+    void animateMove(ActorInfo &a);
     Game *gameptr = nullptr;
 
 public:
@@ -86,7 +93,7 @@ public:
     GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int));
     GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), Game *);
     GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), int ap);
-    GameField(int width, int height, std::vector<ActorInfo> startActors, int actonpoints);
+    GameField(int width, int height, std::vector<ActorInfo> startActors, int actionpoints);
 
 
     ~GameField();
@@ -100,7 +107,10 @@ public:
     std::vector<int> getMap();
     std::vector<ActorInfo> getActors();
     std::vector<ActorInfo> * getActorsPointer();
+    const std::vector<ActorInfo> &getActorsConst();
     std::vector<std::pair<int,int>> getSFX();
+    std::vector<std::pair<int,int>> * getSFXPointer();
+    const std::vector<std::pair<int,int>> &getSFXConst();
     void clearSFX();
     MapData getMapData();
     ActorInfo & actorInfoById(int id);

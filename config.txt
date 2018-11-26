@@ -1,17 +1,17 @@
 WIDTH 30
 HEIGHT 14
 MAP
-xxxxxxxxRRRRRRxxxxxxxxRRRRRRxx
-xxxxxxxTWWRRWWTxxxxxxTWWRRWWTx
+xRxxxxxxRRRRRRxxxxxxxxRRRRRRxx
+TxxxxxxTWWRRWWTxxxxxxTWWRRWWTx
 xxxxxxTTTBTTTBTTxxxxTTTBTTTBTT
-xxxxxCxxxxxxxxxxxxxxxxxxxxxxxx
+xxxccxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxB
 xxxxTxxxxxTxxxxxTxxxxxTxxxxBBT
 xxTTBTTxTTBTTxTTBTTxTTBTTxxTTB
 xxRxRxRxRxRxRxRxRxRxRxRxRxxRxR
 Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-OxxRxxxxxRxxxxxRxxxxWRxxxxxxxx
+OxxRxxxxxRxxxxxRxxxWWRxxxxxxxx
 xxTTTxxxTTTxxxTTTWWWTTTxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -30,8 +30,6 @@ AI SimpleAI 12 10 images/Purple/tankP_U.png images/Purple/tankP_R.png images/Pur
 AI SimpleAI 22 10 images/SkyBlue/tankSB_U.png images/SkyBlue/tankSB_R.png images/SkyBlue/tankSB_D.png images/SkyBlue/tankSB_L.png images/SkyBlue/bulletSB.png
 AI SimpleAI 14 8 images/Tiger/tankTi_U.png images/Tiger/tankTi_R.png images/Tiger/tankTi_D.png images/Tiger/tankTi_L.png images/Tiger/bulletTi.png
 
-#AI IDLE SPEED: AI_SPEED <750>
-AI_SPEED 750
 
 #FIELDIMAGE <MAP FILE>
 FIELDIMAGE images/green.png
@@ -50,13 +48,25 @@ MAXTURNS 200
 #TANK RULES
 #STAT <AMMOUNT>
 #VALID STATS: DAMAGE, HEALTH, RADAR, AP, SPECIAL, RANGE, AMMO
-DAMAGE 1
-HEALTH 3
+DAMAGE 2
+HEALTH 6
 RADAR 4 
 AP 2
 SPECIAL 1
 RANGE 4
 AMMO 6
+
+#AI IDLE SPEED: AI_SPEED <750>
+AI_SPEED 750
+
+#ANIMATION SPEED: ANIMATION_SPEED<20>
+ANIMATION_SPEED 20
+
+#BULLET SPEED: BULLET_SPEED<80>
+BULLET_SPEED 80
+
+#TANK SPEED: TANK_SPEED<400>
+TANK_SPEED 400
 
 #DISABLEGUI Disables GUI
 #DISABLEGUI

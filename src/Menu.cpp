@@ -9,6 +9,7 @@
 
 
 void drawBitmapText( char *string, GLfloat x, GLfloat y );
+void drawBitmapTurn( int turn, GLfloat x, GLfloat y );
 
 
 /***************************************************************************//**
@@ -22,19 +23,21 @@ void drawBitmapText( char *string, GLfloat x, GLfloat y );
 * @param[in] hp - health
 * @param[in] ammo - ammo count
 * *****************************************************************************/
-Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction dir, int mc)
+Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction dir, int mc, int t)
 {
-    this->id = id;
-    for(int j = 0; j < 20; j++)
-    	name[j] = '\0';
+  this->id = id;
+  //for(int j = 0; j < 20; j++)
+  // 	name[j] = '\0';
+  turn = t;
 
 	int i = 0;
 
-	while(nameIn[i] != '\0')
+	while(i < nameIn.size() && i < 20)
 	{
-	name[i] = nameIn[i];
-	i++;
+	  name[i] = nameIn[i];
+	  i++;
 	}
+  name[i] = '\0';
 
 	screen_x = -0.70;
 	screen_y = 0.54;
@@ -42,9 +45,10 @@ Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction di
   bullet = ammo;
   score = hits;
   angle = 0;
-  bTex = (id-1) * 5 + 4;
+  id > 0 ? bTex = (id-1) * 5 + 4 : bTex = (-id-1) * 5 + 4;
+  id > 0 ? i = id : i = -id;
   if (mc == 0 || mc == 1 || mc == 7){
-    tex = (id-1) * 5 + 0;//up upright upleft
+    tex = (i-1) * 5 + 0;//up upright upleft
     if (mc == 1){
             angle = -45;
     }
@@ -53,10 +57,10 @@ Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction di
     }
   }
   if (mc == 2){
-    tex = (id-1) * 5 + 1;//right
+    tex = (i-1) * 5 + 1;//right
   }
   if (mc == 3 || mc == 4 || mc == 5){
-    tex = (id-1) * 5 + 2;//down downright downleft
+    tex = (i-1) * 5 + 2;//down downright downleft
     if (mc == 3){
             angle = 45;
     }
@@ -65,7 +69,7 @@ Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction di
     }
   }
   if (mc == 6){
-    tex = (id-1) * 5 + 3;//left
+    tex = (i-1) * 5 + 3;//left
   }
 }
 
@@ -78,7 +82,6 @@ Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction di
 * *****************************************************************************/
 void Menu::draw(int x, int y)
 {
-	glEnable(GL_TEXTURE_2D);
     glColor4ub(255,255,255,255);
     glPushMatrix();
 
@@ -130,10 +133,7 @@ void drawAmmo(GLfloat x, GLfloat y, GLuint icon, bool tank, int angle = 1)
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
     glTranslatef(x - 0.85, y + 0.65, -5.0f);
-    if(!tank)
-    	glBindTexture(GL_TEXTURE_2D, gameTex[icon]);
-    else
-    	glBindTexture(GL_TEXTURE_2D, tankTex[icon]);
+    glBindTexture(GL_TEXTURE_2D, tankTex[icon]);
     glRotatef(angle,0,0,1);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
@@ -158,8 +158,8 @@ void drawTank(GLfloat x, GLfloat y, GLuint icon, bool tank, int angle)
 {
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
-    if(!tank)
-    	glBindTexture(GL_TEXTURE_2D, gameTex[icon]);
+    if(!tank) //false = bullet  true = tank
+    	glBindTexture(GL_TEXTURE_2D, tankTex[icon]);
     else
     	glBindTexture(GL_TEXTURE_2D, tankTex[icon]);
     glTranslatef(1.5 ,1.2, -5.0f);
@@ -194,8 +194,8 @@ void Menu::drawTextBox(GLfloat x, GLfloat y)
 {
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
-    glTranslatef(x - .5, y + 0.6, -5.0f);
-    glBindTexture(GL_TEXTURE_2D, gameTex[5]);
+		glTranslatef(x - .5, y + 0.6, -5.0f);
+    glBindTexture(GL_TEXTURE_2D, gameTex[3]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-0.5f, -1.5f,  1.0f);
@@ -225,22 +225,26 @@ void Menu::drawPlayerStats()
 
     //Output name of the player
     drawBitmapText(name, screen_x - 0.13, screen_y + 0.24);
+    
+    //Output turn
+    drawBitmapTurn(turn, screen_x + 1.40, screen_y + 0.24);
 
     // Draw health points
     for( int i = 0; i < health ; i++ )
     {
-    	drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.04, 4, false );
+    	drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.04, 2, false );
     }
 
     // Draw number of hits
     for( int i = 0; i < score ; i++ )
     {
-    	drawIcon((screen_x + 2.05) + 0.1 * i, screen_y - 0.04, 6, false );
+    	drawIcon((screen_x + 2.05) + 0.1 * i, screen_y - 0.04, 4, false );
     }
 
+    // Draw Ammo
     for( int i = 0; i < bullet ; i++ )
     {
-    	drawAmmo((screen_x + 1.38) + 0.1 * i, screen_y - 0.04, bTex, true, 90 );
+      drawAmmo((screen_x + 1.38) + 0.1 * i, screen_y - 0.04, bTex, true, 90 );
     }
 
    drawTank((screen_x + 3.25), screen_y, tex, true, angle);
@@ -261,6 +265,30 @@ void drawBitmapText( char *string, GLfloat x, GLfloat y )
     glRasterPos3f( x, y, -2.0 );
 
     for( c = string; *c != '\0'; c++ )
+        glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *c );
+    glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, *c );
+}
+
+/***************************************************************************//**
+* @author Jon McKee
+* @brief drawBitmapText
+*
+* Generates the turn string.
+* *****************************************************************************/
+void drawBitmapTurn( int turn, GLfloat x, GLfloat y )
+{
+    glDisable(GL_TEXTURE_2D);
+    std::string temp = "Turn: ";
+    if (turn < 10)
+            temp += "  ";
+    else if (turn < 100)
+            temp += " ";
+    temp += std::to_string(turn);
+    const char *c;
+    glColor3f( 250, 250, 250 );
+    glRasterPos3f( x, y, -2.0 );
+
+    for( c = temp.c_str(); *c != '\0'; c++ )
         glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *c );
     glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, *c );
 }

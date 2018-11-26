@@ -155,6 +155,25 @@ int CamperAI::spendAP(MapData map, PositionData status)
 {
     if (maxAp == 0)
         maxAp = status.ap;
+//Debugging map output
+/*printf("Map:\n");
+for (int i = 0; i < map.map.size(); i++){
+  printf("%d ", map.map[i]);
+  if (i % 30 == 29)
+          printf("\n");
+}
+printf("Obstacle:\n");
+for (int i = 0; i < map.obstacleMap.size(); i++){
+  printf("%d ", map.obstacleMap[i]);
+  if (i % 30 == 29)
+          printf("\n");
+}
+printf("Health:\n");
+for (int i = 0; i < map.healthMap.size(); i++){
+  printf("%d ", map.healthMap[i]);
+  if (i % 30 == 29)
+          printf("\n");
+}*/
     if (maxAp == status.ap){
         turn = 0;
         for (int i = 0; i < 6; i++)

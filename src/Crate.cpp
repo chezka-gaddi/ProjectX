@@ -23,7 +23,7 @@ Crate::Crate( GLfloat x_coor, GLfloat y_coor, int actx, int acty )
     screen_y = y_coor;
     gridx = actx;
     gridy = acty;
-    tex = 4;
+    tex = 7;
     health = 1;
 }
 
@@ -39,16 +39,16 @@ void Crate::draw(int x, int y)
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
     glTranslatef(screen_x, screen_y, -5.0f);
-    glBindTexture(GL_TEXTURE_2D, sfxTex[tex]);
+    glBindTexture(GL_TEXTURE_2D, gameTex[tex]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.12f * scalar, -0.14f * scalar,  1.0f);
+    glVertex3f(-0.12f * xscalar, -0.14f * yscalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.12f * scalar, -0.14f * scalar,  1.0f);
+    glVertex3f( 0.12f * xscalar, -0.14f * yscalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.12f * scalar,  0.14f * scalar,  1.0f);
+    glVertex3f( 0.12f * xscalar,  0.14f * yscalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.12f * scalar,  0.14f * scalar,  1.0f);
+    glVertex3f(-0.12f * xscalar,  0.14f * yscalar,  1.0f);
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
