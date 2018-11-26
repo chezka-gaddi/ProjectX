@@ -69,7 +69,7 @@ void updateDrawables(Game &game)
     if(act.id > 0 && act.health > 0)
     {
       //Use smart pointers for better memory management
-      std::unique_ptr<TankDrawable> temp_tank(new TankDrawable(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, game.tankGame->getTurnCount(), game.modCounter, act.offsetx, act.offsety));
+      std::unique_ptr<TankDrawable> temp_tank(new TankDrawable(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, game.tankGame->getTurnCount(), game.modCounter, act.offsetx, act.offsety, act.camp));
       act.sMod = !act.sMod;
       //Give our tanks health for sfx drawing
       temp_tank->setHealth(act.health);
@@ -79,7 +79,7 @@ void updateDrawables(Game &game)
     }
     else if(act.id < 0 && act.health > 0)
     {
-      std::unique_ptr<Projectile> temp_proj(new Projectile(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, (act.id == game.actTurn || -act.id == game.actTurn), act.offsetx, act.offsety));
+      std::unique_ptr<Projectile> temp_proj(new Projectile(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, (act.id == game.actTurn || -act.id == game.actTurn), act.offsetx, act.offsety, act.camp));
       temp_proj->sizeMod = act.scale;
       game.objects.push_back(std::move(temp_proj));
     }

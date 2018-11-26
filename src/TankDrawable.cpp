@@ -18,7 +18,7 @@
 * @param[in] x_coor - coordinate to spawn tank
 * @param[in] y_coor - coordinate to spawn tank
 * *****************************************************************************/
-TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, int t = 0, int s = 0, GLfloat osx = 1, GLfloat osy = 1)
+TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, int t = 0, int s = 0, GLfloat osx = 1, GLfloat osy = 1, bool camp = false)
 {
     screen_x = x_coor;
     screen_y = y_coor;
@@ -27,6 +27,7 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
     id = ID;
     turn = t;
     sMod = s;
+    this->camp = camp;
 
     // Acesses the right image for the tanks
     //  0 is the up image,
@@ -84,6 +85,8 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
         tex = ID-1 * 5;
     }
 
+    if (camp == true)
+        tex = 4;
 }
 
 
@@ -103,9 +106,12 @@ void TankDrawable::draw(int x, int y)
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
     glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
-    glRotatef(angle,0,0,1);
-    glBindTexture(GL_TEXTURE_2D, tankTex[tex]);
-
+    if (camp == true){
+      glBindTexture(GL_TEXTURE_2D, sfxTex[tex]);
+    }else{
+      glRotatef(angle,0,0,1);
+      glBindTexture(GL_TEXTURE_2D, tankTex[tex]);
+    }
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-0.13f * xscalar, -0.1f * yscalar,  1.0f);

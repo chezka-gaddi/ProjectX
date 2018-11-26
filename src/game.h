@@ -82,9 +82,9 @@ private:
     int idle_speed = 750;
     int max_turns = 200;
     int activeId;
-    int aniSpeed = 15;
-    int tank_speed = 150;
-    int bullet_speed = 25;
+    int aniSpeed = 20;
+    int tank_speed = 400;
+    int bullet_speed = 80;
 };
 
 #endif //__GAME_H

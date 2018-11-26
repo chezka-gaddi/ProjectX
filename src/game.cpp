@@ -1001,6 +1001,10 @@ void Game::initGameState()
   cout << "Creating Player Tanks...\n";
   for(int i = 0; i < startActorPointers.size(); ++i)
   {
+    if ( tankLocations[i].first < width &&
+         tankLocations[i].first >= 0 &&
+         tankLocations[i].second < height &&
+         tankLocations[i].second >= 0){
     startActors.push_back(ActorInfo(startActorPointers[i]
                                     , health
                                     , damage
@@ -1015,6 +1019,9 @@ void Game::initGameState()
                                     , AINames[i]));
     //printf("Actor %d name: %s\n", i, AINames[i].c_str());
     fout << AINames[i] << " ";
+    }else{
+      cout << "Invalid location for " << AINames[i] << endl;
+    }
   }
   fout << "Winner: ";
   cout << "  ...Done" << endl;

@@ -116,7 +116,8 @@ public:
     int angle;
     float offsetx;
     float offsety;
-    Projectile(int ID, GLfloat x, GLfloat y, direction dir, bool t, float osx, float osy);
+    bool camp;
+    Projectile(int ID, GLfloat x, GLfloat y, direction dir, bool t, float osx, float osy, bool camping);
 
     void draw(int, int);
 
@@ -138,8 +139,9 @@ public:
     int sMod;
     float offsetx;
     float offsety;
+    bool camp;
 
-    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, int sMod, float osx, float osy);
+    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, int sMod, float osx, float osy, bool camping);
 
     void draw(int, int);
     void setHealth(int h);

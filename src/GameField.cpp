@@ -565,10 +565,18 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
   }
 
   //Run the main loop through actors to see if we hit one
-  if(a.health > 0 && hitObj == false)
+  if(a.health > 0 && hitObj == false && (xoff != 0 || yoff != 0))
   {
+    if (a.id > 0){
+      a.cDetect = 0;
+      a.camp = false;
+    }
+    
     for(int i = 0; i < actors.size(); ++i)   //check each actor
     {
+      if(a.id < 0 && actors[i].id == -a.id){
+        a.camp = actors[i].camp;
+      }
       if(a.health > 0 && actors[i].health > 0   //Make sure neither is dead
          && actors[i].x == a.x    //Make sure we're on the same column
          && actors[i].y == a.y    //Make sure we're on the same row
@@ -996,6 +1004,7 @@ void GameField::nextTurn()
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
 #ifndef TESTING
+      actors[i].cDetect++;
       gameptr->modCounter++; 
       if(gameptr->modCounter > 7)
         gameptr->modCounter = 0;
@@ -1077,6 +1086,8 @@ void GameField::nextTurn()
         actors[i].ammo = actors[i].max_ammo;
         //printf("Reloading... Reloading... Reloading\n");
       }
+      if (actors[i].health > 0 && actors[i].cDetect / actors[i].AP >= 4)
+              actors[i].camp = true;
       --act_ap;
     }
   }

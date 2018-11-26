@@ -43,6 +43,8 @@ struct ActorInfo
     int ammo = 0;
     int max_health = 0;
     int max_ammo = 0;
+    int cDetect = 0;
+    bool camp = false;
     bool sMod = false;
     float scale = 1;
     float offsetx = 0;
