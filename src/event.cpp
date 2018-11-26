@@ -122,6 +122,11 @@ void DisplayEvent::doAction(Game &game)
     {
       game.constants[i]->draw(game.getX(), game.getY());
     }
+    
+    for(int i = 0; i < game.waters.size(); i++)
+    {
+      game.waters[i]->draw(game.getX(), game.getY());
+    }
 
     for(int i = 0; i < game.specials.size(); i++)
     {
@@ -148,10 +153,6 @@ void DisplayEvent::doAction(Game &game)
     for(int i = 0; i < game.bushes.size(); i++)
     {
       game.bushes[i]->draw(game.getX(), game.getY());
-    }
-    for(int i = 0; i < game.waters.size(); i++)
-    {
-      game.waters[i]->draw(game.getX(), game.getY());
     }
 
     for(int i = 0; i < game.sfx.size(); i++)
