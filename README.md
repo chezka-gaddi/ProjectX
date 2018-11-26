@@ -1,7 +1,10 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
-## Release
+## Release 6.00
+## Fixes
+  - Fixed projectiles turning into torpedos
+  - Prevented rocks from regrowing on top of tanks
 ## Changes
   - Changed the default settings for the animation configuration.  The lower the number the faster the actor will move.  
 ## Balancing
