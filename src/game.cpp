@@ -636,10 +636,10 @@ void Game::initGameState()
         {
           cout << "Greasing the wheels...  \n";
           stringstream(args) >> tank_speed;
-          if(tank_speed > 400)
+          if(tank_speed > 800)
           {
-            cout << "Tank speeds above 400 are extremely slow, defaulting to 400\n";
-            tank_speed = 400;
+            cout << "Tank speeds above 800 are extremely slow, defaulting to 800\n";
+            tank_speed = 800;
           }else if (tank_speed < 0){
             cout << "Tank speed below 0 are now allowed, defaulting to 0\n";
             tank_speed = 0;
@@ -650,10 +650,10 @@ void Game::initGameState()
         {
           cout << "Putting helium in the bullets...  \n";
           stringstream(args) >> bullet_speed;
-          if(bullet_speed > 70)
+          if(bullet_speed > 100)
           {
-            cout << "Bullet speeds above 70 are extremely slow, defaulting to 70\n";
-            bullet_speed = 70;
+            cout << "Bullet speeds above 100 are extremely slow, defaulting to 100\n";
+            bullet_speed = 100;
           }else if (bullet_speed < 0){
             cout << "Bullet speeds below 0 are now allowed, defaulting to 0\n";
             aniSpeed = 0;

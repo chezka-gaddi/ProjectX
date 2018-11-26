@@ -92,7 +92,8 @@ void Obstacles::draw(int, int)
     glDisable(GL_TEXTURE_2D);
 }
 
-void Obstacles::regrow(int turn){
+void Obstacles::regrow(int turn, const std::vector<ActorInfo> actor){
+  bool taken = false;
   if (destroyed == -1)
     return;
 
@@ -102,11 +103,17 @@ void Obstacles::regrow(int turn){
     if (tex < 10){ //Its a tree
       health = 3;
     }else if( tex < 20){ //Its a Rocks
-      health = 5;
+      for (int i = 0; i < actor.size(); i++){
+            if (actor[i].x == gridx && actor[i].y == gridy)
+                    taken = true;
+      }
+      if (!taken)
+        health = 5;
     }else if( tex < 30){ //Its a Bushes
       health = 1;
     }
-    destroyed = -1;
+    if (health >= 0)
+      destroyed = -1;
   }
 }
 

@@ -965,7 +965,7 @@ void GameField::nextTurn()
   {
     if(t->health <= 0)
     {
-      t->regrow(gameptr->turn);
+      t->regrow(gameptr->turn, actors);
       if (t->health > 0)
         addObstacle(t->gridx, t->gridy, 'T');
     }
@@ -974,7 +974,7 @@ void GameField::nextTurn()
   {
     if(r->health <= 0)
     {
-      r->regrow(gameptr->turn);
+      r->regrow(gameptr->turn, actors);
       if (r->health > 0)
         addObstacle(r->gridx, r->gridy, 'R');
     }
@@ -984,7 +984,7 @@ void GameField::nextTurn()
   {
     if(b->health <= 0)
     {
-      b->regrow(gameptr->turn);
+      b->regrow(gameptr->turn, actors);
       if (b->health > 0)
         addObstacle(b->gridx, b->gridy, 'B');
     }

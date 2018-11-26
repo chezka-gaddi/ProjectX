@@ -13,6 +13,7 @@
 #include "direction.h"
 #include <GL/glut.h>
 #include <GL/freeglut.h>
+#include "ActorInfo.h"
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -95,7 +96,7 @@ class Obstacles : public Drawable
 {
 public:
     Obstacles( int, GLfloat, GLfloat, int, int);
-    void regrow(int turn); 
+    void regrow(int turn, const std::vector<ActorInfo> actor); 
     void draw(int, int);
 protected:
     int destroyed = -1;
