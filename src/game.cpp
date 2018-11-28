@@ -129,7 +129,7 @@ static bool isplayable(const std::vector<ActorInfo> &actorInfo)
  *
  * Display the screen that reads game over
  *******************************************************************************/
-void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
+void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 {
 
   const char *str;
@@ -158,6 +158,8 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   glPopMatrix();
 
   glDisable(GL_TEXTURE_2D);
+  
+  ofstream fout("results.txt", ios::out | ios::app);
 
   float j = -0.7f;
   bool flag = false;
@@ -229,7 +231,20 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     }
     k += -0.1f;
     count++;
-
+    fout << "\n\nGame ended on turn: " << turn;
+    fout << "\nWinner: " << winner[winDex].name 
+         << " Kills: " << winner[winDex].kills
+         << " Shots: " << std::to_string(winner[winDex].shots).c_str() 
+         << " Hits: " << std::to_string(winner[winDex].hits).c_str();
+    fout << " AP: " << std::to_string(winner[winDex].AP).c_str() 
+         << " Radar: " << std::to_string(winner[winDex].radar).c_str();
+    fout << " Max Health: " << std::to_string(winner[winDex].max_health).c_str()
+         << " Remaining: " << std::to_string(winner[winDex].health).c_str() 
+         << " Max Ammo: " << std::to_string(winner[winDex].max_ammo).c_str()
+         << " Remaining: " << std::to_string(winner[winDex].health).c_str()
+         << " Final Position: (" << std::to_string(winner[winDex].x).c_str() 
+         << "," << std::to_string(winner[winDex].y).c_str() << ")\n";
+    fout << "Non-Winning Participants:";
     for(int l = dead.size() - 1; l >= 0; l--)
     {
 
@@ -287,6 +302,18 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 
       k += -0.1f;
       count++;
+    fout << "\nParticipant: " << dead[l].name 
+         << " Kills: " << dead[l].kills
+         << " Shots: " << dead[l].shots 
+         << " Hits: " << dead[l].hits;
+    fout << " AP: " << dead[l].AP
+         << " Radar: " << dead[l].radar;
+    fout << " Max Health: " << dead[l].max_health
+         << " Remaining: " << dead[l].health
+         << " Max Ammo: " << dead[l].max_ammo
+         << " Remaining: " << dead[l].health
+         << " Final Position: (" << dead[l].x
+         << "," << dead[l].y << ")";
     }
   }
   else
@@ -380,9 +407,6 @@ void Game::executeTurn()
   }
   else   //If maxturns is not hit, and no longer playable print results
   {
-    ofstream fout("results.txt", ios::out | ios::app);
-    fout << tankGame->getWinner() << endl;
-    fout.close();
     gameOver(tankGame->getDeceased(), tankGame->getActors());
     glutLeaveMainLoop();
   }
@@ -996,8 +1020,6 @@ void Game::initGameState()
 
   std::vector<ActorInfo> startActors;
 
-
-  fout << "Players: ";
   cout << "Creating Player Tanks...\n";
   for(int i = 0; i < startActorPointers.size(); ++i)
   {
@@ -1018,14 +1040,10 @@ void Game::initGameState()
                                     , ammo
                                     , AINames[i]));
     //printf("Actor %d name: %s\n", i, AINames[i].c_str());
-    fout << AINames[i] << " ";
     }else{
       cout << "Invalid location for " << AINames[i] << endl;
     }
   }
-  fout << "Winner: ";
-  cout << "  ...Done" << endl;
-  fout.close();
   int count = 0;
 
   cout << "Finalizing game settings...\n";

@@ -57,6 +57,7 @@ public:
     void createConfig();
     float convertGLXCoordinate( int );
     float convertGLYCoordinate( int );
+    void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner);
 
     int getX(){return fieldx;};
     int getY(){return fieldy;};
