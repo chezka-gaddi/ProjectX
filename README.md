@@ -1,6 +1,10 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Release 6.02
+## Changes
+  - Changed output to results.txt file to improve human readablility
+
 ## Release 6.01
 ## Fixes
   - Fixed issue with Object map not always updating on a tank move command
