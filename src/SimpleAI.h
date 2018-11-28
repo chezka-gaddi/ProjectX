@@ -37,6 +37,8 @@ public:
      */
    
     attributes myStats; 
+  
+    bool spend = false;
 
     SimpleAI();
     ~SimpleAI();
