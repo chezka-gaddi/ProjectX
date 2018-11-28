@@ -327,6 +327,23 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
       glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
       str++;
     }
+    fout << "\n\nGame ended on turn: " << turn;
+    fout << "\nDraw Game: "; 
+      for(int l = dead.size() - 1; l >= 0; l--)
+      {
+        fout << "\nParticipant: " << dead[l].name 
+          << " Kills: " << dead[l].kills
+          << " Shots: " << dead[l].shots 
+          << " Hits: " << dead[l].hits;
+        fout << " AP: " << dead[l].AP
+          << " Radar: " << dead[l].radar;
+        fout << " Max Health: " << dead[l].max_health
+          << " Remaining: " << dead[l].health
+          << " Max Ammo: " << dead[l].max_ammo
+          << " Remaining: " << dead[l].health
+          << " Final Position: (" << dead[l].x
+          << "," << dead[l].y << ")";
+      }
   }
 
   sleep(1);

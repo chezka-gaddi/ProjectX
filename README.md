@@ -3,7 +3,8 @@ Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
 ## Release 6.02
 ## Changes
-  - Changed output to results.txt file to improve human readablility
+  - Changed output to results.txt file to improve human readablility.
+    - The new format will list what turn the game ended on, the winner if there was one.  And then list each tank that participated in the match.  For each tank, their kills, hits, shots, AP, Max/Current Health, Max/Current Ammo, and final position is listed.
 
 ## Release 6.01
 ## Fixes

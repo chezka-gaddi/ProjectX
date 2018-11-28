@@ -622,7 +622,7 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
           }
           redraw = true; //We hit something, don't animate more
         }
-        else if(a.id < 0 && a.id != -actors[i].id)  //If we're a projectile and we hit a tank
+        else if(a.id < 0)  //If we're a projectile and we hit a tank
         {
           //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
           actors[i].health -= a.damage; //damage the tank
