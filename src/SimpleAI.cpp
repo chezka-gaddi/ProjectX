@@ -21,13 +21,14 @@ direction SimpleAI::move(MapData map, PositionData status)
     int offset = 2; //lee way for moving
     
     if (spend == true){
-      printf("Move Map:\n");
+      //Debug for testing mapupdate
+      /*printf("Move Map:\n");
       for (int i = 0; i < map.map.size(); i++){
       printf("%d ", map.map[i]);
       if (i % 30 == 29)
             printf("\n");
       }
-      printf("X: %d, Y: %d\n", status.game_x, status.game_y);
+      printf("X: %d, Y: %d\n", status.game_x, status.game_y);*/
     }
     for (int x = 0; x < map.width; ++x)
     {
@@ -228,13 +229,14 @@ int SimpleAI::spendAP(MapData map, PositionData status)
     direction tMove = move(map,status);
     direction tAttack = attack(map,status);
     spend = true;
-    printf("Spend Map:\n");
+    /*printf("Spend Map:\n");
     for (int i = 0; i < map.map.size(); i++){
     printf("%d ", map.map[i]);
     if (i % 30 == 29)
           printf("\n");
     }
     printf("X: %d, Y: %d\n", status.game_x, status.game_y);
+    */
 
     if (tMove == STAY && tAttack != STAY) //If there is nowhere to move, attack
         return 2;
