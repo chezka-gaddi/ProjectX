@@ -947,8 +947,10 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
 
 void GameField::nextTurn()
 {
-  if(gameptr != nullptr)
+  if(gameptr != nullptr){
     ++gameptr->turn;
+    ++turnCount;
+  }
 
   direction atk;
   ActorInfo newProjectile;
