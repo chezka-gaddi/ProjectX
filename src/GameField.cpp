@@ -1009,6 +1009,7 @@ void GameField::nextTurn()
       if(gameptr->modCounter > 7)
         gameptr->modCounter = 0;
 #endif
+      updateMap();
       fog_of_war = fieldMap;
       create_fog_of_war(fog_of_war, actors[i]);
       pos.game_x = actors[i].x;
