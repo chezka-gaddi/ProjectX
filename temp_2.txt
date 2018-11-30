@@ -1,0 +1,2 @@
+tournament_1v1/SimpleAIvsCamperAI.round
+tournament_1v1/SimpleAIvsSimpleAI.round
