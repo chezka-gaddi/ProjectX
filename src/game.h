@@ -26,7 +26,7 @@ using namespace std;
 
 
 /*!<Enum class for the gameMode */
-enum gameMode {ai, sp, mp};
+enum gameMode {none, ai, sp, mp, quiet};
 
 
 /***************************************************************************//**
@@ -39,7 +39,7 @@ class Game
 {
 public:
     GameField *tankGame;               /*!<Pointer to the game manager */
-    gameMode g_mode;                   /*!<Type of game to be ran */
+    gameMode g_mode = none;                   /*!<Type of game to be ran */
     int turn = 0;
     int actTurn = 0; //0 causes issues on first display call
     int modCounter = 7;

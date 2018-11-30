@@ -14,7 +14,15 @@
 *******************************************************************************/
 void utilityCentral(gameMode mode, Event *event)
 {
-    static Game gameloop(mode);
+    static gameMode gMode = none;
+    if (gMode == none){
+            if (mode == none){
+              gMode = ai;
+            }else{
+              gMode = mode;
+            }
+    }
+    static Game gameloop(gMode);
 
     event->doAction(gameloop);
 

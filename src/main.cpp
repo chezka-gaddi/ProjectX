@@ -56,17 +56,34 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 
 int main(int argc, char **argv)
 {
-    gameMode mode = ai;
     const char *dmode = "-demo";
+    const char *qmode = "-quiet";
+    
+    gameMode mode = ai;
+    int height = 727, width = 1000;
+    int counter = 1;
 
-    printf("%d\n", argc);
-    printf("%s\n", argv[argc-1]);
+    //printf("%d\n", argc);
+    //printf("%s\n", argv[argc-1]);
 
     //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
-    if (argc == 2 && strcmp(argv[1], dmode) == 0)
-      initOpenGL( argc, argv, 1900, 1000, mode );
-    else
-      initOpenGL( argc, argv, 1000, 727, mode );
+    while(counter < argc)
+    {
+      if (strcmp(argv[counter], dmode) == 0 && counter + 1 <= argc)
+      {
+        printf("demo mode\n");
+        width = 1900;
+        height = 1000;
+      }
+      if (strcmp(argv[counter], qmode) == 0 && counter + 1 <= argc)
+      {
+        printf("quiet mode\n");
+        mode = quiet;
+      }
+      counter++;
+    }
+    //printf("Height: %d Width: %d",height, width);
+    initOpenGL( argc, argv, width, height, mode );
 
 
     glutMainLoop();

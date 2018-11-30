@@ -17,7 +17,7 @@ int actualY(int y)
  ******************************************************************************/
 void display()
 {
-    utilityCentral(ai,new DisplayEvent());
+    utilityCentral(ai, new DisplayEvent());
 }
 
 

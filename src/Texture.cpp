@@ -31,13 +31,15 @@ const std::vector<string> gImages = {"images/UI/background.png","images/UI/green
 *******************************************************************************/
 int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> gameimgs,
                    std::vector <std::string> trees, std::vector <std::string> rocks, 
-                   std::vector <std::string> bushes, std::vector <std::string> waters)
+                   std::vector <std::string> bushes, std::vector <std::string> waters, bool quiet)
 {
     // Load in the tank texure information
-    cout << "\nLoading Tank Textures:";
+    if(!quiet)
+        cout << "\nLoading Tank Textures:";
     for( int i = 0; i < images.size(); i++ )
     {
         const char *c = images[i].c_str();
+    if(!quiet)
         (i%5 == 0) ? cout << "\n" << c << "  " : cout << c << "  ";
         tankTex[i] = SOIL_load_OGL_texture(
                          c,
@@ -52,11 +54,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
         glBindTexture(GL_TEXTURE_2D, tankTex[i]);
     }
 
+    if(!quiet)
     cout << "\nLoading Tree Textures:\n";
     // Load in the tree texure information
     for( int i = 0; i < tImages.size(); i++ )
     {
         const char *c = tImages[i].c_str();
+    if(!quiet)
         cout << c << "  ";
         treeTex[i] = SOIL_load_OGL_texture(
                          c,
@@ -69,11 +73,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
 
         glBindTexture(GL_TEXTURE_2D, treeTex[i]);
     }
+    if(!quiet)
     cout << "\nLoading User Tree Textures:\n";
     // Load in the tree texure information
     for( int i = tImages.size(); i < trees.size()+tImages.size(); i++ )
     {
         const char *c = trees[i-tImages.size()].c_str();
+    if(!quiet)
         cout << c << "  ";
         treeTex[i] = SOIL_load_OGL_texture(
                          c,
@@ -86,11 +92,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
 
         glBindTexture(GL_TEXTURE_2D, treeTex[i]);
     }
+    if(!quiet)
     cout << "\nLoading Rock Textures:\n";
     // Load in the rock texures information
     for( int i = 0; i < rImages.size(); i++ )
     {
         const char *c = rImages[i].c_str();
+    if(!quiet)
         cout << c << "  ";
         rockTex[i] = SOIL_load_OGL_texture(
                          c,
@@ -103,11 +111,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
 
         glBindTexture(GL_TEXTURE_2D, rockTex[i]);
     }
+    if(!quiet)
     cout << "\nLoading User Rock Textures:\n";
     // Load in the rock texures information
     for( int i = rImages.size(); i < rocks.size()+rImages.size(); i++ )
     {
         const char *c = rocks[i-rImages.size()].c_str();
+    if(!quiet)
         cout << c << "  ";
         rockTex[i] = SOIL_load_OGL_texture(
                          c,
@@ -120,11 +130,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
 
         glBindTexture(GL_TEXTURE_2D, rockTex[i]);
     }
+    if(!quiet)
     cout << "\nLoading Bush Textures:\n";
     // Load in the bush texure information
     for( int i = 0; i < bImages.size(); i++ )
     {
         const char *c = bImages[i].c_str();
+    if(!quiet)
         cout << c << "  ";
         bushTex[i] = SOIL_load_OGL_texture(
                          c,
@@ -137,11 +149,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
 
         glBindTexture(GL_TEXTURE_2D, bushTex[i]);
     }
+    if(!quiet)
     cout << "\nLoading User Bush Textures:\n";
     // Load in the bush texure information
     for( int i = bImages.size(); i < bushes.size()+bImages.size(); i++ )
     {
         const char *c = bushes[i-bImages.size()].c_str();
+    if(!quiet)
         cout << c << "  ";
         bushTex[i] = SOIL_load_OGL_texture(
                          c,
@@ -155,11 +169,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
         glBindTexture(GL_TEXTURE_2D, bushTex[i]);
     }
 
+    if(!quiet)
     cout << "\nLoading Water Textures:\n";
     // Load in the bush texure information
     for( int i = 0; i < waters.size(); i++ )
     {
         const char *c = waters[i].c_str();
+    if(!quiet)
         cout << c << "  ";
         waterTex[i] = SOIL_load_OGL_texture(
                      c,
@@ -174,11 +190,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
     }
 
 
+    if(!quiet)
     cout << "\nLoading UI Textures:\n";
     // Load in constant game images
     for( int i = 0; i < gImages.size(); i++ )
     {
         const char *c = gImages[i].c_str();
+    if(!quiet)
         cout << c << "  ";
         gameTex[i] = SOIL_load_OGL_texture(
                          c,
@@ -193,11 +211,13 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
     }
 
 
+    if(!quiet)
     cout << "\nLoading SFX Textures:\n";
     // Load in sfx game images
     for(int i=0; i < sImages.size(); i++)
     {
     const char *c = sImages[i].c_str();
+    if(!quiet)
     cout << c << " ";
     sfxTex[i] = SOIL_load_OGL_texture(
                     c,
@@ -210,6 +230,7 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
     glBindTexture(GL_TEXTURE_2D, sfxTex[i]);
     }
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    if(!quiet)
     cout << "\n";
     return true;
 }
