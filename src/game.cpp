@@ -158,7 +158,7 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   glPopMatrix();
 
   glDisable(GL_TEXTURE_2D);
-  
+
   ofstream fout("results.txt", ios::out | ios::app);
 
   float j = -0.7f;
@@ -232,17 +232,17 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     k += -0.1f;
     count++;
     fout << "\n\nGame ended on turn: " << turn;
-    fout << "\nWinner: " << winner[winDex].name 
+    fout << "\nWinner: " << winner[winDex].name
          << " Kills: " << winner[winDex].kills
-         << " Shots: " << std::to_string(winner[winDex].shots).c_str() 
+         << " Shots: " << std::to_string(winner[winDex].shots).c_str()
          << " Hits: " << std::to_string(winner[winDex].hits).c_str();
-    fout << " AP: " << std::to_string(winner[winDex].AP).c_str() 
+    fout << " AP: " << std::to_string(winner[winDex].AP).c_str()
          << " Radar: " << std::to_string(winner[winDex].radar).c_str();
     fout << " Max Health: " << std::to_string(winner[winDex].max_health).c_str()
-         << " Remaining: " << std::to_string(winner[winDex].health).c_str() 
+         << " Remaining: " << std::to_string(winner[winDex].health).c_str()
          << " Max Ammo: " << std::to_string(winner[winDex].max_ammo).c_str()
          << " Remaining: " << std::to_string(winner[winDex].health).c_str()
-         << " Final Position: (" << std::to_string(winner[winDex].x).c_str() 
+         << " Final Position: (" << std::to_string(winner[winDex].x).c_str()
          << "," << std::to_string(winner[winDex].y).c_str() << ")\n";
     fout << "Non-Winning Participants:";
     for(int l = dead.size() - 1; l >= 0; l--)
@@ -302,9 +302,9 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 
       k += -0.1f;
       count++;
-    fout << "\nParticipant: " << dead[l].name 
+    fout << "\nParticipant: " << dead[l].name
          << " Kills: " << dead[l].kills
-         << " Shots: " << dead[l].shots 
+         << " Shots: " << dead[l].shots
          << " Hits: " << dead[l].hits;
     fout << " AP: " << dead[l].AP
          << " Radar: " << dead[l].radar;
@@ -328,12 +328,12 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
       str++;
     }
     fout << "\n\nGame ended on turn: " << turn;
-    fout << "\nDraw Game: "; 
+    fout << "\nDraw Game: ";
       for(int l = dead.size() - 1; l >= 0; l--)
       {
-        fout << "\nParticipant: " << dead[l].name 
+        fout << "\nParticipant: " << dead[l].name
           << " Kills: " << dead[l].kills
-          << " Shots: " << dead[l].shots 
+          << " Shots: " << dead[l].shots
           << " Hits: " << dead[l].hits;
         fout << " AP: " << dead[l].AP
           << " Radar: " << dead[l].radar;
@@ -346,9 +346,12 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
       }
   }
 
-  sleep(1);
+  int timer_pause = TimerEvent::idle_speed * 133;
+  timer_pause >= 0 ? usleep(timer_pause) : usleep(0);
+
   glutSwapBuffers();
-  sleep(4);
+  timer_pause = TimerEvent::idle_speed * 533;
+  timer_pause >= 0 ? usleep(timer_pause) : usleep(0);
   printf("Exiting!\n");
 }
 
