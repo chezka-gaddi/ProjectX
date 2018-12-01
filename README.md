@@ -1,6 +1,12 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Release 6.03
+##  Changes
+  - Added -quiet command line option to remove a lot of output text
+  - Added -demo command line option to increase game size for a 1080p screen
+  - Fixed speed mode
+    - Changing ANIMATION_SPEED, TANK_SPEED, PROJECTILE_SPEED to 0 should greatly decrease total game time.
 ## Release 6.02
 ## Changes
   - Changed output to results.txt file to improve human readablility.
