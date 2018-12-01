@@ -42,7 +42,7 @@ ROCK_IMAGE images/rock/rock.png images/rock/rockb.png images/rock/rockc.png
 WATER_IMAGE images/Water/waterTex.png images/Water/waterTexNS.png images/Water/waterTexES.png images/Water/waterTexSS.png images/Water/waterTexWS.png images/Water/waterTexNES.png images/Water/waterTexSES.png images/Water/waterTexSWS.png images/Water/waterTexNWS.png images/Water/waterTexEWS.png images/Water/waterTexNSS.png images/Water/waterTexNWES.png images/Water/waterTexNESS.png images/Water/waterTexSEWS.png images/Water/waterTexNWSS.png images/Water/waterTexPond.png
 
 #Max Turns <200>
-MAXTURNS 200
+MAXTURNS 400
 
 #TANK RULES
 #STAT <AMMOUNT>
@@ -56,7 +56,7 @@ RANGE 4
 AMMO 6
 
 #AI IDLE SPEED: AI_SPEED <750>
-AI_SPEED 1
+AI_SPEED 0
 
 #ANIMATION SPEED: ANIMATION_SPEED<20>
 ANIMATION_SPEED 0
@@ -68,4 +68,4 @@ BULLET_SPEED 0
 TANK_SPEED 0
 
 #DISABLEGUI Disables GUI
-DISABLEGUI
+#DISABLEGUI

@@ -789,7 +789,7 @@ void Game::initGameState()
           }
           else if(maxT > 200)
           {
-            width = 200;
+            maxT = 200;
             if (g_mode != quiet)
               cout << "Max turns set too high, defaulting to 200.\n";
           }
