@@ -32,7 +32,7 @@ struct MapData
     MapData();
 
 private:
-    void printMap(std::vector<int> tMap);
+    void printMap(std::vector<int> tMap); /*!< Print the specified map as a 2d ascii map */
 };
 /* overload << to display to console */
 std::ostream & operator<<(std::ostream& os, const MapData& md);

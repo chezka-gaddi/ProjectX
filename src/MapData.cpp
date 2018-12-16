@@ -1,4 +1,6 @@
-/** @file */
+/** @file 
+ @brief overloaded output function for the mapdata structure.  Only outputs the game obstacle map.
+ */
 
 #include "MapData.h"
 #include <iostream>
@@ -93,6 +95,11 @@ std::ostream& operator<<(std::ostream& os, const MapData& md)
     return os;
 }
 
+/*****************//*
+ * Author Original Developers
+ * Constructor for the MapData object.  Resizes and creates a proper size obstacleMap
+ *
+ *******************/
 MapData::MapData(int w, int h) : width(w), height(h)
 {
     map.resize(w * h);
@@ -100,6 +107,12 @@ MapData::MapData(int w, int h) : width(w), height(h)
     std::fill(map.begin(), map.end(), 0);
     std::fill(obstacleMap.begin(), obstacleMap.end(), false);
 }
+
+/****************//*
+ * @ author Jon McKee
+ * @ brief a printMap function to any specified map array as a 2d ascii map
+ *
+ ******************/
 void MapData::printMap(std::vector<int> tMap){
     for (int i = 0; i < height; i++){
             for (int j=0; j < width;j++){

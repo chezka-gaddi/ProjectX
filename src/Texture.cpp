@@ -15,7 +15,7 @@ GLuint treeTex[20];     /*!<Texture array for the trees */
 GLuint bushTex[20];     /*!<Texture array for the bushes */
 GLuint rockTex[20];     /*!<Texture array for the rocks */
 GLuint sfxTex[20];   /*<Texture array for the special effects */
-GLuint waterTex[30];
+GLuint waterTex[30]; /*<Texture array for water tiles */
 
 const std::vector<string> bImages = {"images/bush/bush1.png","images/bush/bush2.png","images/bush/bush3.png","images/bush/bush4.png"};
 const std::vector<string> rImages = {"images/rock/rockc.png","images/rock/rockb.png","images/rock/rock.png"};

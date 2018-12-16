@@ -8,14 +8,13 @@
 
 /***************************************************************************//**
 * @author Jon McKee
-* @brief Constructor
+* @brief Creates a crate with both it's X/Y Coordinates  and it's Scrren X/Y
+* drawing coordinates
 *
-* Initiates the coordinates of where crate is to be drawn and from whom the
-* crate came from.
-*
-* @param[in] ID - indicates who fired the crate
 * @param[in] x_coor - coordinate to spawn crate
 * @param[in] y_coor - coordinate to spawn crate
+* @param[in] actx - grid x coordinate to spawn crate
+* @param[in] acty - grid y coordinate to spawn crate
 * *****************************************************************************/
 Crate::Crate( GLfloat x_coor, GLfloat y_coor, int actx, int acty )
 {
@@ -30,9 +29,9 @@ Crate::Crate( GLfloat x_coor, GLfloat y_coor, int actx, int acty )
 
 /***************************************************************************//**
 * @author Jon McKee
-* @brief draw
-*
-* Draws the crate in the gamefield
+* @brief Draws the crate in the gamefield
+* @param[in] x - X input coordinate (Currently unused)
+* @param[in] y - Y input coordinate (Currently unused)
 * *****************************************************************************/
 void Crate::draw(int x, int y)
 {

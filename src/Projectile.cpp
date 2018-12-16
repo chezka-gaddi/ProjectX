@@ -75,6 +75,7 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, b
 * @brief draw
 *
 * Draws the projectile in the gamefield
+* @param[in] x The current turn value
 * *****************************************************************************/
 void Projectile::draw(int x, int y)
 {
@@ -84,6 +85,7 @@ void Projectile::draw(int x, int y)
     glPushMatrix();
     glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
     glRotatef(angle,0,0,1);
+    //Check if we have a marshmellow 
     if (camp == true)
       glBindTexture(GL_TEXTURE_2D, sfxTex[tex]);
     else

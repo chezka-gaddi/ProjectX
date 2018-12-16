@@ -231,5 +231,15 @@ void TankDrawable::draw(int x, int y)
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }
+/*****************//*
+ * @author Jon McKee
+ * @brief allows us to set the drawables health
+ * @param[in] h the current health of the object
+ *******************/
 void TankDrawable::setHealth(int h){health = h;}
+/*****************//*
+ * @author Jon McKee
+ * @brief allows us to set the drawables max health
+ * @param[in] mh the max health of the object
+ *******************/
 void TankDrawable::setMax_health(int mh){max_health = mh;}

@@ -66,6 +66,7 @@ void Obstacles::draw(int, int)
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
     glTranslatef(screen_x, screen_y, -5.0f);
+    //Check what obstacle it is
     if (tex >= 0 && tex <= 9){ //It's a tree
       glBindTexture(GL_TEXTURE_2D, treeTex[tex]);
     }else if( tex >= 10 && tex <= 19){ //It's a Rocks
@@ -92,6 +93,12 @@ void Obstacles::draw(int, int)
     glDisable(GL_TEXTURE_2D);
 }
 
+/****************//*
+ * @author Jon McKee
+ * @brief Checks if the obstacle should be regrown
+ * @param[in] turn the current turn
+ * @param[in] actor the object to check
+ ******************/
 void Obstacles::regrow(int turn, const std::vector<ActorInfo> actor){
   bool taken = false;
   if (destroyed == -1)
@@ -117,6 +124,11 @@ void Obstacles::regrow(int turn, const std::vector<ActorInfo> actor){
   }
 }
 
+/**********************//*
+ * @author Jon McKee
+ * @brief set the current obstacle as destoryed
+ * @param[in] d the turn the obstacle was destroyed on
+ ************************/
 void Obstacles::set_destroyed(int d){
   destroyed = d;
 }

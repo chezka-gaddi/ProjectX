@@ -2,6 +2,11 @@
 
 #include "Actor.h"
 //Actor::Actor() {}
+/**************************************************************************//**
+ * @author Jon McKee
+ * @par Description
+ * This is the default deconstructor that is overrideent by inherited actors
+ *****************************************************************************/
 Actor::~Actor() {}
 
 

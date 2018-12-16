@@ -19,8 +19,8 @@ protected:
     int id = 0;                 /*!< the id number of the actor */
 
 public:
-    //Actor(){};
-    virtual ~Actor()=0;
+    //Actor(){}; //Commented out to remove compaitibility errors
+    virtual ~Actor()=0; /*!< Default deconstructor that must be overriden by custom tanks */
 
     /**
      * calculates a move, and returns the data describing its move

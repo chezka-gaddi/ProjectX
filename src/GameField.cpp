@@ -257,6 +257,19 @@ void GameField::setSPECIAL(int points, const attributes baseStats)
                 <<std::endl;
   }
 }
+/*********************************************************************//*
+ * @author Jon McKee
+ * @brief This function creates the animation effect for the object 
+ * passed into it. The function works by checking the previous X and Y 
+ * values of the actor and then continuously redrawing the object specified
+ * by the number of samples in the animation speed game option.  Once the
+ * draw is complete the object will be at it's new position with the new
+ * location saved as the previous location for the next animation call.
+ *
+ * During this functions call the idletime is temporarily set to 0 and
+ * reset back to the game setting at the end of the function.
+ *
+************************************************************************/ 
 void GameField::animateMove(ActorInfo &a)
 {
   if(a.x == a.prevx && a.y == a.prevy || a.prevx == -1 || a.prevy == -1)  //We didn't actually move
@@ -269,13 +282,13 @@ void GameField::animateMove(ActorInfo &a)
   GLfloat prevx, prevy;
   GLfloat newx, newy;
   int samples = gameptr->getAniSpeed();
-#ifndef TESTING
-  if (a.id < 0)
+#ifndef TESTING //if we end up here while running catch tests, block out the invalid pointer (Other errors will occur)
+  if (a.id < 0)  //check if we need speed for a tank or projectile
     TimerEvent::idle_speed = gameptr->getbullet_speed();
   else
     TimerEvent::idle_speed = gameptr->gettank_speed();
 #endif
-  switch(a.heading)
+  switch(a.heading) //get our heading and loop through drawing samples
   {
     case UP:
       tempy = -1.75 - (ny * y_scalar); //smaller
@@ -404,20 +417,20 @@ void GameField::animateMove(ActorInfo &a)
       //not sure what happened so don't move
       break;
   }
-  a.offsety = 0;
+  a.offsety = 0; //Reset values 
   a.offsetx = 0;
-  a.prevx = a.x;
+  a.prevx = a.x; //Save new previous values
   a.prevy = a.y;
 #ifndef TESTING
-  TimerEvent::idle_speed = gameptr->getAISpeed();
+  TimerEvent::idle_speed = gameptr->getAISpeed(); //fix idle speed
 #endif
 }
 
 /**
  * @author David Donahue
+ * @author Jon McKee (Heavily Modified by)
  * @par Description:
- * Executes the move phase of an AI's turn
- * AI's are culled
+ * Executes the move phase of an AI's turn and then AI's are culled
  */
 void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
 {
@@ -622,7 +635,7 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
           }
           redraw = true; //We hit something, don't animate more
         }
-        else if(a.id < 0)  //If we're a projectile and we hit a tank
+        else if(a.id < 0 && a.id != -actors[i].id)  //If we're a projectile and we hit a tank (Do not allow self hit)
         {
           //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
           actors[i].health -= a.damage; //damage the tank
@@ -639,21 +652,29 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
   a.health -= hit;
   checkHealth(a, hitObj);
 #ifndef TESTING //Skip animating if we're not displaying the game
-  if(!redraw && !hitObj){
+  if(!redraw && !hitObj){ //If we didn't hit an object and we don't need to force a redraw (Does not update map)
     animateMove(a);
   }
-  if(hitObj || redraw){
+  if(hitObj || redraw){ //If either condition is true, animate 
     animateMove(a);
-    updateMap();
+    updateMap(); //Update actors and map
     //printf("Currently %d number of explosions.\n",SFX.size());
-    if (gameptr != nullptr)
+    if (gameptr != nullptr) //redraw screen
       displayCallback(fieldMap, actors, gameptr->turn);
-    SFX.clear();
+    SFX.clear(); //Clear the explosions
   }
 #endif
   
 }
-
+/***********************************************************************//*
+ * @author Jon McKee
+ *
+ * @brief Checks to see if the current object was killed or hit an object.
+ * If the actor's health is less than or equal to 0 we 0 zero out its stats.
+ * If the actor was a projectile and struck on object, we set it's health
+ * equal to 0 and zero out the rest of it's stats.
+ *
+ *************************************************************************/
 bool GameField::checkHealth(ActorInfo &a, bool object)
 {
   if(a.health <= 0) //if whatever we have has no health left
@@ -677,6 +698,14 @@ bool GameField::checkHealth(ActorInfo &a, bool object)
   return false;
 }
 
+/****************************************************************************//*
+ * @author Jon McKee
+ * @brief Check to see if the current projectile hit an object.  If the curent
+ * actor is not a projectile immediately.  If the current actor is a projectile
+ * we check the various object lists to see if we struck one and then return the
+ * appropriate flag.
+ *
+ ******************************************************************************/ 
 bool GameField::checkObjectStrike(ActorInfo &a)
 {
   int tempOb = obstacleAt(a.x, a.y);
@@ -774,7 +803,8 @@ bool GameField::checkObjectStrike(ActorInfo &a)
 }
 /***************************************************************************//**
 * @author Jon McKee
-* @brief  Crate destruction
+* @brief  Crate destruction.  We check every square in the range of the crate 
+* and deal appropriate damage.  If we struck a crate we begin chaining our damage.
 ******************************************************************************/
 bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
 {
@@ -940,9 +970,11 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
 }
 /**
  * @author David Donahue
+ * @author Jon McKee (modified by)
  * @par Description:
  * Executes the move and attack phase of each AI's turn and increments the turn counter.
- * AI's are culled
+ * Object regrowth is checked at the beginning of the turn phase.
+ * AI's are culled at the end of the turn phase.
  */
 
 void GameField::nextTurn()
@@ -1045,19 +1077,19 @@ void GameField::nextTurn()
             j = i+1;
             grow = false;
             while(j < actors.size() && actors[i].id == -actors[j].id && actors[j].id < 0 && actors[j].health > 0)
-            {
-              if(actors[i].x == actors[j].x && actors[i].y == actors[j].y)
+            {//Check projectile list for a projectile in this spot
+              if(actors[i].x == actors[j].x && actors[i].y == actors[j].y) //found one
               {
                 actors[j].scale += .40;
                 actors[j].health += 1;
                 actors[j].ammo += 1;
                 actors[j].damage += actors[i].damage;
-                grow = true;
+                grow = true; //See if the projectile is one of our own
                 break;
               }
               j++;
             }
-            if(grow == false)
+            if(grow == false) //If there was no projectiles in this spot create a new one
             {
               ProjectileActor * proj = new ProjectileActor(atk);
               newProjectile.AP = actors[i].range;
@@ -1075,7 +1107,7 @@ void GameField::nextTurn()
               actors[i].ammo--;
             }
           }
-          else if(atk != STAY)
+          else if(atk != STAY)//Forced reload on empty ammo rack
           {
             //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
             actors[i].ammo = actors[i].max_ammo;
@@ -1084,21 +1116,21 @@ void GameField::nextTurn()
         }
 
       }
-      else if(action == 4)
+      else if(action == 4) //Chosen reload action
       {
         actors[i].ammo = actors[i].max_ammo;
         //printf("Reloading... Reloading... Reloading\n");
       }
-      if (actors[i].health > 0 && actors[i].cDetect / actors[i].AP >= 4)
-              actors[i].camp = true;
+      if (actors[i].health > 0 && actors[i].cDetect / actors[i].AP >= 4) //check for a camper
+              actors[i].camp = true; //
       --act_ap;
     }
   }
-  cull();
-  updateMap();
-  if(gameptr != nullptr)
+  cull(); //Remove dead actors
+  updateMap(); //update map
+  if(gameptr != nullptr) //Draw map
     displayCallback(fieldMap, actors, gameptr->turn);
-  SFX.clear();
+  SFX.clear(); //remove explosions that remain
 }
 /**
  * @author David Donahue

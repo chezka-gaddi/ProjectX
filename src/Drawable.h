@@ -30,20 +30,20 @@ public:
     GLfloat screen_y;   /*!<The scren y coordinate of the drawable */
 
     int health;         /*!<The health value of the drawable */
-    int max_health;
+    int max_health;     /*!<The max health of the drawable object */
     GLuint tex;            /*!<Texture to draw object with */
 
-    Drawable() {}
-    ~Drawable() {}
+    Drawable() {}       /*!< Drawable constructor */
+    ~Drawable() {}      /*!< Drawable deconstructor */
 
     virtual void draw(int, int) = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
 protected:
-    int gridx;
-    int gridy; 
-    static float xscalar;
-    static float yscalar;
-friend class Game;
-friend class GameField;
+    int gridx;          /*!< Drawables grid x coordinate */
+    int gridy;          /*!< Drawables grid y coordinate */
+    static float xscalar; /*!< Drawable x shared scalar value */
+    static float yscalar; /*!< Drawable y shared scalar value */
+friend class Game;        //Make Game class a friend of the drawable classes
+friend class GameField;   //Make GameField class a friend of the drawable classes
 };
 
 
@@ -55,10 +55,10 @@ friend class GameField;
 class GameFieldDrawable : public Drawable
 {
 public:
-    GLuint tex;
-    GameFieldDrawable();
+    GLuint tex;   /*!< GameField Texture */
+    GameFieldDrawable(); /*!< GameField Drawable constructor */
 
-    void draw(int, int);
+    void draw(int, int); /*!< Draw function for the GameFieldDrawable Object */
 };
 
 
@@ -74,15 +74,15 @@ public:
     int health;         /*!<Player's health */
     int bullet;         /*!<Current bullet count */
     int score;          /*!<Current score */
-    int angle = 0;
-    int bTex;
-    int turn = 0;
+    int angle = 0;      /*!<Angle used for the menu */
+    int bTex;           /*!<Secondary texture used (Primarily tank texture) */
+    int turn = 0;       /*!<Current turn modifier for mini tank direction */
 
-    Menu( int, int, int, int, std::string, direction, int, int);
+    Menu( int, int, int, int, std::string, direction, int, int); /*!<Menu drawable constuctor */
 
-    void drawTextBox( GLfloat, GLfloat );
-    void drawPlayerStats();
-    void draw(int, int);
+    void drawTextBox( GLfloat, GLfloat ); /*!< Function to prepare the menu's background box */
+    void drawPlayerStats();  /*!< Function to populate player stats into text box */
+    void draw(int, int); /*!< Function to draw the final Menu object */
 
 };
 
@@ -95,14 +95,14 @@ public:
 class Obstacles : public Drawable
 {
 public:
-    Obstacles( int, GLfloat, GLfloat, int, int);
-    void regrow(int turn, const std::vector<ActorInfo> actor); 
-    void draw(int, int);
+    Obstacles( int, GLfloat, GLfloat, int, int); /*!< Initial constructor for the Obstacle drawables */
+    void regrow(int turn, const std::vector<ActorInfo> actor); /*!< Function to check for a rock/Tree regrowing */
+    void draw(int, int); /*!< Function to draw the Obstacle on the map */
 protected:
-    int destroyed = -1;
-    int regrow_rate = 8;
-    void set_destroyed(int d);
-friend class GameField;
+    int destroyed = -1; /*!< The turn the obstacle was destoryed on */
+    int regrow_rate = 8; /*!< The number of turns the obstacle takes to regrow */
+    void set_destroyed(int d); /*!< Set's the turn the object was destoryed on */
+friend class GameField; // Make the gamefield class a friend of the Obstacle sub-class
 };
 
 
@@ -114,16 +114,17 @@ friend class GameField;
 class Projectile : public Drawable
 {
 public:
-    int angle;
-    float offsetx;
-    float offsety;
-    bool camp;
-    Projectile(int ID, GLfloat x, GLfloat y, direction dir, bool t, float osx, float osy, bool camping);
+    int angle;  /*!< The angle of the projectile */
+    float offsetx; /*!< The x offset of the projectile for drawing */
+    float offsety; /*!< The y offset of the projectile for drawing */
+    bool camp; /*!< Check to see if the tank is consider camping so we can set the projectile accordingly */
 
-    void draw(int, int);
+    Projectile(int ID, GLfloat x, GLfloat y, direction dir, bool t, float osx, float osy, bool camping); /*!< Constructor for the projectile drawable object */
 
-    float sizeMod = 1;
-    bool turn;
+    void draw(int, int); /*!< The draw function for the Projectile class */
+
+    float sizeMod = 1;  /*!< Scalar specific for projectiles.  Used in projectile stacking */
+    bool turn; /*!< Flag used to signify if the fire trail should be on or off */
 };
 
 
@@ -135,47 +136,47 @@ public:
 class TankDrawable : public Drawable
 {
 public:
-    int angle;
-    int turn;
-    int sMod;
-    float offsetx;
-    float offsety;
-    bool camp;
+    int angle;  /*!< The angle of the tank */
+    int turn; /*!< The turn counter for the tank drawable */
+    int sMod; /*!< Smoke mode counter for alternating smoke */
+    float offsetx; /*!< x offset for the tank drawable */
+    float offsety; /*!< y offset for the tank drawable */
+    bool camp; /*!< bool setting for the tank detected as camping */
 
-    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, int sMod, float osx, float osy, bool camping);
+    TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, int sMod, float osx, float osy, bool camping); /*!< The constructor for making a Tank Drawable object */
 
-    void draw(int, int);
-    void setHealth(int h);
-    void setMax_health(int mh);
+    void draw(int, int); /*!< The draw function for displaying a tank drawable object */
+    void setHealth(int h); /*!< Setting the health of the drawable object */
+    void setMax_health(int mh); /*!< Setting the max health of the drawable object */
 };
 
 /***************************************************************************//**
-* @author Not Chezka Gaddi
+* @author Jon McKee
 * @class sfxDrawable
 * @brief sfxDrawable contains instructions to draw the sfxDrawable
 *******************************************************************************/
 class sfxDrawable : public Drawable
 {
 public:
-    int angle;
+    int angle; /*!< The angle to draw the special effects */
 
-    sfxDrawable(GLfloat x, GLfloat y);
+    sfxDrawable(GLfloat x, GLfloat y); /*!< The constructor for drawing the special efects */
 
-    void draw(int, int);
+    void draw(int, int); /*!< The draw function for displaying the special effects objects */
 };
 /***************************************************************************//**
-* @author Not Chezka Gaddi
+* @author Jon McKee
 * @class crate
 * @brief crate contains instructions to draw the party crate
 *******************************************************************************/
 class Crate : public Drawable
 {
 public:
-    int angle;
+    int angle; /*!< The angle at which the crate is drawn */
 
-    Crate(GLfloat x, GLfloat y,int, int);
+    Crate(GLfloat x, GLfloat y,int, int); /*!< The constructor for the crate objects */
 
-    void draw(int, int);
+    void draw(int, int);  /*!< The draw function for the Crate drawable objects */
 };
 
 

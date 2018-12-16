@@ -7,12 +7,10 @@
 #include <iostream>
 
 
-///////////////////////////////////////////////////////////////////////////////
-/// Description: This AI finds a corner and starts shooting. It's like an 8
-//                year old playing call of duty.
-///////////////////////////////////////////////////////////////////////////////
-
-
+/************************//*
+ * @author Jon McKee
+ * @class StationaryAI that does nothing but sits where placed
+ **************************/
 class StationaryAI : public Actor
 {
     // The direction moved from last turn

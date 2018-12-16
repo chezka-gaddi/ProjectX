@@ -1254,6 +1254,7 @@ void Game::initGameState()
     cout << "...done.\n" << endl;
 }
 /***************************************************************************//**
+ * @author Jon McKee
  * @brief createConfig
  *
  * Creates new config file
@@ -1300,9 +1301,19 @@ void Game::createConfig()
   fout << "BUSH_IMAGE images/bush/bush1.png images/bush/bush2.png images/bush/bush3.png images/bush/bush4.png\n";
   fout << "ROCK_IMAGE images/rock/rock.png images/rock/rockb.png images/rock/rockc.png\n";
   fout << "WATER_IMAGE images/Water/waterTex.png images/Water/waterTexNS.png images/Water/waterTexES.png images/Water/waterTexSS.png images/Water/waterTexWS.png images/Water/waterTexNES.png images/Water/waterTexSES.png images/Water/waterTexSWS.png images/Water/waterTexNWS.png images/Water/waterTexEWS.png images/Water/waterTexNSS.png images/Water/waterTexNWES.png images/Water/waterTexNESS.png images/Water/waterTexSEWS.png images/Water/waterTexNWSS.png images/Water/waterTexPond.png\n\n";
-  fout << "#Max Turns\n";
+  fout << "#Game Settings\n";
   fout << "#MAXTURNS 200\n";
   fout << "MAXTURNS 200\n\n";
+  fout << "#AI_SPEED <750>\n";
+  fout << "AI_SPEED 750\n\n";
+  fout << "#BULLET_SPEED <80>\n";
+  fout << "BULLET_SPEED 80\n\n";
+  fout << "#TANK_SPEED <400>\n";
+  fout << "TANK_SPEED 400\n\n";
+  fout << "#ANIMATION_SPEED <20>\n";
+  fout << "ANIMATION_SPEED 20\n\n";
+  fout << "#DISABLEUI UNCOMMENT TO DISABLE GUI\n";
+  fout << "#DISABLEGUI \n\n";
   fout << "#TANK RULES\n";
   fout << "#STAT <AMMOUNT>\n";
   fout << "#VALID STATS: DAMAGE, HEALTH, RADAR, AP, SPECIAL, RANGE, AMMO\n";
