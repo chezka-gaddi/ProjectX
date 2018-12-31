@@ -787,7 +787,7 @@ void Game::initGameState()
             if (g_mode != quiet)
               cout << "Invalid max_turn parameter, defaulting to 1.\n";
           }
-          else if(maxT > 200)
+          else if(maxT > 1000)
           {
             maxT = 1000;
             if (g_mode != quiet)
