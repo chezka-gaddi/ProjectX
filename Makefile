@@ -130,9 +130,9 @@ push-to-git: clean-lib
 tests: $(TANKS:src/%.cpp=tanks/%.so) testUnitAll testFunctionalAll
 
 testUnitAll:
-	make PROFILE="$(PROFILE)" -C tests/src
+	+make PROFILE="$(PROFILE)" -C tests/src
 	mv tests/src/testUnitAll .
 
 testFunctionalAll: tanks/SimpleActor.so tanks/SimpleAI.so
-	make PROFILE="$(PROFILE)" -C tests/functional_tests
+	+make PROFILE="$(PROFILE)" -C tests/functional_tests
 	mv tests/functional_tests/testFunctionalAll .

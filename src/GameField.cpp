@@ -278,16 +278,18 @@ void GameField::animateMove(ActorInfo &a)
   int py = a.prevy;
   int nx = a.x;
   int ny = a.y;
+  int samples = 1; //If we're testing default to 1 sample
   GLfloat tempx, tempy;
   GLfloat prevx, prevy;
   GLfloat newx, newy;
-#ifndef TESTING //if we end up here while running catch tests, block out the invalid pointer (Other errors will occur)
-  int samples = gameptr->getAniSpeed();
-  if (a.id < 0)  //check if we need speed for a tank or projectile
-    TimerEvent::idle_speed = gameptr->getbullet_speed();
-  else
-    TimerEvent::idle_speed = gameptr->gettank_speed();
-#endif
+  if (gameptr != nullptr){//if we end up here while running catch tests, block out the invalid pointer (Other errors will occur)
+    int samples = gameptr->getAniSpeed();
+  
+    if (a.id < 0)  //check if we need speed for a tank or projectile
+      TimerEvent::idle_speed = gameptr->getbullet_speed();
+    else
+      TimerEvent::idle_speed = gameptr->gettank_speed();
+  }
   switch(a.heading) //get our heading and loop through drawing samples
   {
     case UP:
@@ -421,9 +423,9 @@ void GameField::animateMove(ActorInfo &a)
   a.offsetx = 0;
   a.prevx = a.x; //Save new previous values
   a.prevy = a.y;
-#ifndef TESTING
-  TimerEvent::idle_speed = gameptr->getAISpeed(); //fix idle speed
-#endif
+  if (gameptr != nullptr){//Skip during testing
+   TimerEvent::idle_speed = gameptr->getAISpeed(); //fix idle speed
+  }
 }
 
 /**
@@ -651,19 +653,19 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
   }
   a.health -= hit;
   checkHealth(a, hitObj);
-#ifndef TESTING //Skip animating if we're not displaying the game
-  if(!redraw && !hitObj){ //If we didn't hit an object and we don't need to force a redraw (Does not update map)
-    animateMove(a);
+  if (gameptr != nullptr){//Skip animating if we're not displaying the game
+    if(!redraw && !hitObj){ //If we didn't hit an object and we don't need to force a redraw (Does not update map)
+      animateMove(a);
+    }
+    if(hitObj || redraw){ //If either condition is true, animate 
+      animateMove(a);
+      updateMap(); //Update actors and map
+      //printf("Currently %d number of explosions.\n",SFX.size());
+      if (gameptr != nullptr) //redraw screen
+        displayCallback(fieldMap, actors, gameptr->turn);
+      SFX.clear(); //Clear the explosions
+    } 
   }
-  if(hitObj || redraw){ //If either condition is true, animate 
-    animateMove(a);
-    updateMap(); //Update actors and map
-    //printf("Currently %d number of explosions.\n",SFX.size());
-    if (gameptr != nullptr) //redraw screen
-      displayCallback(fieldMap, actors, gameptr->turn);
-    SFX.clear(); //Clear the explosions
-  }
-#endif
   
 }
 /***********************************************************************//*

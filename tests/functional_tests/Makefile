@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -std=c++11 -DTESTING 
+CXXFLAGS = -g -std=c++11 -DTESTING -fPIC 
 INCS = -I./ -I../../src/ -I../src 
 #TEST_FILES = ../src/catch.hpp
 

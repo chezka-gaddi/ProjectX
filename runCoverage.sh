@@ -9,15 +9,15 @@ echo "Running ./covTanks to create gco files"
 ./platform -coverage
 
 echo ""
-echo "Ceating gcda files"
-gcov src/*.gcno
+echo "Creating gcno files"
+#find . -type f -name '*.gcno' -exec gcov {} +
 
 lcov --no-external --capture --initial --directory src --output-file coverage/platform_base.info
-find src -type f -name '*.gc*' -exec rm {} +
+find . -type f -name '*.gcda' -exec rm {} +
 
-#echo ""
-#echo "Running gprof for timing"
-#gprof ./platform > gprofresults.txt
+echo ""
+echo "Running gprof for timing"
+gprof ./platform > coverage/gprofresults.txt
 
 echo "Creating test files"
 make tests PROFILE="-pg -fprofile-arcs -ftest-coverage"
@@ -26,25 +26,24 @@ echo "Running Unit Test files"
 ./testUnitAll
 
 echo ""
-echo "Creating gcda files"
-gcov src/*.gcno
+echo "Creating gcno files"
+#find . -type f -name '*.gcno' -exec gcov {} +
 
-lcov --no-external --capture --initial --directory src --output-file coverage/platform_unit.info
-find src -type f -name '*.gc*' -exec rm {} +
+lcov --no-external --capture --directory . --output-file coverage/platform_unit.info
+find . -type f -name '*.gcda' -exec rm {} +
 
 echo ""
 echo "Running Functional Test files"
 ./testFunctionalAll
 
 echo ""
-echo "Ceating gcda files"
-gcov src/*.gcno
+echo "Ceating gcno files"
+#find . -type f -name '*.gcno' -exec gcov {} +
 
-lcov --no-external --capture --initial --directory src --output-file coverage/platform_functional.info
-find src -type f -name '*.gc*' -exec rm {} +
+lcov --no-external --capture --directory . --output-file coverage/platform_functional.info
 
 echo ""
-echo "Creating report with lcov"
+echo "Creating HTML report with lcov"
 #lcov --no-external --directory src/ --capture --output-file coverage/coverage.info
 lcov --no-external --add-tracefile coverage/platform_base.info \
         --add-tracefile coverage/platform_unit.info \
