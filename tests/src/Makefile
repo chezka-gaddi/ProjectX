@@ -1,24 +1,40 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -DTESTING -fPIC
-INCS = -I../../src/ 
-LIBS = -ldl
+INCS = -I./ -I../../src/ -I../src 
+LIBS += -ldl -lglut -lGL -lGLU -lpthread
+LIBS += -L../../libraries -lSOIL
 SOFLAGS = -DDYNAMIC
 
 #TEST_FILES = catch.hpp
 TEST_FILES = main.o
 TEST_FILES += GameFeildTests.o
-TEST_FILES += ../../src/GameField.o
-TEST_FILES += ../../src/MapData.o
-FILES = ../../src/Actor.o
-FILES += ../../src/SimpleAI.o
-FILES += ../../src/DynamicLoader.o
-TEST_FILES += ../../src/ActorInfo.o
-TEST_FILES += ../../src/ProjectileActor.o
-TEST_FILES += ../../src/SimpleActor.o
 TEST_FILES += SimpleActorTests.o
 TEST_FILES += SimpleAITests.o
-
 TEST_FILES += DynamicLoaderTests.o
+
+SRC_PATH=../../src/
+
+FILES += $(SRC_PATH)GameField.cpp
+FILES += $(SRC_PATH)Actor.cpp
+FILES += $(SRC_PATH)MapData.cpp
+FILES += $(SRC_PATH)ProjectileActor.cpp
+FILES += $(SRC_PATH)ActorInfo.cpp
+FILES += $(SRC_PATH)Texture.cpp
+FILES += $(SRC_PATH)event.cpp
+FILES += $(SRC_PATH)util.cpp
+FILES += $(SRC_PATH)TankDrawable.cpp
+FILES += $(SRC_PATH)GameFieldDrawable.cpp
+FILES += $(SRC_PATH)Projectile.cpp
+FILES += $(SRC_PATH)Obstacles.cpp
+FILES += $(SRC_PATH)game.cpp
+FILES += $(SRC_PATH)callbacks.cpp
+FILES += $(SRC_PATH)DynamicLoader.cpp
+FILES += $(SRC_PATH)Menu.cpp
+FILES += $(SRC_PATH)sfxDrawable.cpp
+FILES += $(SRC_PATH)Crate.cpp
+FILES += $(SRC_PATH)SimpleAI.cpp
+FILES += $(SRC_PATH)SimpleActor.cpp
+
 
 TANK_PATH= ./tanks/
 TANKS = ../../src/SimpleAI.so
@@ -32,9 +48,9 @@ TANKS_LINK = ../../src/Actor.o #need to link in the base class for the .so to ha
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $? -o $@ $(INCS)
 
-testAll: $(FILES) $(TEST_FILES)
+testAll: $(FILES:.cpp=.o) $(TEST_FILES)
 	+make tanks
-	$(CXX) $(CXXFLAGS) $(INCS) -o testAll $(FILES) $(TEST_FILES) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) -o testUnitAll $(FILES:.cpp=.o) $(TEST_FILES) $(LIBS)
 
 tanks:	$(TANKS)
 	mkdir -p $(TANK_PATH)

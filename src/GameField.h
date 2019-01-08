@@ -57,6 +57,8 @@ protected:
     bool checkHealth(ActorInfo &a, bool object = true);
     void animateMove(ActorInfo &a);
     Game *gameptr = nullptr;
+    //helper functions
+    void checkObjectRegrowth();
 
 public:
     void setSPECIAL(int points, const attributes baseStats);

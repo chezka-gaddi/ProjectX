@@ -976,25 +976,7 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
  * Object regrowth is checked at the beginning of the turn phase.
  * AI's are culled at the end of the turn phase.
  */
-
-void GameField::nextTurn()
-{
-  if(gameptr != nullptr){
-    ++gameptr->turn;
-    ++turnCount;
-  }
-
-  direction atk;
-  ActorInfo newProjectile;
-  PositionData pos;
-  int action;
-  int act_ap;
-  int tSize, tId;
-  int j = 0;
-  bool grow = false;
-  MapData fog_of_war = fieldMap;
-  //printf("Turn number: %d\n",turnCount);
-#ifndef TESTING  //Prevent testing from trying to access the unset pointer
+void GameField::checkObjectRegrowth(){
   for(Obstacles* t : gameptr->trees)
   {
     if(t->health <= 0)
@@ -1023,26 +1005,54 @@ void GameField::nextTurn()
         addObstacle(b->gridx, b->gridy, 'B');
     }
   }
-#endif
+}
+
+/**
+ * @author David Donahue
+ * @author Jon McKee (modified by)
+ * @par Description:
+ * Executes the move and attack phase of each AI's turn and increments the turn counter.
+ * Object regrowth is checked at the beginning of the turn phase.
+ * AI's are culled at the end of the turn phase.
+ */
+
+void GameField::nextTurn()
+{
+  if(gameptr != nullptr){
+    ++gameptr->turn;
+    ++turnCount;
+  }
+
+  direction atk;
+  ActorInfo newProjectile;
+  PositionData pos;
+  int action;
+  int act_ap;
+  int tSize, tId;
+  int j = 0;
+  bool grow = false;
+  MapData fog_of_war = fieldMap;
+  //printf("Turn number: %d\n",turnCount);
+  if (gameptr != nullptr){
+    checkObjectRegrowth();
+  }
   for(int i = 0; i < actors.size(); ++i)
   {
     act_ap = actors[i].AP;
-#ifndef TESTING //Prevent testing from trying to access the unset pointer
-    if(actors[i].id > 0 && actors[i].health > 0)
+    if(actors[i].id > 0 && actors[i].health > 0 && gameptr != nullptr)
       gameptr->actTurn = actors[i].id;
-#endif
     updateMap();  //Give each actor a fresh map
     if(gameptr != nullptr)  
       displayCallback(fieldMap, actors, gameptr->turn);
     SFX.clear();
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
-#ifndef TESTING
       actors[i].cDetect++;
-      gameptr->modCounter++; 
-      if(gameptr->modCounter > 7)
-        gameptr->modCounter = 0;
-#endif
+      if (gameptr != nullptr){
+        gameptr->modCounter++; 
+        if(gameptr->modCounter > 7)
+          gameptr->modCounter = 0;
+      }
       updateMap();
       fog_of_war = fieldMap;
       create_fog_of_war(fog_of_war, actors[i]);

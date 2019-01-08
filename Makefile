@@ -76,6 +76,10 @@ clean-all: clean-lib
 	@rm -rf $(TANK_PATH)*
 	@rm -rf coverage
 
+clean-tests: clean-all
+	@rm testUnitAll
+	@rm testFunctionalAll
+
 dev: clean-lib
 	make gen-library -j8
 
@@ -116,3 +120,13 @@ push-to-git: clean-lib
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 4.00"
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc status
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release
+
+tests: testUnitAll testFunctionalAll
+	mv tests/src/testUnitAll .
+	mv tests/functional_tests/testFunctionalAll .
+
+testUnitAll:
+	make -C tests/src
+
+testFunctionalAll: tanks/SimpleActor.so tanks/SimpleAI.so
+	make -C tests/functional_tests
