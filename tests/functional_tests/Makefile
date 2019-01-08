@@ -3,6 +3,8 @@ CXXFLAGS = -g -std=c++11 -DTESTING
 INCS = -I./ -I../../src/ -I../src 
 #TEST_FILES = ../src/catch.hpp
 
+PROFILE ?=
+
 TEST_FILES = main.o
 TEST_FILES += movement_tests.o
 TEST_FILES += projectile_functional_tests.o
@@ -33,10 +35,10 @@ FILES += $(SRC_PATH)SimpleActor.cpp
 
 
 %.o : %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
+	$(CXX) $(CXXFLAGS) $(PROFILE) -c $< -o $@ $(INCS)
 
 testAll: $(FILES:.cpp=.o) $(TEST_FILES)
-	$(CXX) $(CXXFLAGS) $(INCS) -o testFunctionalAll $(FILES:.cpp=.o) $(TEST_FILES) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o testFunctionalAll $(FILES:.cpp=.o) $(TEST_FILES) $(LIBS)
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)

@@ -58,6 +58,7 @@ int main(int argc, char **argv)
 {
     const char *dmode = "-demo";
     const char *qmode = "-quiet";
+    const char *cmode = "-coverage";
     
     gameMode mode = ai;
     int height = 727, width = 1000;
@@ -79,6 +80,11 @@ int main(int argc, char **argv)
       {
         printf("quiet mode\n");
         mode = quiet;
+      }
+      if (strcmp(argv[counter], cmode) == 0 && counter + 1 <= argc)
+      {
+        printf("coverage mode\n");
+        mode = coverage;        
       }
       counter++;
     }

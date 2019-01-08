@@ -5,6 +5,8 @@ LIBS += -ldl -lglut -lGL -lGLU -lpthread
 LIBS += -L../../libraries -lSOIL
 SOFLAGS = -DDYNAMIC
 
+PROFILE ?=
+
 #TEST_FILES = catch.hpp
 TEST_FILES = main.o
 TEST_FILES += GameFeildTests.o
@@ -37,20 +39,20 @@ FILES += $(SRC_PATH)SimpleActor.cpp
 
 
 TANK_PATH= ./tanks/
-TANKS = ../../src/SimpleAI.so
-TANKS += ../../src/SimpleActor.so
+TANKS = SimpleAI.so
+TANKS += SimpleActor.so
 
 TANKS_LINK = ../../src/Actor.o #need to link in the base class for the .so to have everything.
 
-%.so: %.cpp
-	$(CXX) $(CXXFLAGS) -shared $? $(TANKS_LINK) -o $@ $(SOFLAGS)
+%.so: ../../src/%.cpp
+	$(CXX) $(CXXFLAGS) $(PROFILE) -shared $? $(TANKS_LINK) -o $@ $(SOFLAGS)
 
 %.o : %.cpp
-	$(CXX) $(CXXFLAGS) -c $? -o $@ $(INCS)
+	$(CXX) $(CXXFLAGS) $(PROFILE) -c $? -o $@ $(INCS)
 
 testAll: $(FILES:.cpp=.o) $(TEST_FILES)
 	+make tanks
-	$(CXX) $(CXXFLAGS) $(INCS) -o testUnitAll $(FILES:.cpp=.o) $(TEST_FILES) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o testUnitAll $(FILES:.cpp=.o) $(TEST_FILES) $(LIBS)
 
 tanks:	$(TANKS)
 	mkdir -p $(TANK_PATH)

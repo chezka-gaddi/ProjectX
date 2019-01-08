@@ -281,8 +281,8 @@ void GameField::animateMove(ActorInfo &a)
   GLfloat tempx, tempy;
   GLfloat prevx, prevy;
   GLfloat newx, newy;
-  int samples = gameptr->getAniSpeed();
 #ifndef TESTING //if we end up here while running catch tests, block out the invalid pointer (Other errors will occur)
+  int samples = gameptr->getAniSpeed();
   if (a.id < 0)  //check if we need speed for a tank or projectile
     TimerEvent::idle_speed = gameptr->getbullet_speed();
   else
