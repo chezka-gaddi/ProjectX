@@ -278,16 +278,18 @@ void GameField::animateMove(ActorInfo &a)
   int py = a.prevy;
   int nx = a.x;
   int ny = a.y;
+  int samples = 1; //If we're testing default to 1 sample
   GLfloat tempx, tempy;
   GLfloat prevx, prevy;
   GLfloat newx, newy;
-  int samples = gameptr->getAniSpeed();
-#ifndef TESTING //if we end up here while running catch tests, block out the invalid pointer (Other errors will occur)
-  if (a.id < 0)  //check if we need speed for a tank or projectile
-    TimerEvent::idle_speed = gameptr->getbullet_speed();
-  else
-    TimerEvent::idle_speed = gameptr->gettank_speed();
-#endif
+  if (gameptr != nullptr){//if we end up here while running catch tests, block out the invalid pointer (Other errors will occur)
+    int samples = gameptr->getAniSpeed();
+  
+    if (a.id < 0)  //check if we need speed for a tank or projectile
+      TimerEvent::idle_speed = gameptr->getbullet_speed();
+    else
+      TimerEvent::idle_speed = gameptr->gettank_speed();
+  }
   switch(a.heading) //get our heading and loop through drawing samples
   {
     case UP:
@@ -421,9 +423,9 @@ void GameField::animateMove(ActorInfo &a)
   a.offsetx = 0;
   a.prevx = a.x; //Save new previous values
   a.prevy = a.y;
-#ifndef TESTING
-  TimerEvent::idle_speed = gameptr->getAISpeed(); //fix idle speed
-#endif
+  if (gameptr != nullptr){//Skip during testing
+   TimerEvent::idle_speed = gameptr->getAISpeed(); //fix idle speed
+  }
 }
 
 /**
@@ -651,19 +653,19 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
   }
   a.health -= hit;
   checkHealth(a, hitObj);
-#ifndef TESTING //Skip animating if we're not displaying the game
-  if(!redraw && !hitObj){ //If we didn't hit an object and we don't need to force a redraw (Does not update map)
-    animateMove(a);
+  if (gameptr != nullptr){//Skip animating if we're not displaying the game
+    if(!redraw && !hitObj){ //If we didn't hit an object and we don't need to force a redraw (Does not update map)
+      animateMove(a);
+    }
+    if(hitObj || redraw){ //If either condition is true, animate 
+      animateMove(a);
+      updateMap(); //Update actors and map
+      //printf("Currently %d number of explosions.\n",SFX.size());
+      if (gameptr != nullptr) //redraw screen
+        displayCallback(fieldMap, actors, gameptr->turn);
+      SFX.clear(); //Clear the explosions
+    } 
   }
-  if(hitObj || redraw){ //If either condition is true, animate 
-    animateMove(a);
-    updateMap(); //Update actors and map
-    //printf("Currently %d number of explosions.\n",SFX.size());
-    if (gameptr != nullptr) //redraw screen
-      displayCallback(fieldMap, actors, gameptr->turn);
-    SFX.clear(); //Clear the explosions
-  }
-#endif
   
 }
 /***********************************************************************//*
@@ -976,25 +978,7 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
  * Object regrowth is checked at the beginning of the turn phase.
  * AI's are culled at the end of the turn phase.
  */
-
-void GameField::nextTurn()
-{
-  if(gameptr != nullptr){
-    ++gameptr->turn;
-    ++turnCount;
-  }
-
-  direction atk;
-  ActorInfo newProjectile;
-  PositionData pos;
-  int action;
-  int act_ap;
-  int tSize, tId;
-  int j = 0;
-  bool grow = false;
-  MapData fog_of_war = fieldMap;
-  //printf("Turn number: %d\n",turnCount);
-#ifndef TESTING  //Prevent testing from trying to access the unset pointer
+void GameField::checkObjectRegrowth(){
   for(Obstacles* t : gameptr->trees)
   {
     if(t->health <= 0)
@@ -1023,26 +1007,54 @@ void GameField::nextTurn()
         addObstacle(b->gridx, b->gridy, 'B');
     }
   }
-#endif
+}
+
+/**
+ * @author David Donahue
+ * @author Jon McKee (modified by)
+ * @par Description:
+ * Executes the move and attack phase of each AI's turn and increments the turn counter.
+ * Object regrowth is checked at the beginning of the turn phase.
+ * AI's are culled at the end of the turn phase.
+ */
+
+void GameField::nextTurn()
+{
+  if(gameptr != nullptr){
+    ++gameptr->turn;
+    ++turnCount;
+  }
+
+  direction atk;
+  ActorInfo newProjectile;
+  PositionData pos;
+  int action;
+  int act_ap;
+  int tSize, tId;
+  int j = 0;
+  bool grow = false;
+  MapData fog_of_war = fieldMap;
+  //printf("Turn number: %d\n",turnCount);
+  if (gameptr != nullptr){
+    checkObjectRegrowth();
+  }
   for(int i = 0; i < actors.size(); ++i)
   {
     act_ap = actors[i].AP;
-#ifndef TESTING //Prevent testing from trying to access the unset pointer
-    if(actors[i].id > 0 && actors[i].health > 0)
+    if(actors[i].id > 0 && actors[i].health > 0 && gameptr != nullptr)
       gameptr->actTurn = actors[i].id;
-#endif
     updateMap();  //Give each actor a fresh map
     if(gameptr != nullptr)  
       displayCallback(fieldMap, actors, gameptr->turn);
     SFX.clear();
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
-#ifndef TESTING
       actors[i].cDetect++;
-      gameptr->modCounter++; 
-      if(gameptr->modCounter > 7)
-        gameptr->modCounter = 0;
-#endif
+      if (gameptr != nullptr){
+        gameptr->modCounter++; 
+        if(gameptr->modCounter > 7)
+          gameptr->modCounter = 0;
+      }
       updateMap();
       fog_of_war = fieldMap;
       create_fog_of_war(fog_of_war, actors[i]);

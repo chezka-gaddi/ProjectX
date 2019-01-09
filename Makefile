@@ -1,13 +1,11 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -fPIC
-CXXFLAGS += -g
-#PROFILE = -pg
-#PROFILE += -fprofile-arcs -ftest-coverage
+CXXFLAGS = -g -std=c++11 -fPIC
 INCS = -I./ -Isrc/
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
 LIBS += -lSOIL -Llibraries
 SOFLAGS = -DDYNAMIC
+PROFILE ?=
 
 SRC_PATH= src/
 TANK_PATH= tanks/
@@ -44,8 +42,14 @@ TANKS += $(SRC_PATH)AttackDownAI.cpp
 
 TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
 
-platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
+platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so) 
+	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
+
+coverage: set-coverage $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o platform $(FILES:.cpp=.o) $(LIBS)
+
+set-coverage:
+	$(eval PROFILE:=-pg -fprofile-arcs -ftest-coverage)
 
 tanksdir:
 	@mkdir -p tanks
@@ -69,12 +73,18 @@ clean:
 	@rm -rf gmon.out
 
 clean-lib: clean
-	rm -rf buildsrc
-	rm -rf libraries/libCTF.so
+	@rm -rf buildsrc
+	@rm -rf libraries/libCTF.so
 
 clean-all: clean-lib
 	@rm -rf $(TANK_PATH)*
 	@rm -rf coverage
+
+clean-tests: clean-all
+	@rm -rf testUnitAll
+	@rm -rf testFunctionalAll
+	@make clean -C tests/src
+	@make clean -C tests/functional_tests
 
 dev: clean-lib
 	make gen-library -j8
@@ -116,3 +126,13 @@ push-to-git: clean-lib
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 4.00"
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc status
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release
+
+tests: $(TANKS:src/%.cpp=tanks/%.so) testUnitAll testFunctionalAll
+
+testUnitAll:
+	+make PROFILE="$(PROFILE)" -C tests/src
+	mv tests/src/testUnitAll .
+
+testFunctionalAll: tanks/SimpleActor.so tanks/SimpleAI.so
+	+make PROFILE="$(PROFILE)" -C tests/functional_tests
+	mv tests/functional_tests/testFunctionalAll .

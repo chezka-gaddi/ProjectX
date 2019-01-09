@@ -458,7 +458,7 @@ int TimerEvent::idle_speed = 750;
 void Game::initGameState()
 {
 
-  if(g_mode != quiet)
+  if(g_mode == ai)
     std::cout << "Game::Loading config.txt\n";
   ifstream fin("config.txt");
   std::string configLine;
@@ -510,7 +510,7 @@ void Game::initGameState()
     {
       if(configLine == "MAP")
       {
-        if (g_mode != quiet)
+        if (g_mode == ai)
                 cout << "Building the map...\n";
         if(height < 9)
         {
@@ -535,13 +535,13 @@ void Game::initGameState()
         for(y; y < height - hPad; y++)
         {
           if(y == height/3)
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "  Planting trees...\n";
           else if(y == height/3*2)
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "  Moving rocks...\n";
           else if(y == height-1)
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "  Trimming bushes...\n";
           getline(fin, configLine);
           //cout << configLine << endl;
@@ -608,9 +608,9 @@ void Game::initGameState()
         if(id == "AI")  //AI to load
         {
           if(AINames.size() == 0)
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "Waking up the tank commanders...\n";
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "   Checking player " << AINames.size()+1 << "...";
           int x, y;
           i = args.find(' ');
@@ -629,13 +629,13 @@ void Game::initGameState()
               }
             }
           }
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "  finding spawn...";
           i = args.find(' ', i+1);    //skip x
           i = args.find(' ', i+1);    //skip y
 
           args = args.substr(i+1);
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "  colorizing tank...";
 
           for(int x = 0; x < 5; x++)
@@ -658,160 +658,160 @@ void Game::initGameState()
             tankImages.insert(std::end(tankImages), std::begin(AIImages), std::end(AIImages));
           }
           AIImages.clear();
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "  ...done.\n";
         }
         else if(id == "AI_SPEED")
         {
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "Speeding up the AI's...  \n";
           stringstream(args) >> ai_speed;
           if(ai_speed > 1500)
           {
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "Speeds above 1500 are extremely slow, defaulting at 1500\n";
             ai_speed = 1500;
           }else if (ai_speed < 1){
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "AI Speed of 0 introduces an uneccessary delay, defaulting to 1\n";
             ai_speed = 1;
           }
           TimerEvent::idle_speed = ai_speed;
           idle_speed = ai_speed;
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "   ...done.\n";
         }
         else if(id == "ANIMATION_SPEED")
         {
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "Slowing down time...  \n";
           stringstream(args) >> aniSpeed;
           if(aniSpeed > 30)
           {
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "Speeds above 30 are slow, defaulting to 30\n";
             aniSpeed = 30;
           }else if (aniSpeed < 0){
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "Speed below 0 are now allowed, defaulting to 0\n";
             aniSpeed = 0;
           }
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "   ...done.\n";
         }
         else if(id == "TANK_SPEED")
         {
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "Greasing the wheels...  \n";
           stringstream(args) >> tank_speed;
           if(tank_speed > 800)
           {
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "Tank speeds above 800 are extremely slow, defaulting to 800\n";
             tank_speed = 800;
           }else if (tank_speed < 0){
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "Tank speed below 0 are now allowed, defaulting to 0\n";
             tank_speed = 0;
           }
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "   ...done.\n";
         }
         else if(id == "BULLET_SPEED")
         {
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "Putting helium in the bullets...  \n";
           stringstream(args) >> bullet_speed;
           if(bullet_speed > 100)
           {
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "Bullet speeds above 100 are extremely slow, defaulting to 100\n";
           bullet_speed = 100;
           }else if (bullet_speed < 0){
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "Bullet speeds below 0 are now allowed, defaulting to 0\n";
             aniSpeed = 0;
           }
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "   ...done.\n";
         }
         //field params
         else if(id == "WIDTH")
         {
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "S t r e t c h i n g   t h e   m a p . . .  ";
           stringstream(args) >> width;
           if(width < 5)
           {
             width < 5;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("\nInvalid width parameter, defaulting to %d.\n", width);
           }
           else if(width > 50)
           {
             width = 50;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "\nWidth parameter too high, defaulting to 50.\n";
           }
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "...done.\n";
         }
         else if(id == "HEIGHT")
         {
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "Elon\n    gati\n        ng t\n            he ma\n                p...  ";
           stringstream(args) >> height;
           if(height < 5)
           {
             height = 5;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("Invalid height parameter, defaulting to %d.\n", height);
           }
           else if(height > 21)
           {
             height = 21;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "Height parameter too high, defaulting to 21.\n";
           }
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "\n                                                                   ...done.\n";
         }
         else if(id == "MAXTURNS")
         {
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "Reducing camping spots...\n";
           stringstream(args) >> maxT;
           if(maxT < 1)
           {
             maxT = 1;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "Invalid max_turn parameter, defaulting to 1.\n";
           }
           else if(maxT > 1000)
           {
             maxT = 1000;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               cout << "Max turns set too high, defaulting to 1000.\n";
           }
           max_turns = maxT;
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "   ...done.\n";
         }
         else if(id == "DISABLEGUI")
         {
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "Hiding Everything\n";
           ui = false;
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "   ...done.\n";
         }
         else if(id == "FIELDIMAGE")
         {
-          if (g_mode != quiet)
+          if (g_mode == ai)
             cout << "Painting the background...\n";
           stringstream(args) >> name;
           gameImages.push_back(name);
-          if(g_mode != quiet)
+          if(g_mode == ai)
             cout << "   ...done\n";
         }
         else if(id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH" || id == "CRATE" || id =="WATER")
@@ -819,7 +819,7 @@ void Game::initGameState()
           stringstream(args) >> x >> y;
           if(x > width - 1 || x < 0 || y > height - 1 || y < 0)
           {
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("Invalid obstacle location: (%d, %d). Ranges: (0-%d, 0-%d)\n", x, y, width-1, height-1);
           }
           else
@@ -829,7 +829,7 @@ void Game::initGameState()
               if(tankLocations[i].first == x && tankLocations[i].second == y)
               {
                 taken = true;
-                if (g_mode != quiet)
+                if (g_mode == ai)
                   printf("Invalid obstacle location: (%d, %d) aleady taken by tank\n", x, y);
               }
             }
@@ -840,7 +840,7 @@ void Game::initGameState()
                 if(obstacleLocations[i].first == x && obstacleLocations[i].second == y)
                 {
                   taken = true;
-                  if (g_mode != quiet)
+                  if (g_mode == ai)
                     printf("Invalid obstacle location: (%d, %d) aleady taken by object\n", x, y);
                 }
               }
@@ -973,12 +973,12 @@ void Game::initGameState()
           if(damage < 0)
           {
             damage = 0;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("Invalid damage value, defaulting to %d\n", damage);
           }
           else if(damage > 8)
           {
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("%d damage might be a little excesive, setting to 10\n", damage);
             damage = 8;
           }
@@ -989,12 +989,12 @@ void Game::initGameState()
           if(health < 0)
           {
             health = 0;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("Invalid health value, defaulting to %d\n", health);
           }
           else if(health > 8)
           {
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("%d health might be a little excesive, setting to 8\n", health);
             health = 8;
           }
@@ -1005,12 +1005,12 @@ void Game::initGameState()
           if(ap < 0)
           {
             ap = 0;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("Invalid number of action points value, defaulting to %d\n", ap);
           }
           else if(ap > 6)
           {
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("%d range might be a little excesive, setting to 6\n", ap);
             ap = 6;
           }
@@ -1021,12 +1021,12 @@ void Game::initGameState()
           if(radar < 0)
           {
             radar = 0;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("Invalid radar value, defaulting to %d\n", radar );
           }
           else if(radar > width)
           {
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("%d radar might be a little excesive, setting to %d\n", radar, width);
             radar = width;
           }
@@ -1037,12 +1037,12 @@ void Game::initGameState()
           if(range < 0)
           {
             range = 0;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("Invalid range value, defaulting to %d\n", range);
           }
           else if(range > 10)
           {
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("%d range might be a little excesive, setting to %d\n", range, 10);
             range = 10;
           }
@@ -1053,12 +1053,12 @@ void Game::initGameState()
           if(attributePoints < 0)
           {
             attributePoints = 0;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("Invalid special value, defaulting to %d\n", attributePoints);
           }
           else if(attributePoints > 20)
           {
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("%d specials might be a little excesive, setting to 20.\n", attributePoints);
             attributePoints = 20;
           }
@@ -1069,19 +1069,19 @@ void Game::initGameState()
           if(ammo < 0)
           {
             ammo = 0;
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("Invalid ammo amount, defaulting to %d\n", ammo);
           }
           else if(ammo > 10)
           {
-            if (g_mode != quiet)
+            if (g_mode == ai)
               printf("%d ammo might be a little excesive, setting to 10.\n", ammo);
             ammo = 10;
           }
         }
         else if(id != "")
         {
-          if (g_mode != quiet)
+          if (g_mode == ai)
             std::cout << "BAD ARGUMENT: " << id << '\n';
         }
 
@@ -1097,17 +1097,17 @@ void Game::initGameState()
 
   glEnable(GL_TEXTURE_2D);
   if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages, waterImages,g_mode == quiet))
-    if (g_mode != quiet)
+    if (g_mode == ai)
       cout << "Failed to open image(s).\n" << endl;
   glDisable(GL_TEXTURE_2D);
 
-  if (g_mode != quiet)
+  if (g_mode == ai)
     cout << "Loading Shared Objects...\n";
   std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
 
   std::vector<ActorInfo> startActors;
 
-  if (g_mode != quiet)
+  if (g_mode == ai)
     cout << "Creating Player Tanks...\n";
   for(int i = 0; i < startActorPointers.size(); ++i)
   {
@@ -1129,13 +1129,13 @@ void Game::initGameState()
                                     , AINames[i]));
     //printf("Actor %d name: %s\n", i, AINames[i].c_str());
     }else{
-      if (g_mode != quiet)
+      if (g_mode == ai)
         cout << "Invalid location for " << AINames[i] << endl;
     }
   }
   int count = 0;
 
-  if (g_mode != quiet)
+  if (g_mode == ai)
     cout << "Finalizing game settings...\n";
   //printf("Height: %d  Width: %d\n",height, width);
   tankGame = new GameField(width, height, startActors, displayWrapper, this);
@@ -1147,11 +1147,11 @@ void Game::initGameState()
   baseStats.tankRange = range;
 
   tankGame->setSPECIAL(attributePoints, baseStats);
-  if (g_mode != quiet)
+  if (g_mode == ai)
     cout << "   ...Done\n" << endl;
 
 // Add obstacles to the gamefield
-  if (g_mode != quiet)
+  if (g_mode == ai)
     cout << "Placing Obstacles...\n";
   for(auto o : obstacleLocations)
   {
@@ -1160,7 +1160,7 @@ void Game::initGameState()
     {
       if(tank.first == o.first && tank.second == o.second){
         taken = true;
-      if (g_mode != quiet)
+      if (g_mode == ai)
         printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
       }
     }
@@ -1172,7 +1172,7 @@ void Game::initGameState()
       constants.push_back(tempOb);
     }
   }
-  if (g_mode != quiet)
+  if (g_mode == ai)
     cout << "  ...hiding the ammo\n";
   for(auto c : specialLocations)
   {
@@ -1181,7 +1181,7 @@ void Game::initGameState()
     {
       if(tank.first == c.first && tank.second == c.second){
         taken = true;
-        if (g_mode != quiet)
+        if (g_mode == ai)
           printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
       }
     }
@@ -1193,7 +1193,7 @@ void Game::initGameState()
     specials.push_back(temp);
     }
   }
-  if (g_mode != quiet)
+  if (g_mode == ai)
     cout << "  ...letting the trees grow\n";
   for(auto t : treeLocations)
   {
@@ -1201,7 +1201,7 @@ void Game::initGameState()
     tempOb = new Obstacles(0, convertGLXCoordinate(t.first), convertGLYCoordinate(t.second), t.first, t.second);
     trees.push_back(tempOb);
   }
-  if (g_mode != quiet)
+  if (g_mode == ai)
     cout << "  ...petting the rocks\n";
   for(auto r : rockLocations)
   {
@@ -1210,7 +1210,7 @@ void Game::initGameState()
     {
       if(tank.first == r.first && tank.second == r.second){
         taken = true;
-      if (g_mode != quiet)
+      if (g_mode == ai)
         printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
       }
     }
@@ -1222,7 +1222,7 @@ void Game::initGameState()
     rocks.push_back(tempOb);
     }
   }
-  if (g_mode != quiet)
+  if (g_mode == ai)
     cout << "  ...finding some shrubberies\n";
   for(auto b : bushLocations)
   {
@@ -1230,7 +1230,7 @@ void Game::initGameState()
     tempOb = new Obstacles(2, convertGLXCoordinate(b.first), convertGLYCoordinate(b.second), b.first, b.second);
     bushes.push_back(tempOb);
   }
-  if (g_mode != quiet)
+  if (g_mode == ai)
     cout << "  ...drilling for moisture\n";
   for(auto w : waterLocations)
   {
@@ -1250,8 +1250,15 @@ void Game::initGameState()
     waters.push_back(temp);
     }
   }
-  if (g_mode != quiet)
+  if (g_mode == ai)
     cout << "...done.\n" << endl;
+  if (g_mode == coverage){
+    cout << "Turning on coverage mode." << endl;
+    idle_speed = 1;
+    aniSpeed=1;
+    tank_speed=1;
+    bullet_speed=1;
+  }
 }
 /***************************************************************************//**
  * @author Jon McKee

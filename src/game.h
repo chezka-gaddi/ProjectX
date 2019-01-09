@@ -26,7 +26,7 @@ using namespace std;
 
 
 /*!<Enum class for the gameMode */
-enum gameMode {none, ai, sp, mp, quiet};
+enum gameMode {none, ai, sp, mp, quiet, coverage};
 
 
 /***************************************************************************//**
