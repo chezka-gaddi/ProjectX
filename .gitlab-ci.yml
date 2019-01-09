@@ -8,6 +8,7 @@ stages:
    - build
    - test
    - test_FT
+   - coverage
 
 build:
    stage: build
