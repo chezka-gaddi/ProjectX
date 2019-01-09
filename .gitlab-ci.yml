@@ -24,7 +24,7 @@ test:
       - cd tests/src
       - echo "Running tests"
       - make -j3
-      - ./testAll -d yes
+      - ./testUnitAll -d yes
 
 
 test_FT:
@@ -35,4 +35,4 @@ test_FT:
       - cd tests/functional_tests/
       - g++ -I../src/ --std=c++11 -c main.cpp 
       - make -j3
-      - ./testAll  -d yes
+      - ./testFunctionalAll -d yes
