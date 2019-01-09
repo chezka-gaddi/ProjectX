@@ -1,6 +1,19 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Release 6.05
+##  Changes
+  - Renamed README.md to changelog.md
+  - Added -coverage option to command line.  This will set all speed values to 1 for a fast playing game.
+  - runCoverage.sh will now actually perform coverage testing on the game files using tests in the  tests (src/functional) folder.
+  - Changed testing binary names to reflect style of tests.
+  - Additional make options added:  
+    - make tests - creates the testing binaries in the main program folder
+    - make clean-tests - cleans up testing
+# FIXES
+  - Fixed problem with CI script looking for old testing binary names.
+  - Fixed problem with tanks folder not being created on a fresh pull and make.
+
 ## Release 6.03
 ##  Changes
   - Added -quiet command line option to remove a lot of output text

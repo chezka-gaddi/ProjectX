@@ -20,7 +20,7 @@ echo "Running gprof for timing"
 gprof ./platform > coverage/gprofresults.txt
 
 echo "Creating test files"
-make tests PROFILE="-pg -fprofile-arcs -ftest-coverage"
+make tests PROFILE="-pg -fprofile-arcs -ftest-coverage" -j8
 
 echo "Running Unit Test files"
 ./testUnitAll

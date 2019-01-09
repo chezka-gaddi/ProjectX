@@ -51,9 +51,6 @@ coverage: set-coverage $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 set-coverage:
 	$(eval PROFILE:=-pg -fprofile-arcs -ftest-coverage)
 
-tanksdir:
-	@mkdir -p tanks
-
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(PROFILE) -c $? -o $@ 
 
@@ -61,6 +58,7 @@ tanksdir:
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
 tanks/%.so: src/%.cpp ./src/Actor.o
+	@mkdir -p tanks
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
 tanks: $(TANKS:%.cpp=%.so)
