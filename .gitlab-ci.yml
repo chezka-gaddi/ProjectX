@@ -44,3 +44,6 @@ coverage:
       - ubuntu16.04
    script:
       - ./runCoverage.sh
+   artifacts:
+      paths:
+        - coverage/
