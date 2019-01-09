@@ -36,3 +36,10 @@ test_FT:
       - g++ -I../src/ --std=c++11 -c main.cpp 
       - make -j3
       - ./testFunctionalAll -d yes
+
+coverage:
+   stage: coverage
+   tags:
+      - ubuntu16.04
+   script:
+      - ./runCoverage.sh
