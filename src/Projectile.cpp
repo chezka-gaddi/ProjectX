@@ -60,6 +60,9 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, b
     case UPLEFT:
         angle = 135;
         break;
+    case STAY:
+    default:
+        break; //should never reach here but warning without
     }
 
     if (camp == true){

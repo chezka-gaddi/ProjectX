@@ -30,7 +30,7 @@ Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction di
   // 	name[j] = '\0';
   turn = t;
 
-	int i = 0;
+	unsigned int i = 0;
 
 	while(i < nameIn.size() && i < 20)
 	{

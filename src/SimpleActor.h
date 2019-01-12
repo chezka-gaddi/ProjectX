@@ -15,8 +15,8 @@
 
 class SimpleActor : public Actor
 {
-    direction dir;
     direction atk;
+    direction dir;
     
     public:
         virtual direction move(MapData map, PositionData status);

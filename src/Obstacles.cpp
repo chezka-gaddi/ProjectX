@@ -110,7 +110,7 @@ void Obstacles::regrow(int turn, const std::vector<ActorInfo> actor){
     if (tex < 10){ //Its a tree
       health = 3;
     }else if( tex < 20){ //Its a Rocks
-      for (int i = 0; i < actor.size(); i++){
+      for (unsigned int i = 0; i < actor.size(); i++){
             if (actor[i].x == gridx && actor[i].y == gridy)
                     taken = true;
       }

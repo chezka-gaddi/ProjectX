@@ -137,7 +137,6 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   std::string scoreDetails[4] = {"Place:", "Player Number:", "Kills:","Hits:"};
 
   float color[] = {1.0f, 1.0f, 1.0f};
-  float pause;
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
@@ -193,7 +192,7 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     }
 
     int count = 1;
-    int winDex = 0;
+    unsigned int winDex = 0;
     float k = -0.5;
 
     while(winner[winDex].name == "default\n" && winDex < winner.size())
@@ -462,15 +461,15 @@ void Game::initGameState()
     std::cout << "Game::Loading config.txt\n";
   ifstream fin("config.txt");
   std::string configLine;
-  int x=0, y=0, i=0; //Temp Holders
+  unsigned int x=0, y=0; //Temp Holders
   Obstacles* tempOb;
   Drawable *temp = nullptr;
   bool taken, done;
 
   //Game Setting defaults
-  int ai_speed = 750, width = 15, height = 9, maxT = 200, hPad = 0, wPad = 0;
+  unsigned int ai_speed = 750, width = 15, height = 9, maxT = 200, hPad = 0, wPad = 0;
   //Tank Defaults
-  int damage = 1, health = 3, range = 4, radar = 4, ap = 1, ammo = 6;
+  unsigned int damage = 1, health = 3, range = 4, radar = 4, ap = 1, ammo = 6;
   //Default Tank Images
   const std::vector<string> AIDefImg = {"images/Default/tankD_L.png", "images/Default/tankD_D.png",
                                         "images/Default/tankD_R.png","images/Default/tankD_U.png", "images/Default/bulletD.png"
@@ -532,17 +531,18 @@ void Game::initGameState()
           }
         }
         //cout << "Y equals: " << y << endl;
-        for(y; y < height - hPad; y++)
+        for(y=0; y < height - hPad; y++)
         {
-          if(y == height/3)
+          if(y == height/3){
             if (g_mode == ai)
               cout << "  Planting trees...\n";
-          else if(y == height/3*2)
+          }else if(y == height/3*2){
             if (g_mode == ai)
               cout << "  Moving rocks...\n";
-          else if(y == height-1)
+          }else if(y == height-1){
             if (g_mode == ai)
               cout << "  Trimming bushes...\n";
+          }
           getline(fin, configLine);
           //cout << configLine << endl;
           for(x = 0; x < width; x++)
@@ -591,7 +591,7 @@ void Game::initGameState()
           }
         }
         cout << endl;
-        for(y; y < height; y++)
+        for(y = 0; y < height; y++)
         {
           for(x = 0; x < width; x++)
           {
@@ -618,9 +618,9 @@ void Game::initGameState()
           std::stringstream(args.substr(i+1)) >> x >> y;
           //printf("\nTank at: Actual: %d, %d Modified: %d, %d.\n",x, y, x+wPad,y+hPad);
           tankLocations.push_back(std::pair<int,int>(x+wPad,y+hPad));
-          for(int x=0; x < tankLocations.size(); x++)
+          for(unsigned int x=0; x < tankLocations.size(); x++)
           {
-            for(int y = x + 1; y < tankLocations.size(); y++)
+            for(unsigned int y = x + 1; y < tankLocations.size(); y++)
             {
               if(tankLocations.at(x) == tankLocations.at(y))
               {
@@ -719,17 +719,18 @@ void Game::initGameState()
         }
         else if(id == "BULLET_SPEED")
         {
-          if (g_mode == ai)
+          if (g_mode == ai){
             cout << "Putting helium in the bullets...  \n";
+          }
           stringstream(args) >> bullet_speed;
           if(bullet_speed > 100)
           {
-          if (g_mode == ai)
-            cout << "Bullet speeds above 100 are extremely slow, defaulting to 100\n";
-          bullet_speed = 100;
+            if (g_mode == ai)
+              cout << "Bullet speeds above 100 are extremely slow, defaulting to 100\n";
+            bullet_speed = 100;
           }else if (bullet_speed < 0){
-          if (g_mode == ai)
-            cout << "Bullet speeds below 0 are now allowed, defaulting to 0\n";
+            if (g_mode == ai)
+              cout << "Bullet speeds below 0 are now allowed, defaulting to 0\n";
             aniSpeed = 0;
           }
           if (g_mode == ai)
@@ -743,7 +744,7 @@ void Game::initGameState()
           stringstream(args) >> width;
           if(width < 5)
           {
-            width < 5;
+            width = 5;
             if (g_mode == ai)
               printf("\nInvalid width parameter, defaulting to %d.\n", width);
           }
@@ -824,9 +825,9 @@ void Game::initGameState()
           }
           else
           {
-            for(int i = 0; i < tankLocations.size(); i ++)
+            for(unsigned int i = 0; i < tankLocations.size(); i ++)
             {
-              if(tankLocations[i].first == x && tankLocations[i].second == y)
+              if((unsigned int) tankLocations[i].first == x && (unsigned int)tankLocations[i].second == y)
               {
                 taken = true;
                 if (g_mode == ai)
@@ -835,9 +836,9 @@ void Game::initGameState()
             }
             if(!taken)
             {
-              for(int i = 0; i < obstacleLocations.size(); i ++)
+              for(unsigned int i = 0; i < obstacleLocations.size(); i ++)
               {
-                if(obstacleLocations[i].first == x && obstacleLocations[i].second == y)
+                if((unsigned int)obstacleLocations[i].first == x && (unsigned int)obstacleLocations[i].second == y)
                 {
                   taken = true;
                   if (g_mode == ai)
@@ -1109,11 +1110,11 @@ void Game::initGameState()
 
   if (g_mode == ai)
     cout << "Creating Player Tanks...\n";
-  for(int i = 0; i < startActorPointers.size(); ++i)
+  for(unsigned int i = 0; i < startActorPointers.size(); ++i)
   {
-    if ( tankLocations[i].first < width &&
+    if ( (unsigned int)tankLocations[i].first < width &&
          tankLocations[i].first >= 0 &&
-         tankLocations[i].second < height &&
+         (unsigned int)tankLocations[i].second < height &&
          tankLocations[i].second >= 0){
     startActors.push_back(ActorInfo(startActorPointers[i]
                                     , health
@@ -1133,8 +1134,6 @@ void Game::initGameState()
         cout << "Invalid location for " << AINames[i] << endl;
     }
   }
-  int count = 0;
-
   if (g_mode == ai)
     cout << "Finalizing game settings...\n";
   //printf("Height: %d  Width: %d\n",height, width);
