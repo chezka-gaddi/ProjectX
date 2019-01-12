@@ -272,7 +272,7 @@ void GameField::setSPECIAL(int points, const attributes baseStats)
 ************************************************************************/ 
 void GameField::animateMove(ActorInfo &a)
 {
-  if(a.x == a.prevx && a.y == a.prevy || a.prevx == -1 || a.prevy == -1)  //We didn't actually move
+  if(((a.x == a.prevx) && (a.y == a.prevy)) || ((a.prevx == -1) || (a.prevy == -1)))  //We didn't actually move
     return;
   int px = a.prevx;
   int py = a.prevy;
@@ -281,9 +281,8 @@ void GameField::animateMove(ActorInfo &a)
   int samples = 1; //If we're testing default to 1 sample
   GLfloat tempx, tempy;
   GLfloat prevx, prevy;
-  GLfloat newx, newy;
   if (gameptr != nullptr){//if we end up here while running catch tests, block out the invalid pointer (Other errors will occur)
-    int samples = gameptr->getAniSpeed();
+    samples = gameptr->getAniSpeed();
   
     if (a.id < 0)  //check if we need speed for a tank or projectile
       TimerEvent::idle_speed = gameptr->getbullet_speed();
@@ -587,7 +586,7 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
       a.camp = false;
     }
     
-    for(int i = 0; i < actors.size(); ++i)   //check each actor
+    for(unsigned int i = 0; i < actors.size(); ++i)   //check each actor
     {
       if(a.id < 0 && actors[i].id == -a.id){
         a.camp = actors[i].camp;
@@ -1030,15 +1029,14 @@ void GameField::nextTurn()
   PositionData pos;
   int action;
   int act_ap;
-  int tSize, tId;
-  int j = 0;
+  unsigned int j = 0;
   bool grow = false;
   MapData fog_of_war = fieldMap;
   //printf("Turn number: %d\n",turnCount);
   if (gameptr != nullptr){
     checkObjectRegrowth();
   }
-  for(int i = 0; i < actors.size(); ++i)
+  for(unsigned int i = 0; i < actors.size(); ++i)
   {
     act_ap = actors[i].AP;
     if(actors[i].id > 0 && actors[i].health > 0 && gameptr != nullptr)
@@ -1294,7 +1292,7 @@ std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
  */
 void GameField::cull()
 {
-  for(int i = 0; i < actors.size(); ++i)  //This is used instead of the c++11 version so that we can use the index.
+  for(unsigned int i = 0; i < actors.size(); ++i)  //This is used instead of the c++11 version so that we can use the index.
   {
     if(actors[i].health == 0)
     {

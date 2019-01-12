@@ -117,7 +117,7 @@ void MapData::printMap(std::vector<int> tMap){
     for (int i = 0; i < height; i++){
             for (int j=0; j < width;j++){
                     std::cout << tMap[j+i*width] << " ";
-                    if (j = width-1) 
+                    if (j == width-1) 
                             std::cout << "\n";
             }
     }

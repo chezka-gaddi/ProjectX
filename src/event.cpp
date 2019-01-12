@@ -55,9 +55,8 @@ void updateDrawables(Game &game)
   std::unique_ptr<Drawable> temp_draw;
   std::unique_ptr<Projectile> temp_proj;
   std::unique_ptr<TankDrawable> temp_tank;
-  int i = 0;
+  unsigned int i = 0;
 
-  bool menu = false;
   if(!game.objects.empty())
     game.objects.clear();
 
@@ -118,44 +117,44 @@ void DisplayEvent::doAction(Game &game)
     if(game.turn > 0)
       updateDrawables(game);
 
-    for(int i = 0; i < game.constants.size(); i++)
+    for(unsigned int i = 0; i < game.constants.size(); i++)
     {
       game.constants[i]->draw(game.getX(), game.getY());
     }
     
-    for(int i = 0; i < game.waters.size(); i++)
+    for(unsigned int i = 0; i < game.waters.size(); i++)
     {
       game.waters[i]->draw(game.getX(), game.getY());
     }
 
-    for(int i = 0; i < game.specials.size(); i++)
+    for(unsigned int i = 0; i < game.specials.size(); i++)
     {
       if(game.specials[i]->health > 0)
         game.specials[i]->draw(game.getX(), game.getY());
     }
 
-    for(int i = 0; i < game.objects.size(); i++)
+    for(unsigned int i = 0; i < game.objects.size(); i++)
     {
       game.objects[i]->draw(game.modCounter, game.getY());
     }
 
-    for(int i = 0; i < game.trees.size(); i++)
+    for(unsigned int i = 0; i < game.trees.size(); i++)
     {
       if(game.trees[i]->health > 0)
         game.trees[i]->draw(game.getX(), game.getY());
     }
 
-    for(int i = 0; i < game.rocks.size(); i++)
+    for(unsigned int i = 0; i < game.rocks.size(); i++)
     {
       if(game.rocks[i]->health > 0)
         game.rocks[i]->draw(game.getX(), game.getY());
     }
-    for(int i = 0; i < game.bushes.size(); i++)
+    for(unsigned int i = 0; i < game.bushes.size(); i++)
     {
       game.bushes[i]->draw(game.getX(), game.getY());
     }
 
-    for(int i = 0; i < game.sfx.size(); i++)
+    for(unsigned int i = 0; i < game.sfx.size(); i++)
     {
       game.sfx[i]->draw(game.getX(), game.getY());
     }
