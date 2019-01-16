@@ -531,7 +531,7 @@ void Game::initGameState()
           }
         }
         //cout << "Y equals: " << y << endl;
-        for(y=0; y < height - hPad; y++)
+        while (y < height - hPad)
         {
           if(y == height/3){
             if (g_mode == ai)
@@ -589,14 +589,16 @@ void Game::initGameState()
               }
             }
           }
+        y++;
         }
         cout << endl;
-        for(y = 0; y < height; y++)
+        while(y < height)
         {
           for(x = 0; x < width; x++)
           {
             obstacleLocations.push_back(std::pair<int, int> (x, y));
           }
+          y++;
         }
       }
       else
