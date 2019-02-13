@@ -61,19 +61,6 @@ float Game::convertGLXCoordinate(int x)
 {
   float fscaler;
   fscaler = x * (4.0717* pow(fieldx, -1.031));
-  /*
-     if (fieldx < 19){
-     fscaler = x * ((-.013 * fieldx) + .445);
-     }else if (fieldx >= 20 && fieldx <= 25){
-     fscaler = x * ((-0.0075 * fieldx) + 0.335);
-     }else if (fieldx > 25){
-     fscaler = x * ((-0.005050 * fieldx) + .273750);
-     }*/
-  // Function:fscalar = 4.0717x^-1.031
-  //float fscalar = x * .25    //15
-  //float fscalar = x * .1850; //20
-  //float fscalar = x * .1475;   //25
-  //float fscalar = x * .12225;      //30
   GLfloat x_gl = -1.75 + (fscaler);
   return x_gl;
 }
@@ -90,12 +77,6 @@ float Game::convertGLXCoordinate(int x)
  *******************************************************************************/
 float Game::convertGLYCoordinate(int y)
 {
-  // Formula: fscalar = y * (3.1923fieldy^-1.08)
-  //float fscalar = y * 2.7/(fieldy);
-  //float fscalar = y * .3; //9
-  //float fscalar = y * .215; //12
-  //float fscalar = y * .170; //15
-  //float fscalar = .142; //18
   float fscaler =  y * (3.1923* pow(fieldy, -1.08));
   GLfloat y_gl = 0.75 - (fscaler);
   return y_gl;
@@ -1145,7 +1126,7 @@ void Game::initGameState()
   baseStats.tankAP = ap;
   baseStats.tankAmmo = ammo;
   baseStats.tankRadar = radar;
-  baseStats.tankRange = range;
+  baseStats.projRange = range;
 
   tankGame->setSPECIAL(attributePoints, baseStats);
   if (g_mode == ai)

@@ -49,7 +49,6 @@ protected:
     void runMoves(ActorInfo &a, MapData &fog, PositionData &pos);
     ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
     //Action points for each actor
-    int ap;
     GLfloat y_scalar = 0;
     GLfloat x_scalar = 0;
     bool checkObjectStrike(ActorInfo &a);
@@ -88,14 +87,8 @@ public:
     /*******************************/
     /********constructors***********/
     /*******************************/
-
-    GameField();
-    GameField(int width, int height);
-    GameField(int width, int height, std::vector<ActorInfo> startActors);
-    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int));
-    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), Game *);
-    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), int ap);
-    GameField(int width, int height, std::vector<ActorInfo> startActors, int actionpoints);
+    GameField(int width = 10, int height = 10);
+    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int) = nullptr, Game * = nullptr );
 
 
     ~GameField();

@@ -11,24 +11,6 @@
 /**
  * @author David Donahue
  * @par Description:
- * Default constructor, makes a 10x10 empty map
- */
-
-GameField::GameField() : ap(2)
-{
-  turnCount = 0;
-  fieldMap.width = 10;
-  fieldMap.height = 10;
-  fieldMap.map.resize(100);
-  fieldMap.obstacleMap.resize(100);
-  std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
-  std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), 0);
-  displayCallback = NULL;
-}
-
-/**
- * @author David Donahue
- * @par Description:
  * Destructor, deletes all actors left on the feild
  */
 
@@ -46,7 +28,7 @@ GameField::~GameField()
  * @par Description:
  * Constructor given dimensions
  */
-GameField::GameField(int width, int height) : ap(2)
+GameField::GameField(int width, int height)
 {
   turnCount = 0;
   fieldMap.width = width;
@@ -62,51 +44,8 @@ GameField::GameField(int width, int height) : ap(2)
  * @par Description:
  * Constructor with dimensions and a vector of ActorInfo
  */
-GameField::GameField(int width, int height, std::vector<ActorInfo> acts) : actors(acts), ap(2)
-{
-  turnCount = 0;
-  fieldMap.width = width;
-  fieldMap.height = height;
-  fieldMap.map.resize(width * height);
-  fieldMap.obstacleMap.resize(width * height);
-  std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
-  std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
-  updateMap();
-  displayCallback = NULL;
-}
-/**
- * @author Riley Kopp
- * @par Description:
- * Constructor with dimensions and a vector of ActorInfo, and action points
- */
-GameField::GameField(int width, int height, std::vector<ActorInfo> acts
-, int actionpoints) : actors(acts), ap(actionpoints)
-{
-  turnCount = 0;
-  fieldMap.width = width;
-  fieldMap.height = height;
-  fieldMap.map.resize(width * height);
-  fieldMap.obstacleMap.resize(width * height);
-  std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
-  std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
-  updateMap();
-  displayCallback = NULL;
-}
 
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int)) : actors(startActors), ap(2)
-{
-  turnCount = 0;
-  fieldMap.width = width;
-  fieldMap.height = height;
-  fieldMap.map.resize(width * height);
-  fieldMap.obstacleMap.resize(width * height);
-  std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
-  std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
-  updateMap();
-  displayCallback = d_callback;
-}
-
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), Game *game) : actors(startActors), ap(2)
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), Game * game) : actors(startActors)
 {
   turnCount = 0;
   fieldMap.width = width;
@@ -120,19 +59,6 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
   updateMap();
   displayCallback = d_callback;
   gameptr = game;
-}
-
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), int AP) : actors(startActors), ap(AP)
-{
-  turnCount = 0;
-  fieldMap.width = width;
-  fieldMap.height = height;
-  fieldMap.map.resize(width * height);
-  fieldMap.obstacleMap.resize(width * height);
-  std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
-  std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
-  updateMap();
-  displayCallback = d_callback;
 }
 
 
@@ -209,7 +135,7 @@ void GameField::setSPECIAL(int points, const attributes baseStats)
           + actor.tankAttributes.tankRadar
           + actor.tankAttributes.tankDamage
           + actor.tankAttributes.tankAmmo
-          + actor.tankAttributes.tankRange;
+          + actor.tankAttributes.projRange;
     if(sum  <= points)
     {
       actor.health += actor.tankAttributes.tankHealth;
@@ -217,7 +143,7 @@ void GameField::setSPECIAL(int points, const attributes baseStats)
       actor.radar += actor.tankAttributes.tankRadar;
       actor.damage += actor.tankAttributes.tankDamage;
       actor.ammo += actor.tankAttributes.tankAmmo;
-      actor.range += actor.tankAttributes.tankRange;
+      actor.range += actor.tankAttributes.projRange;
       if(actor.health > 8)
       {
         actor.health = 8;
