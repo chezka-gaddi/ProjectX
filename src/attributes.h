@@ -17,8 +17,9 @@ struct attributes
     int tankRadar = 0;
     int tankAmmo = 0;
     int projRange = 0;
-    attributes( int tH = 0, int tD = 0, int tR = 0, int tV = 0, int tA = 0, int pR = 0) 
-       : tankHealth(tH), tankDamage(tD), tankAP(tR), tankRadar(tV), tankAmmo(tA), projRange(pR) {}
+    int tankSpecial = 0;
+    attributes( int tH = 0, int tD = 0, int tR = 0, int tV = 0, int tA = 0, int pR = 0, int tS = 0) 
+       : tankHealth(tH), tankDamage(tD), tankAP(tR), tankRadar(tV), tankAmmo(tA), projRange(pR), tankSpecial(tS) {}
 
 };
 

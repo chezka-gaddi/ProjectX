@@ -28,6 +28,7 @@
 * *****************************************************************************/
 
 class Game;
+class Settings;
 
 class GameField
 {
@@ -55,7 +56,11 @@ protected:
     bool crate_o_doom(int x, int y, ActorInfo &a);
     bool checkHealth(ActorInfo &a, bool object = true);
     void animateMove(ActorInfo &a);
+
+    //pointers to other game components
     Game *gameptr = nullptr;
+    Settings *settings = nullptr;
+
     //helper functions
     void checkObjectRegrowth();
 
@@ -87,8 +92,8 @@ public:
     /*******************************/
     /********constructors***********/
     /*******************************/
-    GameField(int width = 10, int height = 10);
-    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int) = nullptr, Game * = nullptr );
+    GameField(int width = 10, int height = 10, Settings *setting=nullptr);
+    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int) = nullptr, Game * = nullptr, Settings *setting=nullptr );
 
 
     ~GameField();

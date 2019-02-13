@@ -6,6 +6,10 @@
 #ifndef __settings_h
 #define __settings_h
 
+#include "attributes.h"
+
+class GameField; //Forward declare it for pointer
+
 /*!<Enum class for the gameMode */
 enum gameMode {none, ai, sp, mp, quiet, coverage};
 
@@ -30,21 +34,34 @@ public:
     int getActTurn();
     int getModCounter();
 
+
+    void nextTurn();
+
     //setters
-    void setAttributes();
-    void setIdleSpeed();
-    void setAniFrames();
-    void setTankSpeed();
-    void setBulletSpeed();
-    void setMaxTurns();
-    void setGameMode();
-    void setTurn();
-    void setActTurn();
-    void setModCounter();
+    void setAttributes(attributes attr);
+    void setIdleSpeed(int is);
+    void setAniFrames(int af);
+    void setTankSpeed(int ts);
+    void setBulletSpeed(int bs);
+    void setMaxTurns(int mt);
+    void setGameMode(gameMode gm);
+    void setTurn(int t);
+    void setActTurn(int at);
+    void setModCounter(int mc);
+
+    //individual attribute setters
+    void setAttrDamage(int damage);
+    void setAttrHealth(int health);
+    void setAttrAP(int ap);
+    void setAttrRadar(int radar, int width);
+    void setAttrAmmo(int ammo);
+    void setAttrRange(int range);
+    void setAttrSpecial(int special);
+
 
 private:
     //default game settings
-    int max_turns = 200;
+    int maxTurns = 1000;
     attributes baseAttributes;
     
     //Speed settings
@@ -55,7 +72,7 @@ private:
 
     //pointers to components
     GameField *tankGame;   //Pointer to gamefield
-    gameMode g_mode = ai;  //default game mode
+    gameMode gMode = ai;  //default game mode
     int turn = 0; //Current game turn
     int actTurn = 0; //0 causes issues on first display call
     int modCounter = 7; //Modular counter for animation effects

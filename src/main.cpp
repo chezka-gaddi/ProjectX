@@ -51,18 +51,24 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 #include "util.h"
 #include <memory>
 #include <stdio.h>
+#include "Settings.h"
 
 // Main
 
 int main(int argc, char **argv)
 {
+    Settings settings;
+    gameMode mode = settings.getGameMode();
     const char *dmode = "-demo";
     const char *qmode = "-quiet";
     const char *cmode = "-coverage";
     
-    gameMode mode = ai;
+    //game display height
     int height = 727, width = 1000;
+    //agument counter
     int counter = 1;
+    //g_mode
+    
 
     //printf("%d\n", argc);
     //printf("%s\n", argv[argc-1]);
@@ -88,8 +94,10 @@ int main(int argc, char **argv)
       }
       counter++;
     }
+
+    settings.setGameMode(mode);
     //printf("Height: %d Width: %d",height, width);
-    initOpenGL( argc, argv, width, height, mode );
+    initOpenGL( argc, argv, width, height, settings );
 
 
     glutMainLoop();

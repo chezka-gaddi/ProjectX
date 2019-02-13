@@ -17,7 +17,7 @@ int actualY(int y)
  ******************************************************************************/
 void display()
 {
-    utilityCentral(ai, new DisplayEvent());
+    utilityCentral(new DisplayEvent());
 }
 
 
@@ -35,7 +35,7 @@ void reshape(const int w, const int h)
     // point the camera at the 2d projection
     glViewport(0,0,w,h);
     // dispatch the reshape event
-    utilityCentral(ai,new ReshapeEvent(w, h));
+    utilityCentral(new ReshapeEvent(w, h));
 }
 
 /***************************************************************************//**
@@ -47,14 +47,14 @@ void reshape(const int w, const int h)
 void ticktock(int value)
 {
     // Dispatch the timer event to the central control function
-    utilityCentral(ai,new TimerEvent(value));
+    utilityCentral(new TimerEvent(value));
     // Set the next timer event elapsed time and function to call
     glutTimerFunc(value, ticktock, value);
 }
 
 void onClose()
 {
-    utilityCentral(ai,new CloseEvent());
+    utilityCentral(new CloseEvent());
 }
 
 /***************************************************************************//**
@@ -66,6 +66,6 @@ void onClose()
  ******************************************************************************/
 void keyboard(unsigned char key, int x, int y)
 {
-    utilityCentral(ai, new KeyboardEvent(key, x, actualY(y)));
+    utilityCentral(new KeyboardEvent(key, x, actualY(y)));
 }
 

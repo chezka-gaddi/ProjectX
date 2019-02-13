@@ -13,7 +13,7 @@
 #include "event.h"
 #include "Texture.h"
 
-void initOpenGL(int, char**, int, int, gameMode);
-void utilityCentral(int, char**, Event *);
+void initOpenGL(int, char**, int, int, Settings);
+void utilityCentral(Event *);
 
 #endif

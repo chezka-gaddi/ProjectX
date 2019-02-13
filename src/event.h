@@ -39,10 +39,12 @@ public:
 *******************************************************************************/
 class InitEvent : public Event
 {
+private:
     int columns, rows;
+    Settings settings;
 
 public:
-    InitEvent(int, int);
+    InitEvent(int, int, Settings);
 
     void doAction(Game &);
 };

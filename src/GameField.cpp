@@ -27,14 +27,15 @@ GameField::~GameField()
  * @author David Donahue
  * @par Description:
  * Constructor given dimensions
- */
-GameField::GameField(int width, int height)
+ */ 
+GameField::GameField(int width, int height, Settings * setting)
 {
   turnCount = 0;
   fieldMap.width = width;
   fieldMap.height = height;
   fieldMap.map.resize(width * height);
   fieldMap.obstacleMap.resize(width * height);
+  settings = setting;
   std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
   std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
   displayCallback = NULL;
@@ -45,7 +46,7 @@ GameField::GameField(int width, int height)
  * Constructor with dimensions and a vector of ActorInfo
  */
 
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), Game * game) : actors(startActors)
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), Game * game, Settings * setting) : actors(startActors)
 {
   turnCount = 0;
   fieldMap.width = width;
@@ -59,6 +60,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
   updateMap();
   displayCallback = d_callback;
   gameptr = game;
+  settings = setting;
 }
 
 
@@ -208,12 +210,12 @@ void GameField::animateMove(ActorInfo &a)
   GLfloat tempx, tempy;
   GLfloat prevx, prevy;
   if (gameptr != nullptr){//if we end up here while running catch tests, block out the invalid pointer (Other errors will occur)
-    samples = gameptr->getAniSpeed();
+    samples = settings->getAniFrames();
   
     if (a.id < 0)  //check if we need speed for a tank or projectile
-      TimerEvent::idle_speed = gameptr->getbullet_speed();
+      TimerEvent::idle_speed = settings->getBulletSpeed();
     else
-      TimerEvent::idle_speed = gameptr->gettank_speed();
+      TimerEvent::idle_speed = settings->getTankSpeed();
   }
   switch(a.heading) //get our heading and loop through drawing samples
   {
@@ -227,7 +229,7 @@ void GameField::animateMove(ActorInfo &a)
       {
         a.offsety = tempy * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, gameptr->turn);
+          displayCallback(fieldMap, actors, settings->getTurn());
       }
       break;
     case DOWN:
@@ -239,7 +241,7 @@ void GameField::animateMove(ActorInfo &a)
       {
         a.offsety = tempy * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, gameptr->turn);
+          displayCallback(fieldMap, actors, settings->getTurn());
       }
       break;
 
@@ -252,7 +254,7 @@ void GameField::animateMove(ActorInfo &a)
       {
         a.offsetx = tempx * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, gameptr->turn);
+          displayCallback(fieldMap, actors, settings->getTurn());
       }
       break;
 
@@ -265,7 +267,7 @@ void GameField::animateMove(ActorInfo &a)
       {
         a.offsetx = tempx * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, gameptr->turn);
+          displayCallback(fieldMap, actors, settings->getTurn());
       }
       break;
     case UPLEFT:
@@ -282,7 +284,7 @@ void GameField::animateMove(ActorInfo &a)
         a.offsety = tempy * (samples - i);
         a.offsetx = tempx * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, gameptr->turn);
+          displayCallback(fieldMap, actors, settings->getTurn());
       }
       break;
 
@@ -300,7 +302,7 @@ void GameField::animateMove(ActorInfo &a)
         a.offsety = tempy * (samples - i);
         a.offsetx = tempx * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, gameptr->turn);
+          displayCallback(fieldMap, actors, settings->getTurn());
       }
       break;
 
@@ -318,7 +320,7 @@ void GameField::animateMove(ActorInfo &a)
         a.offsety = tempy * (samples - i);
         a.offsetx = tempx * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, gameptr->turn);
+          displayCallback(fieldMap, actors, settings->getTurn());
       }
       break;
 
@@ -336,7 +338,7 @@ void GameField::animateMove(ActorInfo &a)
         a.offsety = tempy * (samples - i);
         a.offsetx = tempx * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, gameptr->turn);
+          displayCallback(fieldMap, actors, settings->getTurn());
       }
       break;
 
@@ -349,7 +351,7 @@ void GameField::animateMove(ActorInfo &a)
   a.prevx = a.x; //Save new previous values
   a.prevy = a.y;
   if (gameptr != nullptr){//Skip during testing
-   TimerEvent::idle_speed = gameptr->getAISpeed(); //fix idle speed
+   TimerEvent::idle_speed = settings->getIdleSpeed(); //fix idle speed
   }
 }
 
@@ -587,7 +589,7 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
       updateMap(); //Update actors and map
       //printf("Currently %d number of explosions.\n",SFX.size());
       if (gameptr != nullptr) //redraw screen
-        displayCallback(fieldMap, actors, gameptr->turn);
+        displayCallback(fieldMap, actors, settings->getTurn());
       SFX.clear(); //Clear the explosions
     } 
   }
@@ -670,7 +672,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         {
           r->health = 0;
 #ifndef TESTING
-          r->set_destroyed(gameptr->turn);
+          r->set_destroyed(settings->getTurn());
           removeObstacle(a.x, a.y);
 #endif
         }
@@ -691,7 +693,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         {
           t->health = 0;
 #ifndef TESTING
-          t->set_destroyed(gameptr->turn);
+          t->set_destroyed(settings->getTurn());
           removeObstacle(a.x, a.y);
           //If a tree you're hiding under get's destroyed take 1 damage
           for (auto tTank : actors)
@@ -758,7 +760,7 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
             {
               t->health--;
               if(t->health <= 0){
-                t->destroyed = gameptr->turn;
+                t->destroyed = settings->getTurn();
                 removeObstacle(t->gridx, t->gridy);
               }
             }
@@ -781,7 +783,7 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
             {
               r->health--;
               if(r->health <= 0){
-                r->destroyed = gameptr->turn;
+                r->destroyed = settings->getTurn();
                 removeObstacle(r->gridx, r->gridy);
                                 }
             }
@@ -908,7 +910,7 @@ void GameField::checkObjectRegrowth(){
   {
     if(t->health <= 0)
     {
-      t->regrow(gameptr->turn, actors);
+      t->regrow(settings->getTurn(), actors);
       if (t->health > 0)
         addObstacle(t->gridx, t->gridy, 'T');
     }
@@ -917,7 +919,7 @@ void GameField::checkObjectRegrowth(){
   {
     if(r->health <= 0)
     {
-      r->regrow(gameptr->turn, actors);
+      r->regrow(settings->getTurn(), actors);
       if (r->health > 0)
         addObstacle(r->gridx, r->gridy, 'R');
     }
@@ -927,7 +929,7 @@ void GameField::checkObjectRegrowth(){
   {
     if(b->health <= 0)
     {
-      b->regrow(gameptr->turn, actors);
+      b->regrow(settings->getTurn(), actors);
       if (b->health > 0)
         addObstacle(b->gridx, b->gridy, 'B');
     }
@@ -946,7 +948,7 @@ void GameField::checkObjectRegrowth(){
 void GameField::nextTurn()
 {
   if(gameptr != nullptr){
-    ++gameptr->turn;
+    settings->nextTurn();
     ++turnCount;
   }
 
@@ -966,18 +968,18 @@ void GameField::nextTurn()
   {
     act_ap = actors[i].AP;
     if(actors[i].id > 0 && actors[i].health > 0 && gameptr != nullptr)
-      gameptr->actTurn = actors[i].id;
+      settings->setActTurn(actors[i].id);
     updateMap();  //Give each actor a fresh map
     if(gameptr != nullptr)  
-      displayCallback(fieldMap, actors, gameptr->turn);
+      displayCallback(fieldMap, actors, settings->getTurn());
     SFX.clear();
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
       actors[i].cDetect++;
       if (gameptr != nullptr){
-        gameptr->modCounter++; 
-        if(gameptr->modCounter > 7)
-          gameptr->modCounter = 0;
+        settings->setModCounter(settings->getModCounter() + 1); 
+        if(settings->getModCounter() > 7)
+          settings->setModCounter(0);
       }
       updateMap();
       fog_of_war = fieldMap;
@@ -1065,7 +1067,7 @@ void GameField::nextTurn()
   cull(); //Remove dead actors
   updateMap(); //update map
   if(gameptr != nullptr) //Draw map
-    displayCallback(fieldMap, actors, gameptr->turn);
+    displayCallback(fieldMap, actors, settings->getTurn());
   SFX.clear(); //remove explosions that remain
 }
 /**

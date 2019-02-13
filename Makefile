@@ -15,6 +15,7 @@ MAIN = $(SRC_PATH)main.cpp
 
 FILES = $(MAIN)
 FILES += $(SRC_PATH)GameField.cpp
+FILES += $(SRC_PATH)Settings.cpp
 FILES += $(SRC_PATH)Actor.cpp
 FILES += $(SRC_PATH)MapData.cpp
 FILES += $(SRC_PATH)ProjectileActor.cpp

@@ -24,7 +24,7 @@ Event::~Event() {}
  * @param[in] c - columns (in pixels) of the window
  * @param[in] r - rows (in pixels) of the window
  ******************************************************************************/
-InitEvent::InitEvent(int c, int r) : columns(c), rows(r) {}
+InitEvent::InitEvent(int c, int r, Settings s) : columns(c), rows(r), settings(s) {}
 
 
 /***************************************************************************//**
@@ -38,7 +38,7 @@ InitEvent::InitEvent(int c, int r) : columns(c), rows(r) {}
 void InitEvent::doAction(Game &game)
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  game.initGameState();
+  game.initGameState(settings);
 }
 
 

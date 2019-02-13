@@ -17,16 +17,13 @@
 #include "Actor.h"
 #include "SimpleAI.h"
 #include "DynamicLoader.h"
+#include "Settings.h"
 #include <fstream>
 #include <sstream>
 #include <utility>
 #include <memory>
 
 using namespace std;
-
-
-/*!<Enum class for the gameMode */
-enum gameMode {none, ai, sp, mp, quiet, coverage};
 
 
 /***************************************************************************//**
@@ -39,19 +36,14 @@ class Game
 {
 public:
     GameField *tankGame;               /*!<Pointer to the game manager */
-    gameMode g_mode = none;                   /*!<Type of game to be ran */
-    int turn = 0;
-    int actTurn = 0; //0 causes issues on first display call
-    int modCounter = 7;
-    bool ui = true;
-
+    Settings *settings;                /*!<Pointer to settings */
     Game();
     Game(gameMode mode);
     ~Game();
 
     void makeDrawables();
     void executeTurn();
-    void initGameState();
+    void initGameState(Settings setting);
     void closeDown();
     void earlyOut();
     void createConfig();
@@ -62,10 +54,7 @@ public:
     int getX(){return fieldx;};
     int getY(){return fieldy;};
 
-    int getAISpeed(){return idle_speed;};
-    int getAniSpeed(){return aniSpeed;};
-    int getbullet_speed(){return bullet_speed;};
-    int gettank_speed(){return tank_speed;};
+    void loadPlayers(bool, std::vector<ActorInfo>, std::vector<std::pair<int,int>>, std::vector<std::string>, std::vector<Actor*>, attributes, int, int);
     
     vector <std::unique_ptr<Drawable>> objects;       /*!<Holds all of the current actors */
     vector <Drawable *> constants;     /*!<Holds the GameFieldDrawable and menus */
@@ -80,12 +69,7 @@ public:
 private:
     int fieldx;
     int fieldy;
-    int idle_speed = 750;
-    int max_turns = 200;
     int activeId;
-    int aniSpeed = 20;
-    int tank_speed = 400;
-    int bullet_speed = 80;
 };
 
 #endif //__GAME_H

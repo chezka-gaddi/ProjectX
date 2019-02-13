@@ -12,17 +12,9 @@
 *
 * Creates the game manager and manages events to their associated functions
 *******************************************************************************/
-void utilityCentral(gameMode mode, Event *event)
+void utilityCentral(Event *event)
 {
-    static gameMode gMode = none;
-    if (gMode == none){
-            if (mode == none){
-              gMode = ai;
-            }else{
-              gMode = mode;
-            }
-    }
-    static Game gameloop(gMode);
+    static Game gameloop;
 
     event->doAction(gameloop);
 
@@ -42,7 +34,7 @@ void utilityCentral(gameMode mode, Event *event)
 * @param[in] wRows - height of the window
 * @param[in] mode - game mode
 *******************************************************************************/
-void initOpenGL(int argc, char** argv, int wCols, int wRows, gameMode mode)
+void initOpenGL(int argc, char** argv, int wCols, int wRows, Settings setting)
 {
     glutInit(&argc, argv);
 
@@ -80,5 +72,5 @@ void initOpenGL(int argc, char** argv, int wCols, int wRows, gameMode mode)
 
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-    utilityCentral( mode, new InitEvent(wCols, wRows));
+    utilityCentral( new InitEvent(wCols, wRows, setting));
 }
