@@ -54,7 +54,7 @@ public:
     int getX(){return fieldx;};
     int getY(){return fieldy;};
 
-    void loadPlayers(bool, std::vector<ActorInfo>, std::vector<std::pair<int,int>>, std::vector<std::string>, std::vector<Actor*>, attributes, int, int);
+    std::vector<ActorInfo> loadPlayers(bool, std::vector<std::pair<int,int>>, std::vector<std::string>, std::vector<Actor*>, attributes, int, int);
     
     vector <std::unique_ptr<Drawable>> objects;       /*!<Holds all of the current actors */
     vector <Drawable *> constants;     /*!<Holds the GameFieldDrawable and menus */

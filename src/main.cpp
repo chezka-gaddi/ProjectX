@@ -66,9 +66,7 @@ int main(int argc, char **argv)
     //game display height
     int height = 727, width = 1000;
     //agument counter
-    int counter = 1;
-    //g_mode
-    
+    int counter = 1;    
 
     //printf("%d\n", argc);
     //printf("%s\n", argv[argc-1]);
@@ -96,6 +94,8 @@ int main(int argc, char **argv)
     }
 
     settings.setGameMode(mode);
+    
+    
     //printf("Height: %d Width: %d",height, width);
     initOpenGL( argc, argv, width, height, settings );
 

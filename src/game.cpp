@@ -931,7 +931,7 @@ void Game::initGameState(Settings setting)
   baseStats.tankAmmo = ammo;
   baseStats.tankRadar = radar;
   baseStats.projRange = range;
-  loadPlayers(ai, startActors, tankLocations, AINames, startActorPointers, baseStats, height, width);
+  startActors = loadPlayers(ai, tankLocations, AINames, startActorPointers, baseStats, height, width);
   settings->setAttributes(baseStats);
 
   tankGame->setSPECIAL(attributePoints, baseStats);
@@ -1049,7 +1049,8 @@ void Game::initGameState(Settings setting)
   }
 }
 
-void Game::loadPlayers(bool ai, std::vector<ActorInfo> startActors, std::vector<std::pair<int,int>> tankLocations, std::vector<std::string> AINames, std::vector<Actor*> startActorPointers, attributes baseAttr, int height, int width){
+std::vector<ActorInfo> Game::loadPlayers(bool ai, std::vector<std::pair<int,int>> tankLocations, std::vector<std::string> AINames, std::vector<Actor*> startActorPointers, attributes baseAttr, int height, int width){
+ std::vector<ActorInfo> actors;
  if (ai)
     cout << "Creating Player Tanks...\n";
   for(unsigned int i = 0; i < startActorPointers.size(); ++i)
@@ -1058,7 +1059,7 @@ void Game::loadPlayers(bool ai, std::vector<ActorInfo> startActors, std::vector<
          tankLocations[i].first >= 0 &&
          tankLocations[i].second < height &&
          tankLocations[i].second >= 0){
-    startActors.push_back(ActorInfo(startActorPointers[i]
+    actors.push_back(ActorInfo(startActorPointers[i]
                                     , baseAttr.tankHealth
                                     , baseAttr.tankDamage
                                     , tankLocations[i].first
@@ -1076,6 +1077,7 @@ void Game::loadPlayers(bool ai, std::vector<ActorInfo> startActors, std::vector<
         cout << "Invalid location for " << AINames[i] << endl;
     }
   }
+  return actors;
 }
 
 /***************************************************************************//**
