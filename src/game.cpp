@@ -322,7 +322,9 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 }
 
 
-/***************************************************************************//**
+/*********************************************
+ * 
+ * ******************************//**
  * @author Chezka Gaddi
  * @brief executeTurn
  *
@@ -384,7 +386,7 @@ void Game::executeTurn()
         }
       }
     }
-    tankGame->turnCount++;
+    settings->nextTurn();
     tankGame->cull();//Let game play one more turn and quit itself
   }
   else if(isplayable(tankGame->getActorsConst())) //If we still have tanks keep playing
@@ -420,9 +422,9 @@ void displayWrapper(MapData map, std::vector<ActorInfo> actors, int turnCount)
 float Drawable::xscalar = 1.0;
 float Drawable::yscalar = 1.0;
 int TimerEvent::idle_speed = 750;
-void Game::initGameState(Settings setting)
+void Game::initGameState(Settings * setting)
 {
-  settings = &setting;
+  settings = setting;
   bool ai = (settings->getGameMode() == gameMode::ai);
   if(ai)
     std::cout << "Game::Loading config.txt\n";
@@ -923,18 +925,18 @@ void Game::initGameState(Settings setting)
   std::vector<ActorInfo> startActors;
   if (ai)
     cout << "Finalizing game settings...\n";
+
+  baseStats.tankHealth = settings->getAttrHealth();
+  baseStats.tankDamage = settings->getAttrDamage();
+  baseStats.tankAP = settings->getAttrAP();
+  baseStats.tankAmmo = settings->getAttrAmmo();
+  baseStats.tankRadar = settings->getAttrRadar();
+  baseStats.projRange = settings->getAttrRange();
+  settings->setAttributes(baseStats);
+  startActors = loadPlayers(ai, tankLocations, AINames, startActorPointers, baseStats, height, width);
   //printf("Height: %d  Width: %d\n",height, width);
   tankGame = new GameField(width, height, startActors, displayWrapper, this, settings);
-  baseStats.tankHealth = health;
-  baseStats.tankDamage = damage;
-  baseStats.tankAP = ap;
-  baseStats.tankAmmo = ammo;
-  baseStats.tankRadar = radar;
-  baseStats.projRange = range;
-  startActors = loadPlayers(ai, tankLocations, AINames, startActorPointers, baseStats, height, width);
-  settings->setAttributes(baseStats);
-
-  tankGame->setSPECIAL(attributePoints, baseStats);
+  tankGame->setSPECIAL(baseStats);
   if (ai)
     cout << "   ...Done\n" << endl;
 
@@ -1059,7 +1061,7 @@ std::vector<ActorInfo> Game::loadPlayers(bool ai, std::vector<std::pair<int,int>
          tankLocations[i].first >= 0 &&
          tankLocations[i].second < height &&
          tankLocations[i].second >= 0){
-    actors.push_back(ActorInfo(startActorPointers[i]
+         actors.push_back(ActorInfo(startActorPointers[i]
                                     , baseAttr.tankHealth
                                     , baseAttr.tankDamage
                                     , tankLocations[i].first

@@ -65,7 +65,7 @@ struct ActorInfo
               , int v = 0 //Radar
               , int b = 1 //ammo
               , std::string n = "default") 
-                   : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), AP(ap), range(r), hits(0), shots(s), tankAttributes(), radar(v), max_health(h), ammo(b), max_ammo(b), name(n), kills(0), heading(RIGHT){} /*!< Constructor with options to set. */
+                   : act_p(a), health(h), damage(d), x(xpos), y(ypos), id(i), AP(ap), range(r), hits(0), shots(0), tankAttributes(), radar(v), max_health(h), ammo(b), max_ammo(b), name(n), kills(0), heading(RIGHT){} /*!< Constructor with options to set. */
     ActorInfo(){};
 };
 

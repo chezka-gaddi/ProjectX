@@ -50,7 +50,7 @@ coverage: set-coverage $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o platform $(FILES:.cpp=.o) $(LIBS)
 
 set-coverage:
-	$(eval PROFILE:=-pg -fprofile-arcs -ftest-coverage)
+	$(eval PROFILE:=-pg -fprofile-arcs -ftest-coverage -lgcov --coverage)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(PROFILE) -c $? -o $@ 
@@ -126,7 +126,7 @@ push-to-git: clean-lib
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc status
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release
 
-tests: $(TANKS:src/%.cpp=tanks/%.so) testUnitAll testFunctionalAll
+tests: set-coverage $(TANKS:src/%.cpp=tanks/%.so) testUnitAll testFunctionalAll
 
 testUnitAll:
 	+make PROFILE="$(PROFILE)" -C tests/src

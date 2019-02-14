@@ -216,3 +216,11 @@ void Settings::setAttrSpecial(int attributePoints){
           }
 baseAttributes.tankSpecial = attributePoints;
 }
+
+int Settings::getAttrDamage(){return baseAttributes.tankDamage;}
+int Settings::getAttrHealth(){return baseAttributes.tankHealth;}
+int Settings::getAttrAP(){return baseAttributes.tankAP;}
+int Settings::getAttrRadar(){return baseAttributes.tankRadar;}
+int Settings::getAttrAmmo(){return baseAttributes.tankAmmo;}
+int Settings::getAttrRange(){return baseAttributes.projRange;}
+int Settings::getAttrSpecial(){return baseAttributes.tankSpecial;}

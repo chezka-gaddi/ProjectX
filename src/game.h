@@ -43,7 +43,7 @@ public:
 
     void makeDrawables();
     void executeTurn();
-    void initGameState(Settings setting);
+    void initGameState(Settings * setting);
     void closeDown();
     void earlyOut();
     void createConfig();
@@ -69,7 +69,6 @@ public:
 private:
     int fieldx;
     int fieldy;
-    int activeId;
-};
+    };
 
 #endif //__GAME_H

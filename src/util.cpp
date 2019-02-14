@@ -34,7 +34,7 @@ void utilityCentral(Event *event)
 * @param[in] wRows - height of the window
 * @param[in] mode - game mode
 *******************************************************************************/
-void initOpenGL(int argc, char** argv, int wCols, int wRows, Settings setting)
+void initOpenGL(int argc, char** argv, int wCols, int wRows, Settings * setting)
 {
     glutInit(&argc, argv);
 

@@ -199,10 +199,8 @@ direction SimpleAI::attack(MapData map, PositionData status)
  */
 attributes SimpleAI::setAttribute(int pointsAvailable, attributes baseStats)
 {
-   attributes tankAttributes;
-   
-   myStats = baseStats; 
-
+    attributes tankAttributes;
+    myStats = baseStats; 
     tankAttributes.tankHealth += pointsAvailable;
 
     return tankAttributes;

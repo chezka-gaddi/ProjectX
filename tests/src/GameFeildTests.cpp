@@ -3,6 +3,7 @@
 #include <Actor.h>
 #include <SimpleActor.h>
 
+class Settings;
 
 TEST_CASE("Instantiate GameField")
 {
@@ -13,7 +14,7 @@ TEST_CASE("Instantiate GameField")
 TEST_CASE("Get Turn Count")
 {
     GameField g;
-    REQUIRE(g.getTurnCount() == 0);
+    REQUIRE(g.settings->getTurn() == 0);
 }
 
 TEST_CASE("nextTurn increments turnCount")
@@ -21,7 +22,7 @@ TEST_CASE("nextTurn increments turnCount")
     GameField g;
     g.nextTurn();
     //Cannot be tested without adding a game object to the GameField
-    //REQUIRE(g.getTurnCount() == 1);
+    REQUIRE(g.settings->getTurn() == 1);
 }
 TEST_CASE("addSimpleActor adds an actor to actors")
 {
@@ -467,7 +468,7 @@ TEST_CASE("Checks for cheaters. Sets cheaters' tanks to have 1 for each attribut
    attributes AIAttributes;
    AIAttributes = a->setAttribute(pointsAvailable, AIAttributes);
    ActorInfo AI(a, AIAttributes.tankHealth, AIAttributes.tankDamage, 1, 1, 1,
-                AIAttributes.tankAP, AIAttributes.tankShots); 
+                AIAttributes.tankAP, AIAttributes.projRange); 
    ActorInfo AI2(a2, 10, 10, 0, 0, 2, 10, 10); // invalid tank: defaults all to one
    AI.tankAttributes = AIAttributes;
    GameField g (2, 2);
@@ -481,7 +482,7 @@ TEST_CASE("Checks for cheaters. Sets cheaters' tanks to have 1 for each attribut
    REQUIRE(g.getActors().at(1).health == 1);
    REQUIRE(g.getActors().at(1).damage == 1);
    REQUIRE(g.getActors().at(1).range == 1); 
-   REQUIRE(g.getActors().at(1).shots == 1);
+   REQUIRE(g.getActors().at(1).shots == 0);
 }
 TEST_CASE("GameField updates heading of ActorInfo")
 {
@@ -501,8 +502,9 @@ TEST_CASE("Game Field properly gets attributes from actors")
 {
     SimpleActor * actor_1 = new SimpleActor(UPRIGHT, STAY);
     attributes baseStats;
+    baseStats.tankSpecial = 4;
 
-    ActorInfo test(actor_1, 1, 1, 0, 1, 1, 2);
+    ActorInfo test(actor_1, 1, 1, 0, 1, 1, 2, 1, 0, 1, 1);
     std::vector<ActorInfo> output;
     std::vector<ActorInfo> vect;
 
@@ -510,14 +512,15 @@ TEST_CASE("Game Field properly gets attributes from actors")
 
     GameField manager(2, 2, vect);
 
-    manager.setSPECIAL(4, baseStats);
+    manager.setSPECIAL(baseStats);
 
     output = manager.getActors();
 
     REQUIRE(output[0].tankAttributes.tankHealth == 1);
     REQUIRE(output[0].tankAttributes.tankDamage == 1);
     REQUIRE(output[0].tankAttributes.tankAP == 1);
-    REQUIRE(output[0].tankAttributes.tankShots == 1);
+    REQUIRE(output[0].tankAttributes.tankRadar == 1);
+    REQUIRE(output[0].tankAttributes.tankAmmo == 1);
 
 
 

@@ -34,6 +34,14 @@ public:
     int getActTurn();
     int getModCounter();
 
+    //individual attribute getters
+    int getAttrDamage();
+    int getAttrHealth();
+    int getAttrAP();
+    int getAttrRadar();
+    int getAttrAmmo();
+    int getAttrRange();
+    int getAttrSpecial();
 
     void nextTurn();
 

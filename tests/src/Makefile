@@ -36,6 +36,7 @@ FILES += $(SRC_PATH)sfxDrawable.cpp
 FILES += $(SRC_PATH)Crate.cpp
 FILES += $(SRC_PATH)SimpleAI.cpp
 FILES += $(SRC_PATH)SimpleActor.cpp
+FILES += $(SRC_PATH)Settings.cpp
 
 
 TANK_PATH= ./tanks/

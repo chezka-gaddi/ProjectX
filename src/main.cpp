@@ -57,8 +57,8 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 
 int main(int argc, char **argv)
 {
-    Settings settings;
-    gameMode mode = settings.getGameMode();
+    Settings * settings = new Settings;
+    gameMode mode = settings->getGameMode();
     const char *dmode = "-demo";
     const char *qmode = "-quiet";
     const char *cmode = "-coverage";
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
       counter++;
     }
 
-    settings.setGameMode(mode);
+    settings->setGameMode(mode);
     
     
     //printf("Height: %d Width: %d",height, width);

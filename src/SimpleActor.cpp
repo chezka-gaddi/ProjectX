@@ -80,12 +80,13 @@ void SimpleActor::setMove(direction d)
 attributes SimpleActor::setAttribute(int pointsAvailable, attributes baseStats)
 {
     attributes tankAttributes;
-    int basicDistribution = pointsAvailable / 4;
+    int basicDistribution = pointsAvailable / 5;
 
     tankAttributes.tankHealth = basicDistribution;
     tankAttributes.tankDamage = basicDistribution;
     tankAttributes.tankAP = basicDistribution;
-    tankAttributes.tankShots = basicDistribution;
+    tankAttributes.tankAmmo = basicDistribution;
+    tankAttributes.projRange = basicDistribution;
     return tankAttributes;
 }
 

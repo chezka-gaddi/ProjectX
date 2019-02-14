@@ -13,6 +13,7 @@ LIBS += -ldl -lglut -lGL -lGLU -lpthread
 LIBS += -L../../libraries -lSOIL
 SRC_PATH=../../src/
 
+FILES += $(SRC_PATH)Settings.cpp
 FILES += $(SRC_PATH)GameField.cpp
 FILES += $(SRC_PATH)Actor.cpp
 FILES += $(SRC_PATH)MapData.cpp
@@ -32,7 +33,6 @@ FILES += $(SRC_PATH)Menu.cpp
 FILES += $(SRC_PATH)sfxDrawable.cpp
 FILES += $(SRC_PATH)Crate.cpp
 FILES += $(SRC_PATH)SimpleActor.cpp
-
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) $(PROFILE) -c $< -o $@ $(INCS)

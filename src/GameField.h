@@ -15,6 +15,7 @@
 #include "MapData.h"
 #include "ActorInfo.h"
 #include "direction.h"
+#include "Settings.h"
 #include <iostream>
 #include <ctime>
 #include <GL/glut.h>
@@ -32,76 +33,16 @@ class Settings;
 
 class GameField
 {
-
-protected:
-    /*!< this is all of the actors on the field: tanks + projectiles */
-    std::vector<ActorInfo> actors;
-    std::vector<ActorInfo> deceased;
-    std::vector<std::pair<int,int>> SFX;
-
-    int turnCount = 0; /*!< The turn count number */
-    /** struct with width, height, and a vector of ints in
-     row major order, 0 for empty tiles and actor id for nonempty. */
-    MapData fieldMap;
-
-    //callback function to update the dispaly with the map, actors, and turn count
-    void (*displayCallback)(MapData, std::vector<ActorInfo>, int);
-    void updateMap();
-    void runMoves(ActorInfo &a, MapData &fog, PositionData &pos);
-    ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
-    //Action points for each actor
-    GLfloat y_scalar = 0;
-    GLfloat x_scalar = 0;
-    bool checkObjectStrike(ActorInfo &a);
-    bool crate_o_doom(int x, int y, ActorInfo &a);
-    bool checkHealth(ActorInfo &a, bool object = true);
-    void animateMove(ActorInfo &a);
-
-    //pointers to other game components
-    Game *gameptr = nullptr;
-    Settings *settings = nullptr;
-
-    //helper functions
-    void checkObjectRegrowth();
-
 public:
-    void setSPECIAL(int points, const attributes baseStats);
-    /**
-     * Each turn will be as follows:
-     * a tank will have the option to move and then a tank will fire, once all of the tanks have fired
-     * it starts over again
-     */
-    void nextTurn();
-    void addActor(ActorInfo);
-    void checkForCheaters(int pointsAvailable);
-    void addObstacle(int x, int y, int type = 1);
-    void removeObstacle(int x, int y);
-    /**
-     * removes all actors that have a health of 0 from the game (not actors with health less than 0)
-     */
-    void cull();
-    std::string getWinner();
-    std::vector<ActorInfo> getDeceased(){return deceased;};
-
-    /**
-     * this will find all the actors in a single cell
-     * @return vector of actors that all have the same position
-     */
-    std::vector<ActorInfo> findActorsByCoord(int x, int y);
-
-    /*******************************/
-    /********constructors***********/
-    /*******************************/
-    GameField(int width = 10, int height = 10, Settings *setting=nullptr);
-    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int) = nullptr, Game * = nullptr, Settings *setting=nullptr );
-
-
+    /**********************************************/
+    /********constructors/deconstructors***********/
+    /**********************************************/
+    GameField(int width = 10, int height = 10);
+    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int) = nullptr, Game * = nullptr, Settings * = nullptr );
     ~GameField();
     /*******************************/
     /*************getters***********/
     /*******************************/
-
-    int getTurnCount();
     int getWidth();
     int getHeight();
     std::vector<int> getMap();
@@ -117,10 +58,48 @@ public:
     int obstacleAt(int x, int y);
     void create_fog_of_war(MapData &map, ActorInfo current_actor);
 
+#ifndef TESTING
+#define TESTING
+protected:
+#endif
+    std::vector<ActorInfo> actors; /*!< this is all of the actors on the field: tanks + projectiles */
+    std::vector<ActorInfo> deceased; /*!< A list of destroyed tanks */
+    std::vector<std::pair<int,int>> SFX; /*!< A list of all special effects on the field */
 
-    /*******************************/
-    /************setters************/
-    /*******************************/
+    MapData fieldMap; /*!< Struct with mapdata, width, height, vector of ints.  0 - empty/ id - actor */
+
+    //callback function to update the dispaly with the map, actors, and turn count
+    void (*displayCallback)(MapData, std::vector<ActorInfo>, int);
+    
+    //functions
+    void updateMap();
+    void runMoves(ActorInfo &a, MapData &fog, PositionData &pos);
+    void checkObjectRegrowth();
+    bool checkObjectStrike(ActorInfo &a);
+    bool crate_o_doom(int x, int y, ActorInfo &a);
+    bool checkHealth(ActorInfo &a, bool object = true);
+    void animateMove(ActorInfo &a);
+    void addObstacle(int x, int y, int type = 1);
+    void removeObstacle(int x, int y);
+    void setSPECIAL(const attributes baseStats);
+    void nextTurn();
+    void addActor(ActorInfo);
+    void checkForCheaters(int pointsAvailable);
+    void cull();
+    std::string getWinner();
+    std::vector<ActorInfo> getDeceased(){return deceased;};
+    std::vector<ActorInfo> findActorsByCoord(int x, int y);
+
+    //pointers to other game components
+    Game *gameptr = nullptr;
+    Settings *settings = nullptr;
+
+    //variables
+    ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
+    GLfloat y_scalar = 0;
+    GLfloat x_scalar = 0;
+
+
 friend class Game;
 };
 #endif //SLACKERS_PLATFORM_GAMEFIELD_H

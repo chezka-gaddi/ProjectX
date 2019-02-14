@@ -41,10 +41,10 @@ class InitEvent : public Event
 {
 private:
     int columns, rows;
-    Settings settings;
+    Settings * settings;
 
 public:
-    InitEvent(int, int, Settings);
+    InitEvent(int, int, Settings *);
 
     void doAction(Game &);
 };

@@ -28,14 +28,13 @@ GameField::~GameField()
  * @par Description:
  * Constructor given dimensions
  */ 
-GameField::GameField(int width, int height, Settings * setting)
+GameField::GameField(int width, int height)
 {
-  turnCount = 0;
   fieldMap.width = width;
   fieldMap.height = height;
   fieldMap.map.resize(width * height);
   fieldMap.obstacleMap.resize(width * height);
-  settings = setting;
+  settings = new Settings();
   std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
   std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
   displayCallback = NULL;
@@ -48,7 +47,6 @@ GameField::GameField(int width, int height, Settings * setting)
 
 GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), Game * game, Settings * setting) : actors(startActors)
 {
-  turnCount = 0;
   fieldMap.width = width;
   fieldMap.height = height;
   fieldMap.map.resize(width * height);
@@ -61,18 +59,10 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
   displayCallback = d_callback;
   gameptr = game;
   settings = setting;
+  actors = startActors;
+
 }
 
-
-/**
- * @author David Donahue
- * @par Description:
- * Gets the number of turns that have elapsed
- */
-int GameField::getTurnCount()
-{
-  return turnCount;
-}
 /**
  * @author David Donahue
  * @par Description:
@@ -124,10 +114,10 @@ void GameField::updateMap()
  * Prompts the actors to choose attributes to specialize int
  * @author Riley Kopp
  ******************************************************************************/
-void GameField::setSPECIAL(int points, const attributes baseStats)
+void GameField::setSPECIAL(const attributes baseStats)
 {
   int sum =0;
-
+  int points = baseStats.tankSpecial;
   for(auto &actor: actors)
   {
     actor.tankAttributes = actor.act_p->setAttribute(points, baseStats);
@@ -183,6 +173,9 @@ void GameField::setSPECIAL(int points, const attributes baseStats)
                 << " did not provide the correct amount of special points! Points used: "
                 << sum
                 <<std::endl;
+
+    actor.max_health = actor.health;
+    actor.max_ammo = actor.ammo;
   }
 }
 /*********************************************************************//*
@@ -200,8 +193,9 @@ void GameField::setSPECIAL(int points, const attributes baseStats)
 ************************************************************************/ 
 void GameField::animateMove(ActorInfo &a)
 {
-  if(((a.x == a.prevx) && (a.y == a.prevy)) || ((a.prevx == -1) || (a.prevy == -1)))  //We didn't actually move
+  if(((a.x == a.prevx) && (a.y == a.prevy)) || ((a.prevx == -1) || (a.prevy == -1))){  //We didn't actually move
     return;
+  }
   int px = a.prevx;
   int py = a.prevy;
   int nx = a.x;
@@ -949,7 +943,6 @@ void GameField::nextTurn()
 {
   if(gameptr != nullptr){
     settings->nextTurn();
-    ++turnCount;
   }
 
   direction atk;
@@ -960,7 +953,6 @@ void GameField::nextTurn()
   unsigned int j = 0;
   bool grow = false;
   MapData fog_of_war = fieldMap;
-  //printf("Turn number: %d\n",turnCount);
   if (gameptr != nullptr){
     checkObjectRegrowth();
   }
@@ -1090,12 +1082,11 @@ void GameField::checkForCheaters(int pointsAvailable)
 {
   for(auto &a : actors)
   {
-    if(a.health + a.damage + a.AP + a.shots + a.range > pointsAvailable)
+    if(a.health + a.damage + a.AP + a.range > pointsAvailable)
     {
       a.health = 1;
       a.damage = 1;
       a.range = 1;
-      a.shots = 1;
       a.AP = 1;
     }
   }
