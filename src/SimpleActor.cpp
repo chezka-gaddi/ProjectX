@@ -80,13 +80,20 @@ void SimpleActor::setMove(direction d)
 attributes SimpleActor::setAttribute(int pointsAvailable, attributes baseStats)
 {
     attributes tankAttributes;
-    int basicDistribution = pointsAvailable / 5;
-
-    tankAttributes.tankHealth = basicDistribution;
-    tankAttributes.tankDamage = basicDistribution;
-    tankAttributes.tankAP = basicDistribution;
-    tankAttributes.tankAmmo = basicDistribution;
-    tankAttributes.projRange = basicDistribution;
+    printf("SimpleActor: Distributing %i points.\n", pointsAvailable);
+    for (int i = 0; i < pointsAvailable; i++){
+        if (i % 5 == 0){
+            tankAttributes.tankHealth++;
+        }else if (i % 5 == 1){
+            tankAttributes.tankDamage++;
+        }else if (i % 5 == 2){
+            tankAttributes.tankAP++;
+        }else if (i % 5 == 3){
+            tankAttributes.tankAmmo++;
+        }else if (i % 5 == 4){
+            tankAttributes.projRange++;
+        }
+    }
     return tankAttributes;
 }
 

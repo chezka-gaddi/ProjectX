@@ -465,8 +465,8 @@ TEST_CASE("Checks for cheaters. Sets cheaters' tanks to have 1 for each attribut
    int pointsAvailable = 20;
    SimpleActor *a = new SimpleActor();
    SimpleActor *a2 = new SimpleActor();
-   attributes AIAttributes;
-   AIAttributes = a->setAttribute(pointsAvailable, AIAttributes);
+   attributes AIAttributes, baseAttributes;
+   AIAttributes = a->setAttribute(pointsAvailable, baseAttributes);
    ActorInfo AI(a, AIAttributes.tankHealth, AIAttributes.tankDamage, 1, 1, 1,
                 AIAttributes.tankAP, AIAttributes.projRange); 
    ActorInfo AI2(a2, 10, 10, 0, 0, 2, 10, 10); // invalid tank: defaults all to one
@@ -516,11 +516,11 @@ TEST_CASE("Game Field properly gets attributes from actors")
 
     output = manager.getActors();
 
-    REQUIRE(output[0].tankAttributes.tankHealth == 1);
-    REQUIRE(output[0].tankAttributes.tankDamage == 1);
-    REQUIRE(output[0].tankAttributes.tankAP == 1);
-    REQUIRE(output[0].tankAttributes.tankRadar == 1);
-    REQUIRE(output[0].tankAttributes.tankAmmo == 1);
+    REQUIRE(output[0].health == 2);
+    REQUIRE(output[0].damage == 2);
+    REQUIRE(output[0].AP == 3);
+    REQUIRE(output[0].radar == 1);
+    REQUIRE(output[0].ammo == 2);
 
 
 

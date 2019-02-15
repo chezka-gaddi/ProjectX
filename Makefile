@@ -75,11 +75,11 @@ clean-lib: clean
 	@rm -rf buildsrc
 	@rm -rf libraries/libCTF.so
 
-clean-all: clean-lib
+clean-all: clean-lib clean-tests
 	@rm -rf $(TANK_PATH)*
 	@rm -rf coverage
 
-clean-tests: clean-all
+clean-tests: clean
 	@rm -rf testUnitAll
 	@rm -rf testFunctionalAll
 	@make clean -C tests/src

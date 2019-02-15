@@ -941,7 +941,7 @@ void GameField::checkObjectRegrowth(){
 
 void GameField::nextTurn()
 {
-  if(gameptr != nullptr){
+  if(settings != nullptr){
     settings->nextTurn();
   }
 
