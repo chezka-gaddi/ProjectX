@@ -18,71 +18,71 @@ void Settings::nextTurn(){turn++;}
 //setters
 void Settings::setAttributes(attributes attr){baseAttributes = attr;}
 void Settings::setIdleSpeed(int ai_speed){
-          if (ai)
+          if (gMode != quiet)
             std::cout << "Speeding up the AI's...  \n";
           if(ai_speed > 1500)
           {
-            if (ai)
+            if (gMode != quiet)
               std::cout << "Speeds above 1500 are extremely slow, defaulting at 1500\n";
             ai_speed = 1500;
           }else if (ai_speed < 1){
-            if (ai)
+            if (gMode != quiet)
               std::cout << "AI Speed of 0 introduces an uneccessary delay, defaulting to 1\n";
             ai_speed = 1;
           }
-          if (ai)
+          if (gMode != quiet)
             std::cout << "   ...done.\n";  
   idleSpeed = ai_speed;
 }
 void Settings::setAniFrames(int aniSpeed){
-  if (ai)
+  if (gMode != quiet)
     std::cout << "Slowing down time...  \n";
   if(aniSpeed > 30)
   {
-    if (ai)
+    if (gMode != quiet)
       std::cout << "Speeds above 30 are slow, defaulting to 30\n";
     aniSpeed = 30;
   }else if (aniSpeed < 0){
-    if (ai)
+    if (gMode != quiet)
       std::cout << "Speed below 0 are now allowed, defaulting to 0\n";
     aniSpeed = 0;
   }
-  if (ai)
+  if (gMode != quiet)
     std::cout << "   ...done.\n";
   aniFrames = aniSpeed;
 }
 void Settings::setTankSpeed(int tank_speed){
-  if (ai)
+  if (gMode != quiet)
     std::cout << "Greasing the wheels...  \n";
   if(tank_speed > 800)
   {
-    if (ai)
+    if (gMode != quiet)
       std::cout << "Tank speeds above 800 are extremely slow, defaulting to 800\n";
     tank_speed = 800;
   }else if (tank_speed < 0){
-    if (ai)
+    if (gMode != quiet)
       std::cout << "Tank speed below 0 are now allowed, defaulting to 0\n";
     tank_speed = 0;
   }
-  if (ai)
+  if (gMode != quiet)
     std::cout << "   ...done.\n";
   tankSpeed = tank_speed;  
 }
 void Settings::setBulletSpeed(int bullet_speed){
-  if (ai){
+  if (gMode != quiet){
     std::cout << "Putting helium in the bullets...  \n";
   }
     if(bullet_speed > 100)
   {
-    if (ai)
+    if (gMode != quiet)
       std::cout << "Bullet speeds above 100 are extremely slow, defaulting to 100\n";
     bullet_speed = 100;
   }else if (bullet_speed < 0){
-    if (ai)
+    if (gMode != quiet)
       std::cout << "Bullet speeds below 0 are now allowed, defaulting to 0\n";
     bullet_speed = 0;
   }
-  if (ai)
+  if (gMode != quiet)
     std::cout << "   ...done.\n";
   bulletSpeed = bullet_speed;
 }
@@ -224,3 +224,6 @@ int Settings::getAttrRadar(){return baseAttributes.tankRadar;}
 int Settings::getAttrAmmo(){return baseAttributes.tankAmmo;}
 int Settings::getAttrRange(){return baseAttributes.projRange;}
 int Settings::getAttrSpecial(){return baseAttributes.tankSpecial;}
+
+void Settings::setCoverageMode(){modeCoverage = true;}
+bool Settings::checkCoverage(){return modeCoverage;}

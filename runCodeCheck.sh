@@ -8,10 +8,6 @@ echo ""
 echo "Running ./covTanks to create gco files"
 ./platform -coverage
 
-echo ""
-echo "Creating gcno files"
-#find . -type f -name '*.gcno' -exec gcov {} +
-
 lcov --no-external --capture --initial --directory src --output-file coverage/platform_base.info
 find . -type f -name '*.gcda' -exec rm {} +
 
@@ -23,24 +19,22 @@ echo "Creating test files"
 make tests PROFILE="-pg -fprofile-arcs -ftest-coverage" -j8
 
 echo "Running Unit Test files"
-./platform
-
-echo ""
-echo "Creating gcno files"
-#find . -type f -name '*.gcno' -exec gcov {} +
+./testUnitAll
 
 lcov --no-external --capture --directory . --output-file coverage/platform_unit.info
 find . -type f -name '*.gcda' -exec rm {} +
 
 echo ""
 echo "Running Functional Test files"
-./platform
-
-echo ""
-echo "Ceating gcno files"
-#find . -type f -name '*.gcno' -exec gcov {} +
+./testFunctionalAll
 
 lcov --no-external --capture --directory . --output-file coverage/platform_functional.info
+find . -type f -name '*.gcda' -exec rm {} +
+
+echo ""
+echo "Running normal game"
+./platform -coverage
+lcov --no-external --capture --directory . --output-file coverage/platform_game.info
 
 echo ""
 echo "Creating HTML report with lcov"
@@ -48,6 +42,7 @@ echo "Creating HTML report with lcov"
 lcov --no-external --add-tracefile coverage/platform_base.info \
         --add-tracefile coverage/platform_unit.info \
         --add-tracefile coverage/platform_functional.info \
+        --add-tracefile coverage/platform_game.info \
         --output-file coverage/coverage.info
 
 echo ""

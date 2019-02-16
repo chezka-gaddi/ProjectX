@@ -425,8 +425,8 @@ int TimerEvent::idle_speed = 750;
 void Game::initGameState(Settings * setting)
 {
   settings = setting;
-  bool ai = (settings->getGameMode() == gameMode::ai);
-  if(ai)
+  bool quiet = (settings->getGameMode() == gameMode::quiet);
+  if(!quiet)
     std::cout << "Game::Loading config.txt\n";
   ifstream fin("config.txt");
   std::string configLine;
@@ -480,7 +480,7 @@ void Game::initGameState(Settings * setting)
     {
       if(configLine == "MAP")
       {
-        if (ai)
+        if (!quiet)
                 cout << "Building the map...\n";
         if(height < 9)
         {
@@ -505,13 +505,13 @@ void Game::initGameState(Settings * setting)
         while (y < height - hPad)
         {
           if(y == height/3){
-            if (ai)
+            if (!quiet)
               cout << "  Planting trees...\n";
           }else if(y == height/3*2){
-            if (ai)
+            if (!quiet)
               cout << "  Moving rocks...\n";
           }else if(y == height-1){
-            if (ai)
+            if (!quiet)
               cout << "  Trimming bushes...\n";
           }
           getline(fin, configLine);
@@ -581,9 +581,9 @@ void Game::initGameState(Settings * setting)
         if(id == "AI")  //AI to load
         {
           if(AINames.size() == 0)
-            if (ai)
+            if (!quiet)
               cout << "Waking up the tank commanders...\n";
-          if (ai)
+          if (!quiet)
             cout << "   Checking player " << AINames.size()+1 << "...";
           int x, y;
           i = args.find(' ');
@@ -602,13 +602,13 @@ void Game::initGameState(Settings * setting)
               }
             }
           }
-          if (ai)
+          if (!quiet)
             cout << "  finding spawn...";
           i = args.find(' ', i+1);    //skip x
           i = args.find(' ', i+1);    //skip y
 
           args = args.substr(i+1);
-          if (ai)
+          if (!quiet)
             cout << "  colorizing tank...";
 
           for(int x = 0; x < 5; x++)
@@ -631,7 +631,7 @@ void Game::initGameState(Settings * setting)
             tankImages.insert(std::end(tankImages), std::begin(AIImages), std::end(AIImages));
           }
           AIImages.clear();
-          if (ai)
+          if (!quiet)
             cout << "  ...done.\n";
         }
         else if(id == "AI_SPEED")
@@ -657,42 +657,42 @@ void Game::initGameState(Settings * setting)
         //field params
         else if(id == "WIDTH")
         {
-          if (ai)
+          if (!quiet)
             cout << "S t r e t c h i n g   t h e   m a p . . .  ";
           stringstream(args) >> width;
           if(width < 5)
           {
             width = 5;
-            if (ai)
+            if (!quiet)
               printf("\nInvalid width parameter, defaulting to %d.\n", width);
           }
           else if(width > 50)
           {
             width = 50;
-            if (ai)
+            if (!quiet)
               cout << "\nWidth parameter too high, defaulting to 50.\n";
           }
-          if (ai)
+          if (!quiet)
             cout << "...done.\n";
         }
         else if(id == "HEIGHT")
         {
-          if (ai)
+          if (!quiet)
             cout << "Elon\n    gati\n        ng t\n            he ma\n                p...  ";
           stringstream(args) >> height;
           if(height < 5)
           {
             height = 5;
-            if (ai)
+            if (!quiet)
               printf("Invalid height parameter, defaulting to %d.\n", height);
           }
           else if(height > 21)
           {
             height = 21;
-            if (ai)
+            if (!quiet)
               cout << "Height parameter too high, defaulting to 21.\n";
           }
-          if (ai)
+          if (!quiet)
             cout << "\n                                                                   ...done.\n";
         }
         else if(id == "MAXTURNS")
@@ -702,11 +702,11 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "FIELDIMAGE")
         {
-          if (ai)
+          if (!quiet)
             cout << "Painting the background...\n";
           stringstream(args) >> name;
           gameImages.push_back(name);
-          if(ai)
+          if(!quiet)
             cout << "   ...done\n";
         }
         else if(id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH" || id == "CRATE" || id =="WATER")
@@ -714,7 +714,7 @@ void Game::initGameState(Settings * setting)
           stringstream(args) >> x >> y;
           if(x > width - 1 || x < 0 || y > height - 1 || y < 0)
           {
-            if (ai)
+            if (!quiet)
               printf("Invalid obstacle location: (%d, %d). Ranges: (0-%d, 0-%d)\n", x, y, width-1, height-1);
           }
           else
@@ -724,7 +724,7 @@ void Game::initGameState(Settings * setting)
               if((unsigned int) tankLocations[i].first == x && (unsigned int)tankLocations[i].second == y)
               {
                 taken = true;
-                if (ai)
+                if (!quiet)
                   printf("Invalid obstacle location: (%d, %d) aleady taken by tank\n", x, y);
               }
             }
@@ -735,7 +735,7 @@ void Game::initGameState(Settings * setting)
                 if((unsigned int)obstacleLocations[i].first == x && (unsigned int)obstacleLocations[i].second == y)
                 {
                   taken = true;
-                  if (ai)
+                  if (!quiet)
                     printf("Invalid obstacle location: (%d, %d) aleady taken by object\n", x, y);
                 }
               }
@@ -899,7 +899,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id != "")
         {
-          if (ai)
+          if (!quiet)
             std::cout << "BAD ARGUMENT: " << id << '\n';
         }
 
@@ -914,16 +914,16 @@ void Game::initGameState(Settings * setting)
   fieldy = height;
 
   glEnable(GL_TEXTURE_2D);
-  if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages, waterImages,settings->getGameMode() == quiet) && ai)
+  if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages, waterImages, quiet) && !quiet)
       cout << "Failed to open image(s).\n" << endl;
   glDisable(GL_TEXTURE_2D);
 
-  if (ai)
+  if (!quiet)
     cout << "Loading Shared Objects...\n";
   std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
 
   std::vector<ActorInfo> startActors;
-  if (ai)
+  if (!quiet)
     cout << "Finalizing game settings...\n";
 
   baseStats.tankHealth = settings->getAttrHealth();
@@ -933,15 +933,15 @@ void Game::initGameState(Settings * setting)
   baseStats.tankRadar = settings->getAttrRadar();
   baseStats.projRange = settings->getAttrRange();
   settings->setAttributes(baseStats);
-  startActors = loadPlayers(ai, tankLocations, AINames, startActorPointers, baseStats, height, width);
+  startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, baseStats, height, width);
   //printf("Height: %d  Width: %d\n",height, width);
   tankGame = new GameField(width, height, startActors, displayWrapper, this, settings);
   tankGame->setSPECIAL(baseStats);
-  if (ai)
+  if (!quiet)
     cout << "   ...Done\n" << endl;
 
 // Add obstacles to the gamefield
-  if (ai)
+  if (!quiet)
     cout << "Placing Obstacles...\n";
   for(auto o : obstacleLocations)
   {
@@ -950,7 +950,7 @@ void Game::initGameState(Settings * setting)
     {
       if(tank.first == o.first && tank.second == o.second){
         taken = true;
-      if (ai)
+      if (!quiet)
         printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
       }
     }
@@ -962,7 +962,7 @@ void Game::initGameState(Settings * setting)
       constants.push_back(tempOb);
     }
   }
-  if (ai)
+  if (!quiet)
     cout << "  ...hiding the ammo\n";
   for(auto c : specialLocations)
   {
@@ -971,7 +971,7 @@ void Game::initGameState(Settings * setting)
     {
       if(tank.first == c.first && tank.second == c.second){
         taken = true;
-        if (ai)
+        if (!quiet)
           printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
       }
     }
@@ -983,7 +983,7 @@ void Game::initGameState(Settings * setting)
     specials.push_back(temp);
     }
   }
-  if (ai)
+  if (!quiet)
     cout << "  ...letting the trees grow\n";
   for(auto t : treeLocations)
   {
@@ -991,7 +991,7 @@ void Game::initGameState(Settings * setting)
     tempOb = new Obstacles(0, convertGLXCoordinate(t.first), convertGLYCoordinate(t.second), t.first, t.second);
     trees.push_back(tempOb);
   }
-  if (ai)
+  if (!quiet)
     cout << "  ...petting the rocks\n";
   for(auto r : rockLocations)
   {
@@ -1000,7 +1000,7 @@ void Game::initGameState(Settings * setting)
     {
       if(tank.first == r.first && tank.second == r.second){
         taken = true;
-      if (ai)
+      if (!quiet)
         printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
       }
     }
@@ -1012,7 +1012,7 @@ void Game::initGameState(Settings * setting)
     rocks.push_back(tempOb);
     }
   }
-  if (ai)
+  if (!quiet)
     cout << "  ...finding some shrubberies\n";
   for(auto b : bushLocations)
   {
@@ -1020,7 +1020,7 @@ void Game::initGameState(Settings * setting)
     tempOb = new Obstacles(2, convertGLXCoordinate(b.first), convertGLYCoordinate(b.second), b.first, b.second);
     bushes.push_back(tempOb);
   }
-  if (ai)
+  if (!quiet)
     cout << "  ...drilling for moisture\n";
   for(auto w : waterLocations)
   {
@@ -1040,9 +1040,9 @@ void Game::initGameState(Settings * setting)
     waters.push_back(temp);
     }
   }
-  if (ai)
+  if (!quiet)
     cout << "...done.\n" << endl;
-  if (settings->getGameMode() == gameMode::coverage){
+  if (settings->checkCoverage()){
     cout << "Turning on coverage mode." << endl;
     settings->setIdleSpeed(1);
     settings->setAniFrames(1);
@@ -1051,9 +1051,9 @@ void Game::initGameState(Settings * setting)
   }
 }
 
-std::vector<ActorInfo> Game::loadPlayers(bool ai, std::vector<std::pair<int,int>> tankLocations, std::vector<std::string> AINames, std::vector<Actor*> startActorPointers, attributes baseAttr, int height, int width){
+std::vector<ActorInfo> Game::loadPlayers(bool quiet, std::vector<std::pair<int,int>> tankLocations, std::vector<std::string> AINames, std::vector<Actor*> startActorPointers, attributes baseAttr, int height, int width){
  std::vector<ActorInfo> actors;
- if (ai)
+ if (!quiet)
     cout << "Creating Player Tanks...\n";
   for(unsigned int i = 0; i < startActorPointers.size(); ++i)
   {
@@ -1075,7 +1075,7 @@ std::vector<ActorInfo> Game::loadPlayers(bool ai, std::vector<std::pair<int,int>
                                     , AINames[i]));
     //printf("Actor %d name: %s\n", i, AINames[i].c_str());
     }else{
-      if (ai)
+      if (!quiet)
         cout << "Invalid location for " << AINames[i] << endl;
     }
   }

@@ -74,7 +74,7 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
         glBindTexture(GL_TEXTURE_2D, treeTex[i]);
     }
     if(!quiet)
-    cout << "\nLoading User Tree Textures:\n";
+        cout << "\nLoading User Tree Textures:\n";
     // Load in the tree texure information
     for( unsigned int i = tImages.size(); i < trees.size()+tImages.size(); i++ )
     {

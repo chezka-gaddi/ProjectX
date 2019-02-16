@@ -59,9 +59,9 @@ int main(int argc, char **argv)
 {
     Settings * settings = new Settings;
     gameMode mode = settings->getGameMode();
-    const char *dmode = "-demo";
-    const char *qmode = "-quiet";
-    const char *cmode = "-coverage";
+    const char *dmode = "--demo";
+    const char *qmode = "--quiet";
+    const char *cmode = "--coverage";
     
     //game display height
     int height = 727, width = 1000;
@@ -74,21 +74,19 @@ int main(int argc, char **argv)
     //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
     while(counter < argc)
     {
-      if (strcmp(argv[counter], dmode) == 0 && counter + 1 <= argc)
+      if ((strcmp(argv[counter], dmode)==0 || strcmp(argv[counter], "-d") == 0) && counter + 1 <= argc)
       {
         printf("demo mode\n");
         width = 1900;
         height = 1000;
-      }
-      if (strcmp(argv[counter], qmode) == 0 && counter + 1 <= argc)
+      }else if ((strcmp(argv[counter], qmode) == 0 || strcmp(argv[counter], "-q") == 0 ) && counter + 1 <= argc)
       {
         printf("quiet mode\n");
         mode = quiet;
-      }
-      if (strcmp(argv[counter], cmode) == 0 && counter + 1 <= argc)
+      }else if ((strcmp(argv[counter], cmode) == 0 || strcmp(argv[counter], "-c") == 0 ) && counter + 1 <= argc)
       {
         printf("coverage mode\n");
-        mode = coverage;        
+        settings->setCoverageMode();
       }
       counter++;
     }

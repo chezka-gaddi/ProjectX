@@ -42,6 +42,7 @@ public:
     int getAttrAmmo();
     int getAttrRange();
     int getAttrSpecial();
+    bool checkCoverage();
 
     void nextTurn();
 
@@ -65,6 +66,7 @@ public:
     void setAttrAmmo(int ammo);
     void setAttrRange(int range);
     void setAttrSpecial(int special);
+    void setCoverageMode();
 
 
 private:
@@ -84,6 +86,7 @@ private:
     int turn = 0; //Current game turn
     int actTurn = 0; //0 causes issues on first display call
     int modCounter = 7; //Modular counter for animation effects
+    bool modeCoverage = false; //coverage mode for faster animations
 };
 
 #endif //__GAME_H
