@@ -1,6 +1,6 @@
 #!/bin/bash
 
-make clean-tests
+make clean-all
 make coverage -j8
 mkdir -p coverage
 
