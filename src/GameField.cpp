@@ -59,6 +59,9 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
   displayCallback = d_callback;
   gameptr = game;
   settings = setting;
+  if (settings == nullptr){
+    settings = new Settings();
+  }
   actors = startActors;
 
 }
@@ -83,15 +86,6 @@ int GameField::getHeight()
   return fieldMap.height;
 }
 
-/**
- * @author David Donahue
- * @par Description:
- * Gets just the map as a vector of ints
- */
-std::vector<int> GameField::getMap()
-{
-  return fieldMap.map;
-}
 /**
  * @author David Donahue
  * @par Description:
@@ -892,12 +886,9 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
 
 }
 /**
- * @author David Donahue
- * @author Jon McKee (modified by)
+ * @author Jon McKee
  * @par Description:
- * Executes the move and attack phase of each AI's turn and increments the turn counter.
- * Object regrowth is checked at the beginning of the turn phase.
- * AI's are culled at the end of the turn phase.
+ * This function checks all objects to see if they should be regrown
  */
 void GameField::checkObjectRegrowth(){
   for(Obstacles* t : gameptr->trees)
@@ -959,7 +950,7 @@ void GameField::nextTurn()
   for(unsigned int i = 0; i < actors.size(); ++i)
   {
     act_ap = actors[i].AP;
-    if(actors[i].id > 0 && actors[i].health > 0 && gameptr != nullptr)
+    if(actors[i].id > 0 && actors[i].health > 0)
       settings->setActTurn(actors[i].id);
     updateMap();  //Give each actor a fresh map
     if(gameptr != nullptr)  
@@ -968,11 +959,11 @@ void GameField::nextTurn()
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
       actors[i].cDetect++;
-      if (gameptr != nullptr){
+      //if (gameptr != nullptr){
         settings->setModCounter(settings->getModCounter() + 1); 
         if(settings->getModCounter() > 7)
           settings->setModCounter(0);
-      }
+      //}
       updateMap();
       fog_of_war = fieldMap;
       create_fog_of_war(fog_of_war, actors[i]);
@@ -1074,25 +1065,6 @@ void GameField::addActor(ActorInfo a)
 }
 
 /**
- * @author Youki Lewis
- * @par Description:
- * Check if points are distributed properly
- */
-void GameField::checkForCheaters(int pointsAvailable)
-{
-  for(auto &a : actors)
-  {
-    if(a.health + a.damage + a.AP + a.range > pointsAvailable)
-    {
-      a.health = 1;
-      a.damage = 1;
-      a.range = 1;
-      a.AP = 1;
-    }
-  }
-}
-
-/**
  * @author David Donahue
  * @par Description:
  * Adds an obstacle to the map
@@ -1149,15 +1121,7 @@ const std::vector<ActorInfo> &GameField::getActorsConst()
 {
   return actors;
 }
-/**
- * @author Jon McKee
- * @par Description:
- * Get the current set of SFX
- */
-std::vector<std::pair<int,int>> GameField::getSFX()
-{
-  return SFX;
-}
+
 /**
  * @author Jon McKee
  * @par Description:
@@ -1169,41 +1133,7 @@ std::vector<std::pair<int,int>> *GameField::getSFXPointer()
   temp = &SFX;
   return temp;
 }
-/**
- * @author Jon McKee
- * @par Description:
- * Get the current set of SFX
- */
-const std::vector<std::pair<int,int>> &GameField::getSFXConst()
-{
-  return SFX;
-}
-/**
- * @author Jon McKee
- * @par Description:
- * Clear the current set of SFX
- */
-void GameField::clearSFX()
-{
-  SFX.clear();
-}
-/**
- * @author David Donahue
- * @par Description:
- * Get a vector of actors at a given location on the map
- */
-std::vector<ActorInfo> GameField::findActorsByCoord(int x, int y)
-{
 
-  std::vector<ActorInfo> hits;
-  for(auto a : actors)  //check each actor
-  {
-    if(a.x == x && a.y == y)
-      hits.push_back(a);
-  }
-  return hits;
-
-}
 /**
  * @author David Donahue
  * @par Description:
@@ -1228,16 +1158,6 @@ void GameField::cull()
     }
   }
 
-}
-/**
- * @author David Donahue
- * @par Description:
- * Returns the full fieldMap as a MapData struct
- */
-MapData GameField::getMapData()
-
-{
-  return fieldMap;
 }
 
 /**
@@ -1276,13 +1196,4 @@ int GameField::obstacleAt(int x, int y)
 {
   return fieldMap.obstacleMap[x + y * fieldMap.width];
 
-}
-
-std::string GameField::getWinner()
-{
-  string winner = "none";
-  for(auto a : actors)
-    if(a.health > 0 && a.id > 0)
-      winner = a.name;
-  return winner;
 }

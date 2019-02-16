@@ -71,7 +71,7 @@ SCENARIO("The projectile moves around the gamefield")
                                                  0, 0, 0, 0, 0
                                                 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
             tank->setAttack(STAY);
@@ -85,7 +85,7 @@ SCENARIO("The projectile moves around the gamefield")
                                                   0, 0, 0, 0, 0
                                                 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }
@@ -105,7 +105,7 @@ SCENARIO("The projectile moves around the gamefield")
                                                   0, 0, 0, 0, -2
                                                 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
 
             }
@@ -120,7 +120,7 @@ SCENARIO("The projectile moves around the gamefield")
                                                   0, 0, 0, 0, 0
                                                 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }
@@ -155,7 +155,7 @@ SCENARIO("The projectile moves around the gamefield")
                                                  0, 0, 0, 0, 0
                                                 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
             tank->setAttack(STAY);
@@ -169,7 +169,7 @@ SCENARIO("The projectile moves around the gamefield")
                                                   0, 0, 0, 0, 0
                                                 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }
@@ -189,7 +189,7 @@ SCENARIO("The projectile moves around the gamefield")
                                                   0, 0, 0, 0, -2
                                                 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
 
             }
@@ -204,7 +204,7 @@ SCENARIO("The projectile moves around the gamefield")
                                                   0, 0, 0, 0, 0
                                                 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }
@@ -252,7 +252,7 @@ SCENARIO("The projectile collides with the actors on the gamefield")
                 //Compare map with the initial map
                 std::vector<int> expected_map = { 3, 0, 0, 0, 0, 0, -3, -2, 0, 0, 0, 0, 0, 2 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
             tank->setAttack(STAY);
@@ -265,7 +265,7 @@ SCENARIO("The projectile collides with the actors on the gamefield")
             THEN("The projectiles collide and despawn")
             {
                 std::vector<int> expected_map = { 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 };
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }

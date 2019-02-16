@@ -8,11 +8,11 @@ SOFLAGS = -DDYNAMIC
 PROFILE ?=
 
 #TEST_FILES = catch.hpp
-TEST_FILES = main.o
-TEST_FILES += GameFeildTests.o
-TEST_FILES += SimpleActorTests.o
-TEST_FILES += SimpleAITests.o
-TEST_FILES += DynamicLoaderTests.o
+TEST_FILES = main.cpp
+TEST_FILES += GameFieldTests.cpp
+TEST_FILES += SimpleActorTests.cpp
+TEST_FILES += SimpleAITests.cpp
+TEST_FILES += DynamicLoaderTests.cpp
 
 SRC_PATH=../../src/
 
@@ -51,9 +51,9 @@ TANKS_LINK = ../../src/Actor.o #need to link in the base class for the .so to ha
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) $(PROFILE) -c $? -o $@ $(INCS)
 
-testAll: $(FILES:.cpp=.o) $(TEST_FILES)
+testAll: $(FILES:.cpp=.o) $(TEST_FILES:.cpp=.o)
 	+make tanks
-	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o testUnitAll $(FILES:.cpp=.o) $(TEST_FILES) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o testUnitAll $(FILES:.cpp=.o) $(TEST_FILES:.cpp=.o) $(LIBS)
 
 tanks:	$(TANKS)
 	mkdir -p $(TANK_PATH)

@@ -34,33 +34,6 @@ TEST_CASE("addSimpleActor adds an actor to actors")
 
 }
 
-TEST_CASE("findActorByCoord() works with no actors")
-{
-    GameField g;
-    REQUIRE(g.findActorsByCoord(0,0).size() == 0);
-}
-
-TEST_CASE("findActorByCoord() returns correct actors")
-{
-    GameField g;
-    ActorInfo a1 (NULL, 1, 1, 0, 0, 1);
-    ActorInfo a2 (NULL, 2, 1, 0, 0, 1);
-    ActorInfo a3 (NULL, 3, 1, 1, 1, 1);
-
-
-
-    g.addActor(a1);
-    g.addActor(a2);
-    g.addActor(a3);
-
-    std::vector<ActorInfo> hits = g.findActorsByCoord(0,0);
-    //make sure that 2 actors are returned and they are the right ones
-    REQUIRE((hits.size() == 2
-             && (hits[0] == a1 || hits[1] == a1)
-             && (hits[0] == a2 || hits[1] == a2) ));
-
-}
-
 TEST_CASE("cull() removes only actors with health of 0")
 {
     GameField g;
@@ -82,11 +55,11 @@ TEST_CASE("Construct GameField with dimensions")
     REQUIRE ((g.getWidth() == 4 && g.getHeight() == 5));
 }
 
-TEST_CASE("getMap() returns valid map")
+TEST_CASE("fieldMap.map returns valid map")
 {
     GameField g (2, 2);
     std::vector<int> ref = {0, 0, 0, 0};
-    REQUIRE(g.getMap() == ref);
+    REQUIRE(g.fieldMap.map == ref);
 }
 
 TEST_CASE("GameField constructs with actors")
@@ -115,7 +88,7 @@ TEST_CASE("GameField correctly places actors on the map at construction")
     actorVect[1].health = 1;
     GameField g (2, 2, actorVect);
     std::vector<int> ref = {0, 1, 2, 0};
-    REQUIRE(g.getMap() == ref);
+    REQUIRE(g.fieldMap.map == ref);
 }
 
 TEST_CASE("GameField correctly places actors on the map when added")
@@ -125,7 +98,7 @@ TEST_CASE("GameField correctly places actors on the map when added")
     GameField g (2, 2);
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
-    REQUIRE(g.getMap() == ref);
+    REQUIRE(g.fieldMap.map == ref);
 }
 TEST_CASE("SimpleActor moves when nextTurn() is called")
 {
@@ -137,7 +110,7 @@ TEST_CASE("SimpleActor moves when nextTurn() is called")
     a->setAttack(STAY);
     std::vector<int> ref = {0, 1, 0, 0};
     g.nextTurn();
-    REQUIRE(g.getMap() == ref);
+    REQUIRE(g.fieldMap.map == ref);
 }
 TEST_CASE("Actors are prevented from moving off the map")
 {
@@ -147,7 +120,7 @@ TEST_CASE("Actors are prevented from moving off the map")
     g.addActor(newAI);
     std::vector<int> ref = {0, 1, 0, 0};
     g.nextTurn();
-    REQUIRE(g.getMap() == ref);
+    REQUIRE(g.fieldMap.map == ref);
 }
 TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are culled")
 {
@@ -164,7 +137,7 @@ TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are
     a2->setMove(STAY);
     std::vector<int> ref = {0, 0, 1};
     g.nextTurn();
-    REQUIRE(g.getMap() == ref);
+    REQUIRE(g.fieldMap.map == ref);
 }
 TEST_CASE("Actors move until their range is depleted")
 {
@@ -176,7 +149,7 @@ TEST_CASE("Actors move until their range is depleted")
     a->setMove(DOWN);
     a->setAttack(STAY);
     g.nextTurn();
-    REQUIRE(g.getMap() == ref);
+    REQUIRE(g.fieldMap.map == ref);
 }
 TEST_CASE("Actors spawn and move projectiles on attack")
 {
@@ -188,7 +161,7 @@ TEST_CASE("Actors spawn and move projectiles on attack")
     a->setAttack(UP);
     a->setMove(STAY);
     g.nextTurn();
-    REQUIRE(g.getMap() == ref);
+    REQUIRE(g.fieldMap.map == ref);
 }
 TEST_CASE("Actors take 1 point of damage from the walls of the arena")
 {
@@ -222,7 +195,7 @@ TEST_CASE("Actors are culled and do not move after collision")
     g.nextTurn(); //tank 1 will fire up at the other tanks
 
     std::vector<int> ref = {3, 0, 0, 1}; //Tank 2 hit, Tank 3 and 1 remain
-    REQUIRE(g.getMap() == ref);
+    REQUIRE(g.fieldMap.map == ref);
 
 }
 
@@ -249,7 +222,7 @@ TEST_CASE("Collision is checked when firing point-blank")
     std::vector<int> ref = {3, 0, 1}; //Tank 2 hit, Tank 3 and 1 remain
 
     //failure looks like {0, 2, 1}
-    REQUIRE(g.getMap() == ref);
+    REQUIRE(g.fieldMap.map == ref);
 
 }
 
@@ -460,29 +433,21 @@ TEST_CASE("SimpleActor moves diagonal down/right and collides with wall")
     REQUIRE(g.getActors().back().health == 1);
     REQUIRE(g2.getActors().back().health == 1);
 }
-TEST_CASE("Checks for cheaters. Sets cheaters' tanks to have 1 for each attributes")
+TEST_CASE("Checks set attributes for new tanks")
 {
    int pointsAvailable = 20;
    SimpleActor *a = new SimpleActor();
-   SimpleActor *a2 = new SimpleActor();
    attributes AIAttributes, baseAttributes;
    AIAttributes = a->setAttribute(pointsAvailable, baseAttributes);
    ActorInfo AI(a, AIAttributes.tankHealth, AIAttributes.tankDamage, 1, 1, 1,
                 AIAttributes.tankAP, AIAttributes.projRange); 
-   ActorInfo AI2(a2, 10, 10, 0, 0, 2, 10, 10); // invalid tank: defaults all to one
    AI.tankAttributes = AIAttributes;
    GameField g (2, 2);
    g.addActor(AI);
-   g.addActor(AI2);
-   g.checkForCheaters(pointsAvailable);
    REQUIRE(g.getActors().at(0).health >= 4);
    REQUIRE(g.getActors().at(0).damage >= 4);
    REQUIRE(g.getActors().at(0).range >= 4);
    REQUIRE(g.getActors().at(0).shots == 0);
-   REQUIRE(g.getActors().at(1).health == 1);
-   REQUIRE(g.getActors().at(1).damage == 1);
-   REQUIRE(g.getActors().at(1).range == 1); 
-   REQUIRE(g.getActors().at(1).shots == 0);
 }
 TEST_CASE("GameField updates heading of ActorInfo")
 {
@@ -558,9 +523,9 @@ TEST_CASE("GameField Calculates Fog of War")
         manager.addObstacle(6, i);
     }
 
-    REQUIRE(manager.getMapData().obstacleMap == expected_obstacles);
+    REQUIRE(manager.fieldMap.obstacleMap == expected_obstacles);
 
-    MapData test_map = manager.getMapData();
+    MapData test_map = manager.fieldMap;
 
     manager.create_fog_of_war(test_map, test);
 //std::fill(expected_obstacles.begin(), expected_obstacles.end(), false);
@@ -586,7 +551,7 @@ TEST_CASE("GameField hides other thanks in the Fog of War")
 
     GameField manager(7, 7, tank_list);
 
-    MapData test_map = manager.getMapData();
+    MapData test_map = manager.fieldMap;
 
     manager.create_fog_of_war(test_map, test);
 

@@ -45,15 +45,10 @@ public:
     /*******************************/
     int getWidth();
     int getHeight();
-    std::vector<int> getMap();
     std::vector<ActorInfo> getActors();
     std::vector<ActorInfo> * getActorsPointer();
     const std::vector<ActorInfo> &getActorsConst();
-    std::vector<std::pair<int,int>> getSFX();
     std::vector<std::pair<int,int>> * getSFXPointer();
-    const std::vector<std::pair<int,int>> &getSFXConst();
-    void clearSFX();
-    MapData getMapData();
     ActorInfo & actorInfoById(int id);
     int obstacleAt(int x, int y);
     void create_fog_of_war(MapData &map, ActorInfo current_actor);
@@ -62,12 +57,6 @@ public:
 #define TESTING
 protected:
 #endif
-    std::vector<ActorInfo> actors; /*!< this is all of the actors on the field: tanks + projectiles */
-    std::vector<ActorInfo> deceased; /*!< A list of destroyed tanks */
-    std::vector<std::pair<int,int>> SFX; /*!< A list of all special effects on the field */
-
-    MapData fieldMap; /*!< Struct with mapdata, width, height, vector of ints.  0 - empty/ id - actor */
-
     //callback function to update the dispaly with the map, actors, and turn count
     void (*displayCallback)(MapData, std::vector<ActorInfo>, int);
     
@@ -84,11 +73,8 @@ protected:
     void setSPECIAL(const attributes baseStats);
     void nextTurn();
     void addActor(ActorInfo);
-    void checkForCheaters(int pointsAvailable);
     void cull();
-    std::string getWinner();
     std::vector<ActorInfo> getDeceased(){return deceased;};
-    std::vector<ActorInfo> findActorsByCoord(int x, int y);
 
     //pointers to other game components
     Game *gameptr = nullptr;
@@ -99,6 +85,10 @@ protected:
     GLfloat y_scalar = 0;
     GLfloat x_scalar = 0;
 
+    std::vector<ActorInfo> actors; /*!< this is all of the actors on the field: tanks + projectiles */
+    std::vector<ActorInfo> deceased; /*!< A list of destroyed tanks */
+    std::vector<std::pair<int,int>> SFX; /*!< A list of all special effects on the field */
+    MapData fieldMap; /*!< Struct with mapdata, width, height, vector of ints.  0 - empty/ id - actor */
 
 friend class Game;
 };

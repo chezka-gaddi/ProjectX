@@ -5,9 +5,9 @@ INCS = -I./ -I../../src/ -I../src
 
 PROFILE ?=
 
-TEST_FILES = main.o
-TEST_FILES += movement_tests.o
-TEST_FILES += projectile_functional_tests.o
+TEST_FILES = main.cpp
+TEST_FILES += movement_tests.cpp
+TEST_FILES += projectile_functional_tests.cpp
 
 LIBS += -ldl -lglut -lGL -lGLU -lpthread
 LIBS += -L../../libraries -lSOIL
@@ -37,8 +37,8 @@ FILES += $(SRC_PATH)SimpleActor.cpp
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) $(PROFILE) -c $< -o $@ $(INCS)
 
-testAll: $(FILES:.cpp=.o) $(TEST_FILES)
-	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o testFunctionalAll $(FILES:.cpp=.o) $(TEST_FILES) $(LIBS)
+testAll: $(FILES:.cpp=.o) $(TEST_FILES:.cpp=.o)
+	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o testFunctionalAll $(FILES:.cpp=.o) $(TEST_FILES:.cpp=.o) $(LIBS)
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
