@@ -48,10 +48,11 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 
 // Includes
 #include <iostream>
-#include "util.h"
 #include <memory>
 #include <stdio.h>
+#include "util.h"
 #include "Settings.h"
+#include "game.h"
 
 // Main
 
@@ -71,21 +72,21 @@ int main(int argc, char **argv)
     //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
     while(counter < argc)
     {
-      if ((strcmp(argv[counter], "--demo")==0 || strcmp(argv[counter], "-d") == 0) && counter + 1 <= argc)
+      if ((strcmp(argv[counter], "--demo")==0)  && counter + 1 <= argc)
       {
         printf("demo mode\n");
         width = 1900;
         height = 1000;
-      }else if ((strcmp(argv[counter], "--quiet") == 0 || strcmp(argv[counter], "-q") == 0 ) && counter + 1 <= argc)
+      }else if ((strcmp(argv[counter], "--quiet") == 0 ) && counter + 1 <= argc)
       {
         printf("quiet mode\n");
         mode = quiet;
-      }else if ((strcmp(argv[counter], "--coverage") == 0 || strcmp(argv[counter], "-c") == 0 ) && counter + 1 <= argc)
+      }else if ((strcmp(argv[counter], "--coverage") == 0) && counter + 1 <= argc)
       {
         printf("coverage mode\n");
         settings->setCoverageMode();
       }else if(argv[counter][0] == '-' && argv[counter][1] != '-'){
-        printf("multi-params\n");
+        //printf("multi-params\n");
         int i = 1; //start at first argument
         while (argv[counter][i] != '\0'){
             switch (argv[counter][i]){
@@ -118,14 +119,16 @@ int main(int argc, char **argv)
 
     settings->setGameMode(mode);
     
-    
-    //printf("Height: %d Width: %d",height, width);
-    initOpenGL( argc, argv, width, height, settings );
-
-
-    glutMainLoop();
+    //gameMode {none, ai, sp, mp, quiet, coverage};
+    if (mode == ai || mode == sp || mode == mp || mode == quiet){
+      initOpenGL( argc, argv, width, height, settings );
+      glutMainLoop();
+    }else{
+        Game game;
+        game.initGameState(settings);
+        game.noGUIGame();
+    }
 
     std::cout << "\n GAME OVER \n";
-
     return 0;
 }

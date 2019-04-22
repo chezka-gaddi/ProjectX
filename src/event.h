@@ -14,8 +14,6 @@
 #include "game.h"
 #include "Drawable.h"
 
-using namespace std;
-
 #define ESCAPE_KEY 27
 
 /***************************************************************************//**

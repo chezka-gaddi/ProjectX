@@ -321,23 +321,19 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   printf("Exiting!\n");
 }
 
-
-/*********************************************
- * 
- * ******************************//**
- * @author Chezka Gaddi
- * @brief executeTurn
+ /**************************************************************************//**
+ * @author Jonathan McKee
+ * @brief checkMaxTurn
  *
- * While the game is still playable, execute a turn from each of the tanks,
- * otherwise return back to main and destroy the GUI.
- *
+ * Check to see if we have hit the max number of turns.  If we have then kill off
+ * all tanks and let the game end on next turn loop.
  *******************************************************************************/
-void Game::executeTurn()
+bool Game::checkMaxTurn()
 {
-  //printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
-  if(settings->getTurn() == settings->getMaxTurns())
-  {
-    //printf("Finding Early Winner.\n");
+  if (settings->getTurn() != settings->getMaxTurns())
+    return false;
+
+  //printf("Finding Early Winner.\n");
     std::vector<ActorInfo> *actors = tankGame->getActorsPointer();
     int actorId=0;
     int currMaxHealth=0;
@@ -386,17 +382,35 @@ void Game::executeTurn()
         }
       }
     }
-    settings->nextTurn();
+    return true;
+}
+
+
+ /**************************************************************************//**
+ * @author Chezka Gaddi
+ * @brief executeTurn
+ *
+ * While the game is still playable, execute a turn from each of the tanks,
+ * otherwise return back to main and destroy the GUI.
+ *
+ *******************************************************************************/
+void Game::executeTurn()
+{
+  //printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
+  if(checkMaxTurn()) //if we hit the max turn skip next actions
+  {
+    tankGame->nextTurn();
     tankGame->cull();//Let game play one more turn and quit itself
   }
   else if(isplayable(tankGame->getActorsConst())) //If we still have tanks keep playing
   {
     tankGame->nextTurn();
   }
-  else   //If maxturns is not hit, and no longer playable print results
+  else   //If maxturns is not hit, but game is no longer playable print results
   {
     gameOver(tankGame->getDeceased(), tankGame->getActors());
-    glutLeaveMainLoop();
+    if (settings->getGameMode() != coverage)
+        glutLeaveMainLoop();
   }
 }
 /**
@@ -933,6 +947,7 @@ void Game::initGameState(Settings * setting)
   baseStats.tankRadar = settings->getAttrRadar();
   baseStats.projRange = settings->getAttrRange();
   settings->setAttributes(baseStats);
+
   startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, baseStats, height, width);
   //printf("Height: %d  Width: %d\n",height, width);
   tankGame = new GameField(width, height, startActors, displayWrapper, this, settings);
@@ -1178,4 +1193,14 @@ void Game::closeDown()
 void Game::earlyOut()
 {
   glutLeaveMainLoop();
+}
+
+/***************************************************************************//**
+ * @brief noGUIGame
+ *
+ * Allows the game to be played without displaying a GUI
+ *******************************************************************************/
+void Game::noGUIGame()
+{
+
 }
