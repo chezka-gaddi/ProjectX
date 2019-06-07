@@ -58,9 +58,10 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
   updateMap();
   displayCallback = d_callback;
   gameptr = game;
-  settings = setting;
-  if (settings == nullptr){
+  if (setting == nullptr){
     settings = new Settings();
+  }else{
+    settings = setting;
   }
   actors = startActors;
 

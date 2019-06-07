@@ -1006,18 +1006,18 @@ void Game::initGameState(Settings * setting)
   if (!quiet)
     cout << "Finalizing game settings...\n";
 
-  baseStats.tankHealth = settings->getAttrHealth();
+  /*baseStats.tankHealth = settings->getAttrHealth();
   baseStats.tankDamage = settings->getAttrDamage();
   baseStats.tankAP = settings->getAttrAP();
   baseStats.tankAmmo = settings->getAttrAmmo();
   baseStats.tankRadar = settings->getAttrRadar();
   baseStats.projRange = settings->getAttrRange();
-  settings->setAttributes(baseStats);
+  settings->setAttributes(baseStats);*/
 
   startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, baseStats, height, width);
   //printf("Height: %d  Width: %d\n",height, width);
-  tankGame = new GameField(width, height, startActors, displayWrapper, this);
-  tankGame->setSPECIAL(baseStats);
+  tankGame = new GameField(width, height, startActors, displayWrapper, this, settings);
+  tankGame->setSPECIAL(settings->getAttributes());
   if (!quiet)
     cout << "   ...Done\n" << endl;
 
