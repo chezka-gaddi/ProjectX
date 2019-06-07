@@ -11,7 +11,7 @@
 class GameField; //Forward declare it for pointer
 
 /*!<Enum class for the gameMode */
-enum gameMode {none, ai, sp, mp, quiet, coverage};
+enum gameMode {none, ai, sp, mp, quiet, coverage, tournament, noui};
 
 /***************************************************************************//**
 * @author Jonathan McKee
@@ -33,6 +33,7 @@ public:
     int getTurn();
     int getActTurn();
     int getModCounter();
+    bool showUI();
 
     //individual attribute getters
     int getAttrDamage();
@@ -57,6 +58,7 @@ public:
     void setTurn(int t);
     void setActTurn(int at);
     void setModCounter(int mc);
+    void setUI(bool set);
 
     //individual attribute setters
     void setAttrDamage(int damage);
@@ -83,10 +85,13 @@ private:
     //pointers to components
     GameField *tankGame;   //Pointer to gamefield
     gameMode gMode = ai;  //default game mode
+
+    //Current Match Settings
     int turn = 0; //Current game turn
     int actTurn = 0; //0 causes issues on first display call
     int modCounter = 7; //Modular counter for animation effects
     bool modeCoverage = false; //coverage mode for faster animations
+    bool showui = true; //should we display the ui
 };
 
 #endif //__GAME_H

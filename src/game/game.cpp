@@ -83,8 +83,6 @@ static bool isplayable(const std::vector<ActorInfo> &actorInfo)
 
   for(auto a : actorInfo)
     tankCount += (a.id > 0) ? 1 : 0;
-
-
   return (tankCount > 1);
 }
 
@@ -99,10 +97,73 @@ static bool isplayable(const std::vector<ActorInfo> &actorInfo)
 void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 {
 
+
   const char *str;
   std::string scoreDetails[4] = {"Place:", "Player Number:", "Kills:","Hits:"};
-
   float color[] = {1.0f, 1.0f, 1.0f};
+  ofstream fout("results.txt", ios::out | ios::app);
+ 
+  if (!settings->showUI())
+  {
+    unsigned int winDex = 0;
+    while(winner[winDex].name == "default\n" && winDex < winner.size())
+      winDex++;
+    if(winner.size() != 0)
+    { 
+      fout << "\n\nGame ended on turn: " << settings->getTurn();
+      fout << "\nWinner: " << winner[winDex].name
+          << " Kills: " << winner[winDex].kills
+          << " Shots: " << std::to_string(winner[winDex].shots).c_str()
+          << " Hits: " << std::to_string(winner[winDex].hits).c_str();
+      fout << " AP: " << std::to_string(winner[winDex].AP).c_str()
+          << " Radar: " << std::to_string(winner[winDex].radar).c_str();
+      fout << " Max Health: " << std::to_string(winner[winDex].max_health).c_str()
+          << " Remaining: " << std::to_string(winner[winDex].health).c_str()
+          << " Max Ammo: " << std::to_string(winner[winDex].max_ammo).c_str()
+          << " Remaining: " << std::to_string(winner[winDex].health).c_str()
+          << " Final Position: (" << std::to_string(winner[winDex].x).c_str()
+          << "," << std::to_string(winner[winDex].y).c_str() << ")\n";
+      fout << "Non-Winning Participants:";
+      
+      for(int l = dead.size() - 1; l >= 0; l--)
+      {
+        fout << "\nParticipant: " << dead[l].name
+            << " Kills: " << dead[l].kills
+            << " Shots: " << dead[l].shots
+            << " Hits: " << dead[l].hits;
+        fout << " AP: " << dead[l].AP
+            << " Radar: " << dead[l].radar;
+        fout << " Max Health: " << dead[l].max_health
+            << " Remaining: " << dead[l].health
+            << " Max Ammo: " << dead[l].max_ammo
+            << " Remaining: " << dead[l].health
+            << " Final Position: (" << dead[l].x
+            << "," << dead[l].y << ")";
+      }
+    }else{
+      fout << "\n\nGame ended on turn: " << settings->getTurn();
+      fout << "\nDraw Game: ";
+      for(int l = dead.size() - 1; l >= 0; l--)
+      {
+        fout << "\nParticipant: " << dead[l].name
+          << " Kills: " << dead[l].kills
+          << " Shots: " << dead[l].shots
+          << " Hits: " << dead[l].hits;
+        fout << " AP: " << dead[l].AP
+          << " Radar: " << dead[l].radar;
+        fout << " Max Health: " << dead[l].max_health
+          << " Remaining: " << dead[l].health
+          << " Max Ammo: " << dead[l].max_ammo
+          << " Remaining: " << dead[l].health
+          << " Final Position: (" << dead[l].x
+          << "," << dead[l].y << ")";
+      }
+    }
+
+
+    return;
+  }
+
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
@@ -124,8 +185,6 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   glPopMatrix();
 
   glDisable(GL_TEXTURE_2D);
-
-  ofstream fout("results.txt", ios::out | ios::app);
 
   float j = -0.7f;
   bool flag = false;
@@ -421,7 +480,7 @@ void Game::executeTurn()
 
 void displayWrapper(MapData map, std::vector<ActorInfo> actors, int turnCount)
 {
-  display();
+    display();
 }
 
 
@@ -716,6 +775,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "FIELDIMAGE")
         {
+          if (!settings->showUI()){break;}
           if (!quiet)
             cout << "Painting the background...\n";
           stringstream(args) >> name;
@@ -784,6 +844,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "OBSTACLE_IMAGE")
         {
+          if (!settings->showUI()){break;}
           done = false;
           while(!done)
           {
@@ -802,6 +863,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "TREE_IMAGE")
         {
+          if (!settings->showUI()){break;}
           done = false;
           while(!done)
           {
@@ -820,6 +882,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "ROCK_IMAGE")
         {
+          if (!settings->showUI()){break;}
           done = false;
           while(!done)
           {
@@ -839,6 +902,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "WATER_IMAGE")
         {
+          if (!settings->showUI()){break;}
           done = false;
           while(!done)
           {
@@ -858,6 +922,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "BUSH_IMAGE")
         {
+          if (!settings->showUI()){break;}
           done = false;
           while(!done)
           {
@@ -927,11 +992,12 @@ void Game::initGameState(Settings * setting)
   fieldx = width;
   fieldy = height;
 
+  if (settings->showUI()){
   glEnable(GL_TEXTURE_2D);
-  if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages, waterImages, quiet) && !quiet)
-      cout << "Failed to open image(s).\n" << endl;
-  glDisable(GL_TEXTURE_2D);
-
+    if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages, waterImages, quiet) && !quiet)
+        cout << "Failed to open image(s).\n" << endl;
+    glDisable(GL_TEXTURE_2D);
+  }
   if (!quiet)
     cout << "Loading Shared Objects...\n";
   std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
@@ -950,7 +1016,7 @@ void Game::initGameState(Settings * setting)
 
   startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, baseStats, height, width);
   //printf("Height: %d  Width: %d\n",height, width);
-  tankGame = new GameField(width, height, startActors, displayWrapper, this, settings);
+  tankGame = new GameField(width, height, startActors, displayWrapper, this);
   tankGame->setSPECIAL(baseStats);
   if (!quiet)
     cout << "   ...Done\n" << endl;
@@ -1202,5 +1268,20 @@ void Game::earlyOut()
  *******************************************************************************/
 void Game::noGUIGame()
 {
-
+//printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
+  if(checkMaxTurn()) //if we hit the max turn skip next actions
+  {
+    tankGame->nextTurn();
+    tankGame->cull();//Let game play one more turn and quit itself
+  }
+  else if(isplayable(tankGame->getActorsConst())) //If we still have tanks keep playing
+  {
+    tankGame->nextTurn();
+  }
+  else   //If maxturns is not hit, but game is no longer playable print results
+  {
+    gameOver(tankGame->getDeceased(), tankGame->getActors());
+    if (settings->getGameMode() != coverage)
+        glutLeaveMainLoop();
+  }
 }

@@ -37,40 +37,39 @@ void utilityCentral(Event *event)
 void initOpenGL(int argc, char** argv, int wCols, int wRows, Settings * setting)
 {
     glutInit(&argc, argv);
-
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH );
-
-    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_CONTINUE_EXECUTION);
-
-    glutInitWindowSize(wCols, wRows);
-
-    glutInitWindowPosition(10, 10);
-
-    glutCreateWindow("Capture the Flag");
-
-    glutSetIconTitle("images/icon.png");
-
+        
     glutDisplayFunc(display);
-
-    glShadeModel(GL_SMOOTH);
-
-    glutReshapeFunc(reshape);
-
+    
     glutKeyboardFunc(keyboard);
 
     glutTimerFunc(750, ticktock, 750);
 
     glutCloseFunc(onClose);
 
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_CONTINUE_EXECUTION);
+            glShadeModel(GL_SMOOTH);
 
-    glClearDepth(1.0f);
+        glutReshapeFunc(reshape);
 
-    glEnable(GL_DEPTH_TEST);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-    glDepthFunc(GL_LEQUAL);
+        glClearDepth(1.0f);
 
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+        glEnable(GL_DEPTH_TEST);
+
+        glDepthFunc(GL_LEQUAL);
+
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+        glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH );
+
+        glutInitWindowSize(wCols, wRows);
+
+        glutInitWindowPosition(10, 10);
+
+        glutCreateWindow("Capture the Flag");
+
+        glutSetIconTitle("images/icon.png");
 
     utilityCentral( new InitEvent(wCols, wRows, setting));
 }

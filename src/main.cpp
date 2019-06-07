@@ -81,6 +81,14 @@ int main(int argc, char **argv)
       {
         printf("quiet mode\n");
         mode = quiet;
+      }else if ((strcmp(argv[counter], "--tournament") == 0 ) && counter + 1 <= argc)
+      {
+        printf("tournament mode\n");
+        mode = tournament;
+      }else if ((strcmp(argv[counter], "--noui") == 0 ) && counter + 1 <= argc)
+      {
+        printf("no ui mode\n");
+        mode = noui;
       }else if ((strcmp(argv[counter], "--coverage") == 0) && counter + 1 <= argc)
       {
         printf("coverage mode\n");
@@ -98,6 +106,14 @@ int main(int argc, char **argv)
               case 'q':
                 mode = quiet;
                 printf("quiet mode\n");
+                break;
+              case 't':
+                mode = tournament;
+                printf("tournament mode\n");
+                break;
+                case 'n':
+                mode = noui;
+                printf("no ui mode\n");
                 break;
               case 'c':
                 settings->setCoverageMode();
@@ -118,13 +134,13 @@ int main(int argc, char **argv)
     }
 
     settings->setGameMode(mode);
-    
     //gameMode {none, ai, sp, mp, quiet, coverage};
     if (mode == ai || mode == sp || mode == mp || mode == quiet){
       initOpenGL( argc, argv, width, height, settings );
       glutMainLoop();
     }else{
         Game game;
+        settings->setUI(false);
         game.initGameState(settings);
         game.noGUIGame();
     }

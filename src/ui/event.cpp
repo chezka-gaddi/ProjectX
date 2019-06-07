@@ -110,6 +110,9 @@ void DisplayEvent::doAction(Game &game)
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
+  if (!game.settings->showUI()){
+    return;
+  }
   float pause;
 
     if(game.settings->getTurn() > 0)

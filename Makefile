@@ -84,10 +84,8 @@ tanks/%.so: src/tanks/%.cpp ./src/actors/Actor.o
 tanks: $(TANKS:%.cpp=%.so)
 
 clean:
-	@rm -Rrf platform results.txt src/*.o
-	find . -name \*.o -type f -exec rm -f {} +
-	@rm -rf *.gc*
-	@rm -rf src/*.gc*
+	@find . -name \*.o -type f -exec rm -f {} +
+	@find . -name \*.gc* -type f -exec rm -f {} +
 	@rm -rf gprofresults.txt
 	@rm -rf gmon.out
 

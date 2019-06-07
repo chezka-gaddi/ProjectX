@@ -57,7 +57,7 @@ public:
     int getY(){return fieldy;};
 
     std::vector<ActorInfo> loadPlayers(bool, std::vector<std::pair<int,int>>, std::vector<std::string>, std::vector<Actor*>, attributes, int, int);
-    
+
     vector<std::unique_ptr<Drawable>> objects;       /*!<Holds all of the current actors */
     vector<Drawable *> constants;     /*!<Holds the GameFieldDrawable and menus */
     vector<Obstacles *> bushes;        /*!<Holds the bushes drawables */

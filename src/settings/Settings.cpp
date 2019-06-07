@@ -109,6 +109,7 @@ void Settings::setGameMode(gameMode gm){ gMode = gm;}
 void Settings::setTurn(int t){turn = t;}
 void Settings::setActTurn(int at){actTurn = at;}
 void Settings::setModCounter(int mc){modCounter = mc;}
+void Settings::setUI(bool s){showui = s;}
 
 void Settings::setAttrDamage(int damage){
     if(damage < 0)
@@ -224,6 +225,8 @@ int Settings::getAttrRadar(){return baseAttributes.tankRadar;}
 int Settings::getAttrAmmo(){return baseAttributes.tankAmmo;}
 int Settings::getAttrRange(){return baseAttributes.projRange;}
 int Settings::getAttrSpecial(){return baseAttributes.tankSpecial;}
+
+bool Settings::showUI(){return showui;}
 
 void Settings::setCoverageMode(){modeCoverage = true;}
 bool Settings::checkCoverage(){return modeCoverage;}
