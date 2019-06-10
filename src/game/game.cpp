@@ -159,8 +159,6 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
           << "," << dead[l].y << ")";
       }
     }
-
-
     return;
   }
 
@@ -478,9 +476,10 @@ void Game::executeTurn()
  * Wrapper to display() that acts as the GameField display callback
  */
 
-void displayWrapper(MapData map, std::vector<ActorInfo> actors, int turnCount)
+void displayWrapper(Settings * settings)
 {
-    display();
+    if (settings->showUI())
+      display();
 }
 
 
@@ -775,7 +774,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "FIELDIMAGE")
         {
-          if (!settings->showUI()){break;}
+          if (!settings->showUI()){continue;}
           if (!quiet)
             cout << "Painting the background...\n";
           stringstream(args) >> name;
@@ -844,7 +843,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "OBSTACLE_IMAGE")
         {
-          if (!settings->showUI()){break;}
+          if (!settings->showUI()){continue;}
           done = false;
           while(!done)
           {
@@ -863,7 +862,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "TREE_IMAGE")
         {
-          if (!settings->showUI()){break;}
+          if (!settings->showUI()){continue;}
           done = false;
           while(!done)
           {
@@ -882,7 +881,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "ROCK_IMAGE")
         {
-          if (!settings->showUI()){break;}
+          if (!settings->showUI()){continue;}
           done = false;
           while(!done)
           {
@@ -902,7 +901,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "WATER_IMAGE")
         {
-          if (!settings->showUI()){break;}
+          if (!settings->showUI()){continue;}
           done = false;
           while(!done)
           {
@@ -922,7 +921,7 @@ void Game::initGameState(Settings * setting)
         }
         else if(id == "BUSH_IMAGE")
         {
-          if (!settings->showUI()){break;}
+          if (!settings->showUI()){continue;}
           done = false;
           while(!done)
           {
@@ -1006,13 +1005,13 @@ void Game::initGameState(Settings * setting)
   if (!quiet)
     cout << "Finalizing game settings...\n";
 
-  /*baseStats.tankHealth = settings->getAttrHealth();
+  baseStats.tankHealth = settings->getAttrHealth();
   baseStats.tankDamage = settings->getAttrDamage();
   baseStats.tankAP = settings->getAttrAP();
   baseStats.tankAmmo = settings->getAttrAmmo();
   baseStats.tankRadar = settings->getAttrRadar();
   baseStats.projRange = settings->getAttrRange();
-  settings->setAttributes(baseStats);*/
+  settings->setAttributes(baseStats);
 
   startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, baseStats, height, width);
   //printf("Height: %d  Width: %d\n",height, width);
@@ -1269,19 +1268,13 @@ void Game::earlyOut()
 void Game::noGUIGame()
 {
 //printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
-  if(checkMaxTurn()) //if we hit the max turn skip next actions
+  while (isplayable(tankGame->getActorsConst())) //If we still have tanks keep playing
   {
     tankGame->nextTurn();
-    tankGame->cull();//Let game play one more turn and quit itself
+    if(checkMaxTurn())
+    {
+      tankGame->cull();
+    }
   }
-  else if(isplayable(tankGame->getActorsConst())) //If we still have tanks keep playing
-  {
-    tankGame->nextTurn();
-  }
-  else   //If maxturns is not hit, but game is no longer playable print results
-  {
-    gameOver(tankGame->getDeceased(), tankGame->getActors());
-    if (settings->getGameMode() != coverage)
-        glutLeaveMainLoop();
-  }
+  gameOver(tankGame->getDeceased(), tankGame->getActors());
 }

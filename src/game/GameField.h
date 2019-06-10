@@ -38,7 +38,7 @@ public:
     /********constructors/deconstructors***********/
     /**********************************************/
     GameField(int width = 10, int height = 10);
-    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int) = nullptr, Game * = nullptr, Settings * = nullptr );
+    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(Settings *), Game *, Settings *);
     ~GameField();
     /*******************************/
     /*************getters***********/
@@ -58,7 +58,7 @@ public:
 protected:
 #endif
     //callback function to update the dispaly with the map, actors, and turn count
-    void (*displayCallback)(MapData, std::vector<ActorInfo>, int);
+    void (*displayCallback)(Settings *);
     
     //functions
     void updateMap();

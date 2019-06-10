@@ -45,7 +45,7 @@ GameField::GameField(int width, int height)
  * Constructor with dimensions and a vector of ActorInfo
  */
 
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(MapData, std::vector<ActorInfo>, int), Game * game, Settings * setting) : actors(startActors)
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(Settings *), Game * game, Settings * setting) : actors(startActors)
 {
   fieldMap.width = width;
   fieldMap.height = height;
@@ -218,7 +218,7 @@ void GameField::animateMove(ActorInfo &a)
       {
         a.offsety = tempy * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, settings->getTurn());
+          displayCallback(settings);
       }
       break;
     case DOWN:
@@ -230,7 +230,7 @@ void GameField::animateMove(ActorInfo &a)
       {
         a.offsety = tempy * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, settings->getTurn());
+          displayCallback(settings);
       }
       break;
 
@@ -243,7 +243,7 @@ void GameField::animateMove(ActorInfo &a)
       {
         a.offsetx = tempx * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, settings->getTurn());
+          displayCallback(settings);
       }
       break;
 
@@ -256,7 +256,7 @@ void GameField::animateMove(ActorInfo &a)
       {
         a.offsetx = tempx * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, settings->getTurn());
+          displayCallback(settings);
       }
       break;
     case UPLEFT:
@@ -273,7 +273,7 @@ void GameField::animateMove(ActorInfo &a)
         a.offsety = tempy * (samples - i);
         a.offsetx = tempx * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, settings->getTurn());
+          displayCallback(settings);
       }
       break;
 
@@ -291,7 +291,7 @@ void GameField::animateMove(ActorInfo &a)
         a.offsety = tempy * (samples - i);
         a.offsetx = tempx * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, settings->getTurn());
+          displayCallback(settings);
       }
       break;
 
@@ -309,7 +309,7 @@ void GameField::animateMove(ActorInfo &a)
         a.offsety = tempy * (samples - i);
         a.offsetx = tempx * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, settings->getTurn());
+          displayCallback(settings);
       }
       break;
 
@@ -327,7 +327,7 @@ void GameField::animateMove(ActorInfo &a)
         a.offsety = tempy * (samples - i);
         a.offsetx = tempx * (samples - i);
         if(gameptr != nullptr)
-          displayCallback(fieldMap, actors, settings->getTurn());
+          displayCallback(settings);
       }
       break;
 
@@ -578,7 +578,7 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
       updateMap(); //Update actors and map
       //printf("Currently %d number of explosions.\n",SFX.size());
       if (gameptr != nullptr) //redraw screen
-        displayCallback(fieldMap, actors, settings->getTurn());
+        displayCallback(settings);
       SFX.clear(); //Clear the explosions
     } 
   }
@@ -774,7 +774,7 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
               if(r->health <= 0){
                 r->destroyed = settings->getTurn();
                 removeObstacle(r->gridx, r->gridy);
-                                }
+              }
             }
           }
           break;
@@ -811,7 +811,6 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
 ******************************************************************************/
 void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
 {
-
   if(current_actor.id <= 0)
     return;
 
@@ -884,8 +883,8 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
     }
   }
   map = new_map;
-
 }
+
 /**
  * @author Jon McKee
  * @par Description:
@@ -936,7 +935,6 @@ void GameField::nextTurn()
   if(settings != nullptr){
     settings->nextTurn();
   }
-
   direction atk;
   ActorInfo newProjectile;
   PositionData pos;
@@ -954,8 +952,8 @@ void GameField::nextTurn()
     if(actors[i].id > 0 && actors[i].health > 0)
       settings->setActTurn(actors[i].id);
     updateMap();  //Give each actor a fresh map
-    if(gameptr != nullptr)  
-      displayCallback(fieldMap, actors, settings->getTurn());
+    if(gameptr != nullptr && settings->showUI())  
+      displayCallback(settings);
     SFX.clear();
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
@@ -979,7 +977,6 @@ void GameField::nextTurn()
       {
         runMoves(actors[i], fog_of_war, pos);
       }
-
       else if(action == 2)
       {
         //PositionData to give the AI
@@ -1036,7 +1033,6 @@ void GameField::nextTurn()
             //printf("Back up to %d bullets.\n",actors[i].ammo);
           }
         }
-
       }
       else if(action == 4) //Chosen reload action
       {
@@ -1050,10 +1046,11 @@ void GameField::nextTurn()
   }
   cull(); //Remove dead actors
   updateMap(); //update map
-  if(gameptr != nullptr) //Draw map
-    displayCallback(fieldMap, actors, settings->getTurn());
+  if(gameptr != nullptr && settings->showUI()) //Draw map
+    displayCallback(settings);
   SFX.clear(); //remove explosions that remain
 }
+
 /**
  * @author David Donahue
  * @par Description:
@@ -1073,7 +1070,6 @@ void GameField::addActor(ActorInfo a)
  * @param[in] x - the x value of the obstacle
  * @param[in] y - the y value of the obstacle
  */
-
 void GameField::addObstacle(int x, int y, int type)
 {
   fieldMap.obstacleMap[x + fieldMap.width * y] = type;
@@ -1087,7 +1083,6 @@ void GameField::addObstacle(int x, int y, int type)
  * @param[in] x - the x value of the obstacle
  * @param[in] y - the y value of the obstacle
  */
-
 void GameField::removeObstacle(int x, int y)
 {
   fieldMap.obstacleMap[x + fieldMap.width * y] = false;
@@ -1102,6 +1097,7 @@ std::vector<ActorInfo> GameField::getActors()
 {
   return actors;
 }
+
 /**
  * @author Jon McKee
  * @par Description:
@@ -1113,6 +1109,7 @@ std::vector<ActorInfo> *GameField::getActorsPointer()
   temp = &actors;
   return temp;
 }
+
 /**
  * @author Jon McKee
  * @par Description:
@@ -1158,7 +1155,6 @@ void GameField::cull()
       --i; // go back one since everything just shifted back
     }
   }
-
 }
 
 /**
@@ -1181,8 +1177,6 @@ ActorInfo & GameField::actorInfoById(int id)
   return nullActor;
 }
 
-
-
 /**
  * @author David Donahue
  * @par Description:
@@ -1196,5 +1190,4 @@ ActorInfo & GameField::actorInfoById(int id)
 int GameField::obstacleAt(int x, int y)
 {
   return fieldMap.obstacleMap[x + y * fieldMap.width];
-
 }
