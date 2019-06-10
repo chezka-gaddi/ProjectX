@@ -93,6 +93,20 @@ int main(int argc, char **argv)
       {
         printf("coverage mode\n");
         settings->setCoverageMode(false);
+      }else if((strcmp(argv[counter], "--help") == 0) && counter + 1 <= argc)
+      {
+        printf("\n\nHelp:\n");
+        printf("--demo, -d\n");
+        printf("   Demo mode, increases default width to 1900 and height to 1000.\n\n");
+        printf("--quiet, -q\n");
+        printf("   Quiet text mode, only displays debug text\n\n");
+        printf("--tournament, -t\n");
+        printf("   Tournament mode, not implemented yet\n\n");
+        printf("--noui, -n\n");
+        printf("   No UI Mode, hides the UI for faster playback\n\n");
+        printf("--coverage, -c\n");
+        printf("   Coverage Mode, runs fast settings for coverage testing with graphics\n\n");
+        exit(1);
       }else if(argv[counter][0] == '-' && argv[counter][1] != '-'){
         //printf("multi-params\n");
         int i = 1; //start at first argument
@@ -119,8 +133,23 @@ int main(int argc, char **argv)
                 settings->setCoverageMode(true);
                 printf("coverage mode\n");
                 break;
+              case 'h':
+                printf("\n\nHelp:\n");
+                printf("--demo, -d\n");
+                printf("   Demo mode, increases default width to 1900 and height to 1000.\n\n");
+                printf("--quiet, -q\n");
+                printf("   Quiet text mode, only displays debug text\n\n");
+                printf("--tournament, -t\n");
+                printf("   Tournament mode, not implemented yet\n\n");
+                printf("--noui, -n\n");
+                printf("   No UI Mode, hides the UI for faster playback\n\n");
+                printf("--coverage, -c\n");
+                printf("   Coverage Mode, runs fast settings for coverage testing with graphics\n\n");
+                exit(1);
+                break;
               default:
                 printf("Invalid option specified: %c\n", argv[counter][i]);
+                printf("Use --help or -h for command line options.\n");
                 exit(1);
                 break;
             }
@@ -128,6 +157,7 @@ int main(int argc, char **argv)
           }
       }else{
           printf("Invalid option specified: %s\n", argv[counter]);
+          printf("Use --help or -h for command line options.\n");
           exit(1);
       }
       counter++;
