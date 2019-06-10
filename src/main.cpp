@@ -142,7 +142,7 @@ int main(int argc, char **argv)
         Game game;
         settings->setUI(false);
         game.initGameState(settings);
-        game.noGUIGame();
+        game.executeTurn();
     }
 
     std::cout << "\n GAME OVER \n";

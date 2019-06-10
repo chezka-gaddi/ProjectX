@@ -101,67 +101,72 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   const char *str;
   std::string scoreDetails[4] = {"Place:", "Player Number:", "Kills:","Hits:"};
   float color[] = {1.0f, 1.0f, 1.0f};
+  float j = -0.7f;
+  float k = -0.5;
+
   ofstream fout("results.txt", ios::out | ios::app);
- 
-  if (!settings->showUI())
-  {
-    unsigned int winDex = 0;
-    while(winner[winDex].name == "default\n" && winDex < winner.size())
-      winDex++;
-    if(winner.size() != 0)
-    { 
-      fout << "\n\nGame ended on turn: " << settings->getTurn();
-      fout << "\nWinner: " << winner[winDex].name
-          << " Kills: " << winner[winDex].kills
-          << " Shots: " << std::to_string(winner[winDex].shots).c_str()
-          << " Hits: " << std::to_string(winner[winDex].hits).c_str();
-      fout << " AP: " << std::to_string(winner[winDex].AP).c_str()
-          << " Radar: " << std::to_string(winner[winDex].radar).c_str();
-      fout << " Max Health: " << std::to_string(winner[winDex].max_health).c_str()
-          << " Remaining: " << std::to_string(winner[winDex].health).c_str()
-          << " Max Ammo: " << std::to_string(winner[winDex].max_ammo).c_str()
-          << " Remaining: " << std::to_string(winner[winDex].health).c_str()
-          << " Final Position: (" << std::to_string(winner[winDex].x).c_str()
-          << "," << std::to_string(winner[winDex].y).c_str() << ")\n";
-      fout << "Non-Winning Participants:";
-      
-      for(int l = dead.size() - 1; l >= 0; l--)
-      {
-        fout << "\nParticipant: " << dead[l].name
-            << " Kills: " << dead[l].kills
-            << " Shots: " << dead[l].shots
-            << " Hits: " << dead[l].hits;
-        fout << " AP: " << dead[l].AP
-            << " Radar: " << dead[l].radar;
-        fout << " Max Health: " << dead[l].max_health
-            << " Remaining: " << dead[l].health
-            << " Max Ammo: " << dead[l].max_ammo
-            << " Remaining: " << dead[l].health
-            << " Final Position: (" << dead[l].x
-            << "," << dead[l].y << ")";
-      }
-    }else{
-      fout << "\n\nGame ended on turn: " << settings->getTurn();
-      fout << "\nDraw Game: ";
-      for(int l = dead.size() - 1; l >= 0; l--)
-      {
-        fout << "\nParticipant: " << dead[l].name
+  bool flag = false;
+
+  unsigned int winDex = 0;
+  int count = 1;
+  int timer_pause = TimerEvent::idle_speed * 133;
+
+  while(winner[winDex].name == "default\n" && winDex < winner.size())
+    winDex++;
+  if(winner.size() != 0)
+  { 
+    fout << "\n\nGame ended on turn: " << settings->getTurn();
+    fout << "\nWinner: " << winner[winDex].name
+        << " Kills: " << winner[winDex].kills
+        << " Shots: " << std::to_string(winner[winDex].shots).c_str()
+        << " Hits: " << std::to_string(winner[winDex].hits).c_str();
+    fout << " AP: " << std::to_string(winner[winDex].AP).c_str()
+        << " Radar: " << std::to_string(winner[winDex].radar).c_str();
+    fout << " Max Health: " << std::to_string(winner[winDex].max_health).c_str()
+        << " Remaining: " << std::to_string(winner[winDex].health).c_str()
+        << " Max Ammo: " << std::to_string(winner[winDex].max_ammo).c_str()
+        << " Remaining: " << std::to_string(winner[winDex].health).c_str()
+        << " Final Position: (" << std::to_string(winner[winDex].x).c_str()
+        << "," << std::to_string(winner[winDex].y).c_str() << ")\n";
+    fout << "Non-Winning Participants:";
+    
+    for(int l = dead.size() - 1; l >= 0; l--)
+    {
+      fout << "\nParticipant: " << dead[l].name
           << " Kills: " << dead[l].kills
           << " Shots: " << dead[l].shots
           << " Hits: " << dead[l].hits;
-        fout << " AP: " << dead[l].AP
+      fout << " AP: " << dead[l].AP
           << " Radar: " << dead[l].radar;
-        fout << " Max Health: " << dead[l].max_health
+      fout << " Max Health: " << dead[l].max_health
           << " Remaining: " << dead[l].health
           << " Max Ammo: " << dead[l].max_ammo
           << " Remaining: " << dead[l].health
           << " Final Position: (" << dead[l].x
           << "," << dead[l].y << ")";
-      }
     }
-    return;
+  }else{
+    fout << "\n\nGame ended on turn: " << settings->getTurn();
+    fout << "\nDraw Game: ";
+    for(int l = dead.size() - 1; l >= 0; l--)
+    {
+      fout << "\nParticipant: " << dead[l].name
+        << " Kills: " << dead[l].kills
+        << " Shots: " << dead[l].shots
+        << " Hits: " << dead[l].hits;
+      fout << " AP: " << dead[l].AP
+        << " Radar: " << dead[l].radar;
+      fout << " Max Health: " << dead[l].max_health
+        << " Remaining: " << dead[l].health
+        << " Max Ammo: " << dead[l].max_ammo
+        << " Remaining: " << dead[l].health
+        << " Final Position: (" << dead[l].x
+        << "," << dead[l].y << ")";
+    }
   }
 
+  if (!settings->showUI())
+    return;
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
@@ -183,9 +188,6 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   glPopMatrix();
 
   glDisable(GL_TEXTURE_2D);
-
-  float j = -0.7f;
-  bool flag = false;
 
   glPushMatrix();
   glTranslatef(0.0f, 0.0f, -5.0f);
@@ -214,12 +216,8 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
       }
     }
 
-    int count = 1;
-    unsigned int winDex = 0;
-    float k = -0.5;
-
-    while(winner[winDex].name == "default\n" && winDex < winner.size())
-      winDex++;
+    count = 1;
+    k = -0.5;
 
     str = "1st";
     glRasterPos3f(-0.7f, k, 2.0f);
@@ -254,20 +252,6 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
     }
     k += -0.1f;
     count++;
-    fout << "\n\nGame ended on turn: " << settings->getTurn();
-    fout << "\nWinner: " << winner[winDex].name
-         << " Kills: " << winner[winDex].kills
-         << " Shots: " << std::to_string(winner[winDex].shots).c_str()
-         << " Hits: " << std::to_string(winner[winDex].hits).c_str();
-    fout << " AP: " << std::to_string(winner[winDex].AP).c_str()
-         << " Radar: " << std::to_string(winner[winDex].radar).c_str();
-    fout << " Max Health: " << std::to_string(winner[winDex].max_health).c_str()
-         << " Remaining: " << std::to_string(winner[winDex].health).c_str()
-         << " Max Ammo: " << std::to_string(winner[winDex].max_ammo).c_str()
-         << " Remaining: " << std::to_string(winner[winDex].health).c_str()
-         << " Final Position: (" << std::to_string(winner[winDex].x).c_str()
-         << "," << std::to_string(winner[winDex].y).c_str() << ")\n";
-    fout << "Non-Winning Participants:";
     for(int l = dead.size() - 1; l >= 0; l--)
     {
 
@@ -325,18 +309,6 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
 
       k += -0.1f;
       count++;
-    fout << "\nParticipant: " << dead[l].name
-         << " Kills: " << dead[l].kills
-         << " Shots: " << dead[l].shots
-         << " Hits: " << dead[l].hits;
-    fout << " AP: " << dead[l].AP
-         << " Radar: " << dead[l].radar;
-    fout << " Max Health: " << dead[l].max_health
-         << " Remaining: " << dead[l].health
-         << " Max Ammo: " << dead[l].max_ammo
-         << " Remaining: " << dead[l].health
-         << " Final Position: (" << dead[l].x
-         << "," << dead[l].y << ")";
     }
   }
   else
@@ -350,26 +322,7 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
       glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *str);
       str++;
     }
-    fout << "\n\nGame ended on turn: " << settings->getTurn();
-    fout << "\nDraw Game: ";
-      for(int l = dead.size() - 1; l >= 0; l--)
-      {
-        fout << "\nParticipant: " << dead[l].name
-          << " Kills: " << dead[l].kills
-          << " Shots: " << dead[l].shots
-          << " Hits: " << dead[l].hits;
-        fout << " AP: " << dead[l].AP
-          << " Radar: " << dead[l].radar;
-        fout << " Max Health: " << dead[l].max_health
-          << " Remaining: " << dead[l].health
-          << " Max Ammo: " << dead[l].max_ammo
-          << " Remaining: " << dead[l].health
-          << " Final Position: (" << dead[l].x
-          << "," << dead[l].y << ")";
-      }
   }
-
-  int timer_pause = TimerEvent::idle_speed * 133;
   timer_pause >= 0 ? usleep(timer_pause) : usleep(0);
 
   glutSwapBuffers();
@@ -445,6 +398,7 @@ bool Game::checkMaxTurn()
 
  /**************************************************************************//**
  * @author Chezka Gaddi
+ * @modified Jon McKee
  * @brief executeTurn
  *
  * While the game is still playable, execute a turn from each of the tanks,
@@ -454,28 +408,25 @@ bool Game::checkMaxTurn()
 void Game::executeTurn()
 {
   //printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
-  if(checkMaxTurn()) //if we hit the max turn skip next actions
+  while (isplayable(tankGame->getActorsConst())) //If we still have tanks keep playing
   {
     tankGame->nextTurn();
-    tankGame->cull();//Let game play one more turn and quit itself
+    if(checkMaxTurn())
+    {
+      tankGame->cull();
+    }
   }
-  else if(isplayable(tankGame->getActorsConst())) //If we still have tanks keep playing
-  {
-    tankGame->nextTurn();
-  }
-  else   //If maxturns is not hit, but game is no longer playable print results
-  {
-    gameOver(tankGame->getDeceased(), tankGame->getActors());
-    if (settings->getGameMode() != coverage)
-        glutLeaveMainLoop();
-  }
+  gameOver(tankGame->getDeceased(), tankGame->getActors());
+  if (settings->showUI())
+    glutLeaveMainLoop();
 }
+
 /**
  * @author David Donahue
+ * @modified Jon McKee
  * @par Description:
  * Wrapper to display() that acts as the GameField display callback
  */
-
 void displayWrapper(Settings * settings)
 {
     if (settings->showUI())
@@ -486,6 +437,7 @@ void displayWrapper(Settings * settings)
 
 /***************************************************************************//**
  * @author Chezka Gaddi
+ * @modified Jon McKee
  * @brief initGameState
  *
  * Initialize the main GameField and all the Drawables needed to start the game.
@@ -991,8 +943,9 @@ void Game::initGameState(Settings * setting)
   fieldx = width;
   fieldy = height;
 
+  //Only load textures if we're showing UI
   if (settings->showUI()){
-  glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);
     if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages, waterImages, quiet) && !quiet)
         cout << "Failed to open image(s).\n" << endl;
     glDisable(GL_TEXTURE_2D);
@@ -1000,8 +953,8 @@ void Game::initGameState(Settings * setting)
   if (!quiet)
     cout << "Loading Shared Objects...\n";
   std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
-
   std::vector<ActorInfo> startActors;
+
   if (!quiet)
     cout << "Finalizing game settings...\n";
 
@@ -1131,6 +1084,12 @@ void Game::initGameState(Settings * setting)
   }
 }
 
+/***************************************************************************//**
+ * @author Jon McKee
+ * @brief loadPlayers
+ *
+ * Dynamically loads the playersS
+ *******************************************************************************/
 std::vector<ActorInfo> Game::loadPlayers(bool quiet, std::vector<std::pair<int,int>> tankLocations, std::vector<std::string> AINames, std::vector<Actor*> startActorPointers, attributes baseAttr, int height, int width){
  std::vector<ActorInfo> actors;
  if (!quiet)
@@ -1258,23 +1217,4 @@ void Game::closeDown()
 void Game::earlyOut()
 {
   glutLeaveMainLoop();
-}
-
-/***************************************************************************//**
- * @brief noGUIGame
- *
- * Allows the game to be played without displaying a GUI
- *******************************************************************************/
-void Game::noGUIGame()
-{
-//printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
-  while (isplayable(tankGame->getActorsConst())) //If we still have tanks keep playing
-  {
-    tankGame->nextTurn();
-    if(checkMaxTurn())
-    {
-      tankGame->cull();
-    }
-  }
-  gameOver(tankGame->getDeceased(), tankGame->getActors());
 }
