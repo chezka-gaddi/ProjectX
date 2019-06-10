@@ -56,6 +56,7 @@ results.txt
 
 # OS generated files #
 ######################
+.vscode
 .DS_Store
 .DS_Store?
 ._*

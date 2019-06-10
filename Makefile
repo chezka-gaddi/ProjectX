@@ -1,6 +1,14 @@
 CXX = g++
 CXXFLAGS = -Wall -g -std=c++11 -fPIC
 INCS = -I./ -Isrc/
+INCS += -Isrc/game
+INCS += -Isrc/map
+INCS += -Isrc/settings
+INCS += -Isrc/structures
+INCS += -Isrc/tanks
+INCS += -Isrc/ui
+INCS += -Isrc/utilities
+INCS += -Isrc/actors
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
 LIBS += -lSOIL -Llibraries
@@ -14,59 +22,70 @@ LIB_PATH= libraries/
 MAIN = $(SRC_PATH)main.cpp
 
 FILES = $(MAIN)
-FILES += $(SRC_PATH)GameField.cpp
-FILES += $(SRC_PATH)Actor.cpp
-FILES += $(SRC_PATH)MapData.cpp
-FILES += $(SRC_PATH)ProjectileActor.cpp
-FILES += $(SRC_PATH)ActorInfo.cpp
-FILES += $(SRC_PATH)Texture.cpp
-FILES += $(SRC_PATH)event.cpp
-FILES += $(SRC_PATH)util.cpp
-FILES += $(SRC_PATH)TankDrawable.cpp
-FILES += $(SRC_PATH)GameFieldDrawable.cpp
-FILES += $(SRC_PATH)Projectile.cpp
-FILES += $(SRC_PATH)Obstacles.cpp
-FILES += $(SRC_PATH)game.cpp
-FILES += $(SRC_PATH)callbacks.cpp
-FILES += $(SRC_PATH)DynamicLoader.cpp
-FILES += $(SRC_PATH)Menu.cpp
-FILES += $(SRC_PATH)sfxDrawable.cpp
-FILES += $(SRC_PATH)Crate.cpp
+#Actors
+FILES += $(SRC_PATH)actors/Actor.cpp
+FILES += $(SRC_PATH)actors/ActorInfo.cpp
+FILES += $(SRC_PATH)actors/ProjectileActor.cpp
+#Game
+FILES += $(SRC_PATH)game/GameField.cpp
+FILES += $(SRC_PATH)game/game.cpp
+#Map
+FILES += $(SRC_PATH)map/MapData.cpp
+#Settings
+FILES += $(SRC_PATH)settings/Settings.cpp
+#UI
+FILES += $(SRC_PATH)ui/callbacks.cpp
+FILES += $(SRC_PATH)ui/Crate.cpp
+FILES += $(SRC_PATH)ui/event.cpp
+FILES += $(SRC_PATH)ui/GameFieldDrawable.cpp
+FILES += $(SRC_PATH)ui/Menu.cpp
+FILES += $(SRC_PATH)ui/Projectile.cpp
+FILES += $(SRC_PATH)ui/Obstacles.cpp
+FILES += $(SRC_PATH)ui/sfxDrawable.cpp
+FILES += $(SRC_PATH)ui/Texture.cpp
+FILES += $(SRC_PATH)ui/util.cpp
+FILES += $(SRC_PATH)ui/TankDrawable.cpp
+#Utilities
+FILES += $(SRC_PATH)utilities/DynamicLoader.cpp
 
-TANK_PATH= ./tanks/
-TANKS = $(SRC_PATH)SimpleAI.cpp
-TANKS += $(SRC_PATH)PongAI.cpp
-TANKS += $(SRC_PATH)CamperAI.cpp
-TANKS += $(SRC_PATH)StationaryAI.cpp
-TANKS += $(SRC_PATH)AttackDownAI.cpp
+#Tanks
+TANKS = $(SRC_PATH)tanks/SimpleAI.cpp
+TANKS += $(SRC_PATH)tanks/PongAI.cpp
+TANKS += $(SRC_PATH)tanks/CamperAI.cpp
+TANKS += $(SRC_PATH)tanks/StationaryAI.cpp
+TANKS += $(SRC_PATH)tanks/AttackDownAI.cpp
 
-TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have everything.
+TANKS_LINK = $(SRC_PATH)actors/Actor.o #need to link in the base class for the .so to have everything.
 
-platform: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so) 
+platform: $(FILES:.cpp=.o)
+	+make tanks
 	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
 
 coverage: set-coverage $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o platform $(FILES:.cpp=.o) $(LIBS)
 
 set-coverage:
-	$(eval PROFILE:=-pg -fprofile-arcs -ftest-coverage)
+	$(eval PROFILE:=-pg -fprofile-arcs -ftest-coverage -lgcov --coverage)
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) $(PROFILE) -c $? -o $@ 
+	$(CXX) $(CXXFLAGS) $(PROFILE) -c $? -o $@ $(INCS)
 
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
-tanks/%.so: src/%.cpp ./src/Actor.o
+src/tanks/%.so: src/tanks/%.cpp ./src/actors/Actor.o
+	@mkdir -p tanks
+	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
+
+tanks/%.so: src/tanks/%.cpp ./src/actors/Actor.o
 	@mkdir -p tanks
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
 tanks: $(TANKS:%.cpp=%.so)
 
 clean:
-	@rm -rf platform results.txt src/*.o
-	@rm -rf *.gc*
-	@rm -rf src/*.gc*
+	@find . -name \*.o -type f -exec rm -f {} +
+	@find . -name \*.gc* -type f -exec rm -f {} +
 	@rm -rf gprofresults.txt
 	@rm -rf gmon.out
 
@@ -74,14 +93,15 @@ clean-lib: clean
 	@rm -rf buildsrc
 	@rm -rf libraries/libCTF.so
 
-clean-all: clean-lib
+clean-all: clean-lib clean-tests
 	@rm -rf $(TANK_PATH)*
 	@rm -rf coverage
 
-clean-tests: clean-all
+clean-tests: clean
 	@rm -rf testUnitAll
 	@rm -rf testFunctionalAll
 	@make clean -C tests/src
+	@make cleanTanks -C tests/src
 	@make clean -C tests/functional_tests
 
 dev: clean-lib
@@ -125,7 +145,7 @@ push-to-git: clean-lib
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc status
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release
 
-tests: $(TANKS:src/%.cpp=tanks/%.so) testUnitAll testFunctionalAll
+tests: set-coverage $(TANKS:%.cpp=%.so) testUnitAll testFunctionalAll
 
 testUnitAll:
 	+make PROFILE="$(PROFILE)" -C tests/src

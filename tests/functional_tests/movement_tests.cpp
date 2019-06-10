@@ -49,7 +49,7 @@ SCENARIO("The tank moves around the gamefield")
         // 000
         // 020
         // 000
-        GameField gamefield(3, 3, actor_list);
+        GameField gamefield(3, 3, actor_list, NULL, nullptr, nullptr);
 
         WHEN("The tank tries to move up")
         {
@@ -62,7 +62,7 @@ SCENARIO("The tank moves around the gamefield")
                 //Compare map with the initial map
                 std::vector<int> expected_map = { 0, 2, 0, 0, 0, 0, 0, 0, 0 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }
@@ -71,7 +71,7 @@ SCENARIO("The tank moves around the gamefield")
         {
             std::vector<int> expected_map = { 0, 0, 0, 0, 2, 0, 0, 0, 0 };
 
-            std::vector<int> actual_map = gamefield.getMap();
+            std::vector<int> actual_map = gamefield.fieldMap.map;
             REQUIRE(expected_map == actual_map);
             tank->setMove(moveDown);
             gamefield.nextTurn();
@@ -81,7 +81,7 @@ SCENARIO("The tank moves around the gamefield")
                 //Compare map with the initial map
                 std::vector<int> expected_map = { 0, 0, 0, 0, 0, 0, 0, 2, 0 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }
@@ -90,7 +90,7 @@ SCENARIO("The tank moves around the gamefield")
         {
             std::vector<int> expected_map = { 0, 0, 0, 0, 2, 0, 0, 0, 0 };
 
-            std::vector<int> actual_map = gamefield.getMap();
+            std::vector<int> actual_map = gamefield.fieldMap.map;
             REQUIRE(expected_map == actual_map);
             tank->setMove(moveRight);
             gamefield.nextTurn();
@@ -99,7 +99,7 @@ SCENARIO("The tank moves around the gamefield")
                 //Compare map with the initial map
                 std::vector<int> expected_map = { 0, 0, 0, 0, 0, 2, 0, 0, 0 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }
@@ -108,7 +108,7 @@ SCENARIO("The tank moves around the gamefield")
         {
             std::vector<int> expected_map = { 0, 0, 0, 0, 2, 0, 0, 0, 0 };
 
-            std::vector<int> actual_map = gamefield.getMap();
+            std::vector<int> actual_map = gamefield.fieldMap.map;
             REQUIRE(expected_map == actual_map);
             tank->setMove(moveLeft);
             gamefield.nextTurn();
@@ -117,7 +117,7 @@ SCENARIO("The tank moves around the gamefield")
                 //Compare map with the initial map
                 std::vector<int> expected_map = { 0, 0, 0, 2, 0, 0, 0, 0, 0 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }
@@ -153,7 +153,7 @@ SCENARIO("The tank encounters a wall")
         // 000
         // 020
         // 000
-        GameField gamefield(1, 1, actor_list);
+        GameField gamefield(1, 1, actor_list, NULL, nullptr, nullptr);
 
         WHEN("A tank hits a wall going up")
         {
@@ -163,7 +163,7 @@ SCENARIO("The tank encounters a wall")
             {
                 std::vector<int> expected_map = { 2 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }
@@ -176,7 +176,7 @@ SCENARIO("The tank encounters a wall")
             {
                 std::vector<int> expected_map = { 2 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }
@@ -189,7 +189,7 @@ SCENARIO("The tank encounters a wall")
             {
                 std::vector<int> expected_map = { 2 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }
@@ -202,7 +202,7 @@ SCENARIO("The tank encounters a wall")
             {
                 std::vector<int> expected_map = { 2 };
 
-                std::vector<int> actual_map = gamefield.getMap();
+                std::vector<int> actual_map = gamefield.fieldMap.map;
                 REQUIRE(expected_map == actual_map);
             }
         }
@@ -232,7 +232,7 @@ SCENARIO("Tanks drive right into each other")
 
         std::vector<ActorInfo> actor_list = {tank_1_s, tank_2_s};
 
-        GameField gamefield(3, 1, actor_list);
+        GameField gamefield(3, 1, actor_list, NULL, nullptr, nullptr);
 
         WHEN("Tanks try to move into the same spot")
         {

@@ -48,21 +48,23 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 
 // Includes
 #include <iostream>
-#include "util.h"
 #include <memory>
 #include <stdio.h>
+#include <util.h>
+#include <Settings.h>
+#include <game.h>
 
 // Main
 
 int main(int argc, char **argv)
 {
-    const char *dmode = "-demo";
-    const char *qmode = "-quiet";
-    const char *cmode = "-coverage";
+    Settings * settings = new Settings;
+    gameMode mode = settings->getGameMode();
     
-    gameMode mode = ai;
+    //game display height
     int height = 727, width = 1000;
-    int counter = 1;
+    //agument counter
+    int counter = 1;    
 
     //printf("%d\n", argc);
     //printf("%s\n", argv[argc-1]);
@@ -70,31 +72,108 @@ int main(int argc, char **argv)
     //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
     while(counter < argc)
     {
-      if (strcmp(argv[counter], dmode) == 0 && counter + 1 <= argc)
+      if ((strcmp(argv[counter], "--demo")==0)  && counter + 1 <= argc)
       {
         printf("demo mode\n");
         width = 1900;
         height = 1000;
-      }
-      if (strcmp(argv[counter], qmode) == 0 && counter + 1 <= argc)
+      }else if ((strcmp(argv[counter], "--quiet") == 0 ) && counter + 1 <= argc)
       {
         printf("quiet mode\n");
-        mode = quiet;
-      }
-      if (strcmp(argv[counter], cmode) == 0 && counter + 1 <= argc)
+        settings->setQuietMode(true);
+      }else if ((strcmp(argv[counter], "--tournament") == 0 ) && counter + 1 <= argc)
+      {
+        printf("tournament mode\n");
+        mode = tournament;
+      }else if ((strcmp(argv[counter], "--noui") == 0 ) && counter + 1 <= argc)
+      {
+        printf("no ui mode\n");
+        settings->setUI(false);
+      }else if ((strcmp(argv[counter], "--coverage") == 0) && counter + 1 <= argc)
       {
         printf("coverage mode\n");
-        mode = coverage;        
+        settings->setCoverageMode(false);
+      }else if((strcmp(argv[counter], "--help") == 0) && counter + 1 <= argc)
+      {
+        printf("\n\nHelp:\n");
+        printf("--demo, -d\n");
+        printf("   Demo mode, increases default width to 1900 and height to 1000.\n\n");
+        printf("--quiet, -q\n");
+        printf("   Quiet text mode, only displays debug text\n\n");
+        printf("--tournament, -t\n");
+        printf("   Tournament mode, not implemented yet\n\n");
+        printf("--noui, -n\n");
+        printf("   No UI Mode, hides the UI for faster playback\n\n");
+        printf("--coverage, -c\n");
+        printf("   Coverage Mode, runs fast settings for coverage testing with graphics\n\n");
+        exit(1);
+      }else if(argv[counter][0] == '-' && argv[counter][1] != '-'){
+        //printf("multi-params\n");
+        int i = 1; //start at first argument
+        while (argv[counter][i] != '\0'){
+            switch (argv[counter][i]){
+              case 'd':
+                width = 1900;
+                height = 1000;
+                printf("demo mode\n");
+                break;
+              case 'q':
+                settings->setQuietMode(true);
+                printf("quiet mode\n");
+                break;
+              case 't':
+                mode = tournament;
+                printf("tournament mode\n");
+                break;
+              case 'n':
+                settings->setUI(false);
+                printf("no ui mode\n");
+                break;
+              case 'c':
+                settings->setCoverageMode(true);
+                printf("coverage mode\n");
+                break;
+              case 'h':
+                printf("\n\nHelp:\n");
+                printf("--demo, -d\n");
+                printf("   Demo mode, increases default width to 1900 and height to 1000.\n\n");
+                printf("--quiet, -q\n");
+                printf("   Quiet text mode, only displays debug text\n\n");
+                printf("--tournament, -t\n");
+                printf("   Tournament mode, not implemented yet\n\n");
+                printf("--noui, -n\n");
+                printf("   No UI Mode, hides the UI for faster playback\n\n");
+                printf("--coverage, -c\n");
+                printf("   Coverage Mode, runs fast settings for coverage testing with graphics\n\n");
+                exit(1);
+                break;
+              default:
+                printf("Invalid option specified: %c\n", argv[counter][i]);
+                printf("Use --help or -h for command line options.\n");
+                exit(1);
+                break;
+            }
+            i++;
+          }
+      }else{
+          printf("Invalid option specified: %s\n", argv[counter]);
+          printf("Use --help or -h for command line options.\n");
+          exit(1);
       }
       counter++;
     }
-    //printf("Height: %d Width: %d",height, width);
-    initOpenGL( argc, argv, width, height, mode );
 
-
-    glutMainLoop();
+    settings->setGameMode(mode);
+    //gameMode {none, ai, sp, mp, tournament};
+    if (settings->showUI()){
+      initOpenGL( argc, argv, width, height, settings );
+      glutMainLoop();
+    }else{
+        Game game;
+        game.initGameState(settings);
+        game.executeTurn();
+    }
 
     std::cout << "\n GAME OVER \n";
-
     return 0;
 }

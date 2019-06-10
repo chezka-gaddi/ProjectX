@@ -1,44 +1,52 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -DTESTING -fPIC 
-INCS = -I./ -I../../src/ -I../src 
+INCS = -I./ -I../../src/ -I../src
+INCS += -I../../src/game
+INCS += -I../../src/map
+INCS += -I../../src/settings
+INCS += -I../../src/structures
+INCS += -I../../src/tanks
+INCS += -I../../src/ui
+INCS += -I../../src/utilities
+INCS += -I../../src/actors
 #TEST_FILES = ../src/catch.hpp
 
 PROFILE ?=
 
-TEST_FILES = main.o
-TEST_FILES += movement_tests.o
-TEST_FILES += projectile_functional_tests.o
+TEST_FILES = main.cpp
+TEST_FILES += movement_tests.cpp
+TEST_FILES += projectile_functional_tests.cpp
 
 LIBS += -ldl -lglut -lGL -lGLU -lpthread
 LIBS += -L../../libraries -lSOIL
 SRC_PATH=../../src/
 
-FILES += $(SRC_PATH)GameField.cpp
-FILES += $(SRC_PATH)Actor.cpp
-FILES += $(SRC_PATH)MapData.cpp
-FILES += $(SRC_PATH)ProjectileActor.cpp
-FILES += $(SRC_PATH)ActorInfo.cpp
-FILES += $(SRC_PATH)Texture.cpp
-FILES += $(SRC_PATH)event.cpp
-FILES += $(SRC_PATH)util.cpp
-FILES += $(SRC_PATH)TankDrawable.cpp
-FILES += $(SRC_PATH)GameFieldDrawable.cpp
-FILES += $(SRC_PATH)Projectile.cpp
-FILES += $(SRC_PATH)Obstacles.cpp
-FILES += $(SRC_PATH)game.cpp
-FILES += $(SRC_PATH)callbacks.cpp
-FILES += $(SRC_PATH)DynamicLoader.cpp
-FILES += $(SRC_PATH)Menu.cpp
-FILES += $(SRC_PATH)sfxDrawable.cpp
-FILES += $(SRC_PATH)Crate.cpp
-FILES += $(SRC_PATH)SimpleActor.cpp
-
+FILES += $(SRC_PATH)settings/Settings.cpp
+FILES += $(SRC_PATH)game/GameField.cpp
+FILES += $(SRC_PATH)actors/Actor.cpp
+FILES += $(SRC_PATH)map/MapData.cpp
+FILES += $(SRC_PATH)actors/ProjectileActor.cpp
+FILES += $(SRC_PATH)actors/ActorInfo.cpp
+FILES += $(SRC_PATH)ui/Texture.cpp
+FILES += $(SRC_PATH)ui/event.cpp
+FILES += $(SRC_PATH)ui/util.cpp
+FILES += $(SRC_PATH)ui/TankDrawable.cpp
+FILES += $(SRC_PATH)ui/GameFieldDrawable.cpp
+FILES += $(SRC_PATH)ui/Projectile.cpp
+FILES += $(SRC_PATH)ui/Obstacles.cpp
+FILES += $(SRC_PATH)game/game.cpp
+FILES += $(SRC_PATH)ui/callbacks.cpp
+FILES += $(SRC_PATH)utilities/DynamicLoader.cpp
+FILES += $(SRC_PATH)ui/Menu.cpp
+FILES += $(SRC_PATH)ui/sfxDrawable.cpp
+FILES += $(SRC_PATH)ui/Crate.cpp
+FILES += $(SRC_PATH)tanks/SimpleActor.cpp
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) $(PROFILE) -c $< -o $@ $(INCS)
 
-testAll: $(FILES:.cpp=.o) $(TEST_FILES)
-	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o testFunctionalAll $(FILES:.cpp=.o) $(TEST_FILES) $(LIBS)
+testAll: $(FILES:.cpp=.o) $(TEST_FILES:.cpp=.o)
+	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o testFunctionalAll $(FILES:.cpp=.o) $(TEST_FILES:.cpp=.o) $(LIBS)
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCS)
