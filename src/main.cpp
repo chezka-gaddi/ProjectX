@@ -80,7 +80,7 @@ int main(int argc, char **argv)
       }else if ((strcmp(argv[counter], "--quiet") == 0 ) && counter + 1 <= argc)
       {
         printf("quiet mode\n");
-        mode = quiet;
+        settings->setQuietMode(true);
       }else if ((strcmp(argv[counter], "--tournament") == 0 ) && counter + 1 <= argc)
       {
         printf("tournament mode\n");
@@ -88,11 +88,11 @@ int main(int argc, char **argv)
       }else if ((strcmp(argv[counter], "--noui") == 0 ) && counter + 1 <= argc)
       {
         printf("no ui mode\n");
-        mode = noui;
+        settings->setUI(false);
       }else if ((strcmp(argv[counter], "--coverage") == 0) && counter + 1 <= argc)
       {
         printf("coverage mode\n");
-        settings->setCoverageMode();
+        settings->setCoverageMode(false);
       }else if(argv[counter][0] == '-' && argv[counter][1] != '-'){
         //printf("multi-params\n");
         int i = 1; //start at first argument
@@ -104,20 +104,20 @@ int main(int argc, char **argv)
                 printf("demo mode\n");
                 break;
               case 'q':
-                mode = quiet;
+                settings->setQuietMode(true);
                 printf("quiet mode\n");
                 break;
               case 't':
                 mode = tournament;
                 printf("tournament mode\n");
                 break;
-                case 'n':
-                mode = noui;
+              case 'n':
+                settings->setUI(false);
                 printf("no ui mode\n");
                 break;
               case 'c':
-                settings->setCoverageMode();
-                printf("multi-params\n");
+                settings->setCoverageMode(true);
+                printf("coverage mode\n");
                 break;
               default:
                 printf("Invalid option specified: %c\n", argv[counter][i]);
@@ -134,13 +134,12 @@ int main(int argc, char **argv)
     }
 
     settings->setGameMode(mode);
-    //gameMode {none, ai, sp, mp, quiet, coverage};
-    if (mode == ai || mode == sp || mode == mp || mode == quiet){
+    //gameMode {none, ai, sp, mp, tournament};
+    if (settings->showUI()){
       initOpenGL( argc, argv, width, height, settings );
       glutMainLoop();
     }else{
         Game game;
-        settings->setUI(false);
         game.initGameState(settings);
         game.executeTurn();
     }

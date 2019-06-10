@@ -44,6 +44,7 @@ public:
     int getAttrRange();
     int getAttrSpecial();
     bool checkCoverage();
+    bool checkQuiet();
 
     void nextTurn();
 
@@ -59,6 +60,8 @@ public:
     void setActTurn(int at);
     void setModCounter(int mc);
     void setUI(bool set);
+    void setCoverageMode(bool c);
+    void setQuietMode(bool q);
 
     //individual attribute setters
     void setAttrDamage(int damage);
@@ -68,8 +71,6 @@ public:
     void setAttrAmmo(int ammo);
     void setAttrRange(int range);
     void setAttrSpecial(int special);
-    void setCoverageMode();
-
 
 private:
     //default game settings
@@ -90,6 +91,9 @@ private:
     int turn = 0; //Current game turn
     int actTurn = 0; //0 causes issues on first display call
     int modCounter = 7; //Modular counter for animation effects
+
+    //platform settings
+    bool modeQuiet = false; //quiet mode for blocking text
     bool modeCoverage = false; //coverage mode for faster animations
     bool showui = true; //should we display the ui
 };

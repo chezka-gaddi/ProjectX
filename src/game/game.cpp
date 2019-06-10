@@ -449,7 +449,7 @@ int TimerEvent::idle_speed = 750;
 void Game::initGameState(Settings * setting)
 {
   settings = setting;
-  bool quiet = (settings->getGameMode() == gameMode::quiet);
+  bool quiet = settings->checkQuiet();
   if(!quiet)
     std::cout << "Game::Loading config.txt\n";
   ifstream fin("config.txt");
@@ -983,8 +983,7 @@ void Game::initGameState(Settings * setting)
     {
       if(tank.first == o.first && tank.second == o.second){
         taken = true;
-      if (!quiet)
-        printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
+        printf("(Obstacle) Spot %d, %d is being used for tank.\n", tank.first, tank.second);
       }
     }
 
@@ -1004,8 +1003,7 @@ void Game::initGameState(Settings * setting)
     {
       if(tank.first == c.first && tank.second == c.second){
         taken = true;
-        if (!quiet)
-          printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
+        printf("(Special Objects) Spot %d, %d is being used for tank.\n", tank.first, tank.second);
       }
     }
 
@@ -1033,8 +1031,7 @@ void Game::initGameState(Settings * setting)
     {
       if(tank.first == r.first && tank.second == r.second){
         taken = true;
-      if (!quiet)
-        printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
+        printf("(Rock) Spot %d, %d is being used for tank.\n", tank.first, tank.second);
       }
     }
 
@@ -1062,7 +1059,7 @@ void Game::initGameState(Settings * setting)
     {
       if(tank.first == w.first && tank.second == w.second){
         taken = true;
-      printf("Spot %d, %d is being used for tank.\n", tank.first, tank.second);
+      printf("(Water) Spot %d, %d is being used for tank.\n", tank.first, tank.second);
       }
     }
 
