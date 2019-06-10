@@ -50,7 +50,6 @@ public:
     std::string getName();    /*!< Returns the value within name */
     int getId(); /*!< Returns the value within id */
     //Setters
-    void setName(std::string newName);   /*!< Sets the value of name to the value in newName */
     void setId(int newId); /*!< Sets the value of id to teh value in newId */
 };
 #endif //SLACKERS_PLATFORM_ACTOR_H

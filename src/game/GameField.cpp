@@ -191,13 +191,9 @@ void GameField::animateMove(ActorInfo &a)
   if(((a.x == a.prevx) && (a.y == a.prevy)) || ((a.prevx == -1) || (a.prevy == -1))){  //We didn't actually move
     return;
   }
-  int px = a.prevx;
-  int py = a.prevy;
-  int nx = a.x;
-  int ny = a.y;
+  int px = a.prevx, py = a.prevy, nx = a.x, ny = a.y;
   int samples = 1; //If we're testing default to 1 sample
   GLfloat tempx, tempy;
-  GLfloat prevx, prevy;
   if (gameptr != nullptr){//if we end up here while running catch tests, block out the invalid pointer (Other errors will occur)
     samples = settings->getAniFrames();
   
@@ -206,134 +202,21 @@ void GameField::animateMove(ActorInfo &a)
     else
       TimerEvent::idle_speed = settings->getTankSpeed();
   }
-  switch(a.heading) //get our heading and loop through drawing samples
+  tempy = ((-1.75 - (py * y_scalar)) - (-1.75 - (ny * y_scalar))) / samples;
+  tempx = -((.75 - (px * x_scalar)) - (.75 - (nx * x_scalar))) / samples;
+
+  //Only need to adjust for single values
+  if (a.heading == UP || a.heading == DOWN)
+    tempx = 0;
+  if (a.heading == LEFT || a.heading == RIGHT)
+    tempy = 0;
+
+  for(int i = 1; i <= samples; i++)
   {
-    case UP:
-      tempy = -1.75 - (ny * y_scalar); //smaller
-      prevy = -1.75 - (py * y_scalar); //bigger
-      tempy = (prevy - tempy); //-scaler
-      tempy = tempy / samples; //scale it
-
-      for(int i = 1; i < samples; i++)
-      {
-        a.offsety = tempy * (samples - i);
-        if(gameptr != nullptr)
-          displayCallback(settings);
-      }
-      break;
-    case DOWN:
-      tempy = -1.75 - (ny * y_scalar); //bigger
-      prevy = -1.75 - (py * y_scalar); //smaller
-      tempy = (prevy - tempy); //scaler
-      tempy = tempy / samples; //scale it
-      for(int i = 1; i < samples; i++)
-      {
-        a.offsety = tempy * (samples - i);
-        if(gameptr != nullptr)
-          displayCallback(settings);
-      }
-      break;
-
-    case LEFT:
-      tempx = .75 - (nx * x_scalar); //smaller
-      prevx = .75 - (px * x_scalar); //bigger
-      tempx = -(prevx - tempx); //-scaler
-      tempx = tempx / samples; //scale it
-      for(int i = 1; i < samples; i++)
-      {
-        a.offsetx = tempx * (samples - i);
-        if(gameptr != nullptr)
-          displayCallback(settings);
-      }
-      break;
-
-    case RIGHT:
-      tempx = .75 - (nx * x_scalar); //bigger
-      prevx = .75 - (px * x_scalar); //smaller
-      tempx = -(prevx - tempx); //scaler
-      tempx = tempx / samples; //scale it
-      for(int i = 1; i < samples; i++)
-      {
-        a.offsetx = tempx * (samples - i);
-        if(gameptr != nullptr)
-          displayCallback(settings);
-      }
-      break;
-    case UPLEFT:
-      tempy = -1.75 - (ny * y_scalar); //smaller
-      prevy = -1.75 - (py * y_scalar); //bigger
-      tempy = (prevy - tempy); //-scaler
-      tempy = tempy / samples; //scale it
-      tempx = .75 - (nx * x_scalar); //smaller
-      prevx = .75 - (px * x_scalar); //bigger
-      tempx = -(prevx - tempx); //-scaler
-      tempx = tempx / samples; //scale it
-      for(int i = 1; i <= samples; i++)
-      {
-        a.offsety = tempy * (samples - i);
-        a.offsetx = tempx * (samples - i);
-        if(gameptr != nullptr)
-          displayCallback(settings);
-      }
-      break;
-
-    case UPRIGHT:
-      tempy = -1.75 - (ny * y_scalar); //smaller
-      prevy = -1.75 - (py * y_scalar); //bigger
-      tempy = (prevy - tempy); //-scaler
-      tempy = tempy / samples; //scale it
-      tempx = .75 - (nx * x_scalar); //bigger
-      prevx = .75 - (px * x_scalar); //smaller
-      tempx = -(prevx - tempx); //scaler
-      tempx = tempx / samples; //scale it
-      for(int i = 1; i <= samples; i++)
-      {
-        a.offsety = tempy * (samples - i);
-        a.offsetx = tempx * (samples - i);
-        if(gameptr != nullptr)
-          displayCallback(settings);
-      }
-      break;
-
-    case DOWNLEFT:
-      tempy = -1.75 - (ny * y_scalar); //bigger
-      prevy = -1.75 - (py * y_scalar); //smaller
-      tempy = (prevy - tempy); //scaler
-      tempy = tempy / samples; //scale it
-      tempx = .75 - (nx * x_scalar); //smaller
-      prevx = .75 - (px * x_scalar); //bigger
-      tempx = -(prevx - tempx); //-scaler
-      tempx = tempx / samples; //scale it
-      for(int i = 1; i <= samples; i++)
-      {
-        a.offsety = tempy * (samples - i);
-        a.offsetx = tempx * (samples - i);
-        if(gameptr != nullptr)
-          displayCallback(settings);
-      }
-      break;
-
-    case DOWNRIGHT:
-      tempy = -1.75 - (ny * y_scalar); //bigger
-      prevy = -1.75 - (py * y_scalar); //smaller
-      tempy = (prevy - tempy); //scaler
-      tempy = tempy / samples; //scale it
-      tempx = .75 - (nx * x_scalar); //bigger
-      prevx = .75 - (px * x_scalar); //smaller
-      tempx = -(prevx - tempx); //scaler
-      tempx = tempx / samples; //scale it
-      for(int i = 1; i <= samples; i++)
-      {
-        a.offsety = tempy * (samples - i);
-        a.offsetx = tempx * (samples - i);
-        if(gameptr != nullptr)
-          displayCallback(settings);
-      }
-      break;
-
-    default:
-      //not sure what happened so don't move
-      break;
+    a.offsety = tempy * (samples - i);
+    a.offsetx = tempx * (samples - i);
+    if(gameptr != nullptr)
+      displayCallback(settings);
   }
   a.offsety = 0; //Reset values 
   a.offsetx = 0;

@@ -19,6 +19,7 @@
 class ProjectileActor:public Actor
 {
 protected:
+    std::string name = "projectile"; 
     direction dir;
 public:
     ProjectileActor();
@@ -28,7 +29,6 @@ public:
     direction attack(MapData map, PositionData status);  
     attributes setAttribute(int pointsAvailable, attributes baseStats);
     int spendAP(MapData map, PositionData status);
-
 };
 
 
