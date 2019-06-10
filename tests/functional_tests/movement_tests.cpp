@@ -49,7 +49,7 @@ SCENARIO("The tank moves around the gamefield")
         // 000
         // 020
         // 000
-        GameField gamefield(3, 3, actor_list);
+        GameField gamefield(3, 3, actor_list, NULL, nullptr, nullptr);
 
         WHEN("The tank tries to move up")
         {
@@ -153,7 +153,7 @@ SCENARIO("The tank encounters a wall")
         // 000
         // 020
         // 000
-        GameField gamefield(1, 1, actor_list);
+        GameField gamefield(1, 1, actor_list, NULL, nullptr, nullptr);
 
         WHEN("A tank hits a wall going up")
         {
@@ -232,7 +232,7 @@ SCENARIO("Tanks drive right into each other")
 
         std::vector<ActorInfo> actor_list = {tank_1_s, tank_2_s};
 
-        GameField gamefield(3, 1, actor_list);
+        GameField gamefield(3, 1, actor_list, NULL, nullptr, nullptr);
 
         WHEN("Tanks try to move into the same spot")
         {

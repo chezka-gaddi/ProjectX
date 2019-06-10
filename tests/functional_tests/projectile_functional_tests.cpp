@@ -56,7 +56,7 @@ SCENARIO("The projectile moves around the gamefield")
         // 0
         // 0
         // 0
-        GameField gamefield(1, 13, actor_list);
+        GameField gamefield(1, 13, actor_list, NULL, nullptr, nullptr);
 
         WHEN("The tank tries to shoot up")
         {
@@ -140,7 +140,7 @@ SCENARIO("The projectile moves around the gamefield")
 
         // Generate the gamefield with a map that looks like this:
         // 0,0,0,0,0,0,2,0,0,0,0,0,0
-        GameField gamefield(13,1, actor_list);
+        GameField gamefield(13,1, actor_list, NULL, nullptr, nullptr);
 
         WHEN("The tank tries to shoot left")
         {
@@ -236,7 +236,7 @@ SCENARIO("The projectile collides with the actors on the gamefield")
     // Generate the gamefield with a map that looks like this:
     // 3,0,0,0,0,0,0,0,0,0,0,0,0,2
 
-    GameField gamefield(14,1, actor_list);
+    GameField gamefield(14,1, actor_list, NULL, nullptr, nullptr);
     GIVEN("A horizontal gamefeild and two tanks")
     {
         WHEN("Each tank tries to shoot a projectile")

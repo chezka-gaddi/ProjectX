@@ -45,7 +45,7 @@ GameField::GameField(int width, int height)
  * Constructor with dimensions and a vector of ActorInfo
  */
 
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(Settings *), Game * game, Settings * setting) : actors(startActors)
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(Settings *) = NULL, Game * game = nullptr, Settings * setting = nullptr) : actors(startActors)
 {
   fieldMap.width = width;
   fieldMap.height = height;
@@ -53,8 +53,8 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
   fieldMap.obstacleMap.resize(width * height);
   std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
   std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
-  x_scalar = 4.0717*pow(width, -1.031);
-  y_scalar = 3.1923*pow(height, -1.08);
+  x_scalar = 4.0717 * pow(width, -1.031);
+  y_scalar = 3.1923 * pow(height, -1.08);
   updateMap();
   displayCallback = d_callback;
   gameptr = game;

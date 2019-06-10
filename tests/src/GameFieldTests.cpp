@@ -69,7 +69,7 @@ TEST_CASE("GameField constructs with actors")
     std::vector<ActorInfo> actors(2);
     actors[0].act_p = a1;
     actors[1].act_p = a2;
-    GameField g (10, 10, actors);
+    GameField g (10, 10, actors, NULL, nullptr, nullptr);
     REQUIRE(g.getActors().size() == 2);
 }
 
@@ -86,7 +86,7 @@ TEST_CASE("GameField correctly places actors on the map at construction")
     actorVect[1].x = 0;
     actorVect[1].y = 1;
     actorVect[1].health = 1;
-    GameField g (2, 2, actorVect);
+    GameField g (2, 2, actorVect, NULL, nullptr, nullptr);
     std::vector<int> ref = {0, 1, 2, 0};
     REQUIRE(g.fieldMap.map == ref);
 }
@@ -190,7 +190,7 @@ TEST_CASE("Actors are culled and do not move after collision")
     tvect[1] = t2i;
     tvect[2] = t3i;
 
-    GameField g (1, 4, tvect);
+    GameField g (1, 4, tvect, NULL, nullptr, nullptr);
 
     g.nextTurn(); //tank 1 will fire up at the other tanks
 
@@ -215,7 +215,7 @@ TEST_CASE("Collision is checked when firing point-blank")
     tvect[1] = t2i;
     tvect[2] = t3i;
 
-    GameField g (1, 3, tvect);
+    GameField g (1, 3, tvect, NULL, nullptr, nullptr);
 
     g.nextTurn(); //tank 1 will fire up at the other tanks, point blank on t2
 
@@ -475,7 +475,7 @@ TEST_CASE("Game Field properly gets attributes from actors")
 
     vect.push_back(test);
 
-    GameField manager(2, 2, vect);
+    GameField manager(2, 2, vect, NULL, nullptr, nullptr);
 
     manager.setSPECIAL(baseStats);
 
@@ -501,7 +501,7 @@ TEST_CASE("GameField Calculates Fog of War")
     std::vector<ActorInfo> tank_list;
     tank_list.push_back(test);
 
-    GameField manager(7, 7, tank_list);
+    GameField manager(7, 7, tank_list, NULL, nullptr, nullptr);
 
     std::vector<int> expected_obstacles = { true, true, true, true, true, true, true,
                                             true, false, false, false, false, false, true,
@@ -549,7 +549,7 @@ TEST_CASE("GameField hides other thanks in the Fog of War")
     tank_list.push_back(test);
     tank_list.push_back(test_hidden);
 
-    GameField manager(7, 7, tank_list);
+    GameField manager(7, 7, tank_list, NULL, nullptr, nullptr);
 
     MapData test_map = manager.fieldMap;
 
