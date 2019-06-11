@@ -74,25 +74,30 @@ int main(int argc, char **argv)
     {
       if ((strcmp(argv[counter], "--demo")==0)  && counter + 1 <= argc)
       {
-        printf("demo mode\n");
+        printf("Demonstration Mode\n");
         width = 1900;
         height = 1000;
       }else if ((strcmp(argv[counter], "--quiet") == 0 ) && counter + 1 <= argc)
       {
-        printf("quiet mode\n");
+        printf("Quiet Mode\n");
         settings->setQuietMode(true);
       }else if ((strcmp(argv[counter], "--tournament") == 0 ) && counter + 1 <= argc)
       {
-        printf("tournament mode\n");
+        printf("Tournament Mode\n");
         mode = tournament;
       }else if ((strcmp(argv[counter], "--noui") == 0 ) && counter + 1 <= argc)
       {
-        printf("no ui mode\n");
+        printf("No UI Mode\n");
         settings->setUI(false);
       }else if ((strcmp(argv[counter], "--coverage") == 0) && counter + 1 <= argc)
       {
-        printf("coverage mode\n");
+        printf("Coverage Mode\n");
         settings->setCoverageMode(false);
+      }else if (((strcmp(argv[counter], "--results") == 0) || strcmp(argv[counter], "-o") == 0) && counter + 2 <= argc)
+      {
+        printf("Results file set to %s\n", argv[counter+1]);
+        settings->setResultsFile(argv[counter+1]);
+        counter++;
       }else if((strcmp(argv[counter], "--help") == 0) && counter + 1 <= argc)
       {
         printf("\n\nHelp:\n");
@@ -115,23 +120,23 @@ int main(int argc, char **argv)
               case 'd':
                 width = 1900;
                 height = 1000;
-                printf("demo mode\n");
+                printf("Demo Mode\n");
                 break;
               case 'q':
                 settings->setQuietMode(true);
-                printf("quiet mode\n");
+                printf("Quiet Mode\n");
                 break;
               case 't':
                 mode = tournament;
-                printf("tournament mode\n");
+                printf("Tournament Mode\n");
                 break;
               case 'n':
                 settings->setUI(false);
-                printf("no ui mode\n");
+                printf("No UI Mode\n");
                 break;
               case 'c':
                 settings->setCoverageMode(true);
-                printf("coverage mode\n");
+                printf("Coverage Mode\n");
                 break;
               case 'h':
                 printf("\n\nHelp:\n");

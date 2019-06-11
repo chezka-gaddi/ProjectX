@@ -104,7 +104,7 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   float j = -0.7f;
   float k = -0.5;
 
-  ofstream fout("results.txt", ios::out | ios::app);
+  ofstream fout(settings->getResultsFile(), ios::out | ios::app);
   bool flag = false;
 
   unsigned int winDex = 0;
@@ -492,10 +492,10 @@ void Game::initGameState(Settings * setting)
   {
     createConfig();
   }
-  fout.open("results.txt", ios::out | ios::in | ios::app);
+  fout.open(settings->getResultsFile(), ios::out | ios::in | ios::app);
   if(!fout)
   {
-    cout << "UNABLE OPEN RESULTS FILE (results.txt).  Game will play but results will not be saved.\n";
+    printf("UNABLE OPEN RESULTS FILE (%s).  Game will play but results will not be saved.\n", settings->getResultsFile().c_str());
   }
   while(!fin.eof())
   {

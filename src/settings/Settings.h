@@ -7,6 +7,7 @@
 #define __settings_h
 
 #include <attributes.h>
+#include <string>
 
 class GameField; //Forward declare it for pointer
 
@@ -34,6 +35,7 @@ public:
     int getActTurn();
     int getModCounter();
     bool showUI();
+    std::string getResultsFile();
 
     //individual attribute getters
     int getAttrDamage();
@@ -62,6 +64,7 @@ public:
     void setUI(bool set);
     void setCoverageMode(bool c);
     void setQuietMode(bool q);
+    void setResultsFile(std::string r);
 
     //individual attribute setters
     void setAttrDamage(int damage);
@@ -96,6 +99,7 @@ private:
     bool modeQuiet = false; //quiet mode for blocking text
     bool modeCoverage = false; //coverage mode for faster animations
     bool showui = true; //should we display the ui
+    std::string resultsFile = "results.txt"; //results output file
 };
 
 #endif //__GAME_H

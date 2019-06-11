@@ -195,6 +195,10 @@ void Settings::setAttrSpecial(int attributePoints){
 baseAttributes.tankSpecial = attributePoints;
 }
 
+void Settings::setResultsFile(std::string s){
+  resultsFile = s;
+}
+
 int Settings::getAttrDamage(){return baseAttributes.tankDamage;}
 int Settings::getAttrHealth(){return baseAttributes.tankHealth;}
 int Settings::getAttrAP(){return baseAttributes.tankAP;}
@@ -208,3 +212,5 @@ bool Settings::showUI(){return showui;}
 void Settings::setCoverageMode(bool c){modeCoverage = c;}
 bool Settings::checkCoverage(){return modeCoverage;}
 bool Settings::checkQuiet(){return modeQuiet;}
+
+std::string Settings::getResultsFile(){return resultsFile;}
