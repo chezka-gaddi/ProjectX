@@ -111,7 +111,7 @@ void Game::gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner)
   int count = 1;
   int timer_pause = TimerEvent::idle_speed * 133;
 
-  while(winner[winDex].name == "default\n" && winDex < winner.size())
+  while(winner[winDex].id <= 0 && winDex < winner.size())
     winDex++;
   if(winner.size() != 0)
   { 
