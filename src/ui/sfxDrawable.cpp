@@ -4,7 +4,7 @@
 * @brief Contains all maintenance functions for sfxDrawable class.
 * *****************************************************************************/
 
-#include "../ui/Drawable.h"
+#include "ui/Drawable.h"
 
 
 /***************************************************************************//**

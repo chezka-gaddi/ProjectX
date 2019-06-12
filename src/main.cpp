@@ -50,9 +50,9 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 #include <iostream>
 #include <memory>
 #include <stdio.h>
-#include <util.h>
-#include <Settings.h>
-#include <game.h>
+#include <ui/util.h>
+#include <settings/Settings.h>
+#include <game/game.h>
 
 // Main
 

@@ -3,11 +3,11 @@
 #ifndef SLACKERS_PLATFORM_ACTOR_H
 #define SLACKERS_PLATFORM_ACTOR_H
 #include <string>
-#include <MoveData.h>
-#include <attributes.h>
-#include <MapData.h>
-#include <direction.h>
-#include <PositionData.h>
+#include <structures/MoveData.h>
+#include <structures/attributes.h>
+#include <map/MapData.h>
+#include <structures/direction.h>
+#include <structures/PositionData.h>
 
 /*!
  * @brief This parent class will be inherited by every projectile and tank

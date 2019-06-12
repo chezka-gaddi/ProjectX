@@ -11,13 +11,14 @@
 #include <vector>
 #include <GL/glut.h>
 #include <GL/freeglut.h>
-#include <ActorInfo.h>
-#include <GameField.h>
-#include <Drawable.h>
-#include <Actor.h>
-#include <SimpleAI.h>
-#include <DynamicLoader.h>
-#include <Settings.h>
+#include <actors/ActorInfo.h>
+#include <game/GameField.h>
+#include <ui/Drawable.h>
+#include <actors/Actor.h>
+#include <tanks/SimpleAI.h>
+#include <utilities/DynamicLoader.h>
+#include <settings/Settings.h>
+#include <game/gameover.h>
 #include <fstream>
 #include <sstream>
 #include <utility>
@@ -49,7 +50,7 @@ public:
     void createConfig();
     float convertGLXCoordinate( int );
     float convertGLYCoordinate( int );
-    void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner);
+    //void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner);
     void noGUIGame();
     bool checkMaxTurn();
 

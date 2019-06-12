@@ -9,9 +9,9 @@
 #include <GL/glut.h>
 #include <vector>
 
-#include <callbacks.h>
-#include <event.h>
-#include <Texture.h>
+#include <ui/callbacks.h>
+#include <ui/event.h>
+#include <ui/Texture.h>
 
 void initOpenGL(int, char**, int, int, Settings*);
 void utilityCentral(Event *);

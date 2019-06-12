@@ -1,8 +1,8 @@
 #ifndef __SIMPLE_AI_H
 #define __SIMPLE_AI_H
 
-#include <Actor.h>
-#include <direction.h>
+#include <actors/Actor.h>
+#include <structures/direction.h>
 #include <cmath>
 
 class SimpleAI : public Actor

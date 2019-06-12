@@ -9,11 +9,11 @@
 
 #include <cstring>
 #include <string>
-#include <global.h>
-#include <direction.h>
+#include <ui/global.h>
+#include <structures/direction.h>
 #include <GL/glut.h>
 #include <GL/freeglut.h>
-#include <ActorInfo.h>
+#include <actors/ActorInfo.h>
 
 /***************************************************************************//**
 * @author Chezka Gaddi

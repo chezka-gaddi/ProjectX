@@ -3,12 +3,12 @@
 //
 
 
-#include "../utilities/DynamicLoader.h"
+#include "utilities/DynamicLoader.h"
 #include <dlfcn.h>
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "../actors/Actor.h"
+#include "actors/Actor.h"
 
 
 /**

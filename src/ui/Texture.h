@@ -8,8 +8,8 @@
 
 #include <GL/glut.h>
 #include <fstream>
-#include <SOIL.h>
-#include <global.h>
+#include <ui/SOIL.h>
+#include <ui/global.h>
 
 //int LoadGLTextures(std::vector <std::string>,std::vector <std::string>);
 int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> gameimgs,

@@ -12,9 +12,9 @@
 #ifndef __ACTOR_INFO_H
 #define __ACTOR_INFO_H
 
-#include <Actor.h>
-#include <ProjectileActor.h>
-#include <attributes.h>
+#include <actors/Actor.h>
+#include <actors/ProjectileActor.h>
+#include <structures/attributes.h>
 #include <iostream>
 #include <memory>
 

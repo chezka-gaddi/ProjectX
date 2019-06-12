@@ -8,8 +8,8 @@
  *
  **********************************************************************/
 
-#include <Actor.h>
-#include <direction.h>
+#include <actors/Actor.h>
+#include <structures/direction.h>
 #include <cmath>
 #include <iostream>
 

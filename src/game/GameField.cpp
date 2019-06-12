@@ -2,11 +2,12 @@
  * @file GameField.cpp
  * @author David Donahue
  */
-#include "GameField.h"
-#include "../game/game.h"
+
 #include <memory>
 #include <iostream>
-#include "../ui/event.h"
+#include "ui/event.h"
+#include "game/GameField.h"
+#include "game/game.h"
 
 /**
  * @author David Donahue

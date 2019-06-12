@@ -13,7 +13,7 @@
 #include <dlfcn.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <Actor.h>
+#include <actors/Actor.h>
 
 typedef void* makeTank_Fptr;
 

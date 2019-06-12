@@ -4,7 +4,7 @@
 * @brief Contains all maintenance functions for TankDrawable class.
 * *****************************************************************************/
 
-#include "../ui/Drawable.h"
+#include "ui/Drawable.h"
 
 
 /***************************************************************************//**

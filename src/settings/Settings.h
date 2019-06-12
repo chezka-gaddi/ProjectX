@@ -6,7 +6,7 @@
 #ifndef __settings_h
 #define __settings_h
 
-#include <attributes.h>
+#include <structures/attributes.h>
 #include <string>
 
 class GameField; //Forward declare it for pointer

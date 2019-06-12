@@ -11,8 +11,8 @@
 #include <sstream>
 #include <GL/glut.h>
 
-#include <game.h>
-#include <Drawable.h>
+#include <game/game.h>
+#include <ui/Drawable.h>
 
 #define ESCAPE_KEY 27
 

@@ -1,5 +1,5 @@
 /*! \file */
-#include "../actors/ProjectileActor.h"
+#include "actors/ProjectileActor.h"
 
 using namespace std;
 /**************************************************************************//**

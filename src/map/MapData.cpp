@@ -2,7 +2,7 @@
  @brief overloaded output function for the mapdata structure.  Only outputs the game obstacle map.
  */
 
-#include "../map/MapData.h"
+#include "MapData.h"
 #include <iostream>
 
 std::ostream& operator<<(std::ostream& os, const MapData& md)

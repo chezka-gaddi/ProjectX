@@ -9,8 +9,8 @@
 #ifndef __SIMPLE_ACTOR_H
 #define __SIMPLE_ACTOR_H
 
-#include <Actor.h>
-#include <direction.h>
+#include <actors/Actor.h>
+#include <structures/direction.h>
 #include <iostream>
 
 class SimpleActor : public Actor

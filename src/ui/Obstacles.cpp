@@ -4,7 +4,7 @@
 * @brief Contains all maintenance functions for the Obstacles class.
 * *****************************************************************************/
 
-#include "../ui/Drawable.h"
+#include "ui/Drawable.h"
 #include <iostream>
 /***************************************************************************//**
 * @author Chezka Gaddi

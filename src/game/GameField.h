@@ -9,13 +9,13 @@
 
 #include <vector>
 #include <algorithm>
-#include <ProjectileActor.h>
-#include <PositionData.h>
-#include <Actor.h>
-#include <MapData.h>
-#include <ActorInfo.h>
-#include <direction.h>
-#include <Settings.h>
+#include <actors/ProjectileActor.h>
+#include <structures/PositionData.h>
+#include <actors/Actor.h>
+#include <map/MapData.h>
+#include <actors/ActorInfo.h>
+#include <structures/direction.h>
+#include <settings/Settings.h>
 #include <iostream>
 #include <ctime>
 #include <GL/glut.h>

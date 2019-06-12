@@ -6,8 +6,8 @@
 #ifndef CALLBACKS_H
 #define CALLBACKS_H
 
-#include <event.h>
-#include <util.h>
+#include <ui/event.h>
+#include <ui/util.h>
 
 /// Callback for the display event
 void display();

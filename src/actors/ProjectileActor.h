@@ -8,10 +8,10 @@
 #define SLACKERS_PLATFORM_PROJECTILEACTOR_H
 
 #include <cmath>
-#include <Actor.h>
-#include <direction.h>
-#include <MoveData.h>
-#include <attributes.h>
+#include <actors/Actor.h>
+#include <structures/direction.h>
+#include <structures/MoveData.h>
+#include <structures/attributes.h>
 
 /*!
  * @brief This class is the base class for all projectile actors

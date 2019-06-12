@@ -5,7 +5,7 @@
  * subclasses.
  ******************************************************************************/
 
-#include "event.h"
+#include "ui/event.h"
 #include <iostream>
 #include <memory>
 

@@ -1,8 +1,8 @@
 #ifndef __CAMPER_AI_H
 #define __CAMPER_AI_H
 
-#include <Actor.h>
-#include <direction.h>
+#include <actors/Actor.h>
+#include <structures/direction.h>
 #include <cmath>
 #include <iostream>
 
