@@ -215,7 +215,7 @@ void Game::initGameState(Settings * setting)
   Drawable *temp = nullptr;
   bool taken, done;
 
-  parseConfig(setting); //INI Config reader
+  //parseConfig(setting); //INI Config reader
 
   //Game Setting defaults
   unsigned int ai_speed = 750, width = 15, height = 9, maxT = 1000, hPad = 0, wPad = 0;
@@ -357,7 +357,7 @@ void Game::initGameState(Settings * setting)
       }
       else
       {
-        int i = configLine.find(' '); //index of first space
+        unsigned i = configLine.find(' '); //index of first space
         std::string id = configLine.substr(0, i); //separate the identefier from the argumets
         std::string args = configLine.substr(i+1);
         //AI settings
@@ -381,41 +381,36 @@ void Game::initGameState(Settings * setting)
               if(tankLocations.at(x) == tankLocations.at(y))
               {
                 cout << "Tanks cannot spawn on the same tile!" << endl;
-                exit(1);
+                continue;
               }
             }
           }
+          
           if (!quiet)
             cout << "  finding spawn...";
           i = args.find(' ', i+1);    //skip x
           i = args.find(' ', i+1);    //skip y
 
-          args = args.substr(i+1);
+          args = args.substr(i+1); //chop off already used info
           if (!quiet)
             cout << "  colorizing tank...";
-
+          i = args.find(' '); // find end of current item
           
-
-          for(int x = 0; x < 5; x++)
-          {
-            i = args.find(' ');    //skip y
-            name = args.substr(0,i);
-            //printf("Image name: %s",name.c_str());
-            AIImages.push_back(name);
-            args = args.substr(i+1);
-            if(args == AIImages[x])
-              break;
-          }
-
-          //printf(". Array size: %d\n",(int)AIImages.size());
-          if(AIImages.size() != 5)
-          {
-            tankImages.insert(std::end(tankImages), std::begin(AIDefImg), std::end(AIDefImg));
-          }
+          //Get our trunk image directory
+          if (args.substr(0,i) == AINames.back())
+            imgPath = "images/Default";
           else
-          {
-            tankImages.insert(std::end(tankImages), std::begin(AIImages), std::end(AIImages));
-          }
+            imgPath = args.substr(0, i);
+
+          //printf("imgPath: %s\n", imgPath.c_str());
+          AIImages.push_back(imgPath + "/tankU.png");
+          AIImages.push_back(imgPath + "/tankR.png");
+          AIImages.push_back(imgPath + "/tankD.png");
+          AIImages.push_back(imgPath + "/tankL.png");
+          AIImages.push_back(imgPath + "/bullet.png");
+          
+          tankImages.insert(std::end(tankImages), std::begin(AIImages), std::end(AIImages));
+          
           AIImages.clear();
           if (!quiet)
             cout << "  ...done.\n";

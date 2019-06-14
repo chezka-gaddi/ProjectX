@@ -20,7 +20,7 @@ TEST_FILES = main.cpp
 TEST_FILES += GameFieldTests.cpp
 TEST_FILES += SimpleActorTests.cpp
 TEST_FILES += SimpleAITests.cpp
-TEST_FILES += tankLoaderTests.cpp
+TEST_FILES += TankLoaderTests.cpp
 
 SRC_PATH=../../src/
 
@@ -37,6 +37,8 @@ FILES += $(SRC_PATH)ui/GameFieldDrawable.cpp
 FILES += $(SRC_PATH)ui/Projectile.cpp
 FILES += $(SRC_PATH)ui/Obstacles.cpp
 FILES += $(SRC_PATH)game/game.cpp
+FILES += $(SRC_PATH)game/gameover.cpp
+FILES += $(SRC_PATH)game/configParser.cpp
 FILES += $(SRC_PATH)ui/callbacks.cpp
 FILES += $(SRC_PATH)utilities/tankLoader.cpp
 FILES += $(SRC_PATH)ui/Menu.cpp
@@ -45,7 +47,6 @@ FILES += $(SRC_PATH)ui/Crate.cpp
 FILES += $(SRC_PATH)tanks/SimpleAI.cpp
 FILES += $(SRC_PATH)tanks/SimpleActor.cpp
 FILES += $(SRC_PATH)settings/Settings.cpp
-
 
 TANK_PATH = ./tanks/
 TANKS = SimpleAI.so

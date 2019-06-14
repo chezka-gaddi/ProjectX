@@ -67,15 +67,15 @@ set-coverage:
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
-src/tanks/%.so: src/tanks/%.cpp ./src/actors/Actor.o
+src/tanks/%.so: src/tanks/%.cpp
 	@mkdir -p tanks
-	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $? $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
-tanks/%.so: src/tanks/%.cpp ./src/actors/Actor.o
-	@mkdir -p tanks
-	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
+#tanks/%.so: src/tanks/%.cpp ./src/actors/Actor.o
+#	@mkdir -p tanks
+#	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
-tanks: $(TANKS:%.cpp=%.so)
+tanks: src/actors/Actor.o $(TANKS:%.cpp=%.so)
 
 clean:
 	@find . -name \*.o -type f -exec rm -f {} +
