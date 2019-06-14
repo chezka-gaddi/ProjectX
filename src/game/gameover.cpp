@@ -8,18 +8,8 @@
  *******************************************************************************/
 void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settings * settings)
 {
-  const char *str;
-  std::string scoreDetails[4] = {"Place:", "Player Number:", "Kills:","Hits:"};
-  float color[] = {1.0f, 1.0f, 1.0f};
-  float j = -0.7f;
-  float k = -0.5;
-
   std::ofstream fout(settings->getResultsFile(), std::ios::out | std::ios::app);
-  bool flag = false;
-
   unsigned int winDex = 0;
-  int count = 1;
-  int timer_pause = settings->getIdleSpeed() * 133;
 
   while(winner[winDex].id <= 0 && winDex < winner.size())
     winDex++;
@@ -55,7 +45,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settin
           << " Final Position: (" << dead[l].x
           << "," << dead[l].y << ")";
     }
-  }else{
+  }else{ //Draw Game
     fout << "\n\nGame ended on turn: " << settings->getTurn();
     fout << "\nDraw Game: ";
     for(int l = dead.size() - 1; l >= 0; l--)
@@ -75,8 +65,19 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settin
     }
   }
 
-  if (!settings->showUI())
-    return;
+  if (settings->showUI())
+    displayScoreBoard(dead, winner, settings, winDex);
+}
+
+void displayScoreBoard(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settings * settings, int winDex){
+  const char *str;
+  std::string scoreDetails[4] = {"Place:", "Player Number:", "Kills:","Hits:"};
+  float color[] = {1.0f, 1.0f, 1.0f};
+  float j = -0.7f;
+  float k = -0.5;
+  bool flag = false;
+  int count = 1;
+  int timer_pause = settings->getIdleSpeed() * 133;
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();

@@ -1,14 +1,6 @@
 CXX = g++
 CXXFLAGS = -Wall -g -std=c++11 -fPIC
 INCS = -I./ -Isrc/
-#INCS += -Isrc/game
-#INCS += -Isrc/map
-#INCS += -Isrc/settings
-#INCS += -Isrc/structures
-#INCS += -Isrc/tanks
-#INCS += -Isrc/ui
-#INCS += -Isrc/utilities
-#INCS += -Isrc/actors
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
 LIBS += -lSOIL -Llibraries
@@ -30,6 +22,7 @@ FILES += $(SRC_PATH)actors/ProjectileActor.cpp
 FILES += $(SRC_PATH)game/GameField.cpp
 FILES += $(SRC_PATH)game/game.cpp
 FILES += $(SRC_PATH)game/gameover.cpp
+FILES += $(SRC_PATH)game/configParser.cpp
 #Map
 FILES += $(SRC_PATH)map/MapData.cpp
 #Settings
@@ -47,7 +40,7 @@ FILES += $(SRC_PATH)ui/Texture.cpp
 FILES += $(SRC_PATH)ui/util.cpp
 FILES += $(SRC_PATH)ui/TankDrawable.cpp
 #Utilities
-FILES += $(SRC_PATH)utilities/DynamicLoader.cpp
+FILES += $(SRC_PATH)utilities/tankLoader.cpp
 
 #Tanks
 TANKS = $(SRC_PATH)tanks/SimpleAI.cpp

@@ -20,5 +20,5 @@
 
 
 void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settings * settings);
-
+void displayScoreBoard(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settings * settings, int winDex);
 #endif

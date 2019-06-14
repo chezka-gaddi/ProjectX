@@ -199,6 +199,10 @@ void Settings::setResultsFile(std::string s){
   resultsFile = s;
 }
 
+void Settings::setConfigFile(std::string c){
+  configFile = c;
+}
+
 int Settings::getAttrDamage(){return baseAttributes.tankDamage;}
 int Settings::getAttrHealth(){return baseAttributes.tankHealth;}
 int Settings::getAttrAP(){return baseAttributes.tankAP;}
@@ -214,3 +218,4 @@ bool Settings::checkCoverage(){return modeCoverage;}
 bool Settings::checkQuiet(){return modeQuiet;}
 
 std::string Settings::getResultsFile(){return resultsFile;}
+std::string Settings::getConfigFile(){return configFile;}

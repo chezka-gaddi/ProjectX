@@ -20,7 +20,7 @@ TEST_FILES = main.cpp
 TEST_FILES += GameFieldTests.cpp
 TEST_FILES += SimpleActorTests.cpp
 TEST_FILES += SimpleAITests.cpp
-TEST_FILES += DynamicLoaderTests.cpp
+TEST_FILES += tankLoaderTests.cpp
 
 SRC_PATH=../../src/
 
@@ -38,7 +38,7 @@ FILES += $(SRC_PATH)ui/Projectile.cpp
 FILES += $(SRC_PATH)ui/Obstacles.cpp
 FILES += $(SRC_PATH)game/game.cpp
 FILES += $(SRC_PATH)ui/callbacks.cpp
-FILES += $(SRC_PATH)utilities/DynamicLoader.cpp
+FILES += $(SRC_PATH)utilities/tankLoader.cpp
 FILES += $(SRC_PATH)ui/Menu.cpp
 FILES += $(SRC_PATH)ui/sfxDrawable.cpp
 FILES += $(SRC_PATH)ui/Crate.cpp

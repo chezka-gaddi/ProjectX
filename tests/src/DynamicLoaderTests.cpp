@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include <DynamicLoader.h>
+#include <tankLoader.h>
 #include <vector>
 #include <string>
 #include <Actor.h>

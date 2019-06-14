@@ -208,11 +208,14 @@ void Game::initGameState(Settings * setting)
   if(!quiet)
     std::cout << "Game::Loading config.txt\n";
   ifstream fin("config.txt");
+
   std::string configLine;
   unsigned int x=0, y=0; //Temp Holders
   Obstacles* tempOb;
   Drawable *temp = nullptr;
   bool taken, done;
+
+  parseConfig(setting); //INI Config reader
 
   //Game Setting defaults
   unsigned int ai_speed = 750, width = 15, height = 9, maxT = 1000, hPad = 0, wPad = 0;
@@ -234,6 +237,7 @@ void Game::initGameState(Settings * setting)
   std::vector<std::string> tankImages, gameImages, treeImages, rockImages, bushImages,
       waterImages, AIImages, AINames;
   std::string name;
+  std::string imgPath;
   int attributePoints = 0;
   ofstream fout;
 
@@ -390,6 +394,8 @@ void Game::initGameState(Settings * setting)
           if (!quiet)
             cout << "  colorizing tank...";
 
+          
+
           for(int x = 0; x < 5; x++)
           {
             i = args.find(' ');    //skip y
@@ -400,6 +406,7 @@ void Game::initGameState(Settings * setting)
             if(args == AIImages[x])
               break;
           }
+
           //printf(". Array size: %d\n",(int)AIImages.size());
           if(AIImages.size() != 5)
           {

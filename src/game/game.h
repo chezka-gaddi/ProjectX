@@ -16,9 +16,10 @@
 #include <ui/Drawable.h>
 #include <actors/Actor.h>
 #include <tanks/SimpleAI.h>
-#include <utilities/DynamicLoader.h>
+#include <utilities/tankLoader.h>
 #include <settings/Settings.h>
 #include <game/gameover.h>
+#include <game/configParser.h>
 #include <fstream>
 #include <sstream>
 #include <utility>

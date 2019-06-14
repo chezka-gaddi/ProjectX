@@ -34,8 +34,13 @@ public:
     int getTurn();
     int getActTurn();
     int getModCounter();
-    bool showUI();
     std::string getResultsFile();
+    std::string getConfigFile();
+
+    //mode checkers
+    bool checkCoverage();
+    bool checkQuiet();
+    bool showUI();
 
     //individual attribute getters
     int getAttrDamage();
@@ -45,9 +50,8 @@ public:
     int getAttrAmmo();
     int getAttrRange();
     int getAttrSpecial();
-    bool checkCoverage();
-    bool checkQuiet();
 
+    //functional
     void nextTurn();
 
     //setters
@@ -65,6 +69,7 @@ public:
     void setCoverageMode(bool c);
     void setQuietMode(bool q);
     void setResultsFile(std::string r);
+    void setConfigFile(std::string c);
 
     //individual attribute setters
     void setAttrDamage(int damage);
@@ -100,6 +105,7 @@ private:
     bool modeCoverage = false; //coverage mode for faster animations
     bool showui = true; //should we display the ui
     std::string resultsFile = "results.txt"; //results output file
+    std::string configFile = "config.ini"; //Config ini file
 };
 
 #endif //__GAME_H
