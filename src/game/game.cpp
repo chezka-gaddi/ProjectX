@@ -224,9 +224,6 @@ void Game::initGameState(Settings * setting)
   //Tank Defaults
   unsigned int damage = 1, health = 3, range = 4, radar = 4, ap = 1, ammo = 6;
   //Default Tank Images
-  const std::vector<string> AIDefImg = {"images/Default/tankD_L.png", "images/Default/tankD_D.png",
-                                        "images/Default/tankD_R.png","images/Default/tankD_U.png", "images/Default/bulletD.png"
-                                       };
   attributes baseStats;
 
   //Location vectors
@@ -247,11 +244,14 @@ void Game::initGameState(Settings * setting)
   // Load game field
   constants.push_back(new GameFieldDrawable);
 
+  //Check if we had a config file we could read.
   if(!fin)
   {
     createConfig();
   }
+  //Try and create output file
   fout.open(settings->getResultsFile(), ios::out | ios::in | ios::app);
+  //Warn if we cannot save settings, ignore quiet for this error
   if(!fout)
   {
     printf("UNABLE OPEN RESULTS FILE (%s).  Game will play but results will not be saved.\n", settings->getResultsFile().c_str());
@@ -934,8 +934,6 @@ void Game::createConfig()
   fout << "TANK_SPEED 400\n\n";
   fout << "#ANIMATION_SPEED <20>\n";
   fout << "ANIMATION_SPEED 20\n\n";
-  fout << "#DISABLEUI UNCOMMENT TO DISABLE GUI\n";
-  fout << "#DISABLEGUI \n\n";
   fout << "#TANK RULES\n";
   fout << "#STAT <AMMOUNT>\n";
   fout << "#VALID STATS: DAMAGE, HEALTH, RADAR, AP, SPECIAL, RANGE, AMMO\n";

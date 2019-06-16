@@ -36,6 +36,8 @@ public:
     Drawable() {}       /*!< Drawable constructor */
     ~Drawable() {}      /*!< Drawable deconstructor */
 
+    int dirToDeg(direction d);
+
     virtual void draw(int, int) = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
 protected:
     int gridx;          /*!< Drawables grid x coordinate */
@@ -146,6 +148,7 @@ public:
     TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, int sMod, float osx, float osy, bool camping); /*!< The constructor for making a Tank Drawable object */
 
     void draw(int, int); /*!< The draw function for displaying a tank drawable object */
+    void drawFire(float xlow, float xhigh, float ylow, float yhigh, float scale);
     void setHealth(int h); /*!< Setting the health of the drawable object */
     void setMax_health(int mh); /*!< Setting the max health of the drawable object */
 };

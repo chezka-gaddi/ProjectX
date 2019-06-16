@@ -30,6 +30,7 @@ FILES += $(SRC_PATH)settings/Settings.cpp
 #UI
 FILES += $(SRC_PATH)ui/callbacks.cpp
 FILES += $(SRC_PATH)ui/Crate.cpp
+FILES += $(SRC_PATH)ui/Drawable.cpp
 FILES += $(SRC_PATH)ui/event.cpp
 FILES += $(SRC_PATH)ui/GameFieldDrawable.cpp
 FILES += $(SRC_PATH)ui/Menu.cpp

@@ -34,56 +34,8 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
     //  1 is right,
     //  2 is down,
     //  3 is left.
-    angle = 0;
-    switch(dir)
-    {
-    case LEFT:
-    {
-        tex = (ID-1) * 5 + 3;
-    }
-    break;
-    case RIGHT:
-    {
-        tex = (ID-1) * 5 + 1;
-    }
-    break;
-    case UPRIGHT:
-    {
-        tex = (ID-1) * 5 + 0;
-        angle = -45;
-    }
-    break;
-    case DOWNRIGHT:
-    {
-        tex = (ID-1) * 5 + 2;
-        angle = -45;
-    }
-    break;
-    case UPLEFT:
-    {
-        tex = (ID-1) * 5 + 0;
-        angle = 45;
-    }
-    break;
-    case DOWNLEFT:
-    {
-        tex = (ID-1) * 5 + 2;
-        angle = -45;
-    }
-    break;
-    case UP:
-    {
-        tex = (ID-1) * 5 + 0;
-    }
-    break;
-    case DOWN:
-    {
-        tex = (ID-1) * 5 + 2;
-    }
-    break;
-    default:
-        tex = ID-1 * 5;
-    }
+    angle = dirToDeg(dir) - 90;
+    tex = (ID-1) * 5;
 
     if (camp == true)
         tex = 4;
@@ -131,7 +83,8 @@ void TankDrawable::draw(int x, int y)
       glBindTexture(GL_TEXTURE_2D, sfxTex[12]);
 
       if (sMod % 2 == 0) {
-        glBegin(GL_QUADS);
+        drawFire(-0.05f * xscalar, 0.0f, 0.2f * yscalar, 0.3f * yscalar, 1.0f);
+        /*glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 1.0f);
         glVertex3f(-0.05f * xscalar, .3f * yscalar,  1.0f);
         glTexCoord2f(1.0f, 1.0f);
@@ -140,7 +93,7 @@ void TankDrawable::draw(int x, int y)
         glVertex3f( 0.0f * xscalar,  0.2f * yscalar,  1.0f);
         glTexCoord2f(0.0f, 0.0f);
         glVertex3f(-0.05f * xscalar,  0.2f * yscalar,  1.0f);
-        glEnd();
+        glEnd();*/
       } else {
       glBegin(GL_QUADS);
         glRotatef(45, 0, 0, 1);
@@ -157,7 +110,8 @@ void TankDrawable::draw(int x, int y)
       //second smoke
       if (health <= max_health*.5){ 
         if (sMod % 2 == 1 ) {
-          glBegin(GL_QUADS);
+          drawFire(0.0f, 0.05f * xscalar, 0.2f * yscalar, 0.3f * yscalar, 1.0f);
+          /*glBegin(GL_QUADS);
           glTexCoord2f(0.0f, 1.0f);
           glVertex3f(-0.0f * xscalar, .3f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 1.0f);
@@ -166,7 +120,7 @@ void TankDrawable::draw(int x, int y)
           glVertex3f( 0.05f * xscalar,  0.2f * yscalar,  1.0f);
           glTexCoord2f(0.0f, 0.0f);
           glVertex3f(-0.0f * xscalar,  0.2f * yscalar,  1.0f);
-          glEnd();
+          glEnd();*/
         }else{
           glBegin(GL_QUADS);
           glRotatef(45, 0, 0, 1);
@@ -191,7 +145,8 @@ void TankDrawable::draw(int x, int y)
           
           //sizing width .05  height .05
           //left
-          glBegin(GL_QUADS);
+          drawFire(-0.07f * xscalar, -0.02f * xscalar, -0.05f * yscalar, 0.0f, 1.0f);
+          /*glBegin(GL_QUADS);
           glTexCoord2f(0.0f, 0.0f);
           glVertex3f( -0.07f * xscalar, -0.05f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 0.0f);
@@ -200,10 +155,11 @@ void TankDrawable::draw(int x, int y)
           glVertex3f( -0.02f * xscalar,  0.0f * yscalar,  1.0f);
           glTexCoord2f(0.0f, 1.0f);
           glVertex3f( -0.07f * xscalar,  0.0f * yscalar,  1.0f);
-          glEnd();
+          glEnd();*/
           
           //right
-          glBegin(GL_QUADS);
+          drawFire(0.01f * xscalar, 0.06f * xscalar, 0.01f * yscalar, 0.06f * yscalar, 1.0f);
+          /*glBegin(GL_QUADS);
           glTexCoord2f(0.0f, 0.0f);
           glVertex3f( 0.01f * xscalar, 0.01f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 0.0f);
@@ -213,9 +169,10 @@ void TankDrawable::draw(int x, int y)
           glTexCoord2f(0.0f, 1.0f);
           glVertex3f( 0.01f * xscalar,  0.06f * yscalar,  1.0f);
           glEnd();
-          
+          */
           //middle
-          glBegin(GL_QUADS);
+          drawFire(-0.04f * xscalar, 0.01f * xscalar, -0.04f * yscalar, 0.01f * yscalar, 1.0f);
+          /*glBegin(GL_QUADS);
           glTexCoord2f(0.0f, 0.0f);
           glVertex3f( -0.04f * xscalar, -0.04f * yscalar,  1.0f);
           glTexCoord2f(1.0f, 0.0f);
@@ -225,18 +182,36 @@ void TankDrawable::draw(int x, int y)
           glTexCoord2f(0.0f, 1.0f);
           glVertex3f( -0.04f * xscalar,  0.01f * yscalar,  1.0f);
           glEnd();
+          */
         }
     }
 
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }
+
+void TankDrawable::drawFire(float xlow, float xhigh, float ylow, float yhigh, float scale = 1.0)
+{
+  glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f( xlow, ylow,  scale);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( xhigh, ylow,  scale);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( xhigh, yhigh,  scale);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f( xlow, yhigh,  scale);
+  glEnd();
+}
+
+
 /*****************//*
  * @author Jon McKee
  * @brief allows us to set the drawables health
  * @param[in] h the current health of the object
  *******************/
 void TankDrawable::setHealth(int h){health = h;}
+
 /*****************//*
  * @author Jon McKee
  * @brief allows us to set the drawables max health

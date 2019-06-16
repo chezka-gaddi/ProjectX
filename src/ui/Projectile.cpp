@@ -27,44 +27,8 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, b
     turn = t;
     this->camp = camp;
 
-    switch(dir)
-    {
-    case UP:
-        angle = 90;
-        break;
-
-    case UPRIGHT:
-        angle = 45;
-        break;
-
-    case RIGHT:
-        angle = 0;
-        break;
-
-    case DOWNRIGHT:
-        angle = -45;
-        break;
-
-    case DOWN:
-        angle = -90;
-        break;
-
-    case DOWNLEFT:
-        angle = -135;
-        break;
-
-    case LEFT:
-        angle = 180;
-        break;
-
-    case UPLEFT:
-        angle = 135;
-        break;
-    case STAY:
-    default:
-        break; //should never reach here but warning without
-    }
-
+    angle = dirToDeg(dir);
+    
     if (camp == true){
       tex = 11;
     }else{
