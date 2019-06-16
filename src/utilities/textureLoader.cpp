@@ -4,7 +4,7 @@
 * @brief Contain the function that creates the game textures
 *******************************************************************************/
 
-#include "Texture.h"
+#include "textureLoader.h"
 #include <iostream>
 using namespace std;
 

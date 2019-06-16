@@ -11,7 +11,7 @@
 
 #include <ui/callbacks.h>
 #include <ui/event.h>
-#include <ui/Texture.h>
+#include <utilities/textureLoader.h>
 
 void initOpenGL(int, char**, int, int, Settings*);
 void utilityCentral(Event *);

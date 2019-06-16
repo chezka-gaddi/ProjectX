@@ -36,10 +36,10 @@ FILES += $(SRC_PATH)ui/Menu.cpp
 FILES += $(SRC_PATH)ui/Projectile.cpp
 FILES += $(SRC_PATH)ui/Obstacles.cpp
 FILES += $(SRC_PATH)ui/sfxDrawable.cpp
-FILES += $(SRC_PATH)ui/Texture.cpp
 FILES += $(SRC_PATH)ui/util.cpp
 FILES += $(SRC_PATH)ui/TankDrawable.cpp
 #Utilities
+FILES += $(SRC_PATH)utilities/textureLoader.cpp
 FILES += $(SRC_PATH)utilities/tankLoader.cpp
 
 #Tanks
