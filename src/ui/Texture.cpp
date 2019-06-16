@@ -25,6 +25,7 @@ const std::vector<string> gImages = {"images/UI/background.png","images/UI/green
 
 /***************************************************************************//**
 * @author Chezka Gaddi
+* @modifiedby Jon McKee
 * @brief LoadGLTextures
 *
 * Loads and saves all the textures needed for the game in texture arrays.
@@ -33,195 +34,84 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
                    std::vector <std::string> trees, std::vector <std::string> rocks, 
                    std::vector <std::string> bushes, std::vector <std::string> waters, bool quiet)
 {
-    // Load in the tank texure information
-    if(!quiet)
-        cout << "\nLoading Tank Textures:";
-    for( unsigned int i = 0; i < images.size(); i++ )
-    {
-        const char *c = images[i].c_str();
-        if(!quiet)
-            (i%5 == 0) ? cout << "\n" << c << "  " : cout << c << "  ";
-        tankTex[i] = SOIL_load_OGL_texture(
-                         c,
-                         SOIL_LOAD_AUTO,
-                         SOIL_CREATE_NEW_ID,
-                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-        if(tankTex[i] == 0){
-          return false;
-        }
-
-        glBindTexture(GL_TEXTURE_2D, tankTex[i]);
-    }
-
-    if(!quiet)
-    cout << "\nLoading User Tree Textures:\n";
-    // Load in the tree texure information
-    for( unsigned int i = 0; i < trees.size(); i++ )
-    {
-        const char *c = trees[i].c_str();
-        if(!quiet)
-            cout << c << "  ";
-        treeTex[i] = SOIL_load_OGL_texture(
-                         c,
-                         SOIL_LOAD_AUTO,
-                         SOIL_CREATE_NEW_ID,
-                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-        if(treeTex[i] == 0)
-            return false;
-        glBindTexture(GL_TEXTURE_2D, treeTex[i]);
-    }
-    if(!quiet)
-        cout << "\nLoading System Tree Textures:\n";
-    // Load in the tree texure information
-    for( unsigned int i = trees.size(); i < trees.size()+tImages.size(); i++ )
-    {
-        const char *c = tImages[i-trees.size()].c_str();
-        if(!quiet)
-            cout << c << "  ";
-        treeTex[i] = SOIL_load_OGL_texture(
-                         c,
-                         SOIL_LOAD_AUTO,
-                         SOIL_CREATE_NEW_ID,
-                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-        if(treeTex[i] == 0)
-            return false;
-        glBindTexture(GL_TEXTURE_2D, treeTex[i]);
-    }
-    if(!quiet)
-        cout << "\nLoading User Rock Textures:\n";
-    // Load in the rock texures information
-    for( unsigned int i = 0; i < rocks.size(); i++ )
-    {
-        const char *c = rocks[i].c_str();
-        if(!quiet)
-            cout << c << "  ";
-        rockTex[i] = SOIL_load_OGL_texture(
-                         c,
-                         SOIL_LOAD_AUTO,
-                         SOIL_CREATE_NEW_ID,
-                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-        if(rockTex[i] == 0)
-            return false;
-
-        glBindTexture(GL_TEXTURE_2D, rockTex[i]);
-    }
-    if(!quiet)
-        cout << "\nLoading System Rock Textures:\n";
-    // Load in the rock texures information
-    for( unsigned int i = rocks.size(); i < rocks.size()+rImages.size(); i++ )
-    {
-        const char *c = rImages[i-rocks.size()].c_str();
-        if(!quiet)
-            cout << c << "  ";
-        rockTex[i] = SOIL_load_OGL_texture(
-                         c,
-                         SOIL_LOAD_AUTO,
-                         SOIL_CREATE_NEW_ID,
-                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-        if(rockTex[i] == 0)
-            return false;
-
-        glBindTexture(GL_TEXTURE_2D, rockTex[i]);
-    }
-    if(!quiet)
-        cout << "\nLoading User Textures:\n";
-    // Load in the bush texure information
-    for( unsigned int i = 0; i < bushes.size(); i++ )
-    {
-        const char *c = bushes[i].c_str();
-        if(!quiet)
-          cout << c << "  ";
-        bushTex[i] = SOIL_load_OGL_texture(
-                         c,
-                         SOIL_LOAD_AUTO,
-                         SOIL_CREATE_NEW_ID,
-                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-        if(bushTex[i] == 0)
-            return false;
-
-        glBindTexture(GL_TEXTURE_2D, bushTex[i]);
-    }
-    if(!quiet)
-        cout << "\nLoading System Bush Textures:\n";
-    // Load in the bush texure information
-    for( unsigned int i = bushes.size(); i < bushes.size()+bImages.size(); i++ )
-    {
-        const char *c = bImages[i-bushes.size()].c_str();
-        if(!quiet)
-        cout << c << "  ";
-        bushTex[i] = SOIL_load_OGL_texture(
-                         c,
-                         SOIL_LOAD_AUTO,
-                         SOIL_CREATE_NEW_ID,
-                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-        if(bushTex[i] == 0)
-            return false;
-
-        glBindTexture(GL_TEXTURE_2D, bushTex[i]);
-    }
-    if(!quiet)
-      cout << "\nLoading Water Textures:\n";
-    // Load in the bush texure information
-    for( unsigned int i = 0; i < waters.size(); i++ )
-    {
-        const char *c = waters[i].c_str();
-        if(!quiet)
-          cout << c << "  ";
-        waterTex[i] = SOIL_load_OGL_texture(
-                     c,
-                     SOIL_LOAD_AUTO,
-                     SOIL_CREATE_NEW_ID,
-                     SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-        if(waterTex[i] == 0)
-        return false;
-
-        glBindTexture(GL_TEXTURE_2D, bushTex[i]);
-    }
+    //Load in the UI component texture information
     if(!quiet)
       cout << "\nLoading UI Textures:\n";
-    // Load in constant game images
-    for( unsigned int i = 0; i < gImages.size(); i++ )
-    {
-        const char *c = gImages[i].c_str();
-        if(!quiet)
-        cout << c << "  ";
-        gameTex[i] = SOIL_load_OGL_texture(
-                         c,
-                         SOIL_LOAD_AUTO,
-                         SOIL_CREATE_NEW_ID,
-                         SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-        if(gameTex[i] == 0)
-            return false;
-
-        glBindTexture(GL_TEXTURE_2D, gameTex[i]);
-    }
+    if (!loadImageGroup(gImages, gameTex, 0, gImages.size(), quiet))
+      return false;
+    //Load in the SFX texture information
     if(!quiet)
-    cout << "\nLoading SFX Textures:\n";
-    // Load in sfx game images
-    for(unsigned int i=0; i < sImages.size(); i++)
-    {
-    const char *c = sImages[i].c_str();
-    if(!quiet)
-    cout << c << " ";
-    sfxTex[i] = SOIL_load_OGL_texture(
-                    c,
-                    SOIL_LOAD_AUTO,
-                    SOIL_CREATE_NEW_ID,
-                    SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
-
-    if(sfxTex[i] == 0)
+        cout << "\nLoading SFX Textures:\n";
+    if (!loadImageGroup(sImages, sfxTex, 0, sImages.size(), quiet))
         return false;
-    glBindTexture(GL_TEXTURE_2D, sfxTex[i]);
-    }
+    //Load in the tank texture information
+    if(!quiet)
+        cout << "\nLoading Tank Textures:";
+    if (!loadImageGroup(images, tankTex, 0, images.size(), quiet))
+        return false;
+    // Load in the tree texture information
+    if(!quiet)
+        cout << "\nLoading User Tree Textures:\n";
+    if (!loadImageGroup(trees, treeTex, 0, trees.size(), quiet))
+        return false;
+    if(!quiet)
+        cout << "\nLoading System Tree Textures:\n";
+    if (!loadImageGroup(tImages, treeTex, trees.size(), trees.size() + tImages.size(), quiet))
+        return false;
+    // Load in the rock textures information
+    if(!quiet)
+        cout << "\nLoading User Rock Textures:\n";
+    if (!loadImageGroup(rocks, rockTex, 0, rocks.size(), quiet))
+        return false;
+    if(!quiet)
+        cout << "\nLoading System Rock Textures:\n";
+    if (!loadImageGroup(rImages, rockTex, rocks.size(), rocks.size()+rImages.size(), quiet))
+        return false;
+    // Load in the bush texture information
+    if(!quiet)
+        cout << "\nLoading User Bush Textures:\n";
+    if (!loadImageGroup(bushes, bushTex, 0, bushes.size(), quiet))
+        return false;
+    if(!quiet)
+        cout << "\nLoading System Bush Textures:\n";
+    if (!loadImageGroup(bImages, bushTex, bushes.size(), bushes.size()+bImages.size(), quiet))
+        return false;
+    // Load in the water textures
+    if(!quiet)
+      cout << "\nLoading Water Textures:\n";
+    if (!loadImageGroup(waters, waterTex, 0, waters.size(), quiet))
+      return false;
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     if(!quiet)
-    cout << "\n";
+        cout << "\n";
+    return true;
+}
+
+/***************************************************************************//**
+* @author Jon McKee
+* @brief loadImageGroup(std::vector <std::string> source, GLuint * imgArray, int start, int stop, bool quiet = false)
+*
+* This function takes a source array of file names, a destination Glut array to 
+* store the image information, and the starting and stopping positions in the 
+* the Glut array.  This information is used to correctly place system images
+* after user images have been loaded.  Lastly, the quiet bool is forwarded to
+* this function to respect quiet settings.
+*******************************************************************************/
+bool loadImageGroup(std::vector <std::string> source, GLuint * imgArray, int start, int stop, bool quiet = false){
+    for(int i = start; i < stop; i++)
+    {
+        const char *c = source[i - start].c_str();
+        if(!quiet)
+            cout << c << " ";
+        imgArray[i] = SOIL_load_OGL_texture(
+                        c,
+                        SOIL_LOAD_AUTO,
+                        SOIL_CREATE_NEW_ID,
+                        SOIL_FLAG_INVERT_Y | SOIL_FLAG_MULTIPLY_ALPHA );
+
+        if(imgArray[i] == 0)
+            return false;
+        glBindTexture(GL_TEXTURE_2D, imgArray[i]);
+    }
     return true;
 }

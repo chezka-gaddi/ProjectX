@@ -16,4 +16,5 @@ int LoadGLTextures(std::vector <std::string> images, std::vector <std::string> g
                    std::vector <std::string> trees, std::vector <std::string> rocks, 
                    std::vector <std::string> bushes, std::vector <std::string> waters, bool quiet = false);
 
+bool loadImageGroup(std::vector <std::string> source, GLuint * imgArray, int start, int stop, bool quiet);
 #endif
