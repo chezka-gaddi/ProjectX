@@ -45,9 +45,7 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, b
 * @param[in] x The current turn value
 * *****************************************************************************/
 void Projectile::draw(int x, int y)
-{
-    float trailMod = .9; //Scale the trail
-    
+{    
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
     glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
@@ -71,9 +69,23 @@ void Projectile::draw(int x, int y)
     glDisable(GL_TEXTURE_2D);
    
     if (turn == true){ //Only draw trail on projectiles turn
-      glEnable(GL_TEXTURE_2D);
+        drawTrail(x);
+    }
+}
+
+/***************************************************************************//**
+* @author Jon McKee
+* @brief drawTrail(int mod)
+*
+* Draws the trail on the projectile using mod to pick a changing smoke trail
+* @param[in] mod The current turn value used to pick a ranging smoke trail
+* *****************************************************************************/
+void Projectile::drawTrail(int mod){
+    float trailMod = .9; //Scale the trail
+
+    glEnable(GL_TEXTURE_2D);
       glPushMatrix();
-      glBindTexture(GL_TEXTURE_2D, sfxTex[x % 4]);
+      glBindTexture(GL_TEXTURE_2D, sfxTex[mod % 4]);
       glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
       glRotatef(angle,0,0,1);
       glBegin(GL_QUADS);
@@ -87,6 +99,6 @@ void Projectile::draw(int x, int y)
       glVertex3f(-0.20f * xscalar * sizeMod * trailMod,  0.07f * yscalar * sizeMod * trailMod,  1.0f);
       glEnd();
       glPopMatrix();
-      glDisable(GL_TEXTURE_2D);
-    }
+    glDisable(GL_TEXTURE_2D);
+    
 }

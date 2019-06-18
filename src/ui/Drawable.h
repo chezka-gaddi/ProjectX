@@ -36,7 +36,8 @@ public:
     Drawable() {}       /*!< Drawable constructor */
     ~Drawable() {}      /*!< Drawable deconstructor */
 
-    int dirToDeg(direction d);
+    int dirToDeg(direction d); /*!< Convert direction enum into degrees */
+    void drawAddon(float xlow, float xhigh, float ylow, float yhigh, float ror, float scale); /*!< Add aditional SFX to a drawable image */
 
     virtual void draw(int, int) = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
 protected:
@@ -124,6 +125,7 @@ public:
     Projectile(int ID, GLfloat x, GLfloat y, direction dir, bool t, float osx, float osy, bool camping); /*!< Constructor for the projectile drawable object */
 
     void draw(int, int); /*!< The draw function for the Projectile class */
+    void drawTrail(int mod); /*!< Function to draw smoke trail */
 
     float sizeMod = 1;  /*!< Scalar specific for projectiles.  Used in projectile stacking */
     bool turn; /*!< Flag used to signify if the fire trail should be on or off */

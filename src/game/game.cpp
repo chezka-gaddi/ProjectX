@@ -254,7 +254,7 @@ void Game::initGameState(Settings * setting)
   //Warn if we cannot save settings, ignore quiet for this error
   if(!fout)
   {
-    printf("UNABLE OPEN RESULTS FILE (%s).  Game will play but results will not be saved.\n", settings->getResultsFile().c_str());
+    printf("WARNING: Unable to open results file (%s).  Game will play but results will not be saved.\n", settings->getResultsFile().c_str());
   }
   while(!fin.eof())
   {
