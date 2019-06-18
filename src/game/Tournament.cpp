@@ -23,11 +23,12 @@ void Tournament::newGame(){
 }
 
 void Tournament::runTournament(){
-    printf("Starting Tournament.");
+    printf("Starting Tournament.\n");
     int turnCounter = 0;
     while (turnCounter < rounds){
         turnCounter++;
-        printf("Game %d of %d\n",turnCounter, rounds);
+        if (turnCounter % (rounds / 10) == 0) //limit output
+            printf("Game %d of %d\n",turnCounter, rounds);
         game->executeTurn();
         delete game;
         newGame();

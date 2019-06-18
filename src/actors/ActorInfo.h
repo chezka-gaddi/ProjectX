@@ -40,7 +40,7 @@ struct ActorInfo
     int max_health = 0; /*!< The max health for this actor*/
     int ammo = 0; /*!< The current ammo the actor has available*/
     int max_ammo = 0; /*!< The max number of ammo for this actor */
-    std::string name = "default\n"; /*!< The actors stored name */
+    std::string name = "default"; /*!< The actors stored name */
     int kills = 0; /*!< The number of kills the actor has made */
     direction heading; /*!< The actors heading*/
     int prevx = -1; /*!< The previous X component for the actor (Used in animation) */

@@ -13,10 +13,10 @@ public:
     Tournament(Settings * settings, int rounds);
     Tournament();
 
-    void runTournament();
+    void runTournament(); //Runs the entire tournament mode
 
 protected:
-    void newGame();
+    void newGame(); //starts a new game
 
 private:
     Settings * settings;

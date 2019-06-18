@@ -345,7 +345,7 @@ void Game::initGameState(Settings * setting)
           }
         y++;
         }
-        cout << endl;
+        //cout << endl;
         while(y < height)
         {
           for(x = 0; x < width; x++)

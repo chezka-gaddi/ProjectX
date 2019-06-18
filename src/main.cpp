@@ -194,6 +194,6 @@ int main(int argc, char **argv)
         game.executeTurn();
     }
 
-    std::cout << "\n GAME OVER \n";
+    std::cout << "\nGAME OVER\n";
     return 0;
 }
