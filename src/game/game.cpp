@@ -298,7 +298,6 @@ void Game::initGameState(Settings * setting)
               cout << "  Trimming bushes...\n";
           }
           getline(fin, configLine);
-          //cout << configLine << endl;
           for(x = 0; x < width; x++)
           {
             if(x >= configLine.size() + wPad)
@@ -345,7 +344,6 @@ void Game::initGameState(Settings * setting)
           }
         y++;
         }
-        //cout << endl;
         while(y < height)
         {
           for(x = 0; x < width; x++)
@@ -441,18 +439,7 @@ void Game::initGameState(Settings * setting)
           if (!quiet)
             cout << "S t r e t c h i n g   t h e   m a p . . .  ";
           stringstream(args) >> width;
-          if(width < 5)
-          {
-            width = 5;
-            if (!quiet)
-              printf("\nInvalid width parameter, defaulting to %d.\n", width);
-          }
-          else if(width > 50)
-          {
-            width = 50;
-            if (!quiet)
-              cout << "\nWidth parameter too high, defaulting to 50.\n";
-          }
+          width = settings->checkSettingValue(5, 50, width, "width");
           if (!quiet)
             cout << "...done.\n";
         }
@@ -461,18 +448,7 @@ void Game::initGameState(Settings * setting)
           if (!quiet)
             cout << "Elon\n    gati\n        ng t\n            he ma\n                p...  ";
           stringstream(args) >> height;
-          if(height < 5)
-          {
-            height = 5;
-            if (!quiet)
-              printf("Invalid height parameter, defaulting to %d.\n", height);
-          }
-          else if(height > 21)
-          {
-            height = 21;
-            if (!quiet)
-              cout << "Height parameter too high, defaulting to 21.\n";
-          }
+          height = settings->checkSettingValue(5, 21, height, "height");
           if (!quiet)
             cout << "\n                                                                   ...done.\n";
         }

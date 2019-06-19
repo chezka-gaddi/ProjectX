@@ -82,6 +82,8 @@ public:
     void setAttrRange(int range);
     void setAttrSpecial(int special);
 
+    //Helper functions
+    int checkSettingValue(int, int, int, std::string);
 private:
     //default game settings
     int maxTurns = 1000;
@@ -109,9 +111,6 @@ private:
     std::string resultsFile = "results.txt"; //results output file
     std::string configFile = "config.ini"; //Config ini file
     bool tracking = false; //track all actions to file
-
-    //Helper functions
-    int checkSettingValue(int, int, int, std::string);
 };
 
 #endif //__GAME_H
