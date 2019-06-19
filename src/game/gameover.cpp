@@ -11,10 +11,10 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settin
   std::ofstream fout(settings->getResultsFile(), std::ios::out | std::ios::app);
   unsigned int winDex = 0;
 
-  while(winner[winDex].id <= 0 && winDex < winner.size())
-    winDex++;
   if(winner.size() != 0)
-  { 
+  {
+    while(winDex < winner.size() && winner[winDex].id <= 0)
+      winDex++; 
     fout << "\n\nGame ended on turn: " << settings->getTurn();
     fout << "\nWinner: " << winner[winDex].name
         << " Kills: " << winner[winDex].kills

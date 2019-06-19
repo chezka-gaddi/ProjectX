@@ -41,6 +41,7 @@ public:
     bool checkCoverage();
     bool checkQuiet();
     bool showUI();
+    bool checkTracking();
 
     //individual attribute getters
     int getAttrDamage();
@@ -70,6 +71,7 @@ public:
     void setQuietMode(bool q);
     void setResultsFile(std::string r);
     void setConfigFile(std::string c);
+    void setTrackingMode(bool t);
 
     //individual attribute setters
     void setAttrDamage(int damage);
@@ -106,6 +108,10 @@ private:
     bool showui = true; //should we display the ui
     std::string resultsFile = "results.txt"; //results output file
     std::string configFile = "config.ini"; //Config ini file
+    bool tracking = false; //track all actions to file
+
+    //Helper functions
+    int checkSettingValue(int, int, int, std::string);
 };
 
 #endif //__GAME_H
