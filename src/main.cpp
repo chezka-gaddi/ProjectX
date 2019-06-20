@@ -107,6 +107,10 @@ int main(int argc, char **argv)
         printf("Config file set to %s\n", argv[counter+1]);
         settings->setConfigFile(argv[counter+1]);
         counter++;
+      }else if (((strcmp(argv[counter], "--gamelog") == 0) || strcmp(argv[counter], "-g") == 0) && counter + 1 <= argc)
+      {
+        printf("Tracking enabled");
+        settings->setTrackingMode(true);
       }else if((strcmp(argv[counter], "--help") == 0) && counter + 1 <= argc)
       {
         printf("\n\nHelp:\n");
@@ -124,6 +128,8 @@ int main(int argc, char **argv)
         printf("   Change the match results output file.\n\n");
         printf("--settings, -s\n");
         printf("   Change the config source file.\n\n");
+        printf("--gamelog, -g\n");
+        printf("   Enable game log tracking to file.\n\n");
         exit(1);
       }else if(argv[counter][0] == '-' && argv[counter][1] != '-'){
         //printf("multi-params\n");
@@ -163,6 +169,8 @@ int main(int argc, char **argv)
                 printf("   Change the match results output file.\n\n");
                 printf("--settings, -s\n");
                 printf("   Change the config source file.\n\n");
+                printf("--gamelog, -g\n");
+                printf("   Enable game log tracking to file.\n\n");
                 exit(1);
                 break;
               default:

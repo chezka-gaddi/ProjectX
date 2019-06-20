@@ -22,6 +22,7 @@ GameField::~GameField()
     if(a.act_p != NULL)
       delete a.act_p;
   }
+  tracker->close();
 }
 
 /**
@@ -39,6 +40,10 @@ GameField::GameField(int width, int height)
   std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
   std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
   displayCallback = NULL;
+  if (settings->checkTracking()){
+    tracker = new gameTracker();
+    tracker->open();
+  }
 }
 /**
  * @author David Donahue
@@ -65,7 +70,10 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
     settings = setting;
   }
   actors = startActors;
-
+  if (settings->checkTracking()){
+    tracker = new gameTracker();
+    tracker->open();
+  }
 }
 
 /**
@@ -112,11 +120,24 @@ void GameField::updateMap()
  ******************************************************************************/
 void GameField::setSPECIAL(const attributes baseStats)
 {
-  int sum =0;
+  int sum = 0;
   int points = baseStats.tankSpecial;
   for(auto &actor: actors)
   {
     actor.tankAttributes = actor.act_p->setAttribute(points, baseStats);
+    
+    if (actor.tankAttributes.tankHealth < 0)
+      actor.tankAttributes.tankHealth = 1;
+    if (actor.tankAttributes.tankAP < 0)
+      actor.tankAttributes.tankAP = 1;
+    if (actor.tankAttributes.tankRadar < 0)
+      actor.tankAttributes.tankRadar = 1;
+    if (actor.tankAttributes.tankDamage <0)
+      actor.tankAttributes.tankDamage = 1;
+    if (actor.tankAttributes.tankAmmo < 0)
+      actor.tankAttributes.tankAmmo = 1;
+    if (actor.tankAttributes.projRange < 0)
+      actor.tankAttributes.projRange = 1;
 
     sum = actor.tankAttributes.tankHealth
           + actor.tankAttributes.tankAP
@@ -124,7 +145,7 @@ void GameField::setSPECIAL(const attributes baseStats)
           + actor.tankAttributes.tankDamage
           + actor.tankAttributes.tankAmmo
           + actor.tankAttributes.projRange;
-    if(sum  <= points)
+    if(sum <= points)
     {
       actor.health += actor.tankAttributes.tankHealth;
       actor.AP += actor.tankAttributes.tankAP;
@@ -135,40 +156,41 @@ void GameField::setSPECIAL(const attributes baseStats)
       if(actor.health > 8)
       {
         actor.health = 8;
-        printf("Health stat was too high,  clamping to 8.\n");
+        printf("%s: Health stat was too high,  clamping to 8.\n", actor.name.c_str());
       }
       if(actor.AP > 6)
       {
         actor.AP = 6;
-        printf("AP stat was too high, clamping to 6.\n");
+        printf("%s: AP stat was too high, clamping to 6.\n", actor.name.c_str());
       }
       if(actor.radar > getWidth())
       {
         actor.radar = getWidth();
-        printf("Radar stat was too high, clamping to %d.\n", getWidth());
+        printf("%s: Radar stat was too high, clamping to %d.\n", actor.name.c_str(), getWidth());
       }
       if(actor.damage > 8)
       {
         actor.damage = 8;
-        printf("Damage stat was too high, clamping at 8.\n");
+        printf("%s: Damage stat was too high, clamping at 8.\n", actor.name.c_str());
       }
       if(actor.ammo > 10)
       {
         actor.ammo = 10;
-        printf("Ammo stat was too high, clamping at 10.\n");
+        printf("%s: Ammo stat was too high, clamping at 10.\n", actor.name.c_str());
       }
       if(actor.range > 10)
       {
         actor.range = 10;
-        printf("Range stat was too high, clamping to 10.\n");
+        printf("%s: Range stat was too high, clamping to 10.\n", actor.name.c_str());
       }
     }
     else
       std::cout << "Tank "
                 << actor.id
+                << "(" << actor.name.c_str() << ")"
                 << " did not provide the correct amount of special points! Points used: "
                 << sum
-                <<std::endl;
+                << std::endl;
 
     actor.max_health = actor.health;
     actor.max_ammo = actor.ammo;
@@ -817,6 +839,8 @@ void GameField::checkObjectRegrowth(){
 void GameField::nextTurn()
 {
   gameTurn++;
+  if (tracker != nullptr)
+    tracker->newTurn(gameTurn);
   direction atk;
   ActorInfo newProjectile;
   PositionData pos;
@@ -831,8 +855,12 @@ void GameField::nextTurn()
   for(unsigned int i = 0; i < actors.size(); ++i)
   {
     act_ap = actors[i].AP;
-    if(actors[i].id > 0 && actors[i].health > 0)
+    if(actors[i].id > 0 && actors[i].health > 0){
       actTurn = actors[i].id;
+    }
+    if (tracker != nullptr)
+        tracker->newPlayerTurn(actors[i].id);
+    
     updateMap();  //Give each actor a fresh map
     if(gameptr != nullptr && settings->showUI())  
       displayCallback(settings);
@@ -858,6 +886,11 @@ void GameField::nextTurn()
       if(action == 1)
       {
         runMoves(actors[i], fog_of_war, pos);
+        if (tracker != nullptr && actors[i].id > 0){
+          tracker->move(actors[i].name, actors[i].heading, actors[i].x, actors[i].y);
+        }else if (tracker != nullptr){
+          tracker->move("Projectile", actors[i].heading, actors[i].x, actors[i].y);
+        }
       }
       else if(action == 2)
       {
@@ -869,9 +902,12 @@ void GameField::nextTurn()
 
         //Get the AI's desired attack
         atk = actors[i].act_p->attack(fog_of_war, pos);
-
+    
         if(actors[i].id > 0)  //tanks attacking
         {
+          if (tracker != nullptr){
+            tracker->attack(actors[i].name, atk);
+          }
           if(atk != STAY && actors[i].ammo >= 1)
           {
             actors[i].heading = atk;
@@ -911,6 +947,9 @@ void GameField::nextTurn()
           }
           else if(atk != STAY)//Forced reload on empty ammo rack
           {
+            if (tracker != nullptr){
+              tracker->reload(actors[i].name, true);
+            }
             //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
             actors[i].ammo = actors[i].max_ammo;
             //printf("Back up to %d bullets.\n",actors[i].ammo);
@@ -919,11 +958,19 @@ void GameField::nextTurn()
       }
       else if(action == 4) //Chosen reload action
       {
+        if (tracker != nullptr){
+          tracker->reload(actors[i].name, false);
+        }
         actors[i].ammo = actors[i].max_ammo;
         //printf("Reloading... Reloading... Reloading\n");
       }
-      if (actors[i].health > 0 && actors[i].cDetect / actors[i].AP >= 4) //check for a camper
-              actors[i].camp = true; //
+      if (actors[i].health > 0 && actors[i].cDetect / actors[i].AP >= 4){ //check for a camper
+        actors[i].camp = true; //
+        if (tracker != nullptr){
+          tracker->camp(actors[i].name);
+        }
+      
+      }
       --act_ap;
     }
   }
@@ -1031,6 +1078,10 @@ void GameField::cull()
         //std::cout << "Tank Down!! " << actors[i].name << " died\n";
         deceased.push_back(actors[i]);
         //std::cout << "Current number of dead tanks is: " << deceased.size() << endl;
+        if (tracker != nullptr){
+          tracker->killed(actors[i].id, actors[i].name);
+        }
+      
       }
       if(actors[i].act_p != NULL)
         delete actors[i].act_p;

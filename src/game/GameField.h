@@ -20,6 +20,7 @@
 #include <ctime>
 #include <GL/glut.h>
 #include <GL/freeglut.h>
+#include <utilities/gameTracker.h>
 
 /***************************************************************************//**
 * @class GameField
@@ -84,6 +85,7 @@ protected:
     //pointers to other game components
     Game *gameptr = nullptr;
     Settings *settings = nullptr;
+    gameTracker *tracker = nullptr;
 
     //variables
     ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);

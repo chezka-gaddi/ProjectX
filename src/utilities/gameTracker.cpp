@@ -61,20 +61,36 @@
     *
     * Track a player reloading
     * @param[in] player - The player who reloaded
+    * @param[in] forced - Whether or not the reload was forced from no ammo
     *******************************************************************************/
-    void gameTracker::reload(std::string player){
-        fout << player << " reloaded.\n";
+    void gameTracker::reload(std::string player, bool forced = false){
+        if (forced)
+            fout << "-" << player << " forced to reload.\n";
+        else
+            fout << player << " reloaded.\n";
     }
 
     /***************************************************************************//**
     * @author Jon McKee
-    * @brief kill(std::string player)
+    * @brief killed(int id, std::string player)
     *
     * Track a player being killed
+    * @param[in] id - Player id number that was killed
     * @param[in] player - The player that was killed
     *******************************************************************************/
-    void gameTracker::kill(std::string player){
-        fout << "-" << player << " destroyed.\n";
+    void gameTracker::killed(int id, std::string player){
+        fout << "-Player " << id << "(" << player << ") destroyed.\n";
+    }
+
+    /***************************************************************************//**
+    * @author Jon McKee
+    * @brief camp(std::string player)
+    *
+    * Track a player marked as camping
+    * @param[in] player - The player that was camping
+    *******************************************************************************/
+    void gameTracker::camp(std::string player){
+        fout << "-" << player << " marked camping.\n";
     }
 
     /***************************************************************************//**
@@ -96,7 +112,10 @@
     * @param[in] player - The player number to log into the file.
     *******************************************************************************/
     void gameTracker::newPlayerTurn(int player){
-        fout << "*Player " << player << "\n";
+        if (player > 0)
+            fout << "*Player " << player << "\n";
+        else
+            fout << "*Player " << abs(player) << " Projectile\n";
     }
 
     /***************************************************************************//**

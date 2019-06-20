@@ -53,6 +53,7 @@ src/.idea/
 *.sql
 *.sqlite
 results.txt
+gameMoves.txt
 
 # OS generated files #
 ######################
