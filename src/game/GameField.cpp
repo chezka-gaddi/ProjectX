@@ -545,7 +545,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         {
           r->health = 0;
 #ifndef TESTING
-          r->set_destroyed(settings->getTurn());
+          r->set_destroyed(gameTurn);
           removeObstacle(a.x, a.y);
 #endif
         }
@@ -566,7 +566,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         {
           t->health = 0;
 #ifndef TESTING
-          t->set_destroyed(settings->getTurn());
+          t->set_destroyed(gameTurn);
           removeObstacle(a.x, a.y);
           //If a tree you're hiding under get's destroyed take 1 damage
           for (auto tTank : actors)
@@ -633,7 +633,7 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
             {
               t->health--;
               if(t->health <= 0){
-                t->destroyed = settings->getTurn();
+                t->destroyed = gameTurn;
                 removeObstacle(t->gridx, t->gridy);
               }
             }
@@ -656,7 +656,7 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
             {
               r->health--;
               if(r->health <= 0){
-                r->destroyed = settings->getTurn();
+                r->destroyed = gameTurn;
                 removeObstacle(r->gridx, r->gridy);
               }
             }
@@ -779,7 +779,7 @@ void GameField::checkObjectRegrowth(){
   {
     if(t->health <= 0)
     {
-      t->regrow(settings->getTurn(), actors);
+      t->regrow(gameTurn, actors);
       if (t->health > 0)
         addObstacle(t->gridx, t->gridy, 'T');
     }
@@ -788,7 +788,7 @@ void GameField::checkObjectRegrowth(){
   {
     if(r->health <= 0)
     {
-      r->regrow(settings->getTurn(), actors);
+      r->regrow(gameTurn, actors);
       if (r->health > 0)
         addObstacle(r->gridx, r->gridy, 'R');
     }
@@ -798,7 +798,7 @@ void GameField::checkObjectRegrowth(){
   {
     if(b->health <= 0)
     {
-      b->regrow(settings->getTurn(), actors);
+      b->regrow(gameTurn, actors);
       if (b->health > 0)
         addObstacle(b->gridx, b->gridy, 'B');
     }
@@ -816,9 +816,7 @@ void GameField::checkObjectRegrowth(){
 
 void GameField::nextTurn()
 {
-  if(settings != nullptr){
-    settings->nextTurn();
-  }
+  gameTurn++;
   direction atk;
   ActorInfo newProjectile;
   PositionData pos;
@@ -834,7 +832,7 @@ void GameField::nextTurn()
   {
     act_ap = actors[i].AP;
     if(actors[i].id > 0 && actors[i].health > 0)
-      settings->setActTurn(actors[i].id);
+      actTurn = actors[i].id;
     updateMap();  //Give each actor a fresh map
     if(gameptr != nullptr && settings->showUI())  
       displayCallback(settings);
@@ -843,9 +841,9 @@ void GameField::nextTurn()
     {
       actors[i].cDetect++;
       //if (gameptr != nullptr){
-        settings->setModCounter(settings->getModCounter() + 1); 
-        if(settings->getModCounter() > 7)
-          settings->setModCounter(0);
+        modCounter++;
+        if(modCounter > 7)
+          modCounter = 0;
       //}
       updateMap();
       fog_of_war = fieldMap;
@@ -905,6 +903,7 @@ void GameField::nextTurn()
               newProjectile.hits = 0;
               newProjectile.ammo = 1;
               newProjectile.heading = actors[i].heading;
+              newProjectile.name = "Projectile\n";
               actors.insert(actors.begin() + i + 1, newProjectile);
               actors[i].shots++;
               actors[i].ammo--;
@@ -1027,7 +1026,7 @@ void GameField::cull()
   {
     if(actors[i].health == 0)
     {
-      if(actors[i].name != "default\n")
+      if(actors[i].name != "Projectile\n")
       {
         //std::cout << "Tank Down!! " << actors[i].name << " died\n";
         deceased.push_back(actors[i]);
@@ -1075,3 +1074,37 @@ int GameField::obstacleAt(int x, int y)
 {
   return fieldMap.obstacleMap[x + y * fieldMap.width];
 }
+
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Returns the current game turn
+ * 
+ * @param[out] returns the current game turn
+ */
+int GameField::getGameTurn(){return gameTurn;}
+
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Returns the current actor
+ * 
+ * @param[out] returns the current actor
+ */
+int GameField::getActTurn(){return actTurn;}
+
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Returns the current modifier counter
+ * 
+ * @param[out] returns the current modifier counter
+ */
+int GameField::getModCounter(){return modCounter;}
+
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Increments game turn counter
+ */
+void GameField::incTurn(){gameTurn++;}

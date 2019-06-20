@@ -9,11 +9,6 @@ int Settings::getTankSpeed(){return tankSpeed;}
 int Settings::getBulletSpeed(){return bulletSpeed;}
 int Settings::getMaxTurns(){return maxTurns;}
 gameMode Settings::getGameMode(){ return gMode;}
-int Settings::getTurn(){return turn;}
-int Settings::getActTurn(){return actTurn;}
-int Settings::getModCounter(){return modCounter;}
-
-void Settings::nextTurn(){turn++;}
 
 //setters
 void Settings::setAttributes(attributes attr){baseAttributes = attr;}
@@ -55,9 +50,6 @@ void Settings::setMaxTurns(int maxT){
     std::cout << "   ...done.\n";  
 }
 void Settings::setGameMode(gameMode gm){ gMode = gm;}
-void Settings::setTurn(int t){turn = t;}
-void Settings::setActTurn(int at){actTurn = at;}
-void Settings::setModCounter(int mc){modCounter = mc;}
 void Settings::setUI(bool s){showui = s;}
 void Settings::setQuietMode(bool q){modeQuiet = q;}
 void Settings::setTrackingMode(bool t){tracking = t;}

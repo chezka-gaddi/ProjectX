@@ -31,9 +31,6 @@ public:
     int getBulletSpeed();
     int getMaxTurns();
     gameMode getGameMode();
-    int getTurn();
-    int getActTurn();
-    int getModCounter();
     std::string getResultsFile();
     std::string getConfigFile();
 
@@ -52,9 +49,6 @@ public:
     int getAttrRange();
     int getAttrSpecial();
 
-    //functional
-    void nextTurn();
-
     //setters
     void setAttributes(attributes attr);
     void setIdleSpeed(int is);
@@ -63,14 +57,12 @@ public:
     void setBulletSpeed(int bs);
     void setMaxTurns(int mt);
     void setGameMode(gameMode gm);
-    void setTurn(int t);
-    void setActTurn(int at);
-    void setModCounter(int mc);
     void setUI(bool set);
     void setCoverageMode(bool c);
     void setQuietMode(bool q);
     void setResultsFile(std::string r);
     void setConfigFile(std::string c);
+    void setTrackingFile(std::string t);
     void setTrackingMode(bool t);
 
     //individual attribute setters
@@ -98,11 +90,6 @@ private:
     //pointers to components
     GameField *tankGame;   //Pointer to gamefield
     gameMode gMode = ai;  //default game mode
-
-    //Current Match Settings
-    int turn = 0; //Current game turn
-    int actTurn = 0; //0 causes issues on first display call
-    int modCounter = 7; //Modular counter for animation effects
 
     //platform settings
     bool modeQuiet = false; //quiet mode for blocking text

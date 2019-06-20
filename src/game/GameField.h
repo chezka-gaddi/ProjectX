@@ -53,6 +53,11 @@ public:
     int obstacleAt(int x, int y);
     void create_fog_of_war(MapData &map, ActorInfo current_actor);
 
+    int getGameTurn();
+    int getActTurn();
+    int getModCounter();
+    void incTurn();
+
 #ifndef TESTING
 #define TESTING
 protected:
@@ -89,6 +94,12 @@ protected:
     std::vector<ActorInfo> deceased; /*!< A list of destroyed tanks */
     std::vector<std::pair<int,int>> SFX; /*!< A list of all special effects on the field */
     MapData fieldMap; /*!< Struct with mapdata, width, height, vector of ints.  0 - empty/ id - actor */
+
+    //Current Match Settings
+    int gameTurn = 0; //Current game turn
+    int actTurn = 0;
+    int modCounter = 7; //Modular counter for animation effects
+
 
 friend class Game;
 };

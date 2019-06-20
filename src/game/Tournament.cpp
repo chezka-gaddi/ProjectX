@@ -46,9 +46,6 @@ Tournament::~Tournament(){
  *******************************************************************************/
 void Tournament::newGame(){
     game = new Game();
-    settings->setTurn(0);
-    settings->setActTurn(0);
-    settings->setModCounter(0);
     game->initGameState(settings);
 }
 /***************************************************************************//**

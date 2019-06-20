@@ -6,7 +6,7 @@
  *
  * Display the screen that reads game over
  *******************************************************************************/
-void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settings * settings)
+void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settings * settings, int turn)
 {
   std::ofstream fout(settings->getResultsFile(), std::ios::out | std::ios::app);
   unsigned int winDex = 0;
@@ -15,7 +15,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settin
   {
     while(winDex < winner.size() && winner[winDex].id <= 0)
       winDex++; 
-    fout << "\n\nGame ended on turn: " << settings->getTurn();
+    fout << "\n\nGame ended on turn: " << turn;
     fout << "\nWinner: " << winner[winDex].name
         << " Kills: " << winner[winDex].kills
         << " Shots: " << std::to_string(winner[winDex].shots).c_str()
@@ -46,7 +46,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settin
           << "," << dead[l].y << ")";
     }
   }else{ //Draw Game
-    fout << "\n\nGame ended on turn: " << settings->getTurn();
+    fout << "\n\nGame ended on turn: " << turn;
     fout << "\nDraw Game: ";
     for(int l = dead.size() - 1; l >= 0; l--)
     {

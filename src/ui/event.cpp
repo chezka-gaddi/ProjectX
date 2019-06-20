@@ -68,7 +68,7 @@ void updateDrawables(Game &game)
     if(act.id > 0 && act.health > 0)
     {
       //Use smart pointers for better memory management
-      std::unique_ptr<TankDrawable> temp_tank(new TankDrawable(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, game.settings->getTurn(), game.settings->getModCounter(), act.offsetx, act.offsety, act.camp));
+      std::unique_ptr<TankDrawable> temp_tank(new TankDrawable(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, game.tankGame->getGameTurn(), game.tankGame->getModCounter(), act.offsetx, act.offsety, act.camp));
       act.sMod = !act.sMod;
       //Give our tanks health for sfx drawing
       temp_tank->setHealth(act.health);
@@ -78,14 +78,14 @@ void updateDrawables(Game &game)
     }
     else if(act.id < 0 && act.health > 0)
     {
-      std::unique_ptr<Projectile> temp_proj(new Projectile(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, (act.id == game.settings->getActTurn() || -act.id == game.settings->getActTurn()), act.offsetx, act.offsety, act.camp));
+      std::unique_ptr<Projectile> temp_proj(new Projectile(act.id, game.convertGLXCoordinate(act.x), game.convertGLYCoordinate(act.y), act.heading, (act.id == game.tankGame->getActTurn() || -act.id == game.tankGame->getActTurn()), act.offsetx, act.offsety, act.camp));
       temp_proj->sizeMod = act.scale;
       game.objects.push_back(std::move(temp_proj));
     }
-    if(game.settings->getActTurn() == act.id)
+    if(game.tankGame->getActTurn() == act.id)
     {
-      for(i = 0; i < actors->size() && actors[0][i].id != game.settings->getActTurn(); i++);
-      std::unique_ptr<Menu> temp_draw(new Menu(actors[0][i].id, actors[0][i].health, actors[0][i].ammo, actors[0][i].hits, actors[0][i].name, actors[0][i].heading, game.settings->getModCounter(), game.settings->getTurn()));
+      for(i = 0; i < actors->size() && actors[0][i].id != game.tankGame->getActTurn(); i++);
+      std::unique_ptr<Menu> temp_draw(new Menu(actors[0][i].id, actors[0][i].health, actors[0][i].ammo, actors[0][i].hits, actors[0][i].name, actors[0][i].heading, game.tankGame->getModCounter(), game.tankGame->getGameTurn()));
       game.objects.push_back(std::move(temp_draw));
     }
 
@@ -115,7 +115,7 @@ void DisplayEvent::doAction(Game &game)
   }
   float pause;
 
-  if(game.settings->getTurn() > 0)
+  if(game.tankGame->getGameTurn() > 0)
     updateDrawables(game);
 
   for(unsigned int i = 0; i < game.constants.size(); i++)
@@ -136,7 +136,7 @@ void DisplayEvent::doAction(Game &game)
 
   for(unsigned int i = 0; i < game.objects.size(); i++)
   {
-    game.objects[i]->draw(game.settings->getModCounter(), game.getY());
+    game.objects[i]->draw(game.tankGame->getModCounter(), game.getY());
   }
 
   for(unsigned int i = 0; i < game.trees.size(); i++)

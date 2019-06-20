@@ -95,7 +95,7 @@ static bool isplayable(const std::vector<ActorInfo> &actorInfo)
  *******************************************************************************/
 bool Game::checkMaxTurn()
 {
-  if (settings->getTurn() != settings->getMaxTurns())
+  if (tankGame->getGameTurn() != settings->getMaxTurns())
     return false;
 
   //printf("Finding Early Winner.\n");
@@ -127,14 +127,11 @@ bool Game::checkMaxTurn()
         tie = true;
       }
     }
-    //printf("Found a duplicate tie value: %d \n", tie);
     if(tie == true)   //If it is a tie clear out all tanks to get to draw screen
     {
       for(auto &a : *actors)
       {
-        //printf("Health: %d \n", a.health);
         a.health = 0;
-        //printf("Health: %d \n", a.health);
       }
     }
     else if(tie == false)    //No tie, kill off all tanks
@@ -171,7 +168,7 @@ void Game::executeTurn()
       tankGame->cull();
     }
   }
-  gameOver(tankGame->getDeceased(), tankGame->getActors(), settings);
+  gameOver(tankGame->getDeceased(), tankGame->getActors(), settings, tankGame->gameTurn);
   if (settings->showUI())
     glutLeaveMainLoop();
 }
@@ -691,6 +688,7 @@ void Game::initGameState(Settings * setting)
   if (!quiet)
     cout << "Finalizing game settings...\n";
 
+  /*
   baseStats.tankHealth = settings->getAttrHealth();
   baseStats.tankDamage = settings->getAttrDamage();
   baseStats.tankAP = settings->getAttrAP();
@@ -698,11 +696,13 @@ void Game::initGameState(Settings * setting)
   baseStats.tankRadar = settings->getAttrRadar();
   baseStats.projRange = settings->getAttrRange();
   settings->setAttributes(baseStats);
+  */
+  baseStats = settings->getAttributes();
 
   startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, baseStats, height, width);
   //printf("Height: %d  Width: %d\n",height, width);
   tankGame = new GameField(width, height, startActors, displayWrapper, this, settings);
-  tankGame->setSPECIAL(settings->getAttributes());
+  tankGame->setSPECIAL(baseStats);
   if (!quiet)
     cout << "   ...Done\n" << endl;
 
