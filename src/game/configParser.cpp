@@ -6,7 +6,8 @@ bool parseConfig( Settings * settings){
     //INIReader config(configFile);
     INIReader config("config.ini");
 
-    int cerrors = config.ParseError();
+    //Store the parse error/line number
+    //int cerrors = config.ParseError();
     if (config.ParseError() != 0) {
         printf("Can't load %s\n", configFile.c_str());
         //return false;

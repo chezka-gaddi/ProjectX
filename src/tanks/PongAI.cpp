@@ -11,7 +11,7 @@ PongAI::~PongAI(void)
     // Intentionally Left Empty
 }
 
-direction PongAI::move(MapData map, PositionData status)
+direction PongAI::move(const MapData &map, PositionData status)
 {
     int y_pos = status.game_y;
 
@@ -32,7 +32,7 @@ direction PongAI::move(MapData map, PositionData status)
 
 }
 
-direction PongAI::attack(MapData map, PositionData status)
+direction PongAI::attack(const MapData &map, PositionData status)
 {
     int x_pos = status.game_x;
     int median = map.width / 2;
@@ -55,7 +55,7 @@ attributes PongAI::setAttribute(int pointsAvailable, attributes baseStats)
     return retval;
 }
 
-int PongAI::spendAP(MapData map, PositionData status)
+int PongAI::spendAP(const MapData &map, PositionData status)
 {
     if(status.ap == 1)
         return 2; // Attack

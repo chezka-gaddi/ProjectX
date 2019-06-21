@@ -25,10 +25,10 @@ public:
     ProjectileActor();
     ProjectileActor(direction d);
 
-    direction move(MapData map, PositionData status);
-    direction attack(MapData map, PositionData status);  
+    direction move(const MapData &map, PositionData status);
+    direction attack(const MapData &map, PositionData status);  
     attributes setAttribute(int pointsAvailable, attributes baseStats);
-    int spendAP(MapData map, PositionData status);
+    int spendAP(const MapData &map, PositionData status);
 };
 
 

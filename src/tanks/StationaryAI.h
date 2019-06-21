@@ -19,16 +19,16 @@ class StationaryAI : public Actor
 public:
 
     // The Overwritten Move function.
-    virtual direction move(MapData map, PositionData status);
+    virtual direction move(const MapData &map, PositionData status);
 
     // The Overwritten attack function.
-    virtual direction attack(MapData map, PositionData status);
+    virtual direction attack(const MapData &map, PositionData status);
 
     // The Overwritten set attribute  function.
     virtual attributes setAttribute(int pointsAvailable, attributes baseStats);
 
     // The Overwritten spendAP  function.
-    virtual int spendAP(MapData map, PositionData status);
+    virtual int spendAP(const MapData &map, PositionData status);
 
     StationaryAI();
     ~StationaryAI();

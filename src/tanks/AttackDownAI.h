@@ -25,16 +25,16 @@ class AttackDownAI : public Actor
 public:
 
     // The Overwritten Move function.
-    virtual direction move(MapData map, PositionData status); /*!< Overwritten version of the move function */
+    virtual direction move(const MapData &map, PositionData status); /*!< Overwritten version of the move function */
 
     // The Overwritten attack function.
-    virtual direction attack(MapData map, PositionData status); /*!< Overwritten version of the attack function */
+    virtual direction attack(const MapData &map, PositionData status); /*!< Overwritten version of the attack function */
 
     // The Overwritten set attribute  function.
     virtual attributes setAttribute(int pointsAvailable, attributes baseStats); /*< Overwritten version of the setAttribute function */
 
     // The Overwritten spendAP  function.
-    virtual int spendAP(MapData map, PositionData status); /*< Overwritten version of the spendAP function */
+    virtual int spendAP(const MapData &map, PositionData status); /*< Overwritten version of the spendAP function */
 
     AttackDownAI(); /*< AttackDownAI Constructor */
     ~AttackDownAI(); /*< AttackDownAI Deconstructor */

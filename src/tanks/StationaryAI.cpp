@@ -9,14 +9,14 @@ StationaryAI::~StationaryAI(void)
 {
 }
 
-direction StationaryAI::move(MapData map, PositionData status)
+direction StationaryAI::move(const MapData &map, PositionData status)
 {
     direction retval;
     retval = STAY;
     return retval;
 }
 
-direction StationaryAI::attack(MapData map, PositionData status)
+direction StationaryAI::attack(const MapData &map, PositionData status)
 {
     direction retval;
     retval = STAY;
@@ -32,7 +32,7 @@ attributes StationaryAI::setAttribute(int pointsAvailable, attributes baseStats)
     return retval;
 }
 
-int StationaryAI::spendAP(MapData map, PositionData status)
+int StationaryAI::spendAP(const MapData &map, PositionData status)
 {
     return 3;
 }

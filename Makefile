@@ -3,7 +3,7 @@ CXXFLAGS = -Wall -g -std=c++11 -fPIC
 INCS = -I./ -Isrc/
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
-LIBS += -lSOIL -Llibraries
+LIBS += -lSOIL -Llibraries -lCTF
 SOFLAGS = -DDYNAMIC
 PROFILE ?=
 
@@ -73,10 +73,6 @@ src/tanks/%.so: src/tanks/%.cpp
 	@mkdir -p tanks
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $? $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
-#tanks/%.so: src/tanks/%.cpp ./src/actors/Actor.o
-#	@mkdir -p tanks
-#	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
-
 tanks: src/actors/Actor.o $(TANKS:%.cpp=%.so)
 
 clean:
@@ -84,6 +80,7 @@ clean:
 	@find . -name \*.gc* -type f -exec rm -f {} +
 	@rm -rf gprofresults.txt
 	@rm -rf gmon.out
+	@rm platform
 
 clean-lib: clean
 	@rm -rf buildsrc
@@ -103,13 +100,14 @@ clean-tests: clean
 dev: clean-lib
 	make gen-library -j8
 
-gen-library: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
+gen-library: $(FILES:.cpp=.o) $(TANKS:%.cpp=%.so)
 	@mkdir -p buildsrc/$(LIB_PATH)
 	@mkdir -p buildsrc/$(SRC_PATH)
 	@mkdir -p buildsrc/$(TANK_PATH)
 	@mkdir -p buildsrc/images	
 	#echo "Building object library"
-	g++ -o buildsrc/$(LIB_PATH)libCTF.so -shared $(CXXFLAGS) $(FILES:.cpp=.o) $(SOFLAGS)
+	g++ -o buildsrc/$(LIB_PATH)libCTF.a -shared $(CXXFLAGS) $(FILES:.cpp=.o) $(SOFLAGS)
+	cp buildsrc/$(LIB_PATH)libCTF.a $(LIB_PATH)
 	#echo "Building platform"
 	$(CXX) $(CXXFLAGS) $(INCS) -o buildsrc/platform $(FILES:.cpp=.o) $(LIBS)
 	#echo "Copying support files"
@@ -118,18 +116,18 @@ gen-library: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
 	cp README.md buildsrc/README.md
 	cp -R images/ buildsrc/
 	cp -R maps/ buildsrc/
-	cp src/Actor.h buildsrc/src/
-	cp src/MoveData.h buildsrc/src/
-	cp src/attributes.h buildsrc/src/
-	cp src/MapData.h buildsrc/src/
-	cp src/direction.h buildsrc/src/
-	cp src/PositionData.h buildsrc/src/
+	cp src/actors/Actor.h buildsrc/src/
+	cp src/structures/MoveData.h buildsrc/src/
+	cp src/structures/attributes.h buildsrc/src/
+	cp src/map/MapData.h buildsrc/src/
+	cp src/structures/direction.h buildsrc/src/
+	cp src/structures/PositionData.h buildsrc/src/
 	cp $(TANKS) buildsrc/
 	cp $(TANKS:.cpp=.h) buildsrc/
 	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
 	# Change tanks src to point to new directory
-	sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
-	sed -i 's#include "#include "src/#g' buildsrc/PongAI.h
+	# sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
+	# sed -i 's#include "#include "src/#g' buildsrc/PongAI.h
 
 push-to-git: clean-lib
 	mkdir -p buildsrc

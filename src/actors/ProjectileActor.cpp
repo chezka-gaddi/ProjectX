@@ -29,7 +29,7 @@ ProjectileActor::ProjectileActor(direction d) : dir(d) {}
  * @par Description:
  *
 ******************************************************************************/
-direction ProjectileActor::move(MapData map, PositionData status)
+direction ProjectileActor::move(const MapData &map, PositionData status)
 {
     return dir;
 
@@ -48,7 +48,7 @@ direction ProjectileActor::move(MapData map, PositionData status)
  *
  * @returns attackProjectile - struct with data on where to attack and damage
 ******************************************************************************/
-direction ProjectileActor::attack(MapData map, PositionData status)
+direction ProjectileActor::attack(const MapData &map, PositionData status)
 {
     return STAY;
 }
@@ -74,7 +74,7 @@ attributes ProjectileActor::setAttribute(int pointsAvailable, attributes baseSta
  * @par Description
  * Returns descision to (0) end turn, (1) move, or (2) attack
  */
-int ProjectileActor::spendAP(MapData map, PositionData status)
+int ProjectileActor::spendAP(const MapData &map, PositionData status)
 {
     return 1;
 }

@@ -9,7 +9,7 @@ CamperAI::~CamperAI(void)
 {
 }
 
-direction CamperAI::move(MapData map, PositionData status)
+direction CamperAI::move(const MapData &map, PositionData status)
 {
     int x_pos = status.game_x;
     int y_pos = status.game_y;
@@ -70,7 +70,7 @@ direction CamperAI::move(MapData map, PositionData status)
     return retval;
 }
 
-direction CamperAI::attack(MapData map, PositionData status)
+direction CamperAI::attack(const MapData &map, PositionData status)
 {
     int y_pos = status.game_y;
     int x_pos = status.game_x;
@@ -151,7 +151,7 @@ attributes CamperAI::setAttribute(int pointsAvailable, attributes baseStats)
     return retval;
 }
 
-int CamperAI::spendAP(MapData map, PositionData status)
+int CamperAI::spendAP(const MapData &map, PositionData status)
 {
     if (maxAp == 0)
         maxAp = status.ap;

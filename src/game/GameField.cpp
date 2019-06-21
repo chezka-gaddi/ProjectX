@@ -22,7 +22,8 @@ GameField::~GameField()
     if(a.act_p != NULL)
       delete a.act_p;
   }
-  tracker->close();
+  if (settings->checkTracking())
+    tracker->close();
 }
 
 /**
@@ -39,6 +40,7 @@ GameField::GameField(int width, int height)
   settings = new Settings();
   std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
   std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
+  fieldMap.initMap();
   displayCallback = NULL;
   if (settings->checkTracking()){
     tracker = new gameTracker();
@@ -57,6 +59,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
   fieldMap.height = height;
   fieldMap.map.resize(width * height);
   fieldMap.obstacleMap.resize(width * height);
+  fieldMap.initMap();
   std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
   std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
   x_scalar = 4.0717 * pow(width, -1.031);
@@ -105,13 +108,15 @@ void GameField::updateMap()
 {
   //erase the map
   std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+  fieldMap.clear();
   for(auto a : actors)
   {
     //for each actor fill in its id on the map
-    if(a.health > 0)
+    if(a.health > 0){
       fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
+      fieldMap.newMap[a.y + 1][a.x + 1] = a.id;
+    }
   }
-
 }
 /***************************************************************************//**
  * @brief
@@ -715,10 +720,12 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
 * @brief
 * turns the map into just what the current tank can see based off radar
 ******************************************************************************/
-void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
+MapData * GameField::create_fog_of_war(const MapData &map, ActorInfo current_actor)
 {
+  MapData * new_map = new MapData(map.width, map.height);
+
   if(current_actor.id <= 0)
-    return;
+    return new_map;
 
   int radar = current_actor.radar;
   int x_pos = current_actor.x;
@@ -728,11 +735,10 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
   int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
   int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
 
-  MapData new_map = map;
-  std::fill(new_map.map.begin(), new_map.map.end(), 0);
-  std::fill(new_map.obstacleMap.begin(), new_map.obstacleMap.end(), 0);
-  new_map.healthMap.resize(new_map.width * new_map.height);
-  std::fill(new_map.healthMap.begin(), new_map.healthMap.end(), 0);
+  std::fill(new_map->map.begin(), new_map->map.end(), 0);
+  std::fill(new_map->obstacleMap.begin(), new_map->obstacleMap.end(), 0);
+  new_map->healthMap.resize(new_map->width * new_map->height);
+  std::fill(new_map->healthMap.begin(), new_map->healthMap.end(), 0);
 
   int value;
   for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
@@ -740,15 +746,15 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
     for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
     {
       value = y_iter * map.width + x_iter;
-      new_map.map[value] = map.map[value];
-      new_map.obstacleMap[value] = map.obstacleMap[value];
+      new_map->map[value] = map.map[value];
+      new_map->obstacleMap[value] = map.obstacleMap[value];
       if(map.obstacleMap[value] == 0 && map.map[value] != 0)
       {
         for(auto act : actors)
         {
           if(act.x == x_iter && act.y == y_iter && act.health > 0)
           {
-            new_map.healthMap[value] = act.health;
+            new_map->healthMap[value] = act.health;
           }
         }
       }
@@ -759,14 +765,14 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
           {
             if(t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
             {
-              new_map.healthMap[value] = t->health;
+              new_map->healthMap[value] = t->health;
             }
           }
           break;
         case 'C':
           for(auto c : gameptr->specials)
           {
-            new_map.healthMap[value] = c->health;
+            new_map->healthMap[value] = c->health;
           }
           break;
         case 'R':
@@ -774,7 +780,7 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
           {
             if(r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
             {
-              new_map.healthMap[value] = r->health;
+              new_map->healthMap[value] = r->health;
             }
           }
           break;
@@ -782,13 +788,13 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
         /*case 'B':
           for(auto b : gameptr->bushes)
           {
-            new_map.healthMap[value] = 1;
+            new_map->healthMap[value] = 1;
           }
           break;*/
       }
     }
   }
-  map = new_map;
+  return new_map;
 }
 
 /**
@@ -844,11 +850,11 @@ void GameField::nextTurn()
   direction atk;
   ActorInfo newProjectile;
   PositionData pos;
+  MapData * fog_of_war;
   int action;
   int act_ap;
   unsigned int j = 0;
   bool grow = false;
-  MapData fog_of_war = fieldMap;
   if (gameptr != nullptr){
     checkObjectRegrowth();
   }
@@ -868,24 +874,21 @@ void GameField::nextTurn()
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
       actors[i].cDetect++;
-      //if (gameptr != nullptr){
-        modCounter++;
-        if(modCounter > 7)
-          modCounter = 0;
-      //}
+      modCounter++;
+      if(modCounter > 7)
+        modCounter = 0;
       updateMap();
-      fog_of_war = fieldMap;
-      create_fog_of_war(fog_of_war, actors[i]);
+      fog_of_war = create_fog_of_war(fieldMap, actors[i]);
       pos.game_x = actors[i].x;
       pos.game_y = actors[i].y;
       pos.health = actors[i].health;
       pos.id = actors[i].id;
       pos.ap = act_ap;
       pos.ammo = actors[i].ammo;
-      action = actors[i].act_p->spendAP(fog_of_war, pos);
+      action = actors[i].act_p->spendAP(*fog_of_war, pos);
       if(action == 1)
       {
-        runMoves(actors[i], fog_of_war, pos);
+        runMoves(actors[i], *fog_of_war, pos);
         if (tracker != nullptr && actors[i].id > 0){
           tracker->move(actors[i].name, actors[i].heading, actors[i].x, actors[i].y);
         }else if (tracker != nullptr){
@@ -901,7 +904,7 @@ void GameField::nextTurn()
         pos.id = actors[i].id;
 
         //Get the AI's desired attack
-        atk = actors[i].act_p->attack(fog_of_war, pos);
+        atk = actors[i].act_p->attack(*fog_of_war, pos);
     
         if(actors[i].id > 0)  //tanks attacking
         {
@@ -971,6 +974,7 @@ void GameField::nextTurn()
         }
       
       }
+      delete fog_of_war;
       --act_ap;
     }
   }
@@ -1003,6 +1007,7 @@ void GameField::addActor(ActorInfo a)
 void GameField::addObstacle(int x, int y, int type)
 {
   fieldMap.obstacleMap[x + fieldMap.width * y] = type;
+  fieldMap.newMap[y][x] = type;
 }
 
 /**
@@ -1016,6 +1021,7 @@ void GameField::addObstacle(int x, int y, int type)
 void GameField::removeObstacle(int x, int y)
 {
   fieldMap.obstacleMap[x + fieldMap.width * y] = false;
+  fieldMap.newMap[y][x] = false;
 }
 
 /**

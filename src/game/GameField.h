@@ -52,13 +52,11 @@ public:
     std::vector<std::pair<int,int>> * getSFXPointer();
     ActorInfo & actorInfoById(int id);
     int obstacleAt(int x, int y);
-    void create_fog_of_war(MapData &map, ActorInfo current_actor);
+    MapData * create_fog_of_war(const MapData &map, ActorInfo current_actor);
 
     int getGameTurn();
     int getActTurn();
     int getModCounter();
-    void incTurn();
-
 #ifndef TESTING
 #define TESTING
 protected:
@@ -66,8 +64,7 @@ protected:
     //callback function to update the dispaly with the map, actors, and turn count
     void (*displayCallback)(Settings *);
     
-    //functions
-    void updateMap();
+    //game functions
     void runMoves(ActorInfo &a, MapData &fog, PositionData &pos);
     void checkObjectRegrowth();
     bool checkObjectStrike(ActorInfo &a);
@@ -81,6 +78,10 @@ protected:
     void addActor(ActorInfo);
     void cull();
     std::vector<ActorInfo> getDeceased(){return deceased;};
+    void incTurn();
+
+    //Map functions
+    void updateMap();
 
     //pointers to other game components
     Game *gameptr = nullptr;

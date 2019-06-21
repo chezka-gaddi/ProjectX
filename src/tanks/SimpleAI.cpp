@@ -12,7 +12,7 @@ SimpleAI::~SimpleAI() {}
  * @param[in] status - The AI's tank's location, health and ID
  * @return direction to move
  */
-direction SimpleAI::move(MapData map, PositionData status)
+direction SimpleAI::move(const MapData &map, PositionData status)
 {
     int min_dist = map.width * map.height + 1;
     direction ret = STAY;
@@ -148,7 +148,7 @@ direction SimpleAI::move(MapData map, PositionData status)
  * @param[in] status - The AI's tank's location, health and ID
  * @return Location to attack and whether to attack
  */
-direction SimpleAI::attack(MapData map, PositionData status)
+direction SimpleAI::attack(const MapData &map, PositionData status)
 {
     direction ret = STAY;
     int min_dist = map.width * map.height + 1; //Guaranteed to be greater than any real distance
@@ -221,7 +221,7 @@ int SimpleAI::calcDist(int x1, int y1, int x2, int y2)
 }
 
 
-int SimpleAI::spendAP(MapData map, PositionData status)
+int SimpleAI::spendAP(const MapData &map, PositionData status)
 {
     spend = false;
     direction tMove = move(map,status);
