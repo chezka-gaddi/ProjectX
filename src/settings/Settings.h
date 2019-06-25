@@ -33,6 +33,7 @@ public:
     gameMode getGameMode();
     std::string getResultsFile();
     std::string getConfigFile();
+    std::string getMapName();
 
     //mode checkers
     bool checkCoverage();
@@ -64,6 +65,7 @@ public:
     void setConfigFile(std::string c);
     void setTrackingFile(std::string t);
     void setTrackingMode(bool t);
+    void setMapName(std::string m);
 
     //individual attribute setters
     void setAttrDamage(int damage);
@@ -97,6 +99,7 @@ private:
     bool showui = true; //should we display the ui
     std::string resultsFile = "results.txt"; //results output file
     std::string configFile = "config.ini"; //Config ini file
+    std::string mapName = "default.map"; //map file name
     bool tracking = false; //track all actions to file
 };
 

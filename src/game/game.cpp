@@ -464,65 +464,6 @@ void Game::initGameState(Settings * setting)
           if(!quiet)
             cout << "   ...done\n";
         }
-        else if(id == "OBSTACLE" || id == "TREE" || id == "ROCK" || id == "BUSH" || id == "CRATE" || id =="WATER")
-        {
-          stringstream(args) >> x >> y;
-          if(x > width - 1 || x < 0 || y > height - 1 || y < 0)
-          {
-            if (!quiet)
-              printf("Invalid obstacle location: (%d, %d). Ranges: (0-%d, 0-%d)\n", x, y, width-1, height-1);
-          }
-          else
-          {
-            for(unsigned int i = 0; i < tankLocations.size(); i ++)
-            {
-              if((unsigned int) tankLocations[i].first == x && (unsigned int)tankLocations[i].second == y)
-              {
-                taken = true;
-                if (!quiet)
-                  printf("Invalid obstacle location: (%d, %d) aleady taken by tank\n", x, y);
-              }
-            }
-            if(!taken)
-            {
-              for(unsigned int i = 0; i < obstacleLocations.size(); i ++)
-              {
-                if((unsigned int)obstacleLocations[i].first == x && (unsigned int)obstacleLocations[i].second == y)
-                {
-                  taken = true;
-                  if (!quiet)
-                    printf("Invalid obstacle location: (%d, %d) aleady taken by object\n", x, y);
-                }
-              }
-            }
-
-            if(!taken && id == "TREE")
-            {
-              treeLocations.push_back(std::pair<int,int> (x, y));
-            }
-            else if(!taken && id == "ROCK")
-            {
-              rockLocations.push_back(std::pair<int,int> (x, y));
-            }
-            else if(!taken && id == "BUSH")
-            {
-              bushLocations.push_back(std::pair<int,int> (x, y));
-            }
-            else if(!taken && id == "CRATE")
-            {
-              specialLocations.push_back(std::pair<int,int> (x, y));
-            }
-            else if(!taken && id == "WATER")
-            {
-              waterLocations.push_back(std::pair<int,int> (x, y));
-            }
-            else
-            {
-              obstacleLocations.push_back(std::pair<int,int> (x, y));
-            }
-            taken = false;
-          }
-        }
         else if(id == "OBSTACLE_IMAGE")
         {
           if (!settings->showUI()){continue;}
@@ -688,15 +629,6 @@ void Game::initGameState(Settings * setting)
   if (!quiet)
     cout << "Finalizing game settings...\n";
 
-  /*
-  baseStats.tankHealth = settings->getAttrHealth();
-  baseStats.tankDamage = settings->getAttrDamage();
-  baseStats.tankAP = settings->getAttrAP();
-  baseStats.tankAmmo = settings->getAttrAmmo();
-  baseStats.tankRadar = settings->getAttrRadar();
-  baseStats.projRange = settings->getAttrRange();
-  settings->setAttributes(baseStats);
-  */
   baseStats = settings->getAttributes();
 
   startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, baseStats, height, width);
@@ -706,7 +638,7 @@ void Game::initGameState(Settings * setting)
   if (!quiet)
     cout << "   ...Done\n" << endl;
 
-// Add obstacles to the gamefield
+  // Add obstacles to the gamefield
   if (!quiet)
     cout << "Placing Obstacles...\n";
   for(auto o : obstacleLocations)

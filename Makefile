@@ -26,6 +26,7 @@ FILES += $(SRC_PATH)game/configParser.cpp
 FILES += $(SRC_PATH)game/Tournament.cpp
 #Map
 FILES += $(SRC_PATH)map/MapData.cpp
+FILES += $(SRC_PATH)map/Tile.cpp
 #Settings
 FILES += $(SRC_PATH)settings/Settings.cpp
 #UI
@@ -44,6 +45,7 @@ FILES += $(SRC_PATH)ui/TankDrawable.cpp
 FILES += $(SRC_PATH)utilities/textureLoader.cpp
 FILES += $(SRC_PATH)utilities/tankLoader.cpp
 FILES += $(SRC_PATH)utilities/gameTracker.cpp
+FILES += $(SRC_PATH)utilities/mapLoader.cpp
 #Tanks
 TANKS = $(SRC_PATH)tanks/SimpleAI.cpp
 TANKS += $(SRC_PATH)tanks/PongAI.cpp

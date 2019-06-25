@@ -41,6 +41,7 @@ GameField::GameField(int width, int height)
   std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
   std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
   fieldMap.initMap();
+  fieldMap.generateTileMap();
   displayCallback = NULL;
   if (settings->checkTracking()){
     tracker = new gameTracker();
@@ -60,6 +61,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
   fieldMap.map.resize(width * height);
   fieldMap.obstacleMap.resize(width * height);
   fieldMap.initMap();
+  fieldMap.generateTileMap();
   std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
   std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
   x_scalar = 4.0717 * pow(width, -1.031);
@@ -812,15 +814,16 @@ void GameField::checkObjectRegrowth(){
         addObstacle(t->gridx, t->gridy, 'T');
     }
   }
-  for(Obstacles* r : gameptr->rocks)
-  {
-    if(r->health <= 0)
-    {
-      r->regrow(gameTurn, actors);
-      if (r->health > 0)
-        addObstacle(r->gridx, r->gridy, 'R');
-    }
-  }
+  //Rocks don't regrow
+  //for(Obstacles* r : gameptr->rocks)
+  //{
+  //  if(r->health <= 0)
+  //  {
+  //    r->regrow(gameTurn, actors);
+  //    if (r->health > 0)
+  //      addObstacle(r->gridx, r->gridy, 'R');
+  //  }
+  //}
   //Currently bushes are non destructible but this will let them regrow when they do
   for(Obstacles* b : gameptr->bushes)
   {
@@ -845,6 +848,8 @@ void GameField::checkObjectRegrowth(){
 void GameField::nextTurn()
 {
   gameTurn++;
+  if (gameTurn >= 1)
+    fieldMap.printTileMap();
   if (tracker != nullptr)
     tracker->newTurn(gameTurn);
   direction atk;
@@ -1006,8 +1011,18 @@ void GameField::addActor(ActorInfo a)
  */
 void GameField::addObstacle(int x, int y, int type)
 {
+  std::string tType = "Empty";
   fieldMap.obstacleMap[x + fieldMap.width * y] = type;
   fieldMap.newMap[y][x] = type;
+  if (type == 'R')
+    tType = "Rock";
+  else if (type == 'T')
+    tType = "Tree";
+  else if (type == 'B')
+    tType = "Bush";
+  else if (type == 'W')
+    tType = "Water";
+  fieldMap.tileMap[y][x] = Tile(tType, x, y, 4, nullptr);
 }
 
 /**

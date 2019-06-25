@@ -53,6 +53,7 @@ void Settings::setGameMode(gameMode gm){ gMode = gm;}
 void Settings::setUI(bool s){showui = s;}
 void Settings::setQuietMode(bool q){modeQuiet = q;}
 void Settings::setTrackingMode(bool t){tracking = t;}
+void Settings::setMapName(std::string m){mapName = m;}
 
 void Settings::setAttrDamage(int damage){
   baseAttributes.tankDamage = checkSettingValue(0, 8, damage, "damage");
@@ -102,6 +103,7 @@ bool Settings::checkTracking(){return tracking;}
 
 std::string Settings::getResultsFile(){return resultsFile;}
 std::string Settings::getConfigFile(){return configFile;}
+std::string Settings::getMapName(){return mapName;}
 
 int Settings::checkSettingValue(int min, int max, int value, std::string param){
   if(value < min)

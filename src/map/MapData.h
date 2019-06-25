@@ -9,6 +9,8 @@
 #include <vector>
 #include <ostream>
 #include <algorithm>
+
+#include <map/Tile.h>
 /*******************************************************************//**
  * @author David Donahue
  *
@@ -18,7 +20,7 @@
  *
  *
  **********************************************************************/
-struct MapData
+class MapData
 {
     public:
         /** row-major-order list the ID's of anything on the tiles on the map (tanks, projectiles, and obstacles) */
@@ -29,6 +31,8 @@ struct MapData
         int width;  /*!< The width value of the map */
         int height; /*!< The height value of the map */
         int **newMap = nullptr; /*!< new two dimensional map */
+        std::vector<std::vector<Tile>> tileMap;
+
         MapData(int w, int h);
         MapData(const MapData &m);
         MapData();
@@ -36,6 +40,9 @@ struct MapData
         void clear();
         void initMap();
         void printNewMap();
+        void printTileMap();
+        void generateTileMap();
+        void clearTileMap();
 
     private:
         void printMap(std::vector<int> tMap); /*!< Print the specified map as a 2d ascii map */

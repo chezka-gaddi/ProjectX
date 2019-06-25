@@ -108,6 +108,43 @@ MapData::MapData(int w, int h) : width(w), height(h)
     std::fill(obstacleMap.begin(), obstacleMap.end(), false);
     createMapArray(newMap, w, h);
     clearMap(w, h);
+    generateTileMap();
+}
+
+/*****************//*
+ * Author: Jon McKee
+ * 
+ * This function resizes the tile map and then fills it with empty tiles.
+ *******************/
+void MapData::generateTileMap()
+{
+    int h = height;
+    int w = width;
+    if (h == 0 || w == 0){ //If either value is 0 we don't need a map
+        clearTileMap(); //Clear any old data
+        return;
+    }
+    tileMap.resize(h); 
+    for(int i = 0; i < (int) tileMap.size(); i++){
+        tileMap[i].resize(w);
+        for (int j = 0; j < (int) tileMap[i].size(); j++){
+            tileMap[i][j] = Tile("Empty", j, i, 0, nullptr); //default empty tiles
+        }
+    }
+}
+
+/*****************//*
+ * Author: Jon McKee
+ * 
+ * This function clears the tileMap
+ *******************/
+void MapData::clearTileMap()
+{
+    for(int i = 0; i < (int) tileMap.size(); i++){
+        for (int j = 0; j < (int) tileMap[i].size(); j++){
+            tileMap[i][j] = Tile("Empty", j, i, 0, nullptr); //default empty tiles
+        }
+    }
 }
 
 /*****************//*
@@ -210,6 +247,21 @@ void MapData::printNewMap(){
             for (int j=1; j <= width; j++){
                     std::cout << newMap[i][j] << " ";
                     if (j == width) 
+                            std::cout << "\n";
+            }
+    }
+    printf("Done.\n");
+}
+
+/****************//*
+ * @ author Jon McKee
+ * @ brief a printMap function to any specified map array as a 2d ascii map
+ ******************/
+void MapData::printTileMap(){
+    for (int i = 0; i < height; i++){
+            for (int j=0; j < width; j++){
+                    std::cout << tileMap[i][j] << " ";
+                    if (j == width - 1) 
                             std::cout << "\n";
             }
     }
