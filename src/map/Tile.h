@@ -10,15 +10,16 @@
 #include <ostream>
 
 struct Tile{
-    std::string type; //{Rock, Bush, Tree, Water, Tank, Projectile}
+    std::string type; //{Rock, Bush, Tree, Water, Crate, Tank, Projectile}
+    int id;
     int x;
     int y;
     int health;
     Tile * actor = nullptr;
 
     //constructor with initial values
-    Tile(std::string t="empty", int newx=0, int newy=0, int h=0, Tile * nactor=nullptr) 
-        : type(t), x(newx), y(newy), health(h), actor(nactor) {};
+    Tile(std::string t="empty", int newid=0, int newx=0, int newy=0, int h=0, Tile * nactor=nullptr) 
+        : type(t), id(newid), x(newx), y(newy), health(h), actor(nactor) {};
 };
 std::ostream & operator<<(std::ostream& os, const Tile& tile);
 #endif

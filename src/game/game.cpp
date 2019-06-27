@@ -45,7 +45,7 @@ Game::~Game()
 float Game::convertGLXCoordinate(int x)
 {
   float fscaler;
-  fscaler = x * (4.0717* pow(fieldx, -1.031));
+  fscaler = (x - 1) * (4.0717* pow(fieldx, -1.031));
   GLfloat x_gl = -1.75 + (fscaler);
   return x_gl;
 }
@@ -62,7 +62,7 @@ float Game::convertGLXCoordinate(int x)
  *******************************************************************************/
 float Game::convertGLYCoordinate(int y)
 {
-  float fscaler =  y * (3.1923* pow(fieldy, -1.08));
+  float fscaler =  (y - 1) * (3.1923* pow(fieldy, -1.08));
   GLfloat y_gl = 0.75 - (fscaler);
   return y_gl;
 }
@@ -274,15 +274,15 @@ void Game::initGameState(Settings * setting)
           width = 15;
           //cout << "wPad: " << wPad << endl;
         }
-        for(y=0; y < hPad; y++)
+        for(y=1; y <= hPad; y++)
         {
-          for(x = 0; x < width; x++)
+          for(x = 1; x <= width; x++)
           {
             obstacleLocations.push_back(std::pair<int, int> (x, y));
           }
         }
         //cout << "Y equals: " << y << endl;
-        while (y < height - hPad)
+        while (y <= height - hPad)
         {
           if(y == height/3){
             if (!quiet)
@@ -295,9 +295,9 @@ void Game::initGameState(Settings * setting)
               cout << "  Trimming bushes...\n";
           }
           getline(fin, configLine);
-          for(x = 0; x < width; x++)
+          for(x = 1; x <= width; x++)
           {
-            if(x >= configLine.size() + wPad)
+            if(x > configLine.size() + wPad)
             {
               obstacleLocations.push_back(std::pair<int,int> (x, y));
             }
@@ -307,7 +307,7 @@ void Game::initGameState(Settings * setting)
             }
             else
             {
-              switch(configLine[x-wPad])
+              switch(configLine[x-wPad-1])
               {
                 case 'B':
                 case 'b':
@@ -341,9 +341,9 @@ void Game::initGameState(Settings * setting)
           }
         y++;
         }
-        while(y < height)
+        while(y <= height)
         {
-          for(x = 0; x < width; x++)
+          for(x = 1; x <= width; x++)
           {
             obstacleLocations.push_back(std::pair<int, int> (x, y));
           }
@@ -383,8 +383,8 @@ void Game::initGameState(Settings * setting)
           
           if (!quiet)
             cout << "  finding spawn...";
-          i = args.find(' ', i+1);    //skip x
-          i = args.find(' ', i+1);    //skip y
+          i = args.find(' ', i+1); //skip x
+          i = args.find(' ', i+1); //skip y
 
           args = args.substr(i+1); //chop off already used info
           if (!quiet)
@@ -651,7 +651,6 @@ void Game::initGameState(Settings * setting)
         printf("(Obstacle) Spot %d, %d is being used for tank.\n", tank.first, tank.second);
       }
     }
-
     if(taken == false)
     {
       tankGame->addObstacle(o.first, o.second);

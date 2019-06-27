@@ -30,13 +30,13 @@ direction SimpleAI::move(const MapData &map, PositionData status)
       }
       printf("X: %d, Y: %d\n", status.game_x, status.game_y);*/
     }
-    for (int x = 0; x < map.width; ++x)
+    for (int x = 1; x <= map.width; ++x)
     {
-        for (int y = 0; y < map.height; ++y)
+        for (int y = 1; y <= map.height; ++y)
         {
-            //If an enemy is encountered closer than previously encountered
-            if ( map.map[x + y*map.width] > 0 &&
-                    map.map[x + y*map.width] != status.id &&
+            if ( map.tileMap[y][x].actor != nullptr &&
+                    map.tileMap[y][x].actor->id != status.id &&
+                    map.tileMap[y][x].actor->id != -status.id &&
                     calcDist(status.game_x, status.game_y, x, y) < min_dist &&
                     calcDist(status.game_x, status.game_y, x, y) > 1)
             {
@@ -46,9 +46,8 @@ direction SimpleAI::move(const MapData &map, PositionData status)
                 {
                     if (status.game_x > x)
                     {
-                        if(!map.obstacleMap[status.game_x - 1 + status.game_y * map.width] ||  //check for obstacle
-                                map.obstacleMap[status.game_x - 1 + status.game_y * map.width] == 'T' ||
-                                map.obstacleMap[status.game_x - 1 + status.game_y * map.width] == 'B' )
+                        //Safe to move
+                        if (map.tileMap[y_pos][x_pos - 1].type == "Empty" || map.tileMap[y_pos][x_pos - 1].type == "Tree" || map.tileMap[y_pos][x_pos - 1].type == "Bush")
                         {
                             ret = LEFT;
                         }
@@ -59,9 +58,8 @@ direction SimpleAI::move(const MapData &map, PositionData status)
                     }
                     else
                     {
-                        if(!map.obstacleMap[status.game_x + 1 + status.game_y * map.width] || //check for obstacle
-                                map.obstacleMap[status.game_x + 1 + status.game_y * map.width] == 'T' ||
-                                map.obstacleMap[status.game_x + 1 + status.game_y * map.width] == 'B' )
+                        //Safe to move
+                        if (map.tileMap[y_pos][x_pos + 1].type == "Empty" || map.tileMap[y_pos][x_pos + 1].type == "Tree" || map.tileMap[y_pos][x_pos + 1].type == "Bush")
                         {
                             ret = RIGHT;
                         }
@@ -76,9 +74,8 @@ direction SimpleAI::move(const MapData &map, PositionData status)
                 {
                     if (status.game_y > y)
                     {
-                        if(!map.obstacleMap[status.game_x + (status.game_y - 1)*map.width] || //check for obstacle
-                                map.obstacleMap[status.game_x + (status.game_y - 1)*map.width] == 'T' ||
-                                map.obstacleMap[status.game_x + (status.game_y - 1)*map.width] == 'B' )
+                        //Safe to move
+                        if (map.tileMap[y_pos - 1][x_pos].type == "Empty" || map.tileMap[y_pos - 1][x_pos].type == "Tree" || map.tileMap[y_pos - 1][x_pos].type == "Bush")
                         {
                             ret = UP;
                         }
@@ -89,9 +86,8 @@ direction SimpleAI::move(const MapData &map, PositionData status)
                     }
                     else
                     {
-                        if(!map.obstacleMap[status.game_x + (status.game_y + 1)*map.width] || //check for obstacle
-                                map.obstacleMap[status.game_x + (status.game_y + 1)*map.width] == 'T' ||
-                                map.obstacleMap[status.game_x + (status.game_y + 1)*map.width] == 'B' )
+                        //Safe to move
+                        if (map.tileMap[y_pos + 1][x_pos].type == "Empty" || map.tileMap[y_pos + 1][x_pos].type == "Tree" || map.tileMap[y_pos + 1][x_pos].type == "Bush")
                         {
                             ret = DOWN;
                         }
@@ -152,14 +148,17 @@ direction SimpleAI::attack(const MapData &map, PositionData status)
 {
     direction ret = STAY;
     int min_dist = map.width * map.height + 1; //Guaranteed to be greater than any real distance
-    for (int x = 0; x < map.width; ++x)
+    for (int x = 1; x <= map.width; ++x)
     {
-        for (int y = 0; y < map.height; ++y)
+        for (int y = 1; y <= map.height; ++y)
         {
             //If an enemy is encountered closer than previously encountered
-            if ( map.map[x + y*map.width] && //if there is an actor at X, Y
-                    map.map[x + y*map.width] != status.id && //And it is not you
-                    map.map[x + y*map.width] != -status.id && //And it is not your projectile
+            //if ( map.map[x + y*map.width] && //if there is an actor at X, Y
+            //        map.map[x + y*map.width] != status.id && //And it is not you
+            //        map.map[x + y*map.width] != -status.id && //And it is not your projectile
+            if ( map.tileMap[y][x].actor != nullptr && //if there is an actor at X, Y
+                    map.tileMap[y][x].actor->id != status.id && //And it is not you 
+                    map.tileMap[y][x].actor->id != -status.id && //And it is not your projectile
                     calcDist(status.game_x, status.game_y, x, y) < min_dist) //And it is the closest one
             {
                 if (x == status.game_x || y == status.game_y ||(

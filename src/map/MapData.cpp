@@ -106,8 +106,6 @@ MapData::MapData(int w, int h) : width(w), height(h)
     obstacleMap.resize(w * h);
     std::fill(map.begin(), map.end(), 0);
     std::fill(obstacleMap.begin(), obstacleMap.end(), false);
-    createMapArray(newMap, w, h);
-    clearMap(w, h);
     generateTileMap();
 }
 
@@ -118,8 +116,8 @@ MapData::MapData(int w, int h) : width(w), height(h)
  *******************/
 void MapData::generateTileMap()
 {
-    int h = height;
-    int w = width;
+    int h = height + 1; //Add 1 so we can use 1 based coordinate system
+    int w = width + 1;
     if (h == 0 || w == 0){ //If either value is 0 we don't need a map
         clearTileMap(); //Clear any old data
         return;
@@ -128,7 +126,7 @@ void MapData::generateTileMap()
     for(int i = 0; i < (int) tileMap.size(); i++){
         tileMap[i].resize(w);
         for (int j = 0; j < (int) tileMap[i].size(); j++){
-            tileMap[i][j] = Tile("Empty", j, i, 0, nullptr); //default empty tiles
+            tileMap[i][j] = Tile("Empty", 0, j, i, 0, nullptr); //default empty tiles
         }
     }
 }
@@ -142,7 +140,7 @@ void MapData::clearTileMap()
 {
     for(int i = 0; i < (int) tileMap.size(); i++){
         for (int j = 0; j < (int) tileMap[i].size(); j++){
-            tileMap[i][j] = Tile("Empty", j, i, 0, nullptr); //default empty tiles
+            tileMap[i][j] = Tile("Empty", 0, j, i, 0, nullptr); //default empty tiles
         }
     }
 }
@@ -157,17 +155,10 @@ MapData::MapData(const MapData &m)
 {
     this->width = m.width;
     this->height = m.height;
-    this->map = m.map;
+    //this->map = m.map;
     this->obstacleMap = m.obstacleMap;
     this->healthMap = m.healthMap;
-
-    initMap();
-
-    for (int i = 0; i <= m.height; i++){
-        for (int j = 0; j <= m.width; j++){
-            this->newMap[i][j] = m.newMap[i][j];
-        }
-    }
+    this->tileMap = m.tileMap;
 }
 
 /****************//*
@@ -177,51 +168,6 @@ MapData::MapData(const MapData &m)
  * Deconstructor to clear our dynamic map
  ******************/
 MapData::~MapData(){
-    if (newMap != nullptr){
-        deleteMapArray(newMap, height);
-    }
-}
-
-/****************//*
- * @ author Jon McKee
- * @ par Description:
- * 
- * Function for initializing or emptying a map to nothing
- ******************/
-void MapData::clearMap(int x, int y){
-    for (int i = 0; i <= y; i++){
-        for (int j = 0; j <= x; j++){
-            newMap[i][j] = 0;
-        }
-    }
-}
-
-/****************//*
- * @ author Jon McKee
- * @ par Description:
- * 
- * Function for clearing 2d array
- ******************/
-void MapData::clear(){
-    //If we dont have a map, don't clear it
-    if (newMap == nullptr)
-        return;
-    for (int i = 0; i <= height; i++){
-        for (int j = 0; j <= width; j++){
-            newMap[i][j] = 0;
-        }
-    }
-}
-
-/****************//*
- * @ author Jon McKee
- * @ par Description:
- * 
- * Function for initializing new map
- ******************/
-void MapData::initMap(){
-    createMapArray(newMap, width, height);
-    clear();
 }
 
 /****************//*
@@ -242,91 +188,15 @@ void MapData::printMap(std::vector<int> tMap){
  * @ author Jon McKee
  * @ brief a printMap function to any specified map array as a 2d ascii map
  ******************/
-void MapData::printNewMap(){
+void MapData::printTileMap(){
     for (int i = 1; i <= height; i++){
             for (int j=1; j <= width; j++){
-                    std::cout << newMap[i][j] << " ";
+                    std::cout << tileMap[i][j] << "  ";
                     if (j == width) 
-                            std::cout << "\n";
-            }
-    }
-    printf("Done.\n");
-}
-
-/****************//*
- * @ author Jon McKee
- * @ brief a printMap function to any specified map array as a 2d ascii map
- ******************/
-void MapData::printTileMap(){
-    for (int i = 0; i < height; i++){
-            for (int j=0; j < width; j++){
-                    std::cout << tileMap[i][j] << " ";
-                    if (j == width - 1) 
-                            std::cout << "\n";
+                        std::cout << "\n";
             }
     }
     printf("Done.\n");
 }
 
 MapData::MapData() {}
-
-
-
-/**************************************************************************//** 
- * @author Jonathan McKee
- * 
- * @par Description: 
- * This function allocates memory for our 2d map array using the number of columns
- * and rows passed into the function.  The pointer that is passed into the 
- * function is left pointing to the new array.  If an error occurs during the 
- * initial allocation the program will output an error message and error code 3.
- *
- * @param[in,out]   ptr - a pointer to our 2d array.
- * @param[in]   cols - The number of columns in our maze (X value).
- * @param[in]   rows - The number of rows in our maze (Y value).
- *
- * @returns 3 - Exits with code 3 if an error occurs allocating memory.
- *****************************************************************************/
-void MapData::createMapArray( int ** &ptr, int cols, int rows )
-{
-    int i;
-    cols++;rows++;
-    ptr = new ( std::nothrow ) int *[rows+1];
-    
-    if ( ptr == nullptr )
-    {
-        printf("ERROR: Error allocating memory for game map.");
-        exit ( 3 );
-    }
-    
-    for ( i = 0; i <= rows; i++ )
-    {
-        ptr[i] = new ( std::nothrow ) int [cols+1];
-        if ( ptr[i] == nullptr )
-        {
-            deleteMapArray( ptr, i );
-            return;
-        }
-    }
-}
-
-/**************************************************************************//** 
- * @author Jonathan McKee
- * 
- * @par Description: 
- * This function deallocates memory from our 2d map array using the number of rows
- * passed into the function.  The function steps through the array passed into
- * the function and deletes the pointers in each spot of the initial array.
- *
- * @param[in,out]   arrptr - a pointer to our 2d array that will be deleted.
- * @param[in]   rows - The number of rows in our array that needs to be removed.
- *****************************************************************************/
-void MapData::deleteMapArray( int **arrptr, int rows )
-{
-    int i;
-    for ( i = 0; i <= rows; i++ ) 
-    {
-        delete [] arrptr[i];
-    }
-    delete [] arrptr;
-}

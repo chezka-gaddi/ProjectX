@@ -30,7 +30,6 @@ class MapData
         std::vector<int> healthMap;
         int width;  /*!< The width value of the map */
         int height; /*!< The height value of the map */
-        int **newMap = nullptr; /*!< new two dimensional map */
         std::vector<std::vector<Tile>> tileMap;
 
         MapData(int w, int h);
@@ -39,16 +38,11 @@ class MapData
         ~MapData();
         void clear();
         void initMap();
-        void printNewMap();
         void printTileMap();
         void generateTileMap();
         void clearTileMap();
-
     private:
-        void printMap(std::vector<int> tMap); /*!< Print the specified map as a 2d ascii map */
-        void createMapArray(int ** &ptr, int x, int y);
-        void deleteMapArray(int **ptr, int y);
-        void clearMap(int x, int y);
+        void printMap(std::vector<int> tMap);
 };
 /* overload << to display to console */
 std::ostream & operator<<(std::ostream& os, const MapData& md);
