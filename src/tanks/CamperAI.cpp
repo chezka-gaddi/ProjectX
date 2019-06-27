@@ -26,25 +26,25 @@ direction CamperAI::move(const MapData &map, PositionData status)
        (corner == true))
         return retval;
     if(y_pos <= median && y_pos - 1 >= 0 
-                && (map.obstacleMap[x_pos + ((y_pos-1)*map.width)] == 0 || 
-                    map.obstacleMap[x_pos + ((y_pos-1)*map.width)] == 'T' ||
-                    map.obstacleMap[x_pos + ((y_pos-1)*map.width)] == 'B'))
+                && (map.tileMap[y_pos-1][x_pos].type == "Empty" || 
+                    map.tileMap[y_pos-1][x_pos].type == "Tree" ||
+                    map.tileMap[y_pos-1][x_pos].type == "Bush"))
         UP = true;
     if(y_pos > median && (y_pos + 1 <= map.height - 1)
-                && (map.obstacleMap[x_pos + ((y_pos+1)*map.width)] == 0 || 
-                map.obstacleMap[x_pos + ((y_pos+1)*map.width)] == 'T' ||
-                map.obstacleMap[x_pos + ((y_pos+1)*map.width)] == 'B'))
+                && (map.tileMap[y_pos+1][x_pos].type == "Empty" || 
+                map.tileMap[y_pos+1][x_pos].type == "Tree" ||
+                map.tileMap[y_pos+1][x_pos].type == "Bush"))
                         
         DOWN = true;
     if(x_pos > median2 && (x_pos + 1 <= map.width - 1)
-                && (map.obstacleMap[(x_pos + 1) + (y_pos*map.width)] == 0 || 
-                    map.obstacleMap[(x_pos + 1) + (y_pos*map.width)] == 'T' ||
-                    map.obstacleMap[(x_pos + 1) + (y_pos*map.width)] == 'B'))
+                && (map.tileMap[y_pos][x_pos+1].type == "Empty" || 
+                    map.tileMap[y_pos][x_pos+1].type == "Tree" ||
+                    map.tileMap[y_pos][x_pos+1].type == "Bush"))
         RIGHT = true;
     if(x_pos <= median2 && (x_pos - 1 >= 0)
-                && (map.obstacleMap[(x_pos - 1) + (y_pos*map.width)] == 0 || 
-                    map.obstacleMap[(x_pos - 1) + (y_pos*map.width)] == 'T' ||
-                    map.obstacleMap[(x_pos - 1) + (y_pos*map.width)] == 'B'))
+                && (map.tileMap[y_pos][x_pos-1].type == "Empty" || 
+                    map.tileMap[y_pos][x_pos-1].type == "Tree" ||
+                    map.tileMap[y_pos][x_pos-1].type == "Bush"))
         LEFT = true;
     
     if (!UP && !DOWN && !RIGHT && !LEFT){
