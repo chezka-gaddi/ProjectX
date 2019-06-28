@@ -263,7 +263,7 @@ void Game::initGameState(Settings * setting)
         //MapLoader
         settings->setMapName(args);
         MapData * mapLoader = loadMap(settings);
-        mapLoader->printTileMap();
+        //mapLoader->printTileMap(); //Test map loaded correctly
         height = mapLoader->height;
         width = mapLoader->width;
       //AI settings

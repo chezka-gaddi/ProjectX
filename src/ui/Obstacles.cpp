@@ -36,7 +36,7 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
       tex = ((rand() % 3) + 10);
       regrow_rate = 5;
     }else if( id == 2){ //It's a Bushes
-      health = 9999;
+      health = 1;
       tex = ((rand() % 4) + 20);
       regrow_rate = 2;
     }else if( id == 3){ //It's a Waters

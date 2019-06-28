@@ -334,7 +334,7 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
       break;
 
     case DOWNRIGHT:
-      if(a.y <= fieldMap.height && a.x <= fieldMap.width && (obstacleAt(a.x+1, a.y+1) != 1))
+      if(a.y < fieldMap.height && a.x < fieldMap.width && (obstacleAt(a.x+1, a.y+1) != 1))
       {
         yoff = 1;
         xoff = 1;

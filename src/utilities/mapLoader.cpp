@@ -1,7 +1,7 @@
 #include <utilities/mapLoader.h>
 
 MapData * loadMap(Settings * settings){
-    MapData * map = new MapData();
+    MapData * map;
     std::string key, args, fileLine, mapName = "maps/" + settings->getMapName();
     std::ifstream fin;
     fin.open(mapName);
@@ -28,7 +28,6 @@ MapData * loadMap(Settings * settings){
                 std::cout << "S t r e t c h i n g   t h e   m a p . . .  ";
             std::stringstream(args) >> width;
             width = settings->checkSettingValue(5, 50, width, "width");
-            map->width = width;
             if (!quiet)
                 std::cout << "...done.\n";
         }
@@ -38,11 +37,10 @@ MapData * loadMap(Settings * settings){
                 std::cout << "Elon\n    gati\n        ng t\n            he ma\n                p...  ";
             std::stringstream(args) >> height;
             height = settings->checkSettingValue(5, 21, height, "height");
-            map->height = height;
             if (!quiet)
                 std::cout << "\n                                                                   ...done.\n";
         }
-        else if(fileLine == "MAP")
+        else if(key == "MAP\r")
         {
             if (width == 0 || height ==0){
                 printf("ERROR: Problem with map file.  Width or Height not loaded before map section.");
@@ -50,7 +48,7 @@ MapData * loadMap(Settings * settings){
             }
             if (!quiet)
                     std::cout << "Building the map->..\n";
-            map->generateTileMap();
+            map = new MapData(width, height);
             if(height < 9)
             {
                 hPad = (9 - height) / 2;
@@ -69,6 +67,7 @@ MapData * loadMap(Settings * settings){
                 {
                     //obstacleLocations.push_back(std::pair<int, int> (x, y));
                     map->tileMap[y][x].type = "Hedgehog";
+                    map->tileMap[y][x].health = 0;
                 }
             }
             //cout << "Y equals: " << y << endl;
@@ -91,11 +90,13 @@ MapData * loadMap(Settings * settings){
                         {
                             //obstacleLocations.push_back(std::pair<int,int> (x, y));
                             map->tileMap[y][x].type = "Hedgehog";
+                            map->tileMap[y][x].health = 0;
                         }
                         else if(x < wPad)
                         {
                             //obstacleLocations.push_back(std::pair<int,int> (x, y));
                             map->tileMap[y][x].type = "Hedgehog";
+                            map->tileMap[y][x].health = 0;
                         }
                         else
                         {
@@ -105,26 +106,31 @@ MapData * loadMap(Settings * settings){
                             case 'b':
                                 //bushLocations.push_back(std::pair<int,int> (x, y));
                                 map->tileMap[y][x].type = "Bush";
+                                map->tileMap[y][x].health = 1;
                                 break;
                             case 'R':
                             case 'r':
                                 //rockLocations.push_back(std::pair<int,int> (x, y));
                                 map->tileMap[y][x].type = "Rock";
+                                map->tileMap[y][x].health = 4;
                                 break;
                             case 'T':
                             case 't':
                                 //treeLocations.push_back(std::pair<int,int> (x, y));
                                 map->tileMap[y][x].type = "Tree";
+                                map->tileMap[y][x].health = 2;
                                 break;
                             case 'W':
                             case 'w':
                                 //waterLocations.push_back(std::pair<int,int> (x, y));
                                 map->tileMap[y][x].type = "Water";
+                                map->tileMap[y][x].health = 0;
                                 break;
                             case 'C':
                             case 'c':
                                 //specialLocations.push_back(std::pair<int,int> (x, y));
                                 map->tileMap[y][x].type = "Crate";
+                                map->tileMap[y][x].health = 1;
                                 break;
                             case 'X':
                             case 'x':
@@ -133,6 +139,7 @@ MapData * loadMap(Settings * settings){
                             default:
                                 //obstacleLocations.push_back(std::pair<int, int> (x, y));
                                 map->tileMap[y][x].type = "Hedgehog";
+                                map->tileMap[y][x].health = 0;
                                 break;
                             }
                         }
@@ -145,6 +152,7 @@ MapData * loadMap(Settings * settings){
                 {
                     //obstacleLocations.push_back(std::pair<int, int> (x, y));
                     map->tileMap[y][x].type = "Hedgehog";
+                    map->tileMap[y][x].health = 0;
                 }
                 y++;
             }
