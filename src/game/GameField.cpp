@@ -93,6 +93,7 @@ int GameField::getHeight()
 
 /**
  * @author David Donahue
+ * @modifiedby Jon McKee
  * @par Description:
  * Update the map with the current postions of all actors
  */
@@ -113,6 +114,7 @@ void GameField::updateMap()
  * @brief
  * Prompts the actors to choose attributes to specialize int
  * @author Riley Kopp
+ * @modifiedby Jon McKee
  ******************************************************************************/
 void GameField::setSPECIAL(const attributes baseStats)
 {
