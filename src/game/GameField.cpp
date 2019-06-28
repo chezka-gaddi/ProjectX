@@ -907,18 +907,26 @@ void GameField::addActor(ActorInfo a)
  */
 void GameField::addObstacle(int x, int y, int type)
 {
+  int health = 0;
   std::string tType = "Empty";
-  if (type == 'R')
+  if (type == 'R'){
     tType = "Rock";
-  else if (type == 'T')
+    health = 4;
+  }else if (type == 'T'){
     tType = "Tree";
-  else if (type == 'B')
+    health = 2;
+  }else if (type == 'B'){
     tType = "Bush";
-  else if (type == 'W')
+    health = 1;
+  }else if (type == 'W'){
     tType = "Water";
-  else if (type == 'C')
+  }else if (type == 'C'){
     tType = "Crate";
-  fieldMap.tileMap[y][x] = Tile(tType, 0, x, y, 4, nullptr);
+    health = 1;
+  }else if (type == 'H'){
+    tType = "Hedgehog";
+  }
+  fieldMap.tileMap[y][x] = Tile(tType, health, x, y, 4, nullptr);
 }
 
 /**

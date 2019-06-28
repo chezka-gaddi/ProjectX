@@ -8,7 +8,7 @@
 
 #ifndef __MAPLOADER_H__
 #define __MAPLOADER_H__
-MapData loadMap(Settings settings);
+MapData * loadMap(Settings * settings);
 
 
 #endif

@@ -17,6 +17,7 @@
 #include <actors/Actor.h>
 #include <tanks/SimpleAI.h>
 #include <utilities/tankLoader.h>
+#include <utilities/mapLoader.h>
 #include <settings/Settings.h>
 #include <game/gameover.h>
 #include <game/configParser.h>

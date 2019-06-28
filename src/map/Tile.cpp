@@ -17,6 +17,8 @@ std::ostream & operator<<(std::ostream& os, const Tile& tile){
         os << "T";
     else if (tType == "Crate")
         os << "C";
+    else if (tType == "Hedgehog")
+        os << "H";
     else if (tType == "Tank" || sType == "Tank")
         os << "¤";
     else if (tType == "Projectile" || sType == "Projectile")

@@ -207,11 +207,9 @@ void Game::initGameState(Settings * setting)
   ifstream fin("config.txt");
 
   std::string configLine;
-  unsigned int x=0, y=0; //Temp Holders
   Obstacles* tempOb;
   Drawable *temp = nullptr;
   bool taken, done;
-
   //parseConfig(setting); //INI Config reader
 
   //Game Setting defaults
@@ -258,352 +256,244 @@ void Game::initGameState(Settings * setting)
     getline(fin, configLine);
     if(configLine[0] != '#') //Ignore comment lines
     {
-      if(configLine == "MAP")
+      unsigned i = configLine.find(' '); //index of first space
+      std::string id = configLine.substr(0, i); //separate the identefier from the argumets
+      std::string args = configLine.substr(i+1);
+      if (id == "MAPNAME"){
+        //MapLoader
+        settings->setMapName(args);
+        MapData * mapLoader = loadMap(settings);
+        mapLoader->printTileMap();
+        height = mapLoader->height;
+        width = mapLoader->width;
+      //AI settings
+      }else if(id == "AI")  //AI to load
       {
+        if(AINames.size() == 0)
+          if (!quiet)
+            cout << "Waking up the tank commanders...\n";
         if (!quiet)
-                cout << "Building the map...\n";
-        if(height < 9)
+          cout << "   Checking player " << AINames.size()+1 << "...";
+        int x, y;
+        i = args.find(' ');
+        AINames.push_back(args.substr(0, i));
+        std::stringstream(args.substr(i+1)) >> x >> y;
+        //printf("\nTank at: Actual: %d, %d Modified: %d, %d.\n",x, y, x+wPad,y+hPad);
+        tankLocations.push_back(std::pair<int,int>(x+wPad,y+hPad));
+        for(unsigned int x=0; x < tankLocations.size(); x++)
         {
-          hPad = (9 - height) / 2;
-          height = 9;
-          //cout << "hPad: " << hPad << endl;
-        }
-        if(width < 15)
-        {
-          wPad = (15 - width) / 2;
-          width = 15;
-          //cout << "wPad: " << wPad << endl;
-        }
-        for(y=1; y <= hPad; y++)
-        {
-          for(x = 1; x <= width; x++)
+          for(unsigned int y = x + 1; y < tankLocations.size(); y++)
           {
-            obstacleLocations.push_back(std::pair<int, int> (x, y));
-          }
-        }
-        //cout << "Y equals: " << y << endl;
-        while (y <= height - hPad)
-        {
-          if(y == height/3){
-            if (!quiet)
-              cout << "  Planting trees...\n";
-          }else if(y == height/3*2){
-            if (!quiet)
-              cout << "  Moving rocks...\n";
-          }else if(y == height-1){
-            if (!quiet)
-              cout << "  Trimming bushes...\n";
-          }
-          getline(fin, configLine);
-          for(x = 1; x <= width; x++)
-          {
-            if(x > configLine.size() + wPad)
+            if(tankLocations.at(x) == tankLocations.at(y))
             {
-              obstacleLocations.push_back(std::pair<int,int> (x, y));
-            }
-            else if(x < wPad)
-            {
-              obstacleLocations.push_back(std::pair<int,int> (x, y));
-            }
-            else
-            {
-              switch(configLine[x-wPad-1])
-              {
-                case 'B':
-                case 'b':
-                  bushLocations.push_back(std::pair<int,int> (x, y));
-                  break;
-                case 'R':
-                case 'r':
-                  rockLocations.push_back(std::pair<int,int> (x, y));
-                  break;
-                case 'T':
-                case 't':
-                  treeLocations.push_back(std::pair<int,int> (x, y));
-                  break;
-                case 'W':
-                case 'w':
-                  waterLocations.push_back(std::pair<int,int> (x, y));
-                  break;
-                case 'C':
-                case 'c':
-                  specialLocations.push_back(std::pair<int,int> (x, y));
-                  break;
-                case 'X':
-                case 'x':
-                case ' ':
-                  break;
-                default:
-                  obstacleLocations.push_back(std::pair<int, int> (x, y));
-                  break;
-              }
+              cout << "Tanks cannot spawn on the same tile!" << endl;
+              continue;
             }
           }
-        y++;
         }
-        while(y <= height)
+        
+        if (!quiet)
+          cout << "  finding spawn...";
+        i = args.find(' ', i+1); //skip x
+        i = args.find(' ', i+1); //skip y
+
+        args = args.substr(i+1); //chop off already used info
+        if (!quiet)
+          cout << "  colorizing tank...";
+        i = args.find(' '); // find end of current item
+        
+        //Get our trunk image directory
+        if (args.substr(0,i) == AINames.back())
+          imgPath = "images/Default";
+        else
+          imgPath = args.substr(0, i);
+
+        //printf("imgPath: %s\n", imgPath.c_str());
+        AIImages.push_back(imgPath + "/base.png");
+        AIImages.push_back(imgPath + "/turret.png");
+        AIImages.push_back(imgPath + "/tankD.png");
+        AIImages.push_back(imgPath + "/tankL.png");
+        AIImages.push_back(imgPath + "/bullet.png");
+        
+        tankImages.insert(std::end(tankImages), std::begin(AIImages), std::end(AIImages));
+        
+        AIImages.clear();
+        if (!quiet)
+          cout << "  ...done.\n";
+      }
+      else if(id == "AI_SPEED")
+      {
+        stringstream(args) >> ai_speed;
+        settings->setIdleSpeed(ai_speed);
+      }
+      else if(id == "ANIMATION_SPEED")
+      {
+        stringstream(args) >> aniSpeed;
+        settings->setAniFrames(aniSpeed);
+      }
+      else if(id == "TANK_SPEED")
+      {
+        stringstream(args) >> tank_speed;
+        settings->setTankSpeed(tank_speed);
+      }
+      else if(id == "BULLET_SPEED")
+      {
+        stringstream(args) >> bullet_speed;
+        settings->setBulletSpeed(bullet_speed);
+      }
+      else if(id == "MAXTURNS")
+      {
+        stringstream(args) >> maxT;
+        settings->setMaxTurns(maxT);
+      }
+      else if(id == "FIELDIMAGE")
+      {
+        if (!settings->showUI()){continue;}
+        if (!quiet)
+          cout << "Painting the background...\n";
+        stringstream(args) >> name;
+        gameImages.push_back(name);
+        if(!quiet)
+          cout << "   ...done\n";
+      }
+      else if(id == "OBSTACLE_IMAGE")
+      {
+        if (!settings->showUI()){continue;}
+        done = false;
+        while(!done)
         {
-          for(x = 1; x <= width; x++)
+          if(args.find(' ') == string::npos)
           {
-            obstacleLocations.push_back(std::pair<int, int> (x, y));
+            done = true;
+            gameImages.push_back(args);
           }
-          y++;
+          else
+          {
+            i = args.find(' ');
+            gameImages.push_back(args.substr(0, i));
+            args = args.substr(i + 1);
+          }
         }
       }
-      else
+      else if(id == "TREE_IMAGE")
       {
-        unsigned i = configLine.find(' '); //index of first space
-        std::string id = configLine.substr(0, i); //separate the identefier from the argumets
-        std::string args = configLine.substr(i+1);
-        //AI settings
-        if(id == "AI")  //AI to load
+        if (!settings->showUI()){continue;}
+        done = false;
+        while(!done)
         {
-          if(AINames.size() == 0)
-            if (!quiet)
-              cout << "Waking up the tank commanders...\n";
-          if (!quiet)
-            cout << "   Checking player " << AINames.size()+1 << "...";
-          int x, y;
-          i = args.find(' ');
-          AINames.push_back(args.substr(0, i));
-          std::stringstream(args.substr(i+1)) >> x >> y;
-          //printf("\nTank at: Actual: %d, %d Modified: %d, %d.\n",x, y, x+wPad,y+hPad);
-          tankLocations.push_back(std::pair<int,int>(x+wPad,y+hPad));
-          for(unsigned int x=0; x < tankLocations.size(); x++)
+          if(args.find(' ') == string::npos)
           {
-            for(unsigned int y = x + 1; y < tankLocations.size(); y++)
-            {
-              if(tankLocations.at(x) == tankLocations.at(y))
-              {
-                cout << "Tanks cannot spawn on the same tile!" << endl;
-                continue;
-              }
-            }
+            done = true;
+            treeImages.push_back(args);
           }
-          
-          if (!quiet)
-            cout << "  finding spawn...";
-          i = args.find(' ', i+1); //skip x
-          i = args.find(' ', i+1); //skip y
-
-          args = args.substr(i+1); //chop off already used info
-          if (!quiet)
-            cout << "  colorizing tank...";
-          i = args.find(' '); // find end of current item
-          
-          //Get our trunk image directory
-          if (args.substr(0,i) == AINames.back())
-            imgPath = "images/Default";
           else
-            imgPath = args.substr(0, i);
-
-          //printf("imgPath: %s\n", imgPath.c_str());
-          AIImages.push_back(imgPath + "/tankU.png");
-          AIImages.push_back(imgPath + "/tankR.png");
-          AIImages.push_back(imgPath + "/tankD.png");
-          AIImages.push_back(imgPath + "/tankL.png");
-          AIImages.push_back(imgPath + "/bullet.png");
-          
-          tankImages.insert(std::end(tankImages), std::begin(AIImages), std::end(AIImages));
-          
-          AIImages.clear();
-          if (!quiet)
-            cout << "  ...done.\n";
-        }
-        else if(id == "AI_SPEED")
-        {
-          stringstream(args) >> ai_speed;
-          settings->setIdleSpeed(ai_speed);
-        }
-        else if(id == "ANIMATION_SPEED")
-        {
-          stringstream(args) >> aniSpeed;
-          settings->setAniFrames(aniSpeed);
-        }
-        else if(id == "TANK_SPEED")
-        {
-          stringstream(args) >> tank_speed;
-          settings->setTankSpeed(tank_speed);
-        }
-        else if(id == "BULLET_SPEED")
-        {
-          stringstream(args) >> bullet_speed;
-          settings->setBulletSpeed(bullet_speed);
-        }
-        //field params
-        else if(id == "WIDTH")
-        {
-          if (!quiet)
-            cout << "S t r e t c h i n g   t h e   m a p . . .  ";
-          stringstream(args) >> width;
-          width = settings->checkSettingValue(5, 50, width, "width");
-          if (!quiet)
-            cout << "...done.\n";
-        }
-        else if(id == "HEIGHT")
-        {
-          if (!quiet)
-            cout << "Elon\n    gati\n        ng t\n            he ma\n                p...  ";
-          stringstream(args) >> height;
-          height = settings->checkSettingValue(5, 21, height, "height");
-          if (!quiet)
-            cout << "\n                                                                   ...done.\n";
-        }
-        else if(id == "MAXTURNS")
-        {
-          stringstream(args) >> maxT;
-          settings->setMaxTurns(maxT);
-        }
-        else if(id == "FIELDIMAGE")
-        {
-          if (!settings->showUI()){continue;}
-          if (!quiet)
-            cout << "Painting the background...\n";
-          stringstream(args) >> name;
-          gameImages.push_back(name);
-          if(!quiet)
-            cout << "   ...done\n";
-        }
-        else if(id == "OBSTACLE_IMAGE")
-        {
-          if (!settings->showUI()){continue;}
-          done = false;
-          while(!done)
           {
-            if(args.find(' ') == string::npos)
-            {
-              done = true;
-              gameImages.push_back(args);
-            }
-            else
-            {
-              i = args.find(' ');
-              gameImages.push_back(args.substr(0, i));
-              args = args.substr(i + 1);
-            }
+            i = args.find(' ');
+            treeImages.push_back(args.substr(0, i));
+            args = args.substr(i + 1);
           }
         }
-        else if(id == "TREE_IMAGE")
+      }
+      else if(id == "ROCK_IMAGE")
+      {
+        if (!settings->showUI()){continue;}
+        done = false;
+        while(!done)
         {
-          if (!settings->showUI()){continue;}
-          done = false;
-          while(!done)
+          if(args.find(' ') == string::npos)
           {
-            if(args.find(' ') == string::npos)
-            {
-              done = true;
-              treeImages.push_back(args);
-            }
-            else
-            {
-              i = args.find(' ');
-              treeImages.push_back(args.substr(0, i));
-              args = args.substr(i + 1);
-            }
+            done = true;
+            rockImages.push_back(args);
           }
-        }
-        else if(id == "ROCK_IMAGE")
-        {
-          if (!settings->showUI()){continue;}
-          done = false;
-          while(!done)
+          else
           {
-            if(args.find(' ') == string::npos)
-            {
-              done = true;
-              rockImages.push_back(args);
-            }
-            else
-            {
-              i = args.find(' ');
-              rockImages.push_back(args.substr(0, i));
-              args = args.substr(i + 1);
-            }
-
+            i = args.find(' ');
+            rockImages.push_back(args.substr(0, i));
+            args = args.substr(i + 1);
           }
+
         }
-        else if(id == "WATER_IMAGE")
+      }
+      else if(id == "WATER_IMAGE")
+      {
+        if (!settings->showUI()){continue;}
+        done = false;
+        while(!done)
         {
-          if (!settings->showUI()){continue;}
-          done = false;
-          while(!done)
+          if(args.find(' ') == string::npos)
           {
-            if(args.find(' ') == string::npos)
-            {
-              done = true;
-              waterImages.push_back(args);
-            }
-            else
-            {
-              i = args.find(' ');
-              waterImages.push_back(args.substr(0, i));
-              args = args.substr(i + 1);
-            }
-
+            done = true;
+            waterImages.push_back(args);
           }
-        }
-        else if(id == "BUSH_IMAGE")
-        {
-          if (!settings->showUI()){continue;}
-          done = false;
-          while(!done)
+          else
           {
-            if(args.find(' ') == string::npos)
-            {
-              done = true;
-              bushImages.push_back(args);
-            }
-            else
-            {
-              i = args.find(' ');
-              bushImages.push_back(args.substr(0, i));
-              args = args.substr(i + 1);
-            }
-
+            i = args.find(' ');
+            waterImages.push_back(args.substr(0, i));
+            args = args.substr(i + 1);
           }
-        }
-        //Tank params
-        else if(id == "DAMAGE")
-        {
-          stringstream(args) >> damage;
-          settings->setAttrDamage(damage);
-        }
-        else if(id == "HEALTH")
-        {
-          stringstream(args) >> health;
-          settings->setAttrHealth(health);
-        }
-        else if(id == "AP")
-        {
-          stringstream(args) >> ap;
-          settings->setAttrAP(ap);
-        }
-        else if(id == "RADAR")
-        {
-          stringstream(args) >> radar;
-          settings->setAttrRadar(radar, width);
-        }
-        else if(id == "RANGE")
-        {
-          stringstream(args) >> range;
-          settings->setAttrRange(range);
-        }
-        else if(id == "SPECIAL")
-        {
-          stringstream(args) >> attributePoints;
-          settings->setAttrSpecial(attributePoints);
-        }
-        else if(id == "AMMO")
-        {
-          stringstream(args) >> ammo;
-          settings->setAttrAmmo(ammo);
-        }
-        else if(id != "")
-        {
-          if (!quiet)
-            std::cout << "BAD ARGUMENT: " << id << '\n';
-        }
 
+        }
+      }
+      else if(id == "BUSH_IMAGE")
+      {
+        if (!settings->showUI()){continue;}
+        done = false;
+        while(!done)
+        {
+          if(args.find(' ') == string::npos)
+          {
+            done = true;
+            bushImages.push_back(args);
+          }
+          else
+          {
+            i = args.find(' ');
+            bushImages.push_back(args.substr(0, i));
+            args = args.substr(i + 1);
+          }
+
+        }
+      }
+      //Tank params
+      else if(id == "DAMAGE")
+      {
+        stringstream(args) >> damage;
+        settings->setAttrDamage(damage);
+      }
+      else if(id == "HEALTH")
+      {
+        stringstream(args) >> health;
+        settings->setAttrHealth(health);
+      }
+      else if(id == "AP")
+      {
+        stringstream(args) >> ap;
+        settings->setAttrAP(ap);
+      }
+      else if(id == "RADAR")
+      {
+        stringstream(args) >> radar;
+        settings->setAttrRadar(radar, width);
+      }
+      else if(id == "RANGE")
+      {
+        stringstream(args) >> range;
+        settings->setAttrRange(range);
+      }
+      else if(id == "SPECIAL")
+      {
+        stringstream(args) >> attributePoints;
+        settings->setAttrSpecial(attributePoints);
+      }
+      else if(id == "AMMO")
+      {
+        stringstream(args) >> ammo;
+        settings->setAttrAmmo(ammo);
+      }
+      else if(id != "")
+      {
+        if (!quiet)
+          std::cout << "BAD ARGUMENT: " << id << '\n';
       }
     }
   }
@@ -757,10 +647,10 @@ std::vector<ActorInfo> Game::loadPlayers(bool quiet, std::vector<std::pair<int,i
     cout << "Creating Player Tanks...\n";
   for(unsigned int i = 0; i < startActorPointers.size(); ++i)
   {
-    if ( tankLocations[i].first < width &&
-         tankLocations[i].first >= 0 &&
-         tankLocations[i].second < height &&
-         tankLocations[i].second >= 0){
+    if ( tankLocations[i].first <= width &&
+         tankLocations[i].first >= 1 &&
+         tankLocations[i].second <= height &&
+         tankLocations[i].second >= 1){
          actors.push_back(ActorInfo(startActorPointers[i]
                                     , baseAttr.tankHealth
                                     , baseAttr.tankDamage
@@ -775,8 +665,7 @@ std::vector<ActorInfo> Game::loadPlayers(bool quiet, std::vector<std::pair<int,i
                                     , AINames[i]));
     //printf("Actor %d name: %s\n", i, AINames[i].c_str());
     }else{
-      if (!quiet)
-        cout << "Invalid location for " << AINames[i] << endl;
+      cout << "WARNING: Invalid location for " << AINames[i] << " (" << tankLocations[i].first << "," << tankLocations[i].second << ")" << endl;
     }
   }
   return actors;

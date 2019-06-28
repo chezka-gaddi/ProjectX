@@ -1,20 +1,5 @@
-WIDTH 30
-HEIGHT 14
-MAP
-xRxxxxxxRRRRRRxxxxxxxxRRRRRRxx
-TxxxxxxTWWRRWWTxxxxxxTWWRRWWTx
-xxxxxxTTTBTTTBTTxxxxTTTBTTTBTT
-xxxccxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxB
-xxxxTxxxxxTxxxxxTxxxxxTxxxxBBT
-xxTTBTTxTTBTTxTTBTTxTTBTTxxTTB
-xxRxRxRxxxRxRxRxRxRxxxRxRxxRxR
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxRxxxxxRxxxWWRxxxxxxxx
-xxTTTxxxTTTxxxTTTWWWTTTxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+#MAPNAME default.map
+MAPNAME default.map
 
 #AI LIST: AI <NAME> <STARTX> <STARTY> <UPIMAGE> <RIGHTIMAGE> <DOWNIMAGE> <LEFTIMAGE> <BULLETIMAGE>
 AI SimpleAI 1 1
