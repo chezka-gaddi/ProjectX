@@ -210,6 +210,7 @@ void Game::initGameState(Settings * setting)
   Obstacles* tempOb;
   Drawable *temp = nullptr;
   bool taken, done;
+  int tex = 50;
   //parseConfig(setting); //INI Config reader
 
   //Game Setting defaults
@@ -530,100 +531,41 @@ void Game::initGameState(Settings * setting)
 
   // Add obstacles to the gamefield
   if (!quiet)
-    cout << "Placing Obstacles...\n";
-  for(auto o : obstacleLocations)
+    cout << "Clearing spawn points...\n";
+  for(auto tank : tankLocations)
   {
     taken = false;
-    for(auto tank : tankLocations)
+    if (mapLoader.tileMap[tank.y][tank.x].type == "Rock"
+      || mapLoader.tileMap[tank.y][tank.x].type == "Water"
+      || mapLoader.tileMap[tank.y][tank.x].type == "Hedgehog")
     {
-      if(tank.first == o.first && tank.second == o.second){
-        taken = true;
-        printf("(Obstacle) Spot %d, %d is being used for tank.\n", tank.first, tank.second);
-      }
-    }
-    if(taken == false)
-    {
-      tankGame->addObstacle(o.first, o.second);
-      tempOb = new Obstacles(50, convertGLXCoordinate(o.first), convertGLYCoordinate(o.second), o.first, o.second);
-      constants.push_back(tempOb);
+      if (!quiet)
+        cout << "WARNING: removing object at (" << tank.x << "," << tank.y << ")\n";
+      mapLoader.tileMap[tank.y][tank.x].type = "Empty";
+      mapLoader.tileMap[tank.y][tank.x].health = 0;
     }
   }
-  if (!quiet)
-    cout << "  ...hiding the ammo\n";
-  for(auto c : specialLocations)
-  {
-    taken = false;
-    for(auto tank : tankLocations)
-    {
-      if(tank.first == c.first && tank.second == c.second){
-        taken = true;
-        printf("(Special Objects) Spot %d, %d is being used for tank.\n", tank.first, tank.second);
+  for (int i = 1; i <= height; i++){
+    for (int j=1; j <= width; j++){
+      if(mapLoader.tileMap[i][j].type != "Empty")
+      {
+        if(tType == "Rock")
+            tex = 1;
+        else if (tType == "Water")
+            tex = 3;
+        else if (tType == "Bush")
+            tex = 2;
+        else if (tType == "Tree")
+            tex = 1;
+        else if (tType == "Crate")
+            os << "C";
+        else if (tType == "Hedgehog")
+            tex = 50;
+        tempOb = new Obstacles(tex, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+        constants.push_back(tempOb);
       }
-    }
+  }
 
-    if(taken == false)
-    {
-    tankGame->addObstacle(c.first, c.second, 'C');
-    temp = new Crate(convertGLXCoordinate(c.first), convertGLYCoordinate(c.second), c.first, c.second);
-    specials.push_back(temp);
-    }
-  }
-  if (!quiet)
-    cout << "  ...letting the trees grow\n";
-  for(auto t : treeLocations)
-  {
-    tankGame->addObstacle(t.first, t.second, 'T');
-    tempOb = new Obstacles(0, convertGLXCoordinate(t.first), convertGLYCoordinate(t.second), t.first, t.second);
-    trees.push_back(tempOb);
-  }
-  if (!quiet)
-    cout << "  ...petting the rocks\n";
-  for(auto r : rockLocations)
-  {
-    taken = false;
-    for(auto tank : tankLocations)
-    {
-      if(tank.first == r.first && tank.second == r.second){
-        taken = true;
-        printf("(Rock) Spot %d, %d is being used for tank.\n", tank.first, tank.second);
-      }
-    }
-
-    if(taken == false)
-    {
-    tankGame->addObstacle(r.first, r.second, 'R'); //No driving over rocks
-    tempOb = new Obstacles(1, convertGLXCoordinate(r.first), convertGLYCoordinate(r.second), r.first, r.second);
-    rocks.push_back(tempOb);
-    }
-  }
-  if (!quiet)
-    cout << "  ...finding some shrubberies\n";
-  for(auto b : bushLocations)
-  {
-    tankGame->addObstacle(b.first, b.second, 'B');
-    tempOb = new Obstacles(2, convertGLXCoordinate(b.first), convertGLYCoordinate(b.second), b.first, b.second);
-    bushes.push_back(tempOb);
-  }
-  if (!quiet)
-    cout << "  ...drilling for moisture\n";
-  for(auto w : waterLocations)
-  {
-    taken = false;
-    for(auto tank : tankLocations)
-    {
-      if(tank.first == w.first && tank.second == w.second){
-        taken = true;
-      printf("(Water) Spot %d, %d is being used for tank.\n", tank.first, tank.second);
-      }
-    }
-
-    if(taken == false)
-    {
-    tankGame->addObstacle(w.first, w.second, 'W');
-    temp = new Obstacles(3, convertGLXCoordinate(w.first), convertGLYCoordinate(w.second), w.first, w.second);
-    waters.push_back(temp);
-    }
-  }
   if (!quiet)
     cout << "...done.\n" << endl;
   if (settings->checkCoverage()){
