@@ -44,20 +44,14 @@ public:
     Game(gameMode mode);
     ~Game();
 
-    void makeDrawables();
     void executeTurn();
     void initGameState(Settings * setting);
     void closeDown();
     void earlyOut();
-    void createConfig();
     float convertGLXCoordinate( int );
     float convertGLYCoordinate( int );
-    //void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner);
     void noGUIGame();
     bool checkMaxTurn();
-
-    int getX(){return fieldx;};
-    int getY(){return fieldy;};
 
     std::vector<ActorInfo> loadPlayers(bool, std::vector<std::pair<int,int>>, std::vector<std::string>, std::vector<Actor*>, attributes, int, int);
 

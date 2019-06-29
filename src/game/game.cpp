@@ -45,7 +45,7 @@ Game::~Game()
 float Game::convertGLXCoordinate(int x)
 {
   float fscaler;
-  fscaler = (x - 1) * (4.0717* pow(fieldx, -1.031));
+  fscaler = (x - 1) * (4.0717* pow(tankGame->fieldMap->width, -1.031));
   GLfloat x_gl = -1.75 + (fscaler);
   return x_gl;
 }
@@ -62,7 +62,7 @@ float Game::convertGLXCoordinate(int x)
  *******************************************************************************/
 float Game::convertGLYCoordinate(int y)
 {
-  float fscaler =  (y - 1) * (3.1923* pow(fieldy, -1.08));
+  float fscaler =  (y - 1) * (3.1923* pow(tankGame->fieldMap->height, -1.08));
   GLfloat y_gl = 0.75 - (fscaler);
   return y_gl;
 }
@@ -82,7 +82,7 @@ static bool isplayable(const std::vector<ActorInfo> &actorInfo)
   int tankCount = 0;
 
   for(auto a : actorInfo)
-    tankCount += (a.id > 0) ? 1 : 0;
+    tankCount += (a.id > 0 && a.health) ? 1 : 0;
   return (tankCount > 1);
 }
 
@@ -202,26 +202,19 @@ void Game::initGameState(Settings * setting)
 {
   settings = setting;
   bool quiet = settings->checkQuiet();
-  if(!quiet)
-    std::cout << "Game::Loading config.txt\n";
-  ifstream fin("config.txt");
 
   std::string configLine, tType, name, imgPath;
   Obstacles* tempOb;
   Drawable* tempObj = nullptr;
-  bool done;
-  int hPad = 0, wPad=0;
-
-  //Default Tank Images
-  attributes baseStats;
-
+  int x, y, hPad = 0, wPad=0;
+  int pCount = 1;
+  std::vector<ActorInfo> startActors;
   //Location vectors
-  std::vector<std::pair<int,int>> obstacleLocations, treeLocations, rockLocations, bushLocations,
-      tankLocations, waterLocations, specialLocations;
+  std::vector<std::pair<int,int>> tankLocations;
 
   //Image vectors for custom images
   std::vector<std::string> tankImages, gameImages, treeImages, rockImages, bushImages,
-      waterImages, AIImages, AINames;
+      waterImages, tImages, AINames;
 
   ofstream fout;
   MapData * mapLoader = nullptr;
@@ -232,14 +225,60 @@ void Game::initGameState(Settings * setting)
   // Load game field
   constants.push_back(new GameFieldDrawable);
 
-  //Check if we had a config file we could read.
-  if(!fin)
-  {
-    createConfig();
-  }
-
   mapLoader = parseConfig(setting); //INI Config reader
   //mapLoader->printTileMap(); //Test map loaded correctly
+
+  //Load images from config.ini
+  if (settings->showUI()){
+    gameImages = parseList(settings, "IMAGES", "fieldimage");
+    bushImages = parseList(settings, "IMAGES", "bush");
+    treeImages = parseList(settings, "IMAGES", "tree");
+    rockImages = parseList(settings, "IMAGES", "rock");
+    waterImages = parseList(settings, "IMAGES", "water");
+    tImages = parseList(settings, "IMAGES", "obstacle");
+    gameImages.insert(std::end(gameImages), std::begin(tImages), std::end(tImages));
+  }
+
+  //Get Player Count and Player Names
+  name = parseAI(settings, "AI1", "name");
+  while(name != ""){
+    AINames.push_back(name);
+    pCount++;
+    name = parseAI(settings, "AI" + std::to_string(pCount), "name");
+  }
+  pCount--;
+  
+  //Process remaining parts of AI (X, Y, Images)
+  for (int i = 1; i <= pCount; i++){
+    x = std::stoi(parseAI(settings, "AI" + std::to_string(i), "x"));
+    y = std::stoi(parseAI(settings, "AI" + std::to_string(i), "y"));
+    tankLocations.push_back(std::pair<int,int>(x+wPad,y+hPad));
+
+    name = parseAI(settings, "AI" + std::to_string(i), "images");
+    if (name == ""){
+      imgPath = "images/tanks/Default";
+      tankImages.push_back(imgPath + "/base.png");
+      tankImages.push_back(imgPath + "/turret.png");
+      tankImages.push_back(imgPath + "/bullet.png");
+    }else{
+      tankImages.push_back(name + "/base.png");
+      tankImages.push_back(name + "/turret.png");
+      tankImages.push_back(name + "/bullet.png");
+    }
+  }
+
+  //Check player locations
+  for(unsigned int x=0; x < tankLocations.size(); x++)
+  {
+    for(unsigned int y = x + 1; y < tankLocations.size(); y++)
+    {
+      if(tankLocations.at(x) == tankLocations.at(y))
+      {
+        cout << "Tanks cannot spawn on the same tile!" << endl;
+        continue;
+      }
+    }
+  }
 
   //Try and create output file
   fout.open(settings->getResultsFile(), ios::out | ios::in | ios::app);
@@ -248,194 +287,17 @@ void Game::initGameState(Settings * setting)
   {
     printf("WARNING: Unable to open results file (%s).  Game will play but results will not be saved.\n", settings->getResultsFile().c_str());
   }
-  while(!fin.eof())
-  {
-    getline(fin, configLine);
-    if(configLine[0] != '#') //Ignore comment lines
-    {
-      unsigned i = configLine.find(' '); //index of first space
-      std::string id = configLine.substr(0, i); //separate the identefier from the argumets
-      std::string args = configLine.substr(i+1);
-      if (id == "MAPNAME"){
-        //MapLoader
-        //settings->setMapName(args);
-      //AI settings
-      }else if(id == "AI")  //AI to load
-      {
-        if(AINames.size() == 0)
-          if (!quiet)
-            cout << "Waking up the tank commanders...\n";
-        if (!quiet)
-          cout << "   Checking player " << AINames.size()+1 << "...";
-        int x, y;
-        i = args.find(' ');
-        AINames.push_back(args.substr(0, i));
-        std::stringstream(args.substr(i+1)) >> x >> y;
-        //printf("\nTank at: Actual: %d, %d Modified: %d, %d.\n",x, y, x+wPad,y+hPad);
-        tankLocations.push_back(std::pair<int,int>(x+wPad,y+hPad));
-        for(unsigned int x=0; x < tankLocations.size(); x++)
-        {
-          for(unsigned int y = x + 1; y < tankLocations.size(); y++)
-          {
-            if(tankLocations.at(x) == tankLocations.at(y))
-            {
-              cout << "Tanks cannot spawn on the same tile!" << endl;
-              continue;
-            }
-          }
-        }
-        
-        if (!quiet)
-          cout << "  finding spawn...";
-        i = args.find(' ', i+1); //skip x
-        i = args.find(' ', i+1); //skip y
-
-        args = args.substr(i+1); //chop off already used info
-        if (!quiet)
-          cout << "  colorizing tank...";
-        i = args.find(' '); // find end of current item
-        
-        //Get our trunk image directory
-        if (args.substr(0,i) == AINames.back()){
-          imgPath = "images/tanks/Default";
-          AIImages.push_back(imgPath + "/base.png");
-          AIImages.push_back(imgPath + "/turret.png");
-          AIImages.push_back(imgPath + "/bullet.png");
-        }else{
-          imgPath = args.substr(0, i);
-          AIImages.push_back(imgPath + "/base.png");
-          AIImages.push_back(imgPath + "/turret.png");
-          AIImages.push_back(imgPath + "/bullet.png");
-        }
-        
-        
-        tankImages.insert(std::end(tankImages), std::begin(AIImages), std::end(AIImages));
-        
-        AIImages.clear();
-        if (!quiet)
-          cout << "  ...done.\n";
-      }
-      else if(id == "FIELDIMAGE")
-      {
-        if (!settings->showUI()){continue;}
-        if (!quiet)
-          cout << "Painting the background...\n";
-        stringstream(args) >> name;
-        gameImages.push_back(name);
-        if(!quiet)
-          cout << "   ...done\n";
-      }
-      else if(id == "OBSTACLE_IMAGE")
-      {
-        if (!settings->showUI()){continue;}
-        done = false;
-        while(!done)
-        {
-          if(args.find(' ') == string::npos)
-          {
-            done = true;
-            gameImages.push_back(args);
-          }
-          else
-          {
-            i = args.find(' ');
-            gameImages.push_back(args.substr(0, i));
-            args = args.substr(i + 1);
-          }
-        }
-      }
-      else if(id == "TREE_IMAGE")
-      {
-        if (!settings->showUI()){continue;}
-        done = false;
-        while(!done)
-        {
-          if(args.find(' ') == string::npos)
-          {
-            done = true;
-            treeImages.push_back(args);
-          }
-          else
-          {
-            i = args.find(' ');
-            treeImages.push_back(args.substr(0, i));
-            args = args.substr(i + 1);
-          }
-        }
-      }
-      else if(id == "ROCK_IMAGE")
-      {
-        if (!settings->showUI()){continue;}
-        done = false;
-        while(!done)
-        {
-          if(args.find(' ') == string::npos)
-          {
-            done = true;
-            rockImages.push_back(args);
-          }
-          else
-          {
-            i = args.find(' ');
-            rockImages.push_back(args.substr(0, i));
-            args = args.substr(i + 1);
-          }
-
-        }
-      }
-      else if(id == "WATER_IMAGE")
-      {
-        if (!settings->showUI()){continue;}
-        done = false;
-        while(!done)
-        {
-          if(args.find(' ') == string::npos)
-          {
-            done = true;
-            waterImages.push_back(args);
-          }
-          else
-          {
-            i = args.find(' ');
-            waterImages.push_back(args.substr(0, i));
-            args = args.substr(i + 1);
-          }
-
-        }
-      }
-      else if(id == "BUSH_IMAGE")
-      {
-        if (!settings->showUI()){continue;}
-        done = false;
-        while(!done)
-        {
-          if(args.find(' ') == string::npos)
-          {
-            done = true;
-            bushImages.push_back(args);
-          }
-          else
-          {
-            i = args.find(' ');
-            bushImages.push_back(args.substr(0, i));
-            args = args.substr(i + 1);
-          }
-
-        }
-      }
-    }
-  }
+  
   if (mapLoader == nullptr){
     printf("ERROR: No map name specified or loaded.\n");
     exit(1);
   }
+
   //set globals
   TimerEvent::idle_speed = settings->getIdleSpeed();
   Drawable::xscalar = (3.75/mapLoader->width)/.32;
   Drawable::yscalar = Drawable::xscalar;
-  fieldx = mapLoader->width;
-  fieldy = mapLoader->height;
-
+  
   //Only load textures if we're showing UI
   if (settings->showUI()){
     glEnable(GL_TEXTURE_2D);
@@ -443,15 +305,14 @@ void Game::initGameState(Settings * setting)
         cout << "Failed to open image(s).\n" << endl;
     glDisable(GL_TEXTURE_2D);
   }
+
+  //Load the tank players from shared objects
   if (!quiet)
     cout << "Loading Shared Objects...\n";
   std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
-  std::vector<ActorInfo> startActors;
 
   if (!quiet)
     cout << "Finalizing game settings...\n";
-
-  baseStats = settings->getAttributes();
 
   startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, settings->getAttributes(), mapLoader->height, mapLoader->width);
   //printf("Height: %d  Width: %d\n",height, width);
@@ -461,7 +322,7 @@ void Game::initGameState(Settings * setting)
   if (!quiet)
     cout << "   ...Done\n" << endl;
 
-  // Add obstacles to the gamefield
+  // Add tanks to the gamefield map
   if (!quiet)
     cout << "Clearing spawn points...\n";
   for(auto tank : tankLocations)
@@ -474,13 +335,13 @@ void Game::initGameState(Settings * setting)
         cout << "WARNING: removing object at (" << tank.first << "," << tank.second << ")\n";
       mapLoader->tileMap[tank.second][tank.first].type = "Empty";
       mapLoader->tileMap[tank.second][tank.first].health = 0;
+      mapLoader->tileMap[tank.second][tank.first].actor = new Tile("Tank", tank.id, tank.x, tank.y, tank.health);
     }
   }
-  //Create drawable objects
+  //Create one-time use drawable objects
   for (int i = 1; i <= mapLoader->height; i++){
     for (int j=1; j <= mapLoader->width; j++){
       tType = mapLoader->tileMap[i][j].type;
-      
       if(tType == "Rock"){
           tempOb = new Obstacles(1, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           rocks.push_back(tempOb);
@@ -548,82 +409,6 @@ std::vector<ActorInfo> Game::loadPlayers(bool quiet, std::vector<std::pair<int,i
     }
   }
   return actors;
-}
-
-/***************************************************************************//**
- * @author Jon McKee
- * @brief createConfig
- *
- * Creates new config file
- *******************************************************************************/
-void Game::createConfig()
-{
-  ifstream fin;
-  ofstream fout;
-  cout << "FAILED TO LOAD CONFIG FILE\n";
-  cout << "Attempting to generate config file...\n";
-  fin.open("config.sample");
-  fout.open("config.txt", ios::out | ios::in | ios::app);
-  if(!fin || !fout)
-  {
-    cout << "Unable to generate new config file.\n";
-    exit(1);
-  }
-
-  fout << "WIDTH 30\n";
-  fout << "HEIGHT 14\n";
-  fout << "MAP\n";
-  fout << "xxxxxxxxRRRRRRxxxxxxxxRRRRRRxx\n";
-  fout << "xxxxxxxTWWRRWWTxxxxxxTWWRRWWTx\n";
-  fout << "xxxxxxTTTBTTTBTTxxxxTTTBTTTBTT\n";
-  fout << "xxxxxCxxxxxxxxxxxxxxxxxxxxxxxx\n";
-  fout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxB\n";
-  fout << "xxxxTxxxxxTxxxxxTxxxxxTxxxxBBT\n";
-  fout << "xxTTBTTxTTBTTxTTBTTxTTBTTxxTTB\n";
-  fout << "xxRxRxRxRxRxRxRxRxRxRxRxRxxRxR\n";
-  fout << "Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
-  fout << "Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
-  fout << "OxxRxxxxxRxxxxxRxxxxWRxxxxxxxx\n";
-  fout << "xxTTTxxxTTTxxxTTTWWWTTTxxxxxxx\n";
-  fout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
-  fout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
-  fout << "#AI LIST: AI <NAME> <STARTX> <STARTY> <UPIMAGE> <RIGHTIMAGE> <DOWNIMAGE> <LEFTIMAGE> <BULLETIMAGE>\n\n";
-  fout << "#AI IDLE SPEED: AI_SPEED <750>\n";
-  fout << "AI_SPEED 750\n\n";
-  fout << "#FIELDIMAGE <MAP FILE>\n";
-  fout << "FIELDIMAGE images/green.png\n\n";
-  fout << "#OBSTACLE_IMAGE <IMAGE1> [<IMAGE2>]\n";
-  fout << "OBSTACLE_IMAGE images/tree/tree.png images/rock/rock.png\n";
-  fout << "TREE_IMAGE images/tree/tree.png images/tree/treeb.png images/tree/treec.png images/tree/treed.png\n";
-  fout << "BUSH_IMAGE images/bush/bush1.png images/bush/bush2.png images/bush/bush3.png images/bush/bush4.png\n";
-  fout << "ROCK_IMAGE images/rock/rock.png images/rock/rockb.png images/rock/rockc.png\n";
-  fout << "WATER_IMAGE images/Water/waterTex.png images/Water/waterTexNS.png images/Water/waterTexES.png images/Water/waterTexSS.png images/Water/waterTexWS.png images/Water/waterTexNES.png images/Water/waterTexSES.png images/Water/waterTexSWS.png images/Water/waterTexNWS.png images/Water/waterTexEWS.png images/Water/waterTexNSS.png images/Water/waterTexNWES.png images/Water/waterTexNESS.png images/Water/waterTexSEWS.png images/Water/waterTexNWSS.png images/Water/waterTexPond.png\n\n";
-  fout << "#Game Settings\n";
-  fout << "#MAXTURNS 200\n";
-  fout << "MAXTURNS 200\n\n";
-  fout << "#AI_SPEED <750>\n";
-  fout << "AI_SPEED 750\n\n";
-  fout << "#BULLET_SPEED <80>\n";
-  fout << "BULLET_SPEED 80\n\n";
-  fout << "#TANK_SPEED <400>\n";
-  fout << "TANK_SPEED 400\n\n";
-  fout << "#ANIMATION_SPEED <20>\n";
-  fout << "ANIMATION_SPEED 20\n\n";
-  fout << "#TANK RULES\n";
-  fout << "#STAT <AMMOUNT>\n";
-  fout << "#VALID STATS: DAMAGE, HEALTH, RADAR, AP, SPECIAL, RANGE, AMMO\n";
-  fout << "DAMAGE 1\n";
-  fout << "HEALTH 3\n";
-  fout << "RADAR 4\n";
-  fout << "AP 2\n";
-  fout << "SPECIAL 1\n";
-  fout << "RANGE 4\n";
-  fout << "AMMO 6\n";
-
-  fin.close();
-  fout.close();
-  cout << "   ...done.\n";
-  cout << "Please add tanks to the new config.txt and re-run the platform.\n";
 }
 
 /***************************************************************************//**

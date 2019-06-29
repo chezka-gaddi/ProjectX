@@ -28,7 +28,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settin
         << " Remaining: " << std::to_string(winner[winDex].health).c_str()
         << " Final Position: (" << std::to_string(winner[winDex].x).c_str()
         << "," << std::to_string(winner[winDex].y).c_str() << ")\n";
-    fout << "Non-Winning Participants:";
+    fout << "Non-Winning Participants(" << std::to_string(dead.size()) << "):";
     
     for(int l = dead.size() - 1; l >= 0; l--)
     {

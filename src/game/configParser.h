@@ -14,6 +14,8 @@
 
 #include <settings/Settings.h>
 
-MapData * parseConfig(Settings *);
+MapData * parseConfig(Settings * settings);
+std::vector<std::string> parseList(Settings * settings, std::string section, std::string key);
+std::string parseAI(Settings * settings, std::string section, std::string key);
 
 #endif

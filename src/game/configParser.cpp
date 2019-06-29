@@ -18,12 +18,6 @@ MapData * parseConfig( Settings * settings){
     //Load the map
     settings->setMapName(config.Get("MAP","name","default.map"));
     map = loadMap(settings);
-    //std::cout << "Images Section: \n"
-    //          << "Field Image: \n" << config.Get("IMAGES", "fieldimage", "images/green.png") << "\n"
-    //          << "Tree: \n" << config.Get("IMAGES", "tree", "") << "\n"
-    //          << "Bush: \n" << config.Get("IMAGES", "bush", "") << "\n"
-    //          << "Rock: \n" << config.Get("IMAGES", "rock", "") << "\n"
-    //          << "Water: \n" << config.Get("IMAGES", "water", "") << "\n\n";
     //Player Stats
     settings->setAttrDamage(config.GetInteger("STATS", "damage", 2));
     settings->setAttrHealth(config.GetInteger("STATS", "health", 2));
@@ -39,8 +33,47 @@ MapData * parseConfig( Settings * settings){
     settings->setAniFrames(config.GetInteger("PLATFORM", "animation_frames", 20));
     settings->setBulletSpeed(config.GetInteger("PLATFORM", "bullet_speed", 80));
     settings->setTankSpeed(config.GetInteger("PLATFORM", "tank_speed", 400));
-
-
-
     return map;
+}
+
+std::vector<std::string> parseList(Settings * settings, std::string section, std::string key){
+    std::string configFile = settings->getConfigFile(), temp;
+    bool quiet = settings->checkQuiet();
+    bool done = false;
+    int i = 0;
+    INIReader config(configFile);
+
+    std::vector<std::string> list;
+
+    temp = config.Get(section, key, "\n");
+    if (temp == ""){
+        return list;
+    }
+    
+    while(!done)
+    {
+        if(temp.find('\n') == std::string::npos)
+        {
+        done = true;
+        list.push_back(temp);
+        }
+        else
+        {
+        i = temp.find('\n');
+        list.push_back(temp.substr(0, i));
+        temp = temp.substr(i + 1);
+        }
+
+    }
+
+    return list;
+}
+
+std::string parseAI(Settings * settings, std::string section, std::string key){
+    std::string configFile = settings->getConfigFile(), param;
+    bool quiet = settings->checkQuiet();
+    INIReader config(configFile);
+
+    param = config.Get(section, key, "");
+    return param;
 }

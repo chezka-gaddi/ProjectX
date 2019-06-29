@@ -102,6 +102,8 @@ bool loadImageGroup(std::vector <std::string> source, GLuint * imgArray, int sta
     for(int i = start; i < stop; i++)
     {
         const char *c = source[i - start].c_str();
+        if (stop == 0) //If there were no images don't error out
+            return true;
         if(!quiet)
             cout << c << " ";
         imgArray[i] = SOIL_load_OGL_texture(
