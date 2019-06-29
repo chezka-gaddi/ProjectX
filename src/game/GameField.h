@@ -90,7 +90,7 @@ protected:
     gameTracker *tracker = nullptr;
 
     //variables
-    ActorInfo nullActor = ActorInfo (NULL, 0, 0, 0, 0, 0);
+    ActorInfo nullActor = ActorInfo (NULL, "", 0, 0, 0, 0, 0);
     GLfloat y_scalar = 0;
     GLfloat x_scalar = 0;
 

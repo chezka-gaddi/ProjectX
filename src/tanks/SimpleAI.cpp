@@ -153,9 +153,6 @@ direction SimpleAI::attack(const MapData &map, PositionData status)
         for (int y = 1; y <= map.height; ++y)
         {
             //If an enemy is encountered closer than previously encountered
-            //if ( map.map[x + y*map.width] && //if there is an actor at X, Y
-            //        map.map[x + y*map.width] != status.id && //And it is not you
-            //        map.map[x + y*map.width] != -status.id && //And it is not your projectile
             if (((map.tileMap[y][x].actor != nullptr && //if there is an actor at X, Y
                     map.tileMap[y][x].actor->id != status.id) || //And it is not you 
                     (map.tileMap[y][x].projectile != nullptr && 

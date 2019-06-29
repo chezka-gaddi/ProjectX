@@ -53,6 +53,9 @@ public:
     void noGUIGame();
     bool checkMaxTurn();
 
+    int getX(){return tankGame->fieldMap->width;};
+    int getY(){return tankGame->fieldMap->height;};
+
     std::vector<ActorInfo> loadPlayers(bool, std::vector<std::pair<int,int>>, std::vector<std::string>, std::vector<Actor*>, attributes, int, int);
 
     vector<std::unique_ptr<Drawable>> objects;       /*!<Holds all of the current actors */

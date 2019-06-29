@@ -335,7 +335,6 @@ void Game::initGameState(Settings * setting)
         cout << "WARNING: removing object at (" << tank.first << "," << tank.second << ")\n";
       mapLoader->tileMap[tank.second][tank.first].type = "Empty";
       mapLoader->tileMap[tank.second][tank.first].health = 0;
-      mapLoader->tileMap[tank.second][tank.first].actor = new Tile("Tank", tank.id, tank.x, tank.y, tank.health);
     }
   }
   //Create one-time use drawable objects
@@ -392,17 +391,19 @@ std::vector<ActorInfo> Game::loadPlayers(bool quiet, std::vector<std::pair<int,i
          tankLocations[i].second <= height &&
          tankLocations[i].second >= 1){
          actors.push_back(ActorInfo(startActorPointers[i]
-                                    , baseAttr.tankHealth
-                                    , baseAttr.tankDamage
+                                    , AINames[i]
+                                    , i + 1
                                     , tankLocations[i].first
                                     , tankLocations[i].second
-                                    , i + 1
+                                    , baseAttr.tankHealth
+                                    , baseAttr.tankHealth
+                                    , baseAttr.tankDamage
                                     , baseAttr.tankAP
-                                    , baseAttr.projRange
-                                    , 0
                                     , baseAttr.tankRadar
+                                    , baseAttr.projRange
                                     , baseAttr.tankAmmo
-                                    , AINames[i]));
+                                    , baseAttr.tankAmmo
+                                    ));
     //printf("Actor %d name: %s\n", i, AINames[i].c_str());
     }else{
       cout << "WARNING: Invalid location for " << AINames[i] << " (" << tankLocations[i].first << "," << tankLocations[i].second << ")" << endl;

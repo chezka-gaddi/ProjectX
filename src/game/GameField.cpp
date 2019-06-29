@@ -150,37 +150,50 @@ void GameField::setSPECIAL(const attributes baseStats)
 {
   int sum = 0;
   int points = baseStats.tankSpecial;
+  attributes tempAttr;
   for(auto &actor: actors)
   {
-    actor.tankAttributes = actor.act_p->setAttribute(points, baseStats);
+    tempAttr = actor.act_p->setAttribute(points, baseStats);
     
-    if (actor.tankAttributes.tankHealth < 0)
-      actor.tankAttributes.tankHealth = 1;
-    if (actor.tankAttributes.tankAP < 0)
-      actor.tankAttributes.tankAP = 1;
-    if (actor.tankAttributes.tankRadar < 0)
-      actor.tankAttributes.tankRadar = 1;
-    if (actor.tankAttributes.tankDamage <0)
-      actor.tankAttributes.tankDamage = 1;
-    if (actor.tankAttributes.tankAmmo < 0)
-      actor.tankAttributes.tankAmmo = 1;
-    if (actor.tankAttributes.projRange < 0)
-      actor.tankAttributes.projRange = 1;
+    if (tempAttr.tankHealth < 0){
+      tempAttr.tankHealth = 0;
+      printf("(SPECIAL-Spend AP) %s Negative health point value, setting to 0.\n", actor.name.c_str());
+    }
+    if (tempAttr.tankAP < 0){
+      tempAttr.tankAP = 0;
+      printf("(SPECIAL-Spend AP) %s Negative health point value, setting to 0.\n", actor.name.c_str());
+    }
+    if (tempAttr.tankRadar < 0){
+      tempAttr.tankRadar = 0;
+      printf("(SPECIAL-Spend AP) %s Negative health point value, setting to 0.\n", actor.name.c_str());
+    }
+    if (tempAttr.tankDamage <0){
+      tempAttr.tankDamage = 0;
+      printf("(SPECIAL-Spend AP) %s Negative health point value, setting to 0.\n", actor.name.c_str());
+    }
+    if (tempAttr.tankAmmo < 0){
+      tempAttr.tankAmmo = 0;
+      printf("(SPECIAL-Spend AP) %s Negative health point value, setting to 0.\n", actor.name.c_str());
+    }
+    if (tempAttr.projRange < 0){
+      tempAttr.projRange = 0;
+      printf("(SPECIAL-Spend AP) %s Negative health point value, setting to 0.\n", actor.name.c_str());
+    }
 
-    sum = actor.tankAttributes.tankHealth
-          + actor.tankAttributes.tankAP
-          + actor.tankAttributes.tankRadar
-          + actor.tankAttributes.tankDamage
-          + actor.tankAttributes.tankAmmo
-          + actor.tankAttributes.projRange;
+    sum = tempAttr.tankHealth
+          + tempAttr.tankAP
+          + tempAttr.tankRadar
+          + tempAttr.tankDamage
+          + tempAttr.tankAmmo
+          + tempAttr.projRange;
     if(sum <= points)
     {
-      actor.health += actor.tankAttributes.tankHealth;
-      actor.AP += actor.tankAttributes.tankAP;
-      actor.radar += actor.tankAttributes.tankRadar;
-      actor.damage += actor.tankAttributes.tankDamage;
-      actor.ammo += actor.tankAttributes.tankAmmo;
-      actor.range += actor.tankAttributes.projRange;
+      actor.health += tempAttr.tankHealth;
+      actor.AP += tempAttr.tankAP;
+      actor.radar += tempAttr.tankRadar;
+      actor.damage += tempAttr.tankDamage;
+      actor.ammo += tempAttr.tankAmmo;
+      actor.range += tempAttr.projRange;
       if(actor.health > 8)
       {
         actor.health = 8;
@@ -856,6 +869,7 @@ void GameField::nextTurn()
           if(atk != STAY && actors[i].ammo >= 1)
           {
             actors[i].heading = atk;
+            actors[i].shots += 1;
             j = i+1;
             grow = false;
             if (fieldMap->tileMap[actors[i].y][actors[i].x].projectile != nullptr){ //If no projectile we don't need to check the list
@@ -888,7 +902,6 @@ void GameField::nextTurn()
               newProjectile.heading = actors[i].heading;
               newProjectile.name = "Projectile\n";
               actors.insert(actors.begin() + i + 1, newProjectile);
-              actors[i].shots++;
               actors[i].ammo--;
               fieldMap->tileMap[actors[i].y][actors[i].x].projectile = new Tile("Projectile", newProjectile.id, newProjectile.x, newProjectile.y, newProjectile.health, nullptr, nullptr);
             }

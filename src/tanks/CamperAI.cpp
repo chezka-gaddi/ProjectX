@@ -19,29 +19,29 @@ direction CamperAI::move(const MapData &map, PositionData status)
 
     direction retval = STAY;
 
-    if((y_pos == 0 && x_pos == 0) ||
-       (y_pos == map.height - 1 && x_pos == 0) ||
-       (x_pos == map.width - 1 && y_pos == 0) ||
-       (x_pos == map.width - 1 && y_pos == map.height - 1) ||
+    if((y_pos == 1 && x_pos == 1) ||
+       (y_pos == map.height && x_pos == 1) ||
+       (x_pos == map.width && y_pos == 1) ||
+       (x_pos == map.width && y_pos == map.height) ||
        (corner == true))
         return retval;
-    if(y_pos <= median && y_pos - 1 >= 0 
+    if(y_pos <= median && y_pos - 1 >= 1 
                 && (map.tileMap[y_pos-1][x_pos].type == "Empty" || 
                     map.tileMap[y_pos-1][x_pos].type == "Tree" ||
                     map.tileMap[y_pos-1][x_pos].type == "Bush"))
         UP = true;
-    if(y_pos > median && (y_pos + 1 <= map.height - 1)
+    if(y_pos > median && (y_pos + 1 <= map.height)
                 && (map.tileMap[y_pos+1][x_pos].type == "Empty" || 
                 map.tileMap[y_pos+1][x_pos].type == "Tree" ||
                 map.tileMap[y_pos+1][x_pos].type == "Bush"))
                         
         DOWN = true;
-    if(x_pos > median2 && (x_pos + 1 <= map.width - 1)
+    if(x_pos > median2 && (x_pos + 1 <= map.width)
                 && (map.tileMap[y_pos][x_pos+1].type == "Empty" || 
                     map.tileMap[y_pos][x_pos+1].type == "Tree" ||
                     map.tileMap[y_pos][x_pos+1].type == "Bush"))
         RIGHT = true;
-    if(x_pos <= median2 && (x_pos - 1 >= 0)
+    if(x_pos <= median2 && (x_pos - 1 >= 1)
                 && (map.tileMap[y_pos][x_pos-1].type == "Empty" || 
                     map.tileMap[y_pos][x_pos-1].type == "Tree" ||
                     map.tileMap[y_pos][x_pos-1].type == "Bush"))
