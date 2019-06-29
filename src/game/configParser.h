@@ -7,11 +7,13 @@
 #define __parseconfig_h
 
 #include <utilities/inireader.h>
+#include <utilities/mapLoader.h>
+#include <map/MapData.h>
 #include <string>
 #include <iostream>
 
 #include <settings/Settings.h>
 
-bool parseConfig(Settings *);
+MapData * parseConfig(Settings *);
 
 #endif

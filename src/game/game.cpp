@@ -210,14 +210,8 @@ void Game::initGameState(Settings * setting)
   Obstacles* tempOb;
   Drawable* tempObj = nullptr;
   bool done;
-  //parseConfig(setting); //INI Config reader
+  int hPad = 0, wPad=0;
 
-  //Game Setting defaults
-  unsigned int ai_speed = 750, width = 15, height = 9, maxT = 1000, hPad = 0, wPad = 0;
-  //setting defaults
-  unsigned int aniSpeed = 20, tank_speed = 400, bullet_speed = 80;
-  //Tank Defaults
-  unsigned int damage = 1, health = 3, range = 4, radar = 4, ap = 1, ammo = 6;
   //Default Tank Images
   attributes baseStats;
 
@@ -229,7 +223,6 @@ void Game::initGameState(Settings * setting)
   std::vector<std::string> tankImages, gameImages, treeImages, rockImages, bushImages,
       waterImages, AIImages, AINames;
 
-  int attributePoints = 0;
   ofstream fout;
   MapData * mapLoader = nullptr;
 
@@ -244,6 +237,10 @@ void Game::initGameState(Settings * setting)
   {
     createConfig();
   }
+
+  mapLoader = parseConfig(setting); //INI Config reader
+  //mapLoader->printTileMap(); //Test map loaded correctly
+
   //Try and create output file
   fout.open(settings->getResultsFile(), ios::out | ios::in | ios::app);
   //Warn if we cannot save settings, ignore quiet for this error
@@ -261,11 +258,7 @@ void Game::initGameState(Settings * setting)
       std::string args = configLine.substr(i+1);
       if (id == "MAPNAME"){
         //MapLoader
-        settings->setMapName(args);
-        mapLoader = loadMap(settings);
-        //mapLoader->printTileMap(); //Test map loaded correctly
-        height = mapLoader->height;
-        width = mapLoader->width;
+        //settings->setMapName(args);
       //AI settings
       }else if(id == "AI")  //AI to load
       {
@@ -321,31 +314,6 @@ void Game::initGameState(Settings * setting)
         AIImages.clear();
         if (!quiet)
           cout << "  ...done.\n";
-      }
-      else if(id == "AI_SPEED")
-      {
-        stringstream(args) >> ai_speed;
-        settings->setIdleSpeed(ai_speed);
-      }
-      else if(id == "ANIMATION_SPEED")
-      {
-        stringstream(args) >> aniSpeed;
-        settings->setAniFrames(aniSpeed);
-      }
-      else if(id == "TANK_SPEED")
-      {
-        stringstream(args) >> tank_speed;
-        settings->setTankSpeed(tank_speed);
-      }
-      else if(id == "BULLET_SPEED")
-      {
-        stringstream(args) >> bullet_speed;
-        settings->setBulletSpeed(bullet_speed);
-      }
-      else if(id == "MAXTURNS")
-      {
-        stringstream(args) >> maxT;
-        settings->setMaxTurns(maxT);
       }
       else if(id == "FIELDIMAGE")
       {
@@ -455,47 +423,6 @@ void Game::initGameState(Settings * setting)
 
         }
       }
-      //Tank params
-      else if(id == "DAMAGE")
-      {
-        stringstream(args) >> damage;
-        settings->setAttrDamage(damage);
-      }
-      else if(id == "HEALTH")
-      {
-        stringstream(args) >> health;
-        settings->setAttrHealth(health);
-      }
-      else if(id == "AP")
-      {
-        stringstream(args) >> ap;
-        settings->setAttrAP(ap);
-      }
-      else if(id == "RADAR")
-      {
-        stringstream(args) >> radar;
-        settings->setAttrRadar(radar, width);
-      }
-      else if(id == "RANGE")
-      {
-        stringstream(args) >> range;
-        settings->setAttrRange(range);
-      }
-      else if(id == "SPECIAL")
-      {
-        stringstream(args) >> attributePoints;
-        settings->setAttrSpecial(attributePoints);
-      }
-      else if(id == "AMMO")
-      {
-        stringstream(args) >> ammo;
-        settings->setAttrAmmo(ammo);
-      }
-      else if(id != "")
-      {
-        if (!quiet)
-          std::cout << "BAD ARGUMENT: " << id << '\n';
-      }
     }
   }
   if (mapLoader == nullptr){
@@ -503,11 +430,11 @@ void Game::initGameState(Settings * setting)
     exit(1);
   }
   //set globals
-  TimerEvent::idle_speed = ai_speed;
-  Drawable::xscalar = (3.75/width)/.32;
+  TimerEvent::idle_speed = settings->getIdleSpeed();
+  Drawable::xscalar = (3.75/mapLoader->width)/.32;
   Drawable::yscalar = Drawable::xscalar;
-  fieldx = width;
-  fieldy = height;
+  fieldx = mapLoader->width;
+  fieldy = mapLoader->height;
 
   //Only load textures if we're showing UI
   if (settings->showUI()){
@@ -526,11 +453,11 @@ void Game::initGameState(Settings * setting)
 
   baseStats = settings->getAttributes();
 
-  startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, baseStats, height, width);
+  startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, settings->getAttributes(), mapLoader->height, mapLoader->width);
   //printf("Height: %d  Width: %d\n",height, width);
-  tankGame = new GameField(width, height, startActors, displayWrapper, this, settings);
+  tankGame = new GameField(mapLoader->width, mapLoader->height, startActors, displayWrapper, this, settings);
   tankGame->setMap(mapLoader);
-  tankGame->setSPECIAL(baseStats);
+  tankGame->setSPECIAL(settings->getAttributes());
   if (!quiet)
     cout << "   ...Done\n" << endl;
 
@@ -550,8 +477,8 @@ void Game::initGameState(Settings * setting)
     }
   }
   //Create drawable objects
-  for (unsigned int i = 1; i <= height; i++){
-    for (unsigned int j=1; j <= width; j++){
+  for (int i = 1; i <= mapLoader->height; i++){
+    for (int j=1; j <= mapLoader->width; j++){
       tType = mapLoader->tileMap[i][j].type;
       
       if(tType == "Rock"){

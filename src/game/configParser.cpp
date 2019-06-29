@@ -1,43 +1,46 @@
 #include "configParser.h"
 
-bool parseConfig( Settings * settings){
+MapData * parseConfig( Settings * settings){
     std::string configFile = settings->getConfigFile();
+    bool quiet = settings->checkQuiet();
 
-    //INIReader config(configFile);
-    INIReader config("config.ini");
+    INIReader config(configFile);
+    //INIReader config("config.ini");
+    MapData * map;
 
     //Store the parse error/line number
     //int cerrors = config.ParseError();
-    if (config.ParseError() != 0) {
-        printf("Can't load %s\n", configFile.c_str());
-        //return false;
-    }
-    std::cout << "Config loaded from " << configFile  << ": \n";
-    std::cout << "Map Section: \n"
-              << "Width: " << config.GetInteger("MAP", "width", 30) << "\n"
-              << "Height: " << config.GetInteger("MAP", "height", 14) << "\n"
-              << "Map: \n" << config.Get("MAP", "map", "") << "\n\n";
-    std::cout << "Images Section: \n"
-              << "Field Image: " << config.Get("IMAGES", "fieldimage", "images/green.png") << "\n"
-              << "Tree: " << config.Get("IMAGES", "tree", "images/tree/tree.png") << "\n"
-              << "Bush: " << config.Get("IMAGES", "bush", "images/bush/bush1.png") << "\n"
-              << "Rock: " << config.Get("IMAGES", "rock", "images/rock/rock.png") << "\n"
-              << "Water: " << config.Get("IMAGES", "water", "images/water/waterTex.png") << "\n\n";
-    std::cout << "Stats Section: \n"
-              << "Damage: " << config.GetInteger("STATS", "damage", 2) << "\n"
-              << "Health: " << config.GetInteger("STATS", "health", 2) << "\n"
-              << "Radar: " << config.GetInteger("STATS", "radar", 4) << "\n"
-              << "AP: " << config.GetInteger("STATS", "ap", 2) << "\n"
-              << "Special: " << config.GetInteger("STATS", "special", 1) << "\n"
-              << "Range: " << config.GetInteger("STATS", "range", 4) << "\n"
-              << "Ammo: " << config.GetInteger("STATS", "ammo", 6) << "\n\n";
-    std::cout << "Game Section: \n"
-              << "Max Turns: " << config.GetInteger("GAME", "maxturns", 200) << "\n\n";
-    std::cout << "Platform Section: \n"
-              << "AI Speed: " << config.GetInteger("PLATFORM", "ai_speed", 750) << "\n"
-              << "Animation Frames: " << config.GetInteger("PLATFORM", "animation_frames", 20) << "\n"
-              << "Bullet Speed: " << config.GetInteger("PLATFORM", "bullet_speed", 80) << "\n"
-              << "Tank Speed: " << config.GetInteger("PLATFORM", "tank_speed", 400) << "\n\n";
+    //if (config.ParseError() != 0) {
+    //    printf("Can't load %s\n", configFile.c_str());
+    //    return false;
+    //}
+    //std::cout << "Config loaded from " << configFile  << ": \n";
+    //Load the map
+    settings->setMapName(config.Get("MAP","name","default.map"));
+    map = loadMap(settings);
+    //std::cout << "Images Section: \n"
+    //          << "Field Image: \n" << config.Get("IMAGES", "fieldimage", "images/green.png") << "\n"
+    //          << "Tree: \n" << config.Get("IMAGES", "tree", "") << "\n"
+    //          << "Bush: \n" << config.Get("IMAGES", "bush", "") << "\n"
+    //          << "Rock: \n" << config.Get("IMAGES", "rock", "") << "\n"
+    //          << "Water: \n" << config.Get("IMAGES", "water", "") << "\n\n";
+    //Player Stats
+    settings->setAttrDamage(config.GetInteger("STATS", "damage", 2));
+    settings->setAttrHealth(config.GetInteger("STATS", "health", 2));
+    settings->setAttrRadar(config.GetInteger("STATS", "radar", 4), map->width);
+    settings->setAttrAP(config.GetInteger("STATS", "ap", 2));
+    settings->setAttrSpecial(config.GetInteger("STATS", "special", 1));
+    settings->setAttrRange(config.GetInteger("STATS", "range", 4));
+    settings->setAttrAmmo(config.GetInteger("STATS", "ammo", 6));
+    //Game Settings
+    settings->setMaxTurns(config.GetInteger("GAME", "maxturns", 200));
+    //Platform Settings
+    settings->setIdleSpeed(config.GetInteger("PLATFORM", "ai_speed", 750));
+    settings->setAniFrames(config.GetInteger("PLATFORM", "animation_frames", 20));
+    settings->setBulletSpeed(config.GetInteger("PLATFORM", "bullet_speed", 80));
+    settings->setTankSpeed(config.GetInteger("PLATFORM", "tank_speed", 400));
 
-    return true;
+
+
+    return map;
 }
