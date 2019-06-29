@@ -40,11 +40,13 @@ public:
     void drawAddon(float xlow, float xhigh, float ylow, float yhigh, float ror, float scale); /*!< Add aditional SFX to a drawable image */
 
     virtual void draw(int, int) = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
+
 protected:
     int gridx;          /*!< Drawables grid x coordinate */
     int gridy;          /*!< Drawables grid y coordinate */
     static float xscalar; /*!< Drawable x shared scalar value */
     static float yscalar; /*!< Drawable y shared scalar value */
+
 friend class Game;        //Make Game class a friend of the drawable classes
 friend class GameField;   //Make GameField class a friend of the drawable classes
 };

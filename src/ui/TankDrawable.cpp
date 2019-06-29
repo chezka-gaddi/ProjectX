@@ -35,7 +35,7 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
     //  2 is down,
     //  3 is left.
     angle = dirToDeg(dir) - 90;
-    tex = (ID-1) * 5;
+    tex = (ID-1) * 3;
 
     if (camp == true)
         tex = 4;
@@ -54,6 +54,7 @@ void TankDrawable::draw(int x, int y)
     glColor4ub(255,255,255,255);
     glPushMatrix();
 
+    //draw base
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
@@ -66,14 +67,34 @@ void TankDrawable::draw(int x, int y)
     }
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.13f * xscalar, -0.1f * yscalar,  1.0f);
+    glVertex3f(-0.13f * xscalar, -0.13f * yscalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.13f * xscalar, -0.1f * yscalar,  1.0f);
+    glVertex3f( 0.13f * xscalar, -0.13f * yscalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.13f * xscalar,  0.1f * yscalar,  1.0f);
+    glVertex3f( 0.13f * xscalar,  0.13f * yscalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.13f * xscalar,  0.1f * yscalar,  1.0f);
+    glVertex3f(-0.13f * xscalar,  0.13f * yscalar,  1.0f);
     glEnd();
+
+    //draw turret
+    if (camp == false){
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+      glLoadIdentity();
+      glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
+      glRotatef(angle,0,0,1);
+      glBindTexture(GL_TEXTURE_2D, tankTex[tex+1]);
+      glBegin(GL_QUADS);
+      glTexCoord2f(0.0f, 0.0f);
+      glVertex3f(-0.13f * xscalar, -0.13f * yscalar,  1.0f);
+      glTexCoord2f(1.0f, 0.0f);
+      glVertex3f( 0.13f * xscalar, -0.13f * yscalar,  1.0f);
+      glTexCoord2f(1.0f, 1.0f);
+      glVertex3f( 0.13f * xscalar,  0.13f * yscalar,  1.0f);
+      glTexCoord2f(0.0f, 1.0f);
+      glVertex3f(-0.13f * xscalar,  0.13f * yscalar,  1.0f);
+      glEnd();
+    }
     //First smoke    
     if (health <= max_health*.66666){
       glEnable(GL_BLEND);

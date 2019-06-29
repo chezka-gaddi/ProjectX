@@ -304,18 +304,14 @@ void Game::initGameState(Settings * setting)
         
         //Get our trunk image directory
         if (args.substr(0,i) == AINames.back()){
-          imgPath = "images/Default";
+          imgPath = "images/tanks/Default";
           AIImages.push_back(imgPath + "/base.png");
           AIImages.push_back(imgPath + "/turret.png");
-          AIImages.push_back(imgPath + "/tankD.png");
-          AIImages.push_back(imgPath + "/tankL.png");
           AIImages.push_back(imgPath + "/bullet.png");
         }else{
           imgPath = args.substr(0, i);
-          AIImages.push_back(imgPath + "/tankU.png");
-          AIImages.push_back(imgPath + "/tankR.png");
-          AIImages.push_back(imgPath + "/tankD.png");
-          AIImages.push_back(imgPath + "/tankL.png");
+          AIImages.push_back(imgPath + "/base.png");
+          AIImages.push_back(imgPath + "/turret.png");
           AIImages.push_back(imgPath + "/bullet.png");
         }
         

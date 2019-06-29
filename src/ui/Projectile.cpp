@@ -32,7 +32,7 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, b
     if (camp == true){
       tex = 11;
     }else{
-      tex = ((-1 * id) - 1) * 5 + 4;
+      tex = ((-1 * id) - 1) * 3 + 2;
     }
 }
 

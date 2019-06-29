@@ -9,7 +9,7 @@
 using namespace std;
 
 // Initialize texture arrays
-GLuint tankTex[80];      /*!<Texture array for the tanks and their projectiles */
+GLuint tankTex[50];      /*!<Texture array for the tanks and their projectiles */
 GLuint gameTex[20];     /*!<Texture array for game constants */
 GLuint treeTex[20];     /*!<Texture array for the trees */
 GLuint bushTex[20];     /*!<Texture array for the bushes */
@@ -17,6 +17,7 @@ GLuint rockTex[20];     /*!<Texture array for the rocks */
 GLuint sfxTex[20];   /*<Texture array for the special effects */
 GLuint waterTex[30]; /*<Texture array for water tiles */
 
+//constants for gameplay
 const std::vector<string> bImages = {"images/bush/bush.png"};
 const std::vector<string> rImages = {"images/rock/rock.png"};
 const std::vector<string> sImages = {"images/seffect/bTrail.png","images/seffect/bTrail2.png","images/seffect/bTrail3.png","images/seffect/bTrail4.png","images/seffect/campfire.png","images/seffect/explosiona.png","images/seffect/explosionsb.png","images/seffect/explosionsc.png","images/seffect/fire.png","images/seffect/fire2.png","images/seffect/fire3.png","images/seffect/marsh.png","images/seffect/smoke.png","images/seffect/smoke2.png","images/seffect/smoke3.png","images/seffect/smoke4.png"};

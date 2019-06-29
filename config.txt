@@ -3,17 +3,17 @@ MAPNAME default.map
 
 #AI LIST: AI <NAME> <STARTX> <STARTY> <UPIMAGE> <RIGHTIMAGE> <DOWNIMAGE> <LEFTIMAGE> <BULLETIMAGE>
 AI SimpleAI 1 1
-AI SimpleAI 15 4 images/Blue
-AI SimpleAI 30 1 images/Red
-AI SimpleAI 9 8 images/Green
+AI SimpleAI 15 4 images/tanks/Blue
+AI SimpleAI 30 1 images/tanks/Red
+AI SimpleAI 9 8 images/tanks/Green
 
-AI SimpleAI 21 8 images/BlackWhite
-AI SimpleAI 29 8 images/Coral
-AI SimpleAI 4 11 images/Lime
-AI SimpleAI 13 11 images/Purple
+AI SimpleAI 21 8 images/tanks/BlackWhite
+AI SimpleAI 29 8 images/tanks/Coral
+AI SimpleAI 4 11 images/tanks/Lime
+AI SimpleAI 13 11 images/tanks/Purple
 
-AI SimpleAI 23 11 images/SkyBlue
-AI SimpleAI 15 9 images/Tiger
+AI SimpleAI 23 11 images/tanks/SkyBlue
+AI SimpleAI 15 9 images/tanks/Tiger
 
 
 #FIELDIMAGE <MAP FILE>
