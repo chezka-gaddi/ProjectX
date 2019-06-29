@@ -54,7 +54,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
   fieldMap = new MapData(width, height);
   x_scalar = 4.0717 * pow(width, -1.031);
   y_scalar = 3.1923 * pow(height, -1.08);
-  updateMap();
+  //updateMap();
   displayCallback = d_callback;
   gameptr = game;
   if (setting == nullptr){
@@ -97,7 +97,7 @@ int GameField::getHeight()
  */
 void GameField::updateMap()
 {
-  //Add each actor back to map
+  //Add each actor back to map or update it's health
   for(auto a : actors)
   {
     //for each actor fill in its id on the map
@@ -119,6 +119,24 @@ void GameField::updateMap()
           fieldMap->tileMap[a.y][a.x].projectile->health = a.health;
         }
       }
+    }
+  }
+  for(auto * t : gameptr->trees)
+  {
+    if (t->health > 0){
+      fieldMap->tileMap[t->gridy][t->gridx].health = t->health;
+    }
+  }
+  for(auto * r : gameptr->rocks)
+  {
+    if (r->health > 0){
+      fieldMap->tileMap[r->gridy][r->gridx].health = r->health;
+    }
+  }
+  for(auto * b : gameptr->bushes)
+  {
+    if (b->health > 0){
+      fieldMap->tileMap[b->gridy][b->gridx].health = b->health;
     }
   }
 }
@@ -706,6 +724,10 @@ MapData * GameField::create_fog_of_war(const MapData &map, ActorInfo current_act
     for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
     {
       new_map->tileMap[y_iter][x_iter] = map.tileMap[y_iter][x_iter];
+      if (map.tileMap[y_iter][x_iter].type != "Empty" && map.tileMap[y_iter][x_iter].health <= 0){//Don't send hidden data on objects that have been destroyed
+        new_map->tileMap[y_iter][x_iter].type = "Empty";
+        new_map->tileMap[y_iter][x_iter].health = 0;
+      }
     }
   }
   return new_map;
