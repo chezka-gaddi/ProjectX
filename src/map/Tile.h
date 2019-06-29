@@ -16,10 +16,11 @@ struct Tile{
     int y;
     int health;
     Tile * actor = nullptr;
+    Tile * projectile = nullptr;
 
     //constructor with initial values
-    Tile(std::string t="empty", int newid=0, int newx=0, int newy=0, int h=0, Tile * nactor=nullptr) 
-        : type(t), id(newid), x(newx), y(newy), health(h), actor(nactor) {};
+    Tile(std::string t="empty", int newid=0, int newx=0, int newy=0, int h=0, Tile * nactor=nullptr, Tile * nproj=nullptr) 
+        : type(t), id(newid), x(newx), y(newy), health(h), actor(nactor), projectile(nproj) {};
 };
 std::ostream & operator<<(std::ostream& os, const Tile& tile);
 #endif

@@ -33,10 +33,10 @@ GameField::~GameField()
  */ 
 GameField::GameField(int width, int height)
 {
-  fieldMap.width = width;
-  fieldMap.height = height;
+  fieldMap->width = width;
+  fieldMap->height = height;
   settings = new Settings();
-  fieldMap.generateTileMap();
+  fieldMap->generateTileMap();
   displayCallback = NULL;
   if (settings->checkTracking()){
     tracker = new gameTracker();
@@ -51,9 +51,7 @@ GameField::GameField(int width, int height)
 
 GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(Settings *) = NULL, Game * game = nullptr, Settings * setting = nullptr) : actors(startActors)
 {
-  fieldMap.width = width;
-  fieldMap.height = height;
-  fieldMap.generateTileMap();
+  fieldMap = new MapData(width, height);
   x_scalar = 4.0717 * pow(width, -1.031);
   y_scalar = 3.1923 * pow(height, -1.08);
   updateMap();
@@ -78,7 +76,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
  */
 int GameField::getWidth()
 {
-  return fieldMap.width;
+  return fieldMap->width;
 }
 /**
  * @author David Donahue
@@ -88,7 +86,7 @@ int GameField::getWidth()
 
 int GameField::getHeight()
 {
-  return fieldMap.height;
+  return fieldMap->height;
 }
 
 /**
@@ -104,9 +102,23 @@ void GameField::updateMap()
   {
     //for each actor fill in its id on the map
     if(a.health > 0){
-      //fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
-      if (fieldMap.tileMap[a.y][a.x].actor == nullptr)
-        fieldMap.tileMap[a.y][a.x].actor = new Tile("Tank", a.id, a.x, a.y, a.health, nullptr);
+      if (a.id > 0){
+        if (fieldMap->tileMap[a.y][a.x].actor == nullptr){
+          fieldMap->tileMap[a.y][a.x].actor = new Tile("Tank", a.id, a.x, a.y, a.health, nullptr, nullptr);
+        }else{
+          fieldMap->tileMap[a.y][a.x].actor->x = a.x;
+          fieldMap->tileMap[a.y][a.x].actor->y = a.y;
+          fieldMap->tileMap[a.y][a.x].actor->health = a.health;
+        }
+      }else{
+        if (fieldMap->tileMap[a.y][a.x].projectile == nullptr){
+          fieldMap->tileMap[a.y][a.x].projectile = new Tile("Projectile", a.id, a.x, a.y, a.health, nullptr, nullptr);
+        }else{
+          fieldMap->tileMap[a.y][a.x].projectile->x = a.x;
+          fieldMap->tileMap[a.y][a.x].projectile->y = a.y;
+          fieldMap->tileMap[a.y][a.x].projectile->health = a.health;
+        }
+      }
     }
   }
 }
@@ -283,7 +295,7 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
       break;
 
     case DOWN:
-      if(a.y < fieldMap.height && (obstacleAt(a.x, a.y + 1) != 1))
+      if(a.y < fieldMap->height && (obstacleAt(a.x, a.y + 1) != 1))
         yoff = 1;
       else
         a.health--;
@@ -297,7 +309,7 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
       break;
 
     case RIGHT:
-      if(a.x < fieldMap.width && (obstacleAt(a.x + 1, a.y) != 1))
+      if(a.x < fieldMap->width && (obstacleAt(a.x + 1, a.y) != 1))
         xoff = 1;
       else
         a.health--;
@@ -314,7 +326,7 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
       break;
 
     case UPRIGHT:
-      if(a.y > 1 && a.x < fieldMap.width && (obstacleAt(a.x+1, a.y-1) != 1))
+      if(a.y > 1 && a.x < fieldMap->width && (obstacleAt(a.x+1, a.y-1) != 1))
       {
         yoff = -1;
         xoff = 1;
@@ -324,7 +336,7 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
       break;
 
     case DOWNLEFT:
-      if(a.y < fieldMap.height && a.x > 1 && (obstacleAt(a.x-1,a.y+1) != 1))
+      if(a.y < fieldMap->height && a.x > 1 && (obstacleAt(a.x-1,a.y+1) != 1))
       {
         yoff = 1;
         xoff = -1;
@@ -334,7 +346,7 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
       break;
 
     case DOWNRIGHT:
-      if(a.y < fieldMap.height && a.x < fieldMap.width && (obstacleAt(a.x+1, a.y+1) != 1))
+      if(a.y < fieldMap->height && a.x < fieldMap->width && (obstacleAt(a.x+1, a.y+1) != 1))
       {
         yoff = 1;
         xoff = 1;
@@ -347,11 +359,18 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
       break;
   }
   //Set our new positions
-  delete fieldMap.tileMap[a.y][a.x].actor;
-  fieldMap.tileMap[a.y][a.x].actor = nullptr;
+  
+  if (a.id > 0){
+    delete fieldMap->tileMap[a.y][a.x].actor;
+    fieldMap->tileMap[a.y][a.x].actor = nullptr;
+  }else{
+    delete fieldMap->tileMap[a.y][a.x].projectile;
+    fieldMap->tileMap[a.y][a.x].projectile = nullptr;
+  }
+  
   a.x += xoff;
   a.y += yoff;
-  tempObj = &fieldMap.tileMap[a.y][a.x];
+  tempObj = &fieldMap->tileMap[a.y][a.x];
   hitObj = checkObjectStrike(a); //Check if our projectile hit a non-actor
   //Check if we're a tank that hit a rock or water
   if(a.id > 0 && (tempObj->type == "Rock" || tempObj->type == "Water"))
@@ -482,16 +501,14 @@ bool GameField::checkHealth(ActorInfo &a, bool object)
  * we check the various object lists to see if we struck one and then return the
  * appropriate flag.
  *
- ******************************************************************************/ 
+******************************************************************************/ 
 bool GameField::checkObjectStrike(ActorInfo &a)
 {
   int tempOb = obstacleAt(a.x, a.y);
   int hits = 0;
 
-
   if(a.id > 0 || a.health < 0)  //Get the non projectiles back out of here
     return false;
-
 
   if(tempOb == 0)    //if the spot is empty then we couldn't have hit anything
   {
@@ -589,8 +606,8 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
   int radar = 1; //How big the explosion
   int x_pos = x;
   int y_pos = y;
-  int x_max_radar_range = radar + x_pos > fieldMap.width ? fieldMap.width : radar + x_pos;
-  int y_max_radar_range = radar + y_pos > fieldMap.height ? fieldMap.height : radar + y_pos;
+  int x_max_radar_range = radar + x_pos > fieldMap->width ? fieldMap->width : radar + x_pos;
+  int y_max_radar_range = radar + y_pos > fieldMap->height ? fieldMap->height : radar + y_pos;
   int y_min_radar_range = y_pos - radar < 1 ? 1 : y_pos - radar;
   int x_min_radar_range = x_pos - radar < 1 ? 1 : x_pos - radar;
   int hit = 0;
@@ -744,8 +761,10 @@ void GameField::nextTurn()
 {
   gameTurn++;
   //Debug tileMap updating
-  //if (gameTurn >= 1)
-  //  fieldMap.printTileMap();
+  //if (gameTurn >= 1){
+  //  printf("Game turn: %d\n", gameTurn);
+  //  fieldMap->printTileMap();
+  //}
   if (tracker != nullptr)
     tracker->newTurn(gameTurn);
   direction atk;
@@ -779,7 +798,7 @@ void GameField::nextTurn()
       if(modCounter > 7)
         modCounter = 0;
       updateMap();
-      fog_of_war = create_fog_of_war(fieldMap, actors[i]);
+      fog_of_war = create_fog_of_war(*fieldMap, actors[i]);
       pos.game_x = actors[i].x;
       pos.game_y = actors[i].y;
       pos.health = actors[i].health;
@@ -817,18 +836,20 @@ void GameField::nextTurn()
             actors[i].heading = atk;
             j = i+1;
             grow = false;
-            while(j < actors.size() && actors[i].id == -actors[j].id && actors[j].id < 0 && actors[j].health > 0)
-            {//Check projectile list for a projectile in this spot
-              if(actors[i].x == actors[j].x && actors[i].y == actors[j].y) //found one
-              {
-                actors[j].scale += .40;
-                actors[j].health += 1;
-                actors[j].ammo += 1;
-                actors[j].damage += actors[i].damage;
-                grow = true; //See if the projectile is one of our own
-                break;
+            if (fieldMap->tileMap[actors[i].y][actors[i].x].projectile != nullptr){ //If no projectile we don't need to check the list
+              while(j < actors.size() && actors[i].id == -actors[j].id && actors[j].id < 0 && actors[j].health > 0)
+              {//Check projectile list for a projectile in this spot
+                if(actors[i].x == actors[j].x && actors[i].y == actors[j].y) //found one
+                {
+                  actors[j].scale += .40;
+                  actors[j].health += 1;
+                  actors[j].ammo += 1;
+                  actors[j].damage += actors[i].damage;
+                  grow = true; //See if the projectile is one of our own
+                  break;
+                }
+                j++;
               }
-              j++;
             }
             if(grow == false) //If there was no projectiles in this spot create a new one
             {
@@ -847,6 +868,7 @@ void GameField::nextTurn()
               actors.insert(actors.begin() + i + 1, newProjectile);
               actors[i].shots++;
               actors[i].ammo--;
+              fieldMap->tileMap[actors[i].y][actors[i].x].projectile = new Tile("Projectile", newProjectile.id, newProjectile.x, newProjectile.y, newProjectile.health, nullptr, nullptr);
             }
           }
           else if(atk != STAY)//Forced reload on empty ammo rack
@@ -926,7 +948,7 @@ void GameField::addObstacle(int x, int y, int type)
   }else if (type == 'H'){
     tType = "Hedgehog";
   }
-  fieldMap.tileMap[y][x] = Tile(tType, health, x, y, 4, nullptr);
+  fieldMap->tileMap[y][x] = Tile(tType, health, x, y, 4, nullptr);
 }
 
 /**
@@ -939,7 +961,7 @@ void GameField::addObstacle(int x, int y, int type)
  */
 void GameField::removeObstacle(int x, int y)
 {
-  fieldMap.tileMap[y][x] = Tile("Empty", 0, x, y, 0, nullptr);
+  fieldMap->tileMap[y][x] = Tile("Empty", 0, x, y, 0, nullptr, nullptr);
 }
 
 /**
@@ -1005,7 +1027,9 @@ void GameField::cull()
         if (tracker != nullptr){
           tracker->killed(actors[i].id, actors[i].name);
         }
-      
+        fieldMap->tileMap[actors[i].y][actors[i].x].actor = nullptr;
+      }else{
+        fieldMap->tileMap[actors[i].y][actors[i].x].projectile = nullptr;
       }
       if(actors[i].act_p != NULL)
         delete actors[i].act_p;
@@ -1047,7 +1071,7 @@ ActorInfo & GameField::actorInfoById(int id)
  */
 int GameField::obstacleAt(int x, int y)
 {
-  std::string tType = fieldMap.tileMap[y][x].type;
+  std::string tType = fieldMap->tileMap[y][x].type;
   int obj = 1;
   if(tType == "Rock")
     obj = 'R';
@@ -1097,3 +1121,12 @@ int GameField::getModCounter(){return modCounter;}
  * Increments game turn counter
  */
 void GameField::incTurn(){gameTurn++;}
+
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Set the fieldMap to a loaded map file.
+ */
+void GameField::setMap(MapData * newMap){
+    fieldMap = newMap;
+  }

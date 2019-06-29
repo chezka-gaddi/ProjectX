@@ -2,10 +2,6 @@
 
 std::ostream & operator<<(std::ostream& os, const Tile& tile){
     std::string tType = tile.type;
-    std::string sType = "";
-    
-    if (tile.actor != nullptr)
-        sType = tile.actor->type;
     
     if(tType == "Rock")
         os << "R";
@@ -19,9 +15,9 @@ std::ostream & operator<<(std::ostream& os, const Tile& tile){
         os << "C";
     else if (tType == "Hedgehog")
         os << "H";
-    else if (tType == "Tank" || sType == "Tank")
+    else if (tile.actor != nullptr)
         os << "¤";
-    else if (tType == "Projectile" || sType == "Projectile")
+    else if (tile.projectile != nullptr)
         os << "º";
     else 
         os << "x";

@@ -206,11 +206,10 @@ void Game::initGameState(Settings * setting)
     std::cout << "Game::Loading config.txt\n";
   ifstream fin("config.txt");
 
-  std::string configLine;
+  std::string configLine, tType, name, imgPath;
   Obstacles* tempOb;
-  Drawable *temp = nullptr;
-  bool taken, done;
-  int tex = 50;
+  Drawable* tempObj = nullptr;
+  bool done;
   //parseConfig(setting); //INI Config reader
 
   //Game Setting defaults
@@ -229,10 +228,10 @@ void Game::initGameState(Settings * setting)
   //Image vectors for custom images
   std::vector<std::string> tankImages, gameImages, treeImages, rockImages, bushImages,
       waterImages, AIImages, AINames;
-  std::string name;
-  std::string imgPath;
+
   int attributePoints = 0;
   ofstream fout;
+  MapData * mapLoader = nullptr;
 
   //Seed random for random obstacle selection
   srand(time(0));
@@ -263,7 +262,7 @@ void Game::initGameState(Settings * setting)
       if (id == "MAPNAME"){
         //MapLoader
         settings->setMapName(args);
-        MapData * mapLoader = loadMap(settings);
+        mapLoader = loadMap(settings);
         //mapLoader->printTileMap(); //Test map loaded correctly
         height = mapLoader->height;
         width = mapLoader->width;
@@ -304,17 +303,22 @@ void Game::initGameState(Settings * setting)
         i = args.find(' '); // find end of current item
         
         //Get our trunk image directory
-        if (args.substr(0,i) == AINames.back())
+        if (args.substr(0,i) == AINames.back()){
           imgPath = "images/Default";
-        else
+          AIImages.push_back(imgPath + "/base.png");
+          AIImages.push_back(imgPath + "/turret.png");
+          AIImages.push_back(imgPath + "/tankD.png");
+          AIImages.push_back(imgPath + "/tankL.png");
+          AIImages.push_back(imgPath + "/bullet.png");
+        }else{
           imgPath = args.substr(0, i);
-
-        //printf("imgPath: %s\n", imgPath.c_str());
-        AIImages.push_back(imgPath + "/base.png");
-        AIImages.push_back(imgPath + "/turret.png");
-        AIImages.push_back(imgPath + "/tankD.png");
-        AIImages.push_back(imgPath + "/tankL.png");
-        AIImages.push_back(imgPath + "/bullet.png");
+          AIImages.push_back(imgPath + "/tankU.png");
+          AIImages.push_back(imgPath + "/tankR.png");
+          AIImages.push_back(imgPath + "/tankD.png");
+          AIImages.push_back(imgPath + "/tankL.png");
+          AIImages.push_back(imgPath + "/bullet.png");
+        }
+        
         
         tankImages.insert(std::end(tankImages), std::begin(AIImages), std::end(AIImages));
         
@@ -498,6 +502,10 @@ void Game::initGameState(Settings * setting)
       }
     }
   }
+  if (mapLoader == nullptr){
+    printf("ERROR: No map name specified or loaded.\n");
+    exit(1);
+  }
   //set globals
   TimerEvent::idle_speed = ai_speed;
   Drawable::xscalar = (3.75/width)/.32;
@@ -525,6 +533,7 @@ void Game::initGameState(Settings * setting)
   startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, baseStats, height, width);
   //printf("Height: %d  Width: %d\n",height, width);
   tankGame = new GameField(width, height, startActors, displayWrapper, this, settings);
+  tankGame->setMap(mapLoader);
   tankGame->setSPECIAL(baseStats);
   if (!quiet)
     cout << "   ...Done\n" << endl;
@@ -534,36 +543,41 @@ void Game::initGameState(Settings * setting)
     cout << "Clearing spawn points...\n";
   for(auto tank : tankLocations)
   {
-    taken = false;
-    if (mapLoader.tileMap[tank.y][tank.x].type == "Rock"
-      || mapLoader.tileMap[tank.y][tank.x].type == "Water"
-      || mapLoader.tileMap[tank.y][tank.x].type == "Hedgehog")
+    if (mapLoader->tileMap[tank.second][tank.first].type == "Rock"
+      || mapLoader->tileMap[tank.second][tank.first].type == "Water"
+      || mapLoader->tileMap[tank.second][tank.first].type == "Hedgehog")
     {
       if (!quiet)
-        cout << "WARNING: removing object at (" << tank.x << "," << tank.y << ")\n";
-      mapLoader.tileMap[tank.y][tank.x].type = "Empty";
-      mapLoader.tileMap[tank.y][tank.x].health = 0;
+        cout << "WARNING: removing object at (" << tank.first << "," << tank.second << ")\n";
+      mapLoader->tileMap[tank.second][tank.first].type = "Empty";
+      mapLoader->tileMap[tank.second][tank.first].health = 0;
     }
   }
-  for (int i = 1; i <= height; i++){
-    for (int j=1; j <= width; j++){
-      if(mapLoader.tileMap[i][j].type != "Empty")
-      {
-        if(tType == "Rock")
-            tex = 1;
-        else if (tType == "Water")
-            tex = 3;
-        else if (tType == "Bush")
-            tex = 2;
-        else if (tType == "Tree")
-            tex = 1;
-        else if (tType == "Crate")
-            os << "C";
-        else if (tType == "Hedgehog")
-            tex = 50;
-        tempOb = new Obstacles(tex, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
-        constants.push_back(tempOb);
+  //Create drawable objects
+  for (unsigned int i = 1; i <= height; i++){
+    for (unsigned int j=1; j <= width; j++){
+      tType = mapLoader->tileMap[i][j].type;
+      
+      if(tType == "Rock"){
+          tempOb = new Obstacles(1, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+          rocks.push_back(tempOb);
+      }else if (tType == "Water"){
+          tempOb = new Obstacles(3, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+          constants.push_back(tempOb);
+      }else if (tType == "Bush"){
+          tempOb = new Obstacles(2, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+          bushes.push_back(tempOb);
+      }else if (tType == "Tree"){
+          tempOb = new Obstacles(0, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+          trees.push_back(tempOb);
+      }else if (tType == "Crate"){
+          tempObj = new Crate(convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+          specials.push_back(tempObj);
+      }else if (tType == "Hedgehog"){
+          tempOb = new Obstacles(50, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+          constants.push_back(tempOb);
       }
+    }
   }
 
   if (!quiet)

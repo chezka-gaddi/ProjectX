@@ -71,8 +71,6 @@ protected:
     bool crate_o_doom(int x, int y, ActorInfo &a);
     bool checkHealth(ActorInfo &a, bool object = true);
     void animateMove(ActorInfo &a);
-    void addObstacle(int x, int y, int type = 1);
-    void removeObstacle(int x, int y);
     void setSPECIAL(const attributes baseStats);
     void nextTurn();
     void addActor(ActorInfo);
@@ -82,6 +80,9 @@ protected:
 
     //Map functions
     void updateMap();
+    void addObstacle(int x, int y, int type = 1);
+    void removeObstacle(int x, int y);
+    void setMap(MapData * newMap);
 
     //pointers to other game components
     Game *gameptr = nullptr;
@@ -96,7 +97,7 @@ protected:
     std::vector<ActorInfo> actors; /*!< this is all of the actors on the field: tanks + projectiles */
     std::vector<ActorInfo> deceased; /*!< A list of destroyed tanks */
     std::vector<std::pair<int,int>> SFX; /*!< A list of all special effects on the field */
-    MapData fieldMap; /*!< Struct with mapdata, width, height, vector of ints.  0 - empty/ id - actor */
+    MapData * fieldMap; /*!< Struct with mapdata, width, height, vector of ints.  0 - empty/ id - actor */
 
     //Current Match Settings
     int gameTurn = 0; //Current game turn

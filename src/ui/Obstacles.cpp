@@ -18,7 +18,7 @@
 Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
 {
     //id's:
-    // 0 = Tree   1 = Rocks   2 = Bushes  3 = Water   4 = Other
+    // 0 = Tree   1 = Rocks   2 = Bushes  3 = Water   4 = Other 50 = hedgehog
     //Textures:
     //0-9   Trees  - Packaged Trees  0-3   - 4 Trees
     //10-19 Rocks  - Packaged Rocks  10-12 - 3 Rocks

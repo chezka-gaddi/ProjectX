@@ -156,9 +156,10 @@ direction SimpleAI::attack(const MapData &map, PositionData status)
             //if ( map.map[x + y*map.width] && //if there is an actor at X, Y
             //        map.map[x + y*map.width] != status.id && //And it is not you
             //        map.map[x + y*map.width] != -status.id && //And it is not your projectile
-            if ( map.tileMap[y][x].actor != nullptr && //if there is an actor at X, Y
-                    map.tileMap[y][x].actor->id != status.id && //And it is not you 
-                    map.tileMap[y][x].actor->id != -status.id && //And it is not your projectile
+            if (((map.tileMap[y][x].actor != nullptr && //if there is an actor at X, Y
+                    map.tileMap[y][x].actor->id != status.id) || //And it is not you 
+                    (map.tileMap[y][x].projectile != nullptr && 
+                    map.tileMap[y][x].projectile->id != -status.id)) && //And it is not your projectile
                     calcDist(status.game_x, status.game_y, x, y) < min_dist) //And it is the closest one
             {
                 if (x == status.game_x || y == status.game_y ||(
