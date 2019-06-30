@@ -36,7 +36,7 @@ SCENARIO("The projectile moves around the gamefield")
         REQUIRE(tank != nullptr);
 
         // Load a tank
-        ActorInfo tank_s(tank, "a1", 1, 1, 7, 4, 4, 2, 1, 6, 6);
+        ActorInfo tank_s(tank, "a1", 1, 1, 7, 4, 4, 2, 1, 6, 6, 2, 2);
 
         //Add a tank into a vector of actors
         std::vector<ActorInfo> actor_list = {tank_s};
@@ -65,8 +65,8 @@ SCENARIO("The projectile moves around the gamefield")
             gamefield.nextTurn();
             THEN("The projectile goes up")
             {
-                REQUIRE(gamefield->tileMap[1][1].projectile != nullptr);
-                REQUIRE(gamefield->tileMap[1][7].actor != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[1][1].projectile != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[7][1].actor != nullptr);
             }
             tank->setAttack(STAY);
             tank->setMove(STAY);
@@ -74,7 +74,7 @@ SCENARIO("The projectile moves around the gamefield")
             THEN("The projectile hits the wall")
             {
                 //compare actual map to expected map
-                REQUIRE(gamefield->tileMap[1][1].projectile == nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[1][1].projectile == nullptr);
             }
         }
 
@@ -88,8 +88,8 @@ SCENARIO("The projectile moves around the gamefield")
             THEN("The tank shoots down")
             {
                 //Compare map with the initial map
-                REQUIRE(gamefield->tileMap[1][13].projectile != nullptr);
-                REQUIRE(gamefield->tileMap[1][7].actor != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[1][13].projectile != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[1][7].actor != nullptr);
 
             }
             tank->setAttack(STAY);
@@ -97,7 +97,7 @@ SCENARIO("The projectile moves around the gamefield")
             gamefield.nextTurn();
             THEN("The projectile hits the wall")
             {
-                REQUIRE(gamefield->tileMap[1][13].projectile != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[1][13].projectile == nullptr);
             }
         }
     }
@@ -109,7 +109,7 @@ SCENARIO("The projectile moves around the gamefield")
         REQUIRE(tank != nullptr);
 
         // Load a tank
-        ActorInfo tank_s(tank, 100,0,6,0,2,2,6);
+        ActorInfo tank_s(tank, "a1", 1, 7, 1, 2, 2, 2, 2, 6, 6, 2, 2);
 
         //Add a tank into a vector of actors
         std::vector<ActorInfo> actor_list = {tank_s};
@@ -125,28 +125,14 @@ SCENARIO("The projectile moves around the gamefield")
             gamefield.nextTurn();
             THEN("The projectile goes left")
             {
-                //compare actual map to expected map
-                std::vector<int> expected_map = {-2, 0, 0, 0,
-                                                 0, 0, 2, 0,
-                                                 0, 0, 0, 0, 0
-                                                };
-
-                std::vector<int> actual_map = gamefield.fieldMap.map;
-                REQUIRE(expected_map == actual_map);
+                REQUIRE(gamefield.fieldMap->tileMap[1][1].projectile != nullptr);
             }
             tank->setAttack(STAY);
             tank->setMove(STAY);
             gamefield.nextTurn();
             THEN("The projectile hits the wall")
             {
-                //compare actual map to expected map
-                std::vector<int> expected_map = { 0, 0, 0, 0,
-                                                  0, 0, 2, 0,
-                                                  0, 0, 0, 0, 0
-                                                };
-
-                std::vector<int> actual_map = gamefield.fieldMap.map;
-                REQUIRE(expected_map == actual_map);
+                REQUIRE(gamefield.fieldMap->tileMap[1][1].projectile == nullptr);
             }
         }
 
@@ -159,29 +145,15 @@ SCENARIO("The projectile moves around the gamefield")
 
             THEN("The projectile goes right")
             {
-                //Compare map with the initial map
-                std::vector<int> expected_map = { 0, 0, 0, 0,
-                                                  0, 0, 2, 0,
-                                                  0, 0, 0, 0, -2
-                                                };
-
-                std::vector<int> actual_map = gamefield.fieldMap.map;
-                REQUIRE(expected_map == actual_map);
-
+                REQUIRE(gamefield.fieldMap->tileMap[1][13].projectile != nullptr);
             }
             tank->setAttack(STAY);
             tank->setMove(STAY);
             gamefield.nextTurn();
             THEN("The projectile hits the wall")
             {
-                //compare actual map to expected map
-                std::vector<int> expected_map = { 0, 0, 0, 0,
-                                                  0, 0, 2, 0,
-                                                  0, 0, 0, 0, 0
-                                                };
+                REQUIRE(gamefield.fieldMap->tileMap[1][13].projectile == nullptr);
 
-                std::vector<int> actual_map = gamefield.fieldMap.map;
-                REQUIRE(expected_map == actual_map);
             }
         }
     }
@@ -203,8 +175,8 @@ SCENARIO("The projectile collides with the actors on the gamefield")
     REQUIRE(tank2 != nullptr);
 
     // Load a tank
-    ActorInfo tank_s(tank, 1,1,13,0,2,2,6);
-    ActorInfo tank_q(tank2, 100,1,0,0,3,2,6);
+    ActorInfo tank_s(tank,  "a1", 1, 14, 1, 2, 2, 2, 2, 14, 6, 1, 1);
+    ActorInfo tank_q(tank2, "a2", 2, 1, 1,  2, 2, 2, 2, 14, 6, 1, 1);
 
     //Add a tank into a vector of actors
     std::vector<ActorInfo> actor_list = {tank_s,tank_q};
@@ -213,6 +185,8 @@ SCENARIO("The projectile collides with the actors on the gamefield")
     // 3,0,0,0,0,0,0,0,0,0,0,0,0,2
 
     GameField gamefield(14,1, actor_list, NULL, nullptr, nullptr);
+    gamefield.updateMap();
+
     GIVEN("A horizontal gamefeild and two tanks")
     {
         WHEN("Each tank tries to shoot a projectile")
@@ -226,10 +200,8 @@ SCENARIO("The projectile collides with the actors on the gamefield")
             THEN("The projectiles spawn and travle their range")
             {
                 //Compare map with the initial map
-                std::vector<int> expected_map = { 3, 0, 0, 0, 0, 0, -3, -2, 0, 0, 0, 0, 0, 2 };
-
-                std::vector<int> actual_map = gamefield.fieldMap.map;
-                REQUIRE(expected_map == actual_map);
+                REQUIRE(gamefield.fieldMap->tileMap[1][7].projectile != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[1][8].projectile != nullptr);
             }
             tank->setAttack(STAY);
             tank->setMove(STAY);
@@ -240,9 +212,8 @@ SCENARIO("The projectile collides with the actors on the gamefield")
 
             THEN("The projectiles collide and despawn")
             {
-                std::vector<int> expected_map = { 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 };
-                std::vector<int> actual_map = gamefield.fieldMap.map;
-                REQUIRE(expected_map == actual_map);
+                REQUIRE(gamefield.fieldMap->tileMap[1][7].projectile == nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[1][8].projectile == nullptr);
             }
         }
 

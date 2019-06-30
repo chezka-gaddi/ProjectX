@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -g -std=c++11 -fPIC
+CXXFLAGS = -Wall -fmax-errors=5 -g -std=c++11 -fPIC
 INCS = -I./ -Isrc/
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
@@ -82,7 +82,7 @@ clean:
 	@find . -name \*.gc* -type f -exec rm -f {} +
 	@rm -rf gprofresults.txt
 	@rm -rf gmon.out
-	@rm platform
+	@rm -rf platform
 
 clean-lib: clean
 	@rm -rf buildsrc
@@ -141,12 +141,12 @@ push-to-git: clean-lib
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc status
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release
 
-tests: set-coverage $(TANKS:%.cpp=%.so) testUnitAll testFunctionalAll
+tests: set-coverage src/actors/Actor.o $(TANKS:%.cpp=%.so) testUnitAll testFunctionalAll
 
 testUnitAll:
 	+make PROFILE="$(PROFILE)" -C tests/src
 	mv tests/src/testUnitAll .
 
-testFunctionalAll: tanks/SimpleActor.so tanks/SimpleAI.so
+testFunctionalAll: src/tanks/SimpleActor.so src/tanks/SimpleAI.so
 	+make PROFILE="$(PROFILE)" -C tests/functional_tests
 	mv tests/functional_tests/testFunctionalAll .

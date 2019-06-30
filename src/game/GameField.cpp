@@ -33,8 +33,7 @@ GameField::~GameField()
  */ 
 GameField::GameField(int width, int height)
 {
-  fieldMap->width = width;
-  fieldMap->height = height;
+  fieldMap = new MapData(width, height);
   settings = new Settings();
   fieldMap->generateTileMap();
   displayCallback = NULL;
@@ -121,22 +120,24 @@ void GameField::updateMap()
       }
     }
   }
-  for(auto * t : gameptr->trees)
-  {
-    if (t->health > 0){
-      fieldMap->tileMap[t->gridy][t->gridx].health = t->health;
+  if (gameptr != nullptr){
+    for(auto * t : gameptr->trees)
+    {
+      if (t->health > 0){
+        fieldMap->tileMap[t->gridy][t->gridx].health = t->health;
+      }
     }
-  }
-  for(auto * r : gameptr->rocks)
-  {
-    if (r->health > 0){
-      fieldMap->tileMap[r->gridy][r->gridx].health = r->health;
+    for(auto * r : gameptr->rocks)
+    {
+      if (r->health > 0){
+        fieldMap->tileMap[r->gridy][r->gridx].health = r->health;
+      }
     }
-  }
-  for(auto * b : gameptr->bushes)
-  {
-    if (b->health > 0){
-      fieldMap->tileMap[b->gridy][b->gridx].health = b->health;
+    for(auto * b : gameptr->bushes)
+    {
+      if (b->health > 0){
+        fieldMap->tileMap[b->gridy][b->gridx].health = b->health;
+      }
     }
   }
 }
@@ -965,7 +966,7 @@ void GameField::addActor(ActorInfo a)
 void GameField::addObstacle(int x, int y, int type)
 {
   int health = 0;
-  std::string tType = "Empty";
+  std::string tType = "Hedgehog";
   if (type == 'R'){
     tType = "Rock";
     health = 4;
