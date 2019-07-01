@@ -19,10 +19,10 @@ TANKS_LINK = src/Actor.o #need to link in the base class for the .so to have eve
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 	
-%.txt:
-	cp config.sample config.txt
+%.ini:
+	cp config.sample config.ini
 	
-config:	config.txt tanks
+config:	config.ini tanks
 
 tanks:	$(TANKS)
 	mkdir -p $(TANK_PATH)

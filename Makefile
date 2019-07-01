@@ -115,6 +115,7 @@ gen-library: $(FILES:.cpp=.o) $(TANKS:%.cpp=%.so)
 	#echo "Copying support files"
 	cp -R src/buildsrc/ .
 	cp README.md buildsrc/README.md
+	cp changelog.md buildsrc/changelog.md
 	cp -R images/ buildsrc/
 	cp -R maps/ buildsrc/
 	cp src/actors/Actor.h buildsrc/src/
