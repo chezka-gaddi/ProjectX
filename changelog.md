@@ -1,6 +1,47 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Release 7.00  ****  Major Changes to map system, AI's will need to be updated  ****
+##  Changes
+  - Smart pointers.  Most conventional points were switched to smart pointers for better memory management.
+  - New command line options:
+    -n  for no ui
+    -q  for quiet text
+    -t x  for x number of repeated games
+    -h  added for command line option help and list of more commands
+      * additional options can be checked in the help command or in the main.cpp
+    - Changed -- for full word options and - for single option
+    - Added support for chained single options.  IE -nq
+  - No UI Mode.  The game can now be ran with no UI for extremely fast game times.  ~.05s average game time.
+  - INI Parser. the config.txt is no more, now all options are in the config.ini
+  - Map Loader. Maps are no longer input into the config, only the map name.  A separate utility will then load the
+    map from the map directory.
+  - Settings Class.  All settings were moved to their own class instead of spread across multiple sections.
+  - Source file restructure.  Source files were moved into directories to better see what functionality they provide
+  - Images.  Tanks now only use 3 images:  Base, Turret, and Bullet.  The base will rotate 360 degrees and the turret follows.
+  - Added better text and descrptions to texture loading.
+  - Rearranged texture loading to separate into user/system groups.
+  - Improved AI loading process.
+  - Functionalized texture loading.
+  - Tank images moved to separate tank sub folder.
+  - New tile object created for map.  The tile object contains the base for an object and then holds pointers for projectile or tank.
+  - New Map.  The MapData object is now a single map made out of 2D vectors.  These vectors store Tile objects to give full information
+        to users without multiple maps to check.
+  - game init function massively reduced and improved.
+  - Improved projectile turn speed.
+  - Improved set special points functions and anti-cheating.
+  - Added a game tracker that can output every move to a separate log file for tracking an entire game.
+  - Added player count to loser section of results file.
+  - Added option to specify name for results file.
+  - Added command line option to specify different config file.
+  - Cleaned up ActorInfo with reorganization and removed excess variables.
+  - Improved create fog of war.
+  - Rocks no longer respawn.
+  - Cleaned up GameOver function.
+  - Separated GameOver function to it's own file.
+  - Functionalized some drawing functions for Tanks and Projectiles.  Added new draw function to Drawable.h/Drawable.cpp
+  - Fixed/Improved SimpleAI after converting to use new Map system.
+  - Other optimizations to help improve time.  ~.02 seconds is base time the additional .02-.03 is game time with 10 SimpleAI tanks.
 ## Release 6.05
 ##  Changes
   - Renamed README.md to changelog.md
