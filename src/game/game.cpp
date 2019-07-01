@@ -26,10 +26,14 @@ Game::Game(){}
  *******************************************************************************/
 Game::~Game()
 {
-  //for(auto temp : objects)
-    //delete temp;
   objects.clear();
-  delete tankGame;
+  constants.clear();
+  bushes.clear();
+  rocks.clear();
+  trees.clear();
+  waters.clear();
+  specials.clear();
+  sfx.clear();
 }
 
 
@@ -45,7 +49,7 @@ Game::~Game()
 float Game::convertGLXCoordinate(int x)
 {
   float fscaler;
-  fscaler = (x - 1) * (4.0717* pow(tankGame->fieldMap->width, -1.031));
+  fscaler = (x - 1) * (4.0717* pow(tankGame->getWidth(), -1.031));
   GLfloat x_gl = -1.75 + (fscaler);
   return x_gl;
 }
@@ -62,7 +66,7 @@ float Game::convertGLXCoordinate(int x)
  *******************************************************************************/
 float Game::convertGLYCoordinate(int y)
 {
-  float fscaler =  (y - 1) * (3.1923* pow(tankGame->fieldMap->height, -1.08));
+  float fscaler =  (y - 1) * (3.1923* pow(tankGame->getHeight(), -1.08));
   GLfloat y_gl = 0.75 - (fscaler);
   return y_gl;
 }
@@ -179,7 +183,7 @@ void Game::executeTurn()
  * @par Description:
  * Wrapper to display() that acts as the GameField display callback
  */
-void displayWrapper(Settings * settings)
+void displayWrapper(std::shared_ptr<Settings> settings)
 {
     if (settings->showUI())
       display();
@@ -198,14 +202,12 @@ void displayWrapper(Settings * settings)
 float Drawable::xscalar = 1.0;
 float Drawable::yscalar = 1.0;
 int TimerEvent::idle_speed = 750;
-void Game::initGameState(Settings * setting)
+void Game::initGameState(std::shared_ptr<Settings> setting)
 {
   settings = setting;
   bool quiet = settings->checkQuiet();
 
   std::string configLine, tType, name, imgPath;
-  Obstacles* tempOb;
-  Drawable* tempObj = nullptr;
   int x, y, hPad = 0, wPad=0;
   int pCount = 1;
   std::vector<ActorInfo> startActors;
@@ -217,13 +219,13 @@ void Game::initGameState(Settings * setting)
       waterImages, tImages, AINames;
 
   ofstream fout;
-  MapData * mapLoader = nullptr;
+  std::shared_ptr<MapData> mapLoader = nullptr;
 
   //Seed random for random obstacle selection
   srand(time(0));
 
   // Load game field
-  constants.push_back(new GameFieldDrawable);
+  constants.push_back(std::unique_ptr<Drawable>(new GameFieldDrawable));
 
   mapLoader = parseConfig(setting); //INI Config reader
   //mapLoader->printTileMap(); //Test map loaded correctly
@@ -316,7 +318,7 @@ void Game::initGameState(Settings * setting)
 
   startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, settings->getAttributes(), mapLoader->height, mapLoader->width);
   //printf("Height: %d  Width: %d\n",height, width);
-  tankGame = new GameField(mapLoader->width, mapLoader->height, startActors, displayWrapper, this, settings);
+  tankGame = std::unique_ptr<GameField>(new GameField(mapLoader->width, mapLoader->height, startActors, displayWrapper, this, settings));
   tankGame->setMap(mapLoader);
   tankGame->setSPECIAL(settings->getAttributes());
   if (!quiet)
@@ -342,23 +344,23 @@ void Game::initGameState(Settings * setting)
     for (int j=1; j <= mapLoader->width; j++){
       tType = mapLoader->tileMap[i][j].type;
       if(tType == "Rock"){
-          tempOb = new Obstacles(1, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
-          rocks.push_back(tempOb);
+          //tempOb = new Obstacles(1, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+          rocks.push_back(std::unique_ptr<Obstacles>(new Obstacles(1, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Water"){
-          tempOb = new Obstacles(3, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
-          constants.push_back(tempOb);
+          //tempOb = new Obstacles(3, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+          constants.push_back(std::unique_ptr<Drawable>(new Obstacles(3, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Bush"){
-          tempOb = new Obstacles(2, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
-          bushes.push_back(tempOb);
+          //tempOb = new Obstacles(2, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+          bushes.push_back(std::unique_ptr<Obstacles>(new Obstacles(2, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Tree"){
-          tempOb = new Obstacles(0, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
-          trees.push_back(tempOb);
+          //tempOb = new Obstacles(0, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+          trees.push_back(std::unique_ptr<Obstacles>(new Obstacles(0, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Crate"){
-          tempObj = new Crate(convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
-          specials.push_back(tempObj);
+          //tempObj = new Crate(convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+          specials.push_back(std::unique_ptr<Drawable>(new Crate(convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Hedgehog"){
-          tempOb = new Obstacles(50, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
-          constants.push_back(tempOb);
+          //tempOb = new Obstacles(50, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
+          constants.push_back(std::unique_ptr<Drawable>(new Obstacles(50, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }
     }
   }

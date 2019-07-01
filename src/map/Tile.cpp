@@ -24,3 +24,21 @@ std::ostream & operator<<(std::ostream& os, const Tile& tile){
     
     return os;
 }
+
+Tile::Tile(const Tile & tTile){
+    type = tTile.type;
+    id = tTile.id;
+    x = tTile.x;
+    y = tTile.y;
+    health = tTile.health;
+    if (actor != nullptr){
+        actor = std::unique_ptr<Tile>(new Tile(tTile.actor->type, tTile.actor->id, tTile.actor->x, tTile.actor->y, tTile.actor->health));
+    }else{
+        actor = nullptr;
+    }
+    if (projectile != nullptr){
+        projectile = std::unique_ptr<Tile>(new Tile(tTile.projectile->type, tTile.projectile->id, tTile.projectile->x, tTile.projectile->y, tTile.projectile->health));
+    }else{
+        projectile = nullptr;
+    }
+}

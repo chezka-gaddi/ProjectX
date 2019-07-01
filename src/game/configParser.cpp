@@ -1,12 +1,12 @@
 #include "configParser.h"
 
-MapData * parseConfig( Settings * settings){
+std::shared_ptr<MapData> parseConfig( std::shared_ptr<Settings> settings){
     std::string configFile = settings->getConfigFile();
-    bool quiet = settings->checkQuiet();
+    //bool quiet = settings->checkQuiet();
 
     INIReader config(configFile);
     //INIReader config("config.ini");
-    MapData * map;
+   std::shared_ptr<MapData> map;
 
     //Store the parse error/line number
     //int cerrors = config.ParseError();
@@ -36,9 +36,9 @@ MapData * parseConfig( Settings * settings){
     return map;
 }
 
-std::vector<std::string> parseList(Settings * settings, std::string section, std::string key){
+std::vector<std::string> parseList(std::shared_ptr<Settings> settings, std::string section, std::string key){
     std::string configFile = settings->getConfigFile(), temp;
-    bool quiet = settings->checkQuiet();
+    //bool quiet = settings->checkQuiet();
     bool done = false;
     int i = 0;
     INIReader config(configFile);
@@ -69,9 +69,9 @@ std::vector<std::string> parseList(Settings * settings, std::string section, std
     return list;
 }
 
-std::string parseAI(Settings * settings, std::string section, std::string key){
+std::string parseAI(std::shared_ptr<Settings> settings, std::string section, std::string key){
     std::string configFile = settings->getConfigFile(), param;
-    bool quiet = settings->checkQuiet();
+    //bool quiet = settings->checkQuiet();
     INIReader config(configFile);
 
     param = config.Get(section, key, "");

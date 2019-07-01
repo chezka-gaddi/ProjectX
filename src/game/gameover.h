@@ -19,6 +19,6 @@
 #include <ui/global.h>
 
 
-void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settings * settings, int turn);
-void displayScoreBoard(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settings * settings, int winDex);
+void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, std::shared_ptr<Settings> settings, int turn);
+void displayScoreBoard(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, std::shared_ptr<Settings> settings, int winDex);
 #endif

@@ -59,7 +59,7 @@ struct ActorInfo
     float scale = 1; /*!< */
     float offsetx = 0; /*!< The stored x offset for drawing the actor */
     float offsety = 0; /*!< The stored y offset for drawing the actor */
-    
+        
     //Default constructor for structure
     ActorInfo(Actor *a
               , std::string n = "default"

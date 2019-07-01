@@ -31,9 +31,12 @@ class MapData
         MapData(const MapData &m);
         MapData();
         ~MapData();
-        void clear();
-        void initMap();
+
         void printTileMap();
+        void clearTanks();
+        void clearProjectiles();
+
+    protected:
         void generateTileMap();
         void clearTileMap();
 };

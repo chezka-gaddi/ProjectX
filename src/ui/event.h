@@ -39,10 +39,10 @@ class InitEvent : public Event
 {
 private:
     int columns, rows;
-    Settings * settings;
+    std::shared_ptr<Settings> settings;
 
 public:
-    InitEvent(int, int, Settings *);
+    InitEvent(int, int, std::shared_ptr<Settings>);
 
     void doAction(Game &);
 };

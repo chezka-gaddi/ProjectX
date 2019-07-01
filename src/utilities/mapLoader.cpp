@@ -1,7 +1,7 @@
 #include <utilities/mapLoader.h>
 
-MapData * loadMap(Settings * settings){
-    MapData * map;
+std::shared_ptr<MapData> loadMap(std::shared_ptr<Settings> settings){
+    std::shared_ptr<MapData> map;
     std::string key, args, fileLine, mapName = "maps/" + settings->getMapName();
     std::ifstream fin;
     fin.open(mapName);
@@ -48,7 +48,7 @@ MapData * loadMap(Settings * settings){
             }
             if (!quiet)
                     std::cout << "Building the map->..\n";
-            map = new MapData(width, height);
+            map = std::shared_ptr<MapData>(new MapData(width, height));
             if(height < 9)
             {
                 hPad = (9 - height) / 2;

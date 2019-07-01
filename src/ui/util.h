@@ -13,7 +13,7 @@
 #include <ui/event.h>
 #include <utilities/textureLoader.h>
 
-void initOpenGL(int, char**, int, int, Settings*);
+void initOpenGL(int, char**, int, int, std::shared_ptr<Settings>);
 void utilityCentral(Event *);
 
 #endif

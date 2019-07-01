@@ -11,7 +11,7 @@
 class Tournament {
 public:
     //constructors
-    Tournament(Settings * settings, int rounds);
+    Tournament(std::shared_ptr<Settings> settings, int rounds);
     Tournament();
     ~Tournament();
 
@@ -23,7 +23,7 @@ protected:
     void newGame(); //starts a new game
 
 private:
-    Settings * settings; //pointer to settings to use
-    Game * game;         //pointer to current game
+    std::shared_ptr<Settings> settings; //pointer to settings to use
+    std::unique_ptr<Game> game;         //pointer to current game
     int rounds = 1;      //number of rounds to play
 };

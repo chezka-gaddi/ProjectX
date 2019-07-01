@@ -24,7 +24,7 @@ Event::~Event() {}
  * @param[in] c - columns (in pixels) of the window
  * @param[in] r - rows (in pixels) of the window
  ******************************************************************************/
-InitEvent::InitEvent(int c, int r, Settings * s) : columns(c), rows(r), settings(s) {}
+InitEvent::InitEvent(int c, int r, std::shared_ptr<Settings> s) : columns(c), rows(r), settings(s) {}
 
 
 /***************************************************************************//**

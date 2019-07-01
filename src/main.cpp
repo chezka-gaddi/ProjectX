@@ -59,8 +59,8 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 
 int main(int argc, char **argv)
 {
-    Settings * settings = new Settings;
-    Tournament * tourny;
+    std::shared_ptr<Settings> settings = std::shared_ptr<Settings>(new Settings);
+    std::unique_ptr<Tournament> tourny;
     gameMode mode = settings->getGameMode();
     
     //game display height
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
         printf("Tournament Mode\n");
         mode = tournament;
         rounds = atoi(argv[counter+1]);
-        tourny = new Tournament(settings, rounds);
+        tourny = std::unique_ptr<Tournament>(new Tournament(settings, rounds));
         counter++;
       }else if ((strcmp(argv[counter], "--noui") == 0 ) && counter + 1 <= argc)
       {

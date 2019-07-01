@@ -10,7 +10,7 @@
  * @param[in] s - pointer to the settings to use
  * @param[in] r - The number of rounds to play
  *******************************************************************************/
-Tournament::Tournament(Settings * s, int r){
+Tournament::Tournament(std::shared_ptr<Settings> s, int r){
     settings = s;
     rounds = r;
     settings->setUI(false);
@@ -24,7 +24,7 @@ Tournament::Tournament(Settings * s, int r){
  * Empty constructor with default values and a single round
  *******************************************************************************/
 Tournament::Tournament(){
-    settings = new Settings();
+    settings = std::shared_ptr<Settings>(new Settings());
     rounds = 1;
     newGame();
 }
@@ -35,8 +35,6 @@ Tournament::Tournament(){
  * Deconstructor to clean up as we leave
  *******************************************************************************/
 Tournament::~Tournament(){
-    delete settings; 
-    delete game;
 }
 /***************************************************************************//**
  * @author Jon McKee
@@ -45,7 +43,7 @@ Tournament::~Tournament(){
  * Resets relevant settings and creates a new game variable for the next round
  *******************************************************************************/
 void Tournament::newGame(){
-    game = new Game();
+    game = std::unique_ptr<Game>(new Game());
     game->initGameState(settings);
 }
 /***************************************************************************//**
@@ -62,7 +60,6 @@ void Tournament::runTournament(){
         if (roundCounter % (rounds / 10) == 0) //limit output
             printf("Game %d of %d\n",roundCounter, rounds);
         game->executeTurn(); //Run the round
-        delete game; //cleanup last round
         newGame();
     }
 }

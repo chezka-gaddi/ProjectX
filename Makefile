@@ -59,7 +59,7 @@ platform: $(FILES:.cpp=.o)
 	+make tanks
 	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
 
-coverage: set-coverage $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
+coverage: set-coverage $(FILES:.cpp=.o) $(TANKS:%.cpp=%.so)
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o platform $(FILES:.cpp=.o) $(LIBS)
 
 set-coverage:
@@ -114,7 +114,6 @@ gen-library: $(FILES:.cpp=.o) $(TANKS:%.cpp=%.so)
 	$(CXX) $(CXXFLAGS) $(INCS) -o buildsrc/platform $(FILES:.cpp=.o) $(LIBS)
 	#echo "Copying support files"
 	cp -R src/buildsrc/ .
-	cp config.txt	buildsrc/config.sample
 	cp README.md buildsrc/README.md
 	cp -R images/ buildsrc/
 	cp -R maps/ buildsrc/

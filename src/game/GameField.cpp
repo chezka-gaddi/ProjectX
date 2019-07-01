@@ -24,6 +24,9 @@ GameField::~GameField()
   }
   if (settings->checkTracking())
     tracker->close();
+  actors.clear();
+  deceased.clear();
+  SFX.clear();
 }
 
 /**
@@ -33,9 +36,8 @@ GameField::~GameField()
  */ 
 GameField::GameField(int width, int height)
 {
-  fieldMap = new MapData(width, height);
-  settings = new Settings();
-  fieldMap->generateTileMap();
+  fieldMap = std::shared_ptr<MapData>(new MapData(width, height));
+  settings = std::shared_ptr<Settings>(new Settings());
   displayCallback = NULL;
   if (settings->checkTracking()){
     tracker = new gameTracker();
@@ -48,16 +50,15 @@ GameField::GameField(int width, int height)
  * Constructor with dimensions and a vector of ActorInfo
  */
 
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(Settings *) = NULL, Game * game = nullptr, Settings * setting = nullptr) : actors(startActors)
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(std::shared_ptr<Settings>) = NULL, Game * game = nullptr, std::shared_ptr<Settings> setting = nullptr) : actors(startActors)
 {
-  fieldMap = new MapData(width, height);
+  fieldMap = std::shared_ptr<MapData>(new MapData(width, height));
   x_scalar = 4.0717 * pow(width, -1.031);
   y_scalar = 3.1923 * pow(height, -1.08);
-  //updateMap();
   displayCallback = d_callback;
   gameptr = game;
   if (setting == nullptr){
-    settings = new Settings();
+    settings = std::shared_ptr<Settings>(new Settings());
   }else{
     settings = setting;
   }
@@ -103,7 +104,7 @@ void GameField::updateMap()
     if(a.health > 0){
       if (a.id > 0){
         if (fieldMap->tileMap[a.y][a.x].actor == nullptr){
-          fieldMap->tileMap[a.y][a.x].actor = new Tile("Tank", a.id, a.x, a.y, a.health, nullptr, nullptr);
+          fieldMap->tileMap[a.y][a.x].actor = std::shared_ptr<Tile>(new Tile("Tank", a.id, a.x, a.y, a.health));
         }else{
           fieldMap->tileMap[a.y][a.x].actor->x = a.x;
           fieldMap->tileMap[a.y][a.x].actor->y = a.y;
@@ -111,7 +112,7 @@ void GameField::updateMap()
         }
       }else{
         if (fieldMap->tileMap[a.y][a.x].projectile == nullptr){
-          fieldMap->tileMap[a.y][a.x].projectile = new Tile("Projectile", a.id, a.x, a.y, a.health, nullptr, nullptr);
+          fieldMap->tileMap[a.y][a.x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", a.id, a.x, a.y, a.health));
         }else{
           fieldMap->tileMap[a.y][a.x].projectile->x = a.x;
           fieldMap->tileMap[a.y][a.x].projectile->y = a.y;
@@ -121,19 +122,19 @@ void GameField::updateMap()
     }
   }
   if (gameptr != nullptr){
-    for(auto * t : gameptr->trees)
+    for(auto && t : gameptr->trees)
     {
       if (t->health > 0){
         fieldMap->tileMap[t->gridy][t->gridx].health = t->health;
       }
     }
-    for(auto * r : gameptr->rocks)
+    for(auto && r : gameptr->rocks)
     {
       if (r->health > 0){
         fieldMap->tileMap[r->gridy][r->gridx].health = r->health;
       }
     }
-    for(auto * b : gameptr->bushes)
+    for(auto && b : gameptr->bushes)
     {
       if (b->health > 0){
         fieldMap->tileMap[b->gridy][b->gridx].health = b->health;
@@ -298,129 +299,58 @@ void GameField::animateMove(ActorInfo &a)
  * @par Description:
  * Executes the move phase of an AI's turn and then AI's are culled
  */
-void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
+void GameField::runMoves(ActorInfo &a, direction dir)
 {
 
   int xoff = 0, yoff = 0, tHealth = 0, hit = 0;
   bool hitObj = false;
-  direction dir;
   Tile * tempObj;
-
-  //get the AI's desired move
-  dir = a.act_p->move(fog, pos);
+  
   a.heading = (dir == STAY) ? a.heading : dir; //Not the best move if we chose to stay
   //If it checks out, execute it
   //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
-  if(a.health <= 0 || a.id == 0 || dir == STAY) //We arn't playing this game with dead actors anymore
+  if(a.health <= 0 || dir == STAY) //We arn't playing this game with dead actors anymore
     return;
   //store prev coordinates
   a.prevx = a.x;
   a.prevy = a.y;
   //try and move
-  switch(dir)
-  {
-    case UP:
-      if(a.y > 1 && (obstacleAt(a.x, a.y - 1) != 1))
-        yoff = -1;
-      else
-        a.health--;
-      break;
 
-    case DOWN:
-      if(a.y < fieldMap->height && (obstacleAt(a.x, a.y + 1) != 1))
-        yoff = 1;
-      else
-        a.health--;
-      break;
-
-    case LEFT:
-      if(a.x > 1 && (obstacleAt(a.x - 1, a.y) != 1))
-        xoff = -1;
-      else
-        a.health--;
-      break;
-
-    case RIGHT:
-      if(a.x < fieldMap->width && (obstacleAt(a.x + 1, a.y) != 1))
-        xoff = 1;
-      else
-        a.health--;
-      break;
-
-    case UPLEFT:
-      if(a.y > 1 && a.x > 1 && (obstacleAt(a.x-1,a.y-1) != 1))
-      {
-        yoff = -1;
-        xoff = -1;
-      }
-      else
-        a.health--;
-      break;
-
-    case UPRIGHT:
-      if(a.y > 1 && a.x < fieldMap->width && (obstacleAt(a.x+1, a.y-1) != 1))
-      {
-        yoff = -1;
-        xoff = 1;
-      }
-      else
-        a.health--;
-      break;
-
-    case DOWNLEFT:
-      if(a.y < fieldMap->height && a.x > 1 && (obstacleAt(a.x-1,a.y+1) != 1))
-      {
-        yoff = 1;
-        xoff = -1;
-      }
-      else
-        a.health--;
-      break;
-
-    case DOWNRIGHT:
-      if(a.y < fieldMap->height && a.x < fieldMap->width && (obstacleAt(a.x+1, a.y+1) != 1))
-      {
-        yoff = 1;
-        xoff = 1;
-      }
-      else
-        a.health--;
-      break;
-
-    default:
-      break;
-  }
+  if (dir == UP || dir == UPLEFT || dir == UPRIGHT){yoff = -1;}
+  else if (dir == DOWN || dir == DOWNLEFT || dir == DOWNRIGHT){yoff = 1;}
+  if (dir == LEFT || dir == UPLEFT || dir == DOWNLEFT){xoff = -1;}
+  else if (dir == RIGHT || dir == UPRIGHT || dir == DOWNRIGHT){xoff = 1;}
   //Set our new positions
-  
-  if (a.id > 0){
-    delete fieldMap->tileMap[a.y][a.x].actor;
-    fieldMap->tileMap[a.y][a.x].actor = nullptr;
-  }else{
-    delete fieldMap->tileMap[a.y][a.x].projectile;
-    fieldMap->tileMap[a.y][a.x].projectile = nullptr;
-  }
-  
   a.x += xoff;
   a.y += yoff;
+
   tempObj = &fieldMap->tileMap[a.y][a.x];
-  hitObj = checkObjectStrike(a); //Check if our projectile hit a non-actor
-  //Check if we're a tank that hit a rock or water
-  if(a.id > 0 && (tempObj->type == "Rock" || tempObj->type == "Water"))
-  {
+  //check if we went off map
+  if (a.x < 1 || a.y < 1 || a.x > fieldMap->width || a.y > fieldMap->height){
+    a.health--;   //subtract 1 health for going off map
+    a.x -= xoff;  //Undo the move
+    a.y -= yoff;
+    hitObj = true; //allows skipping additional checks
+  }else if (a.id > 0 && (tempObj->type == "Rock" || tempObj->type == "Water" || tempObj->type == "Hedgehog")){
     a.x -= xoff;
     a.y -= yoff;
-    hitObj = true;//Allows us to skip the rest of the checking if we ran into a rock or water
     a.health--;
+    hitObj = true;//Allows us to skip additional checks further on
+  }else if (a.id < 0) { //only run projectiles through this check
+    hitObj = checkObjectStrike(a); //Check if our projectile hit a non-actor
   }
+    
+  //Move actor over on internal map instead of deleting a creating new
+  moveActor(a.x, a.y, a.prevx, a.prevy, a.id);
 
   //Run the main loop through actors to see if we hit one
-  if(a.health > 0 && hitObj == false && (xoff != 0 || yoff != 0))
+  if(hitObj == false && (xoff != 0 || yoff != 0))
   {
     if (a.id > 0){
       a.cDetect = 0;
       a.camp = false;
     }
-    if (tempObj->actor != nullptr){ //Only check for actors if there was one in the tile
+    if (tempObj->actor != nullptr || tempObj->projectile != nullptr){ //Only check for actors if there was one in the tile
       for(unsigned int i = 0; i < actors.size(); ++i)   //check each actor
       {
         if(a.id < 0 && actors[i].id == -a.id){//If it's one of our projectiles update it's camp value
@@ -435,9 +365,6 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
           if(a.id > 0 && actors[i].id > 0)
           {
             //printf("Tank hit tank\n");
-            //Reverse the move
-            a.x -= xoff;
-            a.y -= yoff;
             //Store target tanks health
             tHealth = actors[i].health;
             actors[i].health -= a.health; //deal our full health damage to target
@@ -455,18 +382,27 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
               hit += tHealth; //Tank survives
             }
             a.hits++; //A tank hit is still a hit right?
-            if(checkHealth(actors[i]))
+            if(checkHealth(actors[i])){
               a.kills++;
+            }else{
+              //Reverse the move if the other tank didn't die
+              a.x -= xoff;
+              a.y -= yoff;
+            }
           }
           else if(actors[i].id < 0)  //Check if we ran into a projectile (What we are doesn't matter)
           {
             //printf("Projectile or Tank hit a projectile.\n");
-            hit += actors[i].damage; //store future damage
+            if (a.id > 0){
+              hit += actors[i].damage; //store future damage if we're a tank
+            }else{
+              a.health = 0; //Kill us if we're a projectile
+            }
             actors[i].health = 0; //Destroy the projectile
             if(a.id > 0 && -actors[i].id != a.id){  //Give the owner a hit, but not a self hit and not a missile to missle hit
               actorInfoById(-actors[i].id).hits++;
               if (a.health -= hit <= 0) //Give the owner a kill if we suicided
-                      actorInfoById(-actors[i].id != a.id);
+                actorInfoById(-actors[i].id != a.id);
             }
           }
           else if(a.id < 0 && a.id != -actors[i].id)  //If we're a projectile and we hit a tank (Do not allow self hit)
@@ -485,14 +421,13 @@ void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
   }
   a.health -= hit;
   checkHealth(a, hitObj);
-  if (gameptr != nullptr){//Skip animating if we're not displaying the game
+  if (settings->showUI()){//Skip animating if we're not displaying the game
     animateMove(a);
-    updateMap(); //Update actors and map
     //printf("Currently %d number of explosions.\n",SFX.size());
     displayCallback(settings);
     SFX.clear(); //Clear the explosions
   }
-  
+  tempObj = nullptr;
 }
 /***********************************************************************//*
  * @author Jon McKee
@@ -507,18 +442,18 @@ bool GameField::checkHealth(ActorInfo &a, bool object)
 {
   if(a.health <= 0) //if whatever we have has no health left
   {
-    SFX.push_back(make_pair(a.x, a.y));
+    if (settings->showUI()) //Don't make SFX if there is no graphics
+      SFX.push_back(make_pair(a.x, a.y));
     a.damage = 0;
-    a.id = 0;
     a.health = 0;
     a.AP = 0;
     return true;
   }
-  else if(a.id < 0 && object) //If our projectile impacted on an object
+  else if(a.id < 0 && object) //If it was a projectile and hit an object kill it no matter health
   {
-    SFX.push_back(make_pair(a.x, a.y));
+    if (settings->showUI())
+      SFX.push_back(make_pair(a.x, a.y));
     a.damage = 0;
-    a.id = 0;
     a.health = 0;
     a.AP = 0;
     return true;
@@ -558,13 +493,14 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   else if(tempOb == 'R')
   {
     //printf("Rock strike, log it.\n");
-    for(auto* r : gameptr->rocks)
+    for(auto && r : gameptr->rocks)
     {
       if(r->gridx == a.x && r->gridy == a.y && r->health > 0)
       {
         //printf("Found Rock strike, log it.\n");
         r->health -= a.damage;
-        SFX.push_back(make_pair(r->gridx, r->gridy));
+        if (settings->showUI())
+          SFX.push_back(make_pair(r->gridx, r->gridy));
         if(r->health <= 0)
         {
           r->health = 0;
@@ -579,13 +515,14 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   }
   else if(tempOb == 'T')
   {
-    for(auto* t : gameptr->trees)
+    for(auto && t : gameptr->trees)
     {
       if(t->gridx == a.x && t->gridy == a.y && t->health > 0)
       {
         //printf("Found tree strike, chop it.\n");
         t->health -= a.damage;
-        SFX.push_back(make_pair(t->gridx, t->gridy));
+        if (settings->showUI())
+          SFX.push_back(make_pair(t->gridx, t->gridy));
         if(t->health <= 0)
         {
           t->health = 0;
@@ -607,7 +544,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   else if(tempOb == 'C')
   {
     //printf("Hit the crate.\n");
-    for(auto* &c : gameptr->specials)
+    for(auto &&c : gameptr->specials)
     {
       if(c->gridx == a.x && c->gridy == a.y && c->health > 0)
       {
@@ -632,12 +569,10 @@ bool GameField::checkObjectStrike(ActorInfo &a)
 * @brief  Crate destruction.  We check every square in the range of the crate 
 * and deal appropriate damage.  If we struck a crate we begin chaining our damage.
 ******************************************************************************/
-bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
+bool  GameField::crate_o_doom(int x_pos, int y_pos, ActorInfo &a)
 {
   //Steal the good parts from fog of war
   int radar = 1; //How big the explosion
-  int x_pos = x;
-  int y_pos = y;
   int x_max_radar_range = radar + x_pos > fieldMap->width ? fieldMap->width : radar + x_pos;
   int y_max_radar_range = radar + y_pos > fieldMap->height ? fieldMap->height : radar + y_pos;
   int y_min_radar_range = y_pos - radar < 1 ? 1 : y_pos - radar;
@@ -688,24 +623,27 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
           break;
         case 'B':
         default:
-          for(auto &act : actors)
-          {
-            if(act.x == x_iter && act.y == y_iter && act.health > 0)
+          //If there is no actor or projectile on the map we can skip the search
+          if (fieldMap->tileMap[y_iter][x_iter].actor != nullptr || fieldMap->tileMap[y_iter][x_iter].projectile != nullptr){
+            for(auto &act : actors)
             {
-              //printf("Hit a tank at (%d, %d)\n",x_iter, y_iter);
-              act.health--;
-              if(act.health <= 0)
+              if(act.x == x_iter && act.y == y_iter && act.health > 0)
               {
-                act.health = 0;
-                act.id = 0;
-                actorInfoById(-a.id).kills++;
+                //printf("Hit a tank at (%d, %d)\n",x_iter, y_iter);
+                act.health--;
+                if(act.health <= 0)
+                {
+                  act.health = 0;
+                  actorInfoById(-a.id).kills++;
+                }
+                actorInfoById(-a.id).hits++;
               }
-              actorInfoById(-a.id).hits++;
             }
           }
           break;
       }
-      SFX.push_back(make_pair(x_iter, y_iter));
+      if (settings->showUI())
+        SFX.push_back(make_pair(x_iter, y_iter));
     }
   }
   //printf("Hit %d number of tanks.\n",hit);
@@ -717,20 +655,17 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
 * @brief
 * turns the map into just what the current tank can see based off radar
 ******************************************************************************/
-MapData * GameField::create_fog_of_war(const MapData &map, ActorInfo current_actor)
+MapData * GameField::create_fog_of_war(const MapData &map, ActorInfo cactor)
 {
   MapData * new_map = new MapData(map.width, map.height);
-
-  if(current_actor.id <= 0)
+  //if a projectile gets here return empty map
+  if(cactor.id <= 0)
     return new_map;
-
-  int radar = current_actor.radar;
-  int x_pos = current_actor.x;
-  int y_pos = current_actor.y;
-  int x_max_radar_range = radar + x_pos > map.width ? map.width : radar + x_pos;
-  int y_max_radar_range = radar + y_pos > map.height ? map.height : radar + y_pos;
-  int y_min_radar_range = y_pos - radar < 1 ? 1 : y_pos - radar;
-  int x_min_radar_range = x_pos - radar < 1 ? 1 : x_pos - radar;
+  
+  int x_max_radar_range = cactor.radar + cactor.x > map.width ? map.width : cactor.radar + cactor.x;
+  int y_max_radar_range = cactor.radar + cactor.y > map.height ? map.height : cactor.radar + cactor.y;
+  int y_min_radar_range = cactor.y - cactor.radar < 1 ? 1 : cactor.y - cactor.radar;
+  int x_min_radar_range = cactor.x - cactor.radar < 1 ? 1 : cactor.x - cactor.radar;
 
   //int value;
   for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
@@ -753,7 +688,7 @@ MapData * GameField::create_fog_of_war(const MapData &map, ActorInfo current_act
  * This function checks all objects to see if they should be regrown
  */
 void GameField::checkObjectRegrowth(){
-  for(Obstacles* t : gameptr->trees)
+  for(auto && t : gameptr->trees)
   {
     if(t->health <= 0)
     {
@@ -762,18 +697,7 @@ void GameField::checkObjectRegrowth(){
         addObstacle(t->gridx, t->gridy, 'T');
     }
   }
-  //Rocks don't regrow
-  //for(Obstacles* r : gameptr->rocks)
-  //{
-  //  if(r->health <= 0)
-  //  {
-  //    r->regrow(gameTurn, actors);
-  //    if (r->health > 0)
-  //      addObstacle(r->gridx, r->gridy, 'R');
-  //  }
-  //}
-  //Currently bushes are non destructible but this will let them regrow when they do
-  for(Obstacles* b : gameptr->bushes)
+  for(auto && b : gameptr->bushes)
   {
     if(b->health <= 0)
     {
@@ -792,7 +716,6 @@ void GameField::checkObjectRegrowth(){
  * Object regrowth is checked at the beginning of the turn phase.
  * AI's are culled at the end of the turn phase.
  */
-
 void GameField::nextTurn()
 {
   gameTurn++;
@@ -803,9 +726,8 @@ void GameField::nextTurn()
   //}
   if (tracker != nullptr)
     tracker->newTurn(gameTurn);
-  direction atk;
+  direction dir;
   ActorInfo newProjectile;
-  PositionData pos;
   MapData * fog_of_war;
   int action;
   int act_ap;
@@ -822,29 +744,38 @@ void GameField::nextTurn()
     }
     if (tracker != nullptr)
         tracker->newPlayerTurn(actors[i].id);
-    
-    updateMap();  //Give each actor a fresh map
-    if(gameptr != nullptr && settings->showUI())  
+    if(gameptr != nullptr && settings->showUI()) {
       displayCallback(settings);
-    SFX.clear();
+      SFX.clear();
+    }
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
       actors[i].cDetect++;
       modCounter++;
       if(modCounter > 7)
         modCounter = 0;
+      if (actors[i].id < 0){
+        dir = actors[i].act_p->move(nullMap, currPos);
+        runMoves(actors[i], dir);
+        if (tracker != nullptr){
+          tracker->move("Projectile", actors[i].heading, actors[i].x, actors[i].y);
+        }
+        continue;
+      }
       updateMap();
       fog_of_war = create_fog_of_war(*fieldMap, actors[i]);
-      pos.game_x = actors[i].x;
-      pos.game_y = actors[i].y;
-      pos.health = actors[i].health;
-      pos.id = actors[i].id;
-      pos.ap = act_ap;
-      pos.ammo = actors[i].ammo;
-      action = actors[i].act_p->spendAP(*fog_of_war, pos);
+      currPos.game_x = actors[i].x;
+      currPos.game_y = actors[i].y;
+      currPos.health = actors[i].health;
+      currPos.id = actors[i].id;
+      currPos.ap = act_ap;
+      currPos.ammo = actors[i].ammo;
+      action = actors[i].act_p->spendAP(*fog_of_war, currPos);
       if(action == 1)
       {
-        runMoves(actors[i], *fog_of_war, pos);
+        dir = actors[i].act_p->move(*fog_of_war, currPos);
+
+        runMoves(actors[i], dir);
         if (tracker != nullptr && actors[i].id > 0){
           tracker->move(actors[i].name, actors[i].heading, actors[i].x, actors[i].y);
         }else if (tracker != nullptr){
@@ -854,22 +785,22 @@ void GameField::nextTurn()
       else if(action == 2)
       {
         //PositionData to give the AI
-        pos.game_x = actors[i].x;
-        pos.game_y = actors[i].y;
-        pos.health = actors[i].health;
-        pos.id = actors[i].id;
+        currPos.game_x = actors[i].x;
+        currPos.game_y = actors[i].y;
+        currPos.health = actors[i].health;
+        currPos.id = actors[i].id;
 
         //Get the AI's desired attack
-        atk = actors[i].act_p->attack(*fog_of_war, pos);
+        dir = actors[i].act_p->attack(*fog_of_war, currPos);
     
         if(actors[i].id > 0)  //tanks attacking
         {
           if (tracker != nullptr){
-            tracker->attack(actors[i].name, atk);
+            tracker->attack(actors[i].name, dir);
           }
-          if(atk != STAY && actors[i].ammo >= 1)
+          if(dir != STAY && actors[i].ammo >= 1)
           {
-            actors[i].heading = atk;
+            actors[i].heading = dir;
             actors[i].shots += 1;
             j = i+1;
             grow = false;
@@ -890,7 +821,7 @@ void GameField::nextTurn()
             }
             if(grow == false) //If there was no projectiles in this spot create a new one
             {
-              ProjectileActor * proj = new ProjectileActor(atk);
+              ProjectileActor * proj = new ProjectileActor(dir);
               newProjectile.AP = actors[i].range;
               newProjectile.id = -actors[i].id;
               newProjectile.act_p = proj;
@@ -904,10 +835,10 @@ void GameField::nextTurn()
               newProjectile.name = "Projectile\n";
               actors.insert(actors.begin() + i + 1, newProjectile);
               actors[i].ammo--;
-              fieldMap->tileMap[actors[i].y][actors[i].x].projectile = new Tile("Projectile", newProjectile.id, newProjectile.x, newProjectile.y, newProjectile.health, nullptr, nullptr);
+              fieldMap->tileMap[actors[i].y][actors[i].x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", newProjectile.id, newProjectile.x, newProjectile.y, newProjectile.health));
             }
           }
-          else if(atk != STAY)//Forced reload on empty ammo rack
+          else if(dir != STAY)//Forced reload on empty ammo rack
           {
             if (tracker != nullptr){
               tracker->reload(actors[i].name, true);
@@ -939,9 +870,10 @@ void GameField::nextTurn()
   }
   cull(); //Remove dead actors
   updateMap(); //update map
-  if(gameptr != nullptr && settings->showUI()) //Draw map
+  if(gameptr != nullptr && settings->showUI()){ //Draw map
     displayCallback(settings);
-  SFX.clear(); //remove explosions that remain
+    SFX.clear(); //remove explosions that remain
+  }
 }
 
 /**
@@ -952,7 +884,7 @@ void GameField::nextTurn()
 void GameField::addActor(ActorInfo a)
 {
   actors.push_back(a);
-  updateMap();
+  fieldMap->tileMap[a.y][a.x].actor = std::shared_ptr<Tile>(new Tile("Tank", a.id, a.x, a.y, a.health));
 }
 
 /**
@@ -984,7 +916,11 @@ void GameField::addObstacle(int x, int y, int type)
   }else if (type == 'H'){
     tType = "Hedgehog";
   }
-  fieldMap->tileMap[y][x] = Tile(tType, health, x, y, 4, nullptr);
+  fieldMap->tileMap[y][x].type = tType;
+  fieldMap->tileMap[y][x].id = 0;
+  fieldMap->tileMap[y][x].x = x;
+  fieldMap->tileMap[y][x].y = y;
+  fieldMap->tileMap[y][x].health = health;
 }
 
 /**
@@ -997,7 +933,11 @@ void GameField::addObstacle(int x, int y, int type)
  */
 void GameField::removeObstacle(int x, int y)
 {
-  fieldMap->tileMap[y][x] = Tile("Empty", 0, x, y, 0, nullptr, nullptr);
+  fieldMap->tileMap[y][x].type = "Empty";
+  fieldMap->tileMap[y][x].id = 0;
+  fieldMap->tileMap[y][x].x = x;
+  fieldMap->tileMap[y][x].y = y;
+  fieldMap->tileMap[y][x].health = 0;
 }
 
 /**
@@ -1055,7 +995,7 @@ void GameField::cull()
   {
     if(actors[i].health == 0)
     {
-      if(actors[i].name != "Projectile\n")
+      if(actors[i].id > 0)
       {
         //std::cout << "Tank Down!! " << actors[i].name << " died\n";
         deceased.push_back(actors[i]);
@@ -1063,9 +1003,13 @@ void GameField::cull()
         if (tracker != nullptr){
           tracker->killed(actors[i].id, actors[i].name);
         }
-        fieldMap->tileMap[actors[i].y][actors[i].x].actor = nullptr;
+        if (fieldMap->tileMap[actors[i].y][actors[i].x].actor != nullptr){
+          fieldMap->tileMap[actors[i].y][actors[i].x].actor = nullptr;
+        }
       }else{
-        fieldMap->tileMap[actors[i].y][actors[i].x].projectile = nullptr;
+        if (fieldMap->tileMap[actors[i].y][actors[i].x].projectile != nullptr){
+          fieldMap->tileMap[actors[i].y][actors[i].x].projectile = nullptr;
+        }
       }
       if(actors[i].act_p != NULL)
         delete actors[i].act_p;
@@ -1163,6 +1107,21 @@ void GameField::incTurn(){gameTurn++;}
  * @par Description:
  * Set the fieldMap to a loaded map file.
  */
-void GameField::setMap(MapData * newMap){
+void GameField::setMap(std::shared_ptr<MapData> newMap){
     fieldMap = newMap;
   }
+
+  /**
+ * @author Jon McKee
+ * @par Description:
+ * Moves an actor from one position to another.
+ */
+void GameField::moveActor(int newx, int newy, int oldx, int oldy, int id){
+  if (id > 0){
+    fieldMap->tileMap[newy][newx].actor = fieldMap->tileMap[oldy][oldx].actor;
+    fieldMap->tileMap[oldy][oldx].actor = nullptr;
+  }else if(id < 0){
+    fieldMap->tileMap[newy][newx].projectile = fieldMap->tileMap[oldy][oldx].actor;
+    fieldMap->tileMap[oldy][oldx].projectile = nullptr;
+  }  
+}

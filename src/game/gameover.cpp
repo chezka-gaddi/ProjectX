@@ -6,7 +6,7 @@
  *
  * Display the screen that reads game over
  *******************************************************************************/
-void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settings * settings, int turn)
+void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, std::shared_ptr<Settings> settings, int turn)
 {
   std::ofstream fout(settings->getResultsFile(), std::ios::out | std::ios::app);
   unsigned int winDex = 0;
@@ -69,7 +69,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settin
     displayScoreBoard(dead, winner, settings, winDex);
 }
 
-void displayScoreBoard(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, Settings * settings, int winDex){
+void displayScoreBoard(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, std::shared_ptr<Settings> settings, int winDex){
   const char *str;
   std::string scoreDetails[4] = {"Place:", "Player Number:", "Kills:","Hits:"};
   float color[] = {1.0f, 1.0f, 1.0f};

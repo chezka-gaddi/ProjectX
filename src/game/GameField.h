@@ -39,7 +39,7 @@ public:
     /********constructors/deconstructors***********/
     /**********************************************/
     GameField(int width = 10, int height = 10);
-    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(Settings *), Game *, Settings *);
+    GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(std::shared_ptr<Settings>), Game *, std::shared_ptr<Settings>);
     ~GameField();
     /*******************************/
     /*************getters***********/
@@ -62,10 +62,10 @@ public:
 protected:
 #endif
     //callback function to update the dispaly with the map, actors, and turn count
-    void (*displayCallback)(Settings *);
+    void (*displayCallback)(std::shared_ptr<Settings>);
     
     //game functions
-    void runMoves(ActorInfo &a, MapData &fog, PositionData &pos);
+    void runMoves(ActorInfo &a, direction dir);
     void checkObjectRegrowth();
     bool checkObjectStrike(ActorInfo &a);
     bool crate_o_doom(int x, int y, ActorInfo &a);
@@ -73,6 +73,7 @@ protected:
     void animateMove(ActorInfo &a);
     void setSPECIAL(const attributes baseStats);
     void nextTurn();
+    void projectileTurn(std::vector<ActorInfo> &proj);
     void addActor(ActorInfo);
     void cull();
     std::vector<ActorInfo> getDeceased(){return deceased;};
@@ -82,22 +83,25 @@ protected:
     void updateMap();
     void addObstacle(int x, int y, int type = 1);
     void removeObstacle(int x, int y);
-    void setMap(MapData * newMap);
+    void setMap(std::shared_ptr<MapData> newMap);
+    void moveActor(int newx, int newy, int oldx, int oldy, int id);
 
     //pointers to other game components
     Game *gameptr = nullptr;
-    Settings *settings = nullptr;
+    std::shared_ptr<Settings> settings = nullptr;
     gameTracker *tracker = nullptr;
 
     //variables
     ActorInfo nullActor = ActorInfo (NULL, "", 0, 0, 0, 0, 0);
+    MapData nullMap = MapData(1,1);
+    PositionData currPos;
     GLfloat y_scalar = 0;
     GLfloat x_scalar = 0;
 
     std::vector<ActorInfo> actors; /*!< this is all of the actors on the field: tanks + projectiles */
     std::vector<ActorInfo> deceased; /*!< A list of destroyed tanks */
     std::vector<std::pair<int,int>> SFX; /*!< A list of all special effects on the field */
-    MapData * fieldMap; /*!< Struct with mapdata, width, height, vector of ints.  0 - empty/ id - actor */
+    std::shared_ptr<MapData> fieldMap; /*!< Struct with mapdata, width, height, vector of ints.  0 - empty/ id - actor */
 
     //Current Match Settings
     int gameTurn = 0; //Current game turn

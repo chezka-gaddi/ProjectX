@@ -32,7 +32,7 @@ void MapData::generateTileMap()
     for(int i = 0; i < (int) tileMap.size(); i++){
         tileMap[i].resize(w);
         for (int j = 0; j < (int) tileMap[i].size(); j++){
-            tileMap[i][j] = Tile("Empty", 0, j, i, 0, nullptr, nullptr); //default empty tiles
+            tileMap[i][j] = Tile("Empty", 0, j, i, 0); //default empty tiles
         }
     }
 }
@@ -46,7 +46,15 @@ void MapData::clearTileMap()
 {
     for(int i = 0; i < (int) tileMap.size(); i++){
         for (int j = 0; j < (int) tileMap[i].size(); j++){
-            tileMap[i][j] = Tile("Empty", 0, j, i, 0, nullptr, nullptr); //default empty tiles
+            tileMap[i][j].type = "Empty";
+            tileMap[i][j].id = 0;
+            tileMap[i][j].x = j;
+            tileMap[i][j].y = i;
+            tileMap[i][j].health = 0;
+
+            tileMap[i][j].actor = nullptr;
+            tileMap[i][j].projectile = nullptr;
+
         }
     }
 }
@@ -71,6 +79,10 @@ MapData::MapData(const MapData &m)
  * Deconstructor to clear our dynamic map
  ******************/
 MapData::~MapData(){
+    for(int i = 0; i < (int) tileMap.size(); i++){
+        tileMap[i].clear();
+    }
+    tileMap.clear();
 }
 
 /****************//*
@@ -89,3 +101,37 @@ void MapData::printTileMap(){
 }
 
 MapData::MapData() {}
+
+/*****************//*
+ * Author: Jon McKee
+ * 
+ * This function clears all tanks from the tileMap
+ *******************/
+void MapData::clearTanks()
+{
+    for(int i = 0; i < (int) tileMap.size(); i++){
+        for (int j = 0; j < (int) tileMap[i].size(); j++){
+            if (tileMap[i][j].actor != nullptr){
+                //delete tileMap[i][j].actor;
+                tileMap[i][j].actor = nullptr;
+            }
+        }
+    }
+}
+
+/*****************//*
+ * Author: Jon McKee
+ * 
+ * This function clears all projectiles from the tileMap
+ *******************/
+void MapData::clearProjectiles()
+{
+    for(int i = 0; i < (int) tileMap.size(); i++){
+        for (int j = 0; j < (int) tileMap[i].size(); j++){
+            if (tileMap[i][j].projectile != nullptr){
+                //delete tileMap[i][j].projectile;
+                tileMap[i][j].projectile = nullptr;
+            }
+        }
+    }
+}
