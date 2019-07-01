@@ -20,9 +20,9 @@ struct Tile{
     std::shared_ptr<Tile> projectile;
     //constructor with initial values
     Tile(std::string t="Empty", int newid=0, int newx=0, int newy=0, int h=0) 
-        : type(t), id(newid), x(newx), y(newy), health(h) {};
+        : type(t), id(newid), x(newx), y(newy), health(h) {actor = nullptr; projectile = nullptr;};
     Tile(const Tile &tTile);
-    ~Tile();
+    ~Tile(){};
 };
 std::ostream & operator<<(std::ostream& os, const Tile& tile);
 #endif

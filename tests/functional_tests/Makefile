@@ -9,7 +9,6 @@ INCS += -I../../src/tanks
 INCS += -I../../src/ui
 INCS += -I../../src/utilities
 INCS += -I../../src/actors
-#TEST_FILES = ../src/catch.hpp
 
 PROFILE ?=
 

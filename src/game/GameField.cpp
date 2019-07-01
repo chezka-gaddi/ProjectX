@@ -38,6 +38,7 @@ GameField::GameField(int width, int height)
 {
   fieldMap = std::shared_ptr<MapData>(new MapData(width, height));
   settings = std::shared_ptr<Settings>(new Settings());
+  settings->setUI(false);
   displayCallback = NULL;
   if (settings->checkTracking()){
     tracker = new gameTracker();
@@ -59,6 +60,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
   gameptr = game;
   if (setting == nullptr){
     settings = std::shared_ptr<Settings>(new Settings());
+    settings->setUI(false);
   }else{
     settings = setting;
   }
@@ -760,6 +762,7 @@ void GameField::nextTurn()
         if (tracker != nullptr){
           tracker->move("Projectile", actors[i].heading, actors[i].x, actors[i].y);
         }
+        --act_ap;
         continue;
       }
       updateMap();

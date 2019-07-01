@@ -88,8 +88,8 @@ SCENARIO("The projectile moves around the gamefield")
             THEN("The tank shoots down")
             {
                 //Compare map with the initial map
-                REQUIRE(gamefield.fieldMap->tileMap[1][13].projectile != nullptr);
-                REQUIRE(gamefield.fieldMap->tileMap[1][7].actor != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[13][1].projectile != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[7][1].actor != nullptr);
 
             }
             tank->setAttack(STAY);
@@ -97,7 +97,7 @@ SCENARIO("The projectile moves around the gamefield")
             gamefield.nextTurn();
             THEN("The projectile hits the wall")
             {
-                REQUIRE(gamefield.fieldMap->tileMap[1][13].projectile == nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[13][1].projectile == nullptr);
             }
         }
     }

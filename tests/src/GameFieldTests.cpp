@@ -104,7 +104,9 @@ TEST_CASE("SimpleActor moves when nextTurn() is called")
 {
     SimpleActor * a = new SimpleActor(STAY, UP);
     ActorInfo newAI(a, "a1", 1, 1, 2, 5, 5, 1, 2);
-    GameField g (2, 2);
+    std::vector<ActorInfo> actorVect;
+    GameField g (2, 2, actorVect, NULL, nullptr, nullptr);
+    //g.settings->setUI(false);
     g.addActor(newAI);
     a->setMove(UP);
     a->setAttack(STAY);
@@ -152,14 +154,14 @@ TEST_CASE("Actors move until their range is depleted")
 TEST_CASE("Actors spawn and move projectiles on attack")
 {
     SimpleActor * a = new SimpleActor(UP, STAY);
-    ActorInfo newAI(a, "a1", 1, 1, 8, 1, 1, 1, 1, 1, 6);
+    ActorInfo newAI(a, "a1", 1, 1, 8, 1, 1, 1, 1, 6, 6, 2, 2);
     GameField g (1, 8);
     g.addActor(newAI);
     a->setAttack(UP);
     a->setMove(STAY);
     g.nextTurn();
-    REQUIRE(g.fieldMap->tileMap[1][2].projectile != nullptr);
-    REQUIRE(g.fieldMap->tileMap[1][8].actor != nullptr);
+    REQUIRE(g.fieldMap->tileMap[2][1].projectile != nullptr);
+    REQUIRE(g.fieldMap->tileMap[8][1].actor != nullptr);
 }
 TEST_CASE("Actors take 1 point of damage from the walls of the arena")
 {

@@ -140,7 +140,7 @@ push-to-git: clean-lib
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc status
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release
 
-tests: set-coverage src/actors/Actor.o $(TANKS:%.cpp=%.so) testUnitAll testFunctionalAll
+tests: set-coverage src/actors/Actor.o testUnitAll testFunctionalAll
 
 testUnitAll:
 	+make PROFILE="$(PROFILE)" -C tests/src

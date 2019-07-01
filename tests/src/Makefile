@@ -58,11 +58,11 @@ TANKS += SimpleActor.so
 
 TANKS_LINK = ../../src/actors/Actor.o #need to link in the base class for the .so to have everything.
 
-%.so: ../../src/tanks/%.cpp
-	$(CXX) $(CXXFLAGS) $(PROFILE) -shared $? $(TANKS_LINK) -o $@ $(SOFLAGS) $(INCS)
-
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) $(PROFILE) -c $? -o $@ $(INCS)
+
+%.so: ../../src/tanks/%.cpp
+	$(CXX) $(CXXFLAGS) $(PROFILE) -shared $? $(TANKS_LINK) -o $@ $(SOFLAGS) $(INCS)
 
 testAll: $(FILES:.cpp=.o) $(TEST_FILES:.cpp=.o)
 	+make tanks
