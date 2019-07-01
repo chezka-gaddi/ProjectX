@@ -118,18 +118,20 @@ gen-library: $(FILES:.cpp=.o) $(TANKS:%.cpp=%.so)
 	cp changelog.md buildsrc/changelog.md
 	cp -R images/ buildsrc/
 	cp -R maps/ buildsrc/
-	cp src/actors/Actor.h buildsrc/src/
-	cp src/structures/MoveData.h buildsrc/src/
-	cp src/structures/attributes.h buildsrc/src/
-	cp src/map/MapData.h buildsrc/src/
-	cp src/structures/direction.h buildsrc/src/
-	cp src/structures/PositionData.h buildsrc/src/
+	cp src/actors/Actor.h buildsrc/src/actors/
+	cp src/structures/MoveData.h buildsrc/src/structures/
+	cp src/structures/attributes.h buildsrc/src/structures/
+	cp src/map/MapData.h buildsrc/src/map/
+	cp src/structures/direction.h buildsrc/src/structures/
+	cp src/structures/PositionData.h buildsrc/src/structures/
 	cp $(TANKS) buildsrc/
 	cp $(TANKS:.cpp=.h) buildsrc/
 	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
 	# Change tanks src to point to new directory
-	# sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
-	# sed -i 's#include "#include "src/#g' buildsrc/PongAI.h
+	#sed -i 's#include <actors#include <src#g' buildsrc/SimpleAI.h
+	#sed -i 's#include <actors#include <src#g' buildsrc/PongAI.h
+	#sed -i 's#include <actors#include <src#g' buildsrc/CamperAI.h
+	#sed -i 's#include <actors#include <src#g' buildsrc/PongAI.h
 
 push-to-git: clean-lib
 	mkdir -p buildsrc
