@@ -9,11 +9,11 @@
 
 #include <cstring>
 #include <string>
-#include <global.h>
-#include <direction.h>
+#include <ui/global.h>
+#include <structures/direction.h>
 #include <GL/glut.h>
 #include <GL/freeglut.h>
-#include <ActorInfo.h>
+#include <actors/ActorInfo.h>
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -36,12 +36,17 @@ public:
     Drawable() {}       /*!< Drawable constructor */
     ~Drawable() {}      /*!< Drawable deconstructor */
 
+    int dirToDeg(direction d); /*!< Convert direction enum into degrees */
+    void drawAddon(float xlow, float xhigh, float ylow, float yhigh, float ror, float scale); /*!< Add aditional SFX to a drawable image */
+
     virtual void draw(int, int) = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
+
 protected:
     int gridx;          /*!< Drawables grid x coordinate */
     int gridy;          /*!< Drawables grid y coordinate */
     static float xscalar; /*!< Drawable x shared scalar value */
     static float yscalar; /*!< Drawable y shared scalar value */
+
 friend class Game;        //Make Game class a friend of the drawable classes
 friend class GameField;   //Make GameField class a friend of the drawable classes
 };
@@ -122,6 +127,7 @@ public:
     Projectile(int ID, GLfloat x, GLfloat y, direction dir, bool t, float osx, float osy, bool camping); /*!< Constructor for the projectile drawable object */
 
     void draw(int, int); /*!< The draw function for the Projectile class */
+    void drawTrail(int mod); /*!< Function to draw smoke trail */
 
     float sizeMod = 1;  /*!< Scalar specific for projectiles.  Used in projectile stacking */
     bool turn; /*!< Flag used to signify if the fire trail should be on or off */
@@ -146,6 +152,7 @@ public:
     TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, int sMod, float osx, float osy, bool camping); /*!< The constructor for making a Tank Drawable object */
 
     void draw(int, int); /*!< The draw function for displaying a tank drawable object */
+    void drawFire(float xlow, float xhigh, float ylow, float yhigh, float scale);
     void setHealth(int h); /*!< Setting the health of the drawable object */
     void setMax_health(int mh); /*!< Setting the max health of the drawable object */
 };

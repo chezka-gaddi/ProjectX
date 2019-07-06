@@ -2,11 +2,12 @@
  * @file GameField.cpp
  * @author David Donahue
  */
-#include "GameField.h"
-#include "../game/game.h"
+
 #include <memory>
 #include <iostream>
-#include "../ui/event.h"
+#include "ui/event.h"
+#include "game/GameField.h"
+#include "game/game.h"
 
 /**
  * @author David Donahue
@@ -21,6 +22,11 @@ GameField::~GameField()
     if(a.act_p != NULL)
       delete a.act_p;
   }
+  if (settings->checkTracking())
+    tracker->close();
+  actors.clear();
+  deceased.clear();
+  SFX.clear();
 }
 
 /**
@@ -30,14 +36,14 @@ GameField::~GameField()
  */ 
 GameField::GameField(int width, int height)
 {
-  fieldMap.width = width;
-  fieldMap.height = height;
-  fieldMap.map.resize(width * height);
-  fieldMap.obstacleMap.resize(width * height);
-  settings = new Settings();
-  std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
-  std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
+  fieldMap = std::shared_ptr<MapData>(new MapData(width, height));
+  settings = std::shared_ptr<Settings>(new Settings());
+  settings->setUI(false);
   displayCallback = NULL;
+  if (settings->checkTracking()){
+    tracker = new gameTracker();
+    tracker->open();
+  }
 }
 /**
  * @author David Donahue
@@ -45,26 +51,24 @@ GameField::GameField(int width, int height)
  * Constructor with dimensions and a vector of ActorInfo
  */
 
-GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(Settings *) = NULL, Game * game = nullptr, Settings * setting = nullptr) : actors(startActors)
+GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, void (*d_callback)(std::shared_ptr<Settings>) = NULL, Game * game = nullptr, std::shared_ptr<Settings> setting = nullptr) : actors(startActors)
 {
-  fieldMap.width = width;
-  fieldMap.height = height;
-  fieldMap.map.resize(width * height);
-  fieldMap.obstacleMap.resize(width * height);
-  std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
-  std::fill(fieldMap.obstacleMap.begin(), fieldMap.obstacleMap.end(), false);
+  fieldMap = std::shared_ptr<MapData>(new MapData(width, height));
   x_scalar = 4.0717 * pow(width, -1.031);
   y_scalar = 3.1923 * pow(height, -1.08);
-  updateMap();
   displayCallback = d_callback;
   gameptr = game;
   if (setting == nullptr){
-    settings = new Settings();
+    settings = std::shared_ptr<Settings>(new Settings());
+    settings->setUI(false);
   }else{
     settings = setting;
   }
   actors = startActors;
-
+  if (settings->checkTracking()){
+    tracker = new gameTracker();
+    tracker->open();
+  }
 }
 
 /**
@@ -74,7 +78,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
  */
 int GameField::getWidth()
 {
-  return fieldMap.width;
+  return fieldMap->width;
 }
 /**
  * @author David Donahue
@@ -84,90 +88,154 @@ int GameField::getWidth()
 
 int GameField::getHeight()
 {
-  return fieldMap.height;
+  return fieldMap->height;
 }
 
 /**
  * @author David Donahue
+ * @modifiedby Jon McKee
  * @par Description:
  * Update the map with the current postions of all actors
  */
 void GameField::updateMap()
 {
-  //erase the map
-  std::fill(fieldMap.map.begin(), fieldMap.map.end(), 0);
+  //Add each actor back to map or update it's health
   for(auto a : actors)
   {
     //for each actor fill in its id on the map
-    if(a.health > 0)
-      fieldMap.map[a.x+ fieldMap.width * a.y] = a.id;
+    if(a.health > 0){
+      if (a.id > 0){
+        if (fieldMap->tileMap[a.y][a.x].tank == nullptr){
+          fieldMap->tileMap[a.y][a.x].tank = std::shared_ptr<Tile>(new Tile("Tank", a.id, a.x, a.y, a.health));
+        }else{
+          fieldMap->tileMap[a.y][a.x].tank->x = a.x;
+          fieldMap->tileMap[a.y][a.x].tank->y = a.y;
+          fieldMap->tileMap[a.y][a.x].tank->health = a.health;
+        }
+      }else{
+        if (fieldMap->tileMap[a.y][a.x].projectile == nullptr){
+          fieldMap->tileMap[a.y][a.x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", a.id, a.x, a.y, a.health));
+        }else{
+          fieldMap->tileMap[a.y][a.x].projectile->x = a.x;
+          fieldMap->tileMap[a.y][a.x].projectile->y = a.y;
+          fieldMap->tileMap[a.y][a.x].projectile->health = a.health;
+        }
+      }
+    }
   }
-
+  if (gameptr != nullptr){
+    for(auto && t : gameptr->trees)
+    {
+      if (t->health > 0){
+        fieldMap->tileMap[t->gridy][t->gridx].health = t->health;
+      }
+    }
+    for(auto && r : gameptr->rocks)
+    {
+      if (r->health > 0){
+        fieldMap->tileMap[r->gridy][r->gridx].health = r->health;
+      }
+    }
+    for(auto && b : gameptr->bushes)
+    {
+      if (b->health > 0){
+        fieldMap->tileMap[b->gridy][b->gridx].health = b->health;
+      }
+    }
+  }
 }
 /***************************************************************************//**
  * @brief
  * Prompts the actors to choose attributes to specialize int
  * @author Riley Kopp
+ * @modifiedby Jon McKee
  ******************************************************************************/
 void GameField::setSPECIAL(const attributes baseStats)
 {
-  int sum =0;
+  int sum = 0;
   int points = baseStats.tankSpecial;
+  attributes tempAttr;
   for(auto &actor: actors)
   {
-    actor.tankAttributes = actor.act_p->setAttribute(points, baseStats);
+    tempAttr = actor.act_p->setAttribute(points, baseStats);
+    
+    if (tempAttr.tankHealth < 0){
+      tempAttr.tankHealth = 0;
+      printf("(SPECIAL-Spend AP) %s Negative health point value, setting to 0.\n", actor.name.c_str());
+    }
+    if (tempAttr.tankAP < 0){
+      tempAttr.tankAP = 0;
+      printf("(SPECIAL-Spend AP) %s Negative health point value, setting to 0.\n", actor.name.c_str());
+    }
+    if (tempAttr.tankRadar < 0){
+      tempAttr.tankRadar = 0;
+      printf("(SPECIAL-Spend AP) %s Negative health point value, setting to 0.\n", actor.name.c_str());
+    }
+    if (tempAttr.tankDamage <0){
+      tempAttr.tankDamage = 0;
+      printf("(SPECIAL-Spend AP) %s Negative health point value, setting to 0.\n", actor.name.c_str());
+    }
+    if (tempAttr.tankAmmo < 0){
+      tempAttr.tankAmmo = 0;
+      printf("(SPECIAL-Spend AP) %s Negative health point value, setting to 0.\n", actor.name.c_str());
+    }
+    if (tempAttr.projRange < 0){
+      tempAttr.projRange = 0;
+      printf("(SPECIAL-Spend AP) %s Negative health point value, setting to 0.\n", actor.name.c_str());
+    }
 
-    sum = actor.tankAttributes.tankHealth
-          + actor.tankAttributes.tankAP
-          + actor.tankAttributes.tankRadar
-          + actor.tankAttributes.tankDamage
-          + actor.tankAttributes.tankAmmo
-          + actor.tankAttributes.projRange;
-    if(sum  <= points)
+    sum = tempAttr.tankHealth
+          + tempAttr.tankAP
+          + tempAttr.tankRadar
+          + tempAttr.tankDamage
+          + tempAttr.tankAmmo
+          + tempAttr.projRange;
+    if(sum <= points)
     {
-      actor.health += actor.tankAttributes.tankHealth;
-      actor.AP += actor.tankAttributes.tankAP;
-      actor.radar += actor.tankAttributes.tankRadar;
-      actor.damage += actor.tankAttributes.tankDamage;
-      actor.ammo += actor.tankAttributes.tankAmmo;
-      actor.range += actor.tankAttributes.projRange;
+      actor.health += tempAttr.tankHealth;
+      actor.AP += tempAttr.tankAP;
+      actor.radar += tempAttr.tankRadar;
+      actor.damage += tempAttr.tankDamage;
+      actor.ammo += tempAttr.tankAmmo;
+      actor.range += tempAttr.projRange;
       if(actor.health > 8)
       {
         actor.health = 8;
-        printf("Health stat was too high,  clamping to 8.\n");
+        printf("%s: Health stat was too high,  clamping to 8.\n", actor.name.c_str());
       }
       if(actor.AP > 6)
       {
         actor.AP = 6;
-        printf("AP stat was too high, clamping to 6.\n");
+        printf("%s: AP stat was too high, clamping to 6.\n", actor.name.c_str());
       }
       if(actor.radar > getWidth())
       {
         actor.radar = getWidth();
-        printf("Radar stat was too high, clamping to %d.\n", getWidth());
+        printf("%s: Radar stat was too high, clamping to %d.\n", actor.name.c_str(), getWidth());
       }
       if(actor.damage > 8)
       {
         actor.damage = 8;
-        printf("Damage stat was too high, clamping at 8.\n");
+        printf("%s: Damage stat was too high, clamping at 8.\n", actor.name.c_str());
       }
       if(actor.ammo > 10)
       {
         actor.ammo = 10;
-        printf("Ammo stat was too high, clamping at 10.\n");
+        printf("%s: Ammo stat was too high, clamping at 10.\n", actor.name.c_str());
       }
       if(actor.range > 10)
       {
         actor.range = 10;
-        printf("Range stat was too high, clamping to 10.\n");
+        printf("%s: Range stat was too high, clamping to 10.\n", actor.name.c_str());
       }
     }
     else
       std::cout << "Tank "
                 << actor.id
+                << "(" << actor.name.c_str() << ")"
                 << " did not provide the correct amount of special points! Points used: "
                 << sum
-                <<std::endl;
+                << std::endl;
 
     actor.max_health = actor.health;
     actor.max_ammo = actor.ammo;
@@ -233,239 +301,135 @@ void GameField::animateMove(ActorInfo &a)
  * @par Description:
  * Executes the move phase of an AI's turn and then AI's are culled
  */
-void GameField::runMoves(ActorInfo &a, MapData &fog, PositionData &pos)
+void GameField::runMoves(ActorInfo &a, direction dir)
 {
 
   int xoff = 0, yoff = 0, tHealth = 0, hit = 0;
   bool hitObj = false;
-  bool redraw = false;
-  direction dir;
-
-  //get the AI's desired move
-  dir = a.act_p->move(fog, pos);
+  Tile * tempObj;
+  
   a.heading = (dir == STAY) ? a.heading : dir; //Not the best move if we chose to stay
   //If it checks out, execute it
   //If the actor hits a wall or obstacle, do not execute the move and deal 1 damage
-  if(a.health <= 0 || a.id == 0 || dir == STAY) //We arn't playing this game with dead actors anymore
+  if(a.health <= 0 || dir == STAY) //We arn't playing this game with dead actors anymore
     return;
   //store prev coordinates
   a.prevx = a.x;
   a.prevy = a.y;
   //try and move
-  switch(dir)
-  {
-    case UP:
-      if(a.y > 0 && (!obstacleAt(a.x, a.y - 1)
-                     || obstacleAt(a.x, a.y - 1) == 'R'
-                     || obstacleAt(a.x, a.y - 1) == 'T'
-                     || obstacleAt(a.x, a.y - 1) == 'C'
-                     || obstacleAt(a.x, a.y - 1) == 'B'
-                     || obstacleAt(a.x, a.y - 1) == 'W'))
-        yoff = -1;
-      else
-        a.health--;
-      break;
 
-    case DOWN:
-      if(a.y < fieldMap.height-1 && (!obstacleAt(a.x, a.y + 1)
-                                     || obstacleAt(a.x, a.y + 1) == 'R'
-                                     || obstacleAt(a.x, a.y + 1) == 'T'
-                                     || obstacleAt(a.x, a.y + 1) == 'C'
-                                     || obstacleAt(a.x, a.y + 1) == 'B'
-                                     || obstacleAt(a.x, a.y + 1) == 'W'))
-        yoff = 1;
-      else
-        a.health--;
-      break;
-
-    case LEFT:
-      if(a.x > 0 && (!obstacleAt(a.x - 1, a.y)
-                     || obstacleAt(a.x - 1, a.y) == 'R'
-                     || obstacleAt(a.x - 1, a.y) == 'T'
-                     || obstacleAt(a.x - 1, a.y) == 'C'
-                     || obstacleAt(a.x - 1, a.y) == 'B'
-                     || obstacleAt(a.x - 1, a.y) == 'W'))
-        xoff = -1;
-      else
-        a.health--;
-      break;
-
-    case RIGHT:
-      if(a.x < fieldMap.width-1 && (!obstacleAt(a.x + 1, a.y)
-                                    || obstacleAt(a.x + 1, a.y) == 'R'
-                                    || obstacleAt(a.x + 1, a.y) == 'T'
-                                    || obstacleAt(a.x + 1, a.y) == 'C'
-                                    || obstacleAt(a.x + 1, a.y) == 'B'
-                                    || obstacleAt(a.x + 1, a.y) == 'W'))
-        xoff = 1;
-      else
-        a.health--;
-      break;
-    case UPLEFT:
-      if(a.y > 0 && a.x > 0 && (!obstacleAt(a.x-1,a.y-1)
-                                || obstacleAt(a.x-1,a.y-1)== 'R'
-                                || obstacleAt(a.x-1,a.y-1)== 'T'
-                                || obstacleAt(a.x-1,a.y-1)== 'C'
-                                || obstacleAt(a.x-1,a.y-1) == 'B'
-                                || obstacleAt(a.x-1,a.y-1) == 'W'))
-      {
-        yoff = -1;
-        xoff = -1;
-      }
-      else
-        a.health--;
-      break;
-
-    case UPRIGHT:
-      if(a.y > 0 && a.x < fieldMap.width-1 && (!obstacleAt(a.x+1, a.y-1)
-          || obstacleAt(a.x+1, a.y-1) == 'R'
-          || obstacleAt(a.x+1, a.y-1) == 'T'
-          || obstacleAt(a.x+1, a.y-1) == 'C'
-          || obstacleAt(a.x+1, a.y-1) == 'B'
-          || obstacleAt(a.x+1, a.y-1) == 'W'))
-      {
-        yoff = -1;
-        xoff = 1;
-      }
-      else
-        a.health--;
-      break;
-
-    case DOWNLEFT:
-      if(a.y < fieldMap.height-1 && a.x > 0 && (!obstacleAt(a.x-1,a.y+1)
-          || obstacleAt(a.x-1,a.y+1) == 'R'
-          || obstacleAt(a.x-1,a.y+1) == 'T'
-          || obstacleAt(a.x-1,a.y+1) == 'C'
-          || obstacleAt(a.x-1,a.y+1) == 'B'
-          || obstacleAt(a.x-1,a.y+1) == 'W'))
-      {
-        yoff = 1;
-        xoff = -1;
-      }
-      else
-        a.health--;
-      break;
-
-    case DOWNRIGHT:
-      if(a.y < fieldMap.height-1 && a.x < fieldMap.width-1 && (!obstacleAt(a.x+1, a.y+1)
-          || obstacleAt(a.x+1, a.y+1) == 'R'
-          || obstacleAt(a.x+1, a.y+1) == 'T'
-          || obstacleAt(a.x+1, a.y+1) == 'C'
-          || obstacleAt(a.x+1, a.y+1) == 'B'
-          || obstacleAt(a.x+1, a.y+1) == 'W'))
-      {
-        yoff = 1;
-        xoff = 1;
-      }
-      else
-        a.health--;
-      break;
-
-    default:
-      break;
-  }
+  if (dir == UP || dir == UPLEFT || dir == UPRIGHT){yoff = -1;}
+  else if (dir == DOWN || dir == DOWNLEFT || dir == DOWNRIGHT){yoff = 1;}
+  if (dir == LEFT || dir == UPLEFT || dir == DOWNLEFT){xoff = -1;}
+  else if (dir == RIGHT || dir == UPRIGHT || dir == DOWNRIGHT){xoff = 1;}
   //Set our new positions
   a.x += xoff;
   a.y += yoff;
-  hitObj = checkObjectStrike(a); //Check if our projectile hit a non-actor
-  //Check if we're a tank that hit a rock or water
-  if(a.id > 0 && (obstacleAt(a.x, a.y) == 'R' || obstacleAt(a.x, a.y) == 'W'))
-  {
+
+  tempObj = &fieldMap->tileMap[a.y][a.x];
+  //check if we went off map
+  if (a.x < 1 || a.y < 1 || a.x > fieldMap->width || a.y > fieldMap->height){
+    a.health--;   //subtract 1 health for going off map
+    a.x -= xoff;  //Undo the move
+    a.y -= yoff;
+    hitObj = true; //allows skipping additional checks
+  }else if (a.id > 0 && (tempObj->type == "Rock" || tempObj->type == "Water" || tempObj->type == "Hedgehog")){
     a.x -= xoff;
     a.y -= yoff;
-    hitObj = true;//Allows us to skip the rest of the checking if we ran into a rock or water
-    redraw = true;//Allows us to skip animation
     a.health--;
+    hitObj = true;//Allows us to skip additional checks further on
+  }else if (a.id < 0) { //only run projectiles through this check
+    hitObj = checkObjectStrike(a); //Check if our projectile hit a non-actor
   }
+    
+  //Move actor over on internal map instead of deleting a creating new
+  moveActor(a.x, a.y, a.prevx, a.prevy, a.id);
 
   //Run the main loop through actors to see if we hit one
-  if(a.health > 0 && hitObj == false && (xoff != 0 || yoff != 0))
+  if(hitObj == false && (xoff != 0 || yoff != 0))
   {
     if (a.id > 0){
       a.cDetect = 0;
       a.camp = false;
     }
-    
-    for(unsigned int i = 0; i < actors.size(); ++i)   //check each actor
-    {
-      if(a.id < 0 && actors[i].id == -a.id){
-        a.camp = actors[i].camp;
-      }
-      if(a.health > 0 && actors[i].health > 0   //Make sure neither is dead
-         && actors[i].x == a.x    //Make sure we're on the same column
-         && actors[i].y == a.y    //Make sure we're on the same row
-         && a.id != actors[i].id) //Make sure our tank doesn't damage itself
+    if (tempObj->tank != nullptr || tempObj->projectile != nullptr){ //Only check for actors if there was one in the tile
+      for(unsigned int i = 0; i < actors.size(); ++i)   //check each actor
       {
-        //Check tank to tank ramming
-        if(a.id > 0 && actors[i].id > 0)
-        {
-          //printf("Tank hit tank\n");
-          //Reverse the move
-          a.x -= xoff;
-          a.y -= yoff;
-          //Store target tanks health
-          tHealth = actors[i].health;
-          actors[i].health -= a.health; //deal our full health damage to target
-          //Logic for ramming
-          if(a.health == 1)
-          {
-            hit += a.health; //tank kills self
-          }
-          else if(tHealth >= a.health)
-          {
-            hit += a.health - 1;//prevent tank's death (at least from ramming)
-          }
-          else //Otherwise take damage as normal
-          {
-            hit += tHealth; //Tank survives
-          }
-          a.hits++; //A tank hit is still a hit right?
-          if(checkHealth(actors[i]))
-            a.kills++;
-          redraw = true; //This is the end of the road for this move, don't animate
+        if(a.id < 0 && actors[i].id == -a.id){//If it's one of our projectiles update it's camp value
+          a.camp = actors[i].camp;
         }
-        else if(actors[i].id < 0)  //Check if we ran into a projectile (What we are doesn't matter)
+        if(a.health > 0 && actors[i].health > 0   //Make sure neither is dead
+          && actors[i].x == a.x    //Make sure we're on the same column
+          && actors[i].y == a.y    //Make sure we're on the same row
+          && a.id != actors[i].id) //Make sure our tank doesn't damage itself
         {
-          //printf("Projectile or Tank hit a projectile.\n");
-          hit += actors[i].damage; //store future damage
-          actors[i].health = 0; //Destroy the projectile
-          if(a.id > 0 && -actors[i].id != a.id){  //Give the owner a hit, but not a self hit and not a missile to missle hit
-            actorInfoById(-actors[i].id).hits++;
-            if (a.health -= hit <= 0) //Give the owner a kill if we suicided
-                    actorInfoById(-actors[i].id != a.id);
+          //Check tank to tank ramming
+          if(a.id > 0 && actors[i].id > 0)
+          {
+            //printf("Tank hit tank\n");
+            //Store target tanks health
+            tHealth = actors[i].health;
+            actors[i].health -= a.health; //deal our full health damage to target
+            //Logic for ramming
+            if(a.health == 1)
+            {
+              hit += a.health; //tank kills self
+            }
+            else if(tHealth >= a.health)
+            {
+              hit += a.health - 1;//prevent tank's death (at least from ramming)
+            }
+            else //Otherwise take damage as normal
+            {
+              hit += tHealth; //Tank survives
+            }
+            a.hits++; //A tank hit is still a hit right?
+            if(checkHealth(actors[i])){
+              a.kills++;
+            }else{
+              //Reverse the move if the other tank didn't die
+              a.x -= xoff;
+              a.y -= yoff;
+            }
           }
-          redraw = true; //We hit something, don't animate more
-        }
-        else if(a.id < 0 && a.id != -actors[i].id)  //If we're a projectile and we hit a tank (Do not allow self hit)
-        {
-          //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
-          actors[i].health -= a.damage; //damage the tank
-          hit += a.health + 1; //should be enough to kill us
-          if(a.id != -actors[i].id)       //no self hits which shouldn't be possible
-            actorInfoById(-a.id).hits++;  //give our owner a hit
-          if(checkHealth(actors[i]))
-            actorInfoById(-a.id).kills++; //get a kill
-          redraw = true;
+          else if(actors[i].id < 0)  //Check if we ran into a projectile (What we are doesn't matter)
+          {
+            //printf("Projectile or Tank hit a projectile.\n");
+            if (a.id > 0){
+              hit += actors[i].damage; //store future damage if we're a tank
+            }else{
+              a.health = 0; //Kill us if we're a projectile
+            }
+            actors[i].health = 0; //Destroy the projectile
+            if(a.id > 0 && -actors[i].id != a.id){  //Give the owner a hit, but not a self hit and not a missile to missle hit
+              actorInfoById(-actors[i].id).hits++;
+              if (a.health -= hit <= 0) //Give the owner a kill if we suicided
+                actorInfoById(-actors[i].id != a.id);
+            }
+          }
+          else if(a.id < 0 && a.id != -actors[i].id)  //If we're a projectile and we hit a tank (Do not allow self hit)
+          {
+            //printf("Projectile hit tank. %d hit %d\n",a.id,actors[i].id);
+            actors[i].health -= a.damage; //damage the tank
+            hit += a.health + 1; //should be enough to kill us
+            if(a.id != -actors[i].id)       //no self hits which shouldn't be possible
+              actorInfoById(-a.id).hits++;  //give our owner a hit
+            if(checkHealth(actors[i]))
+              actorInfoById(-a.id).kills++; //get a kill
+          }
         }
       }
     }
   }
   a.health -= hit;
   checkHealth(a, hitObj);
-  if (gameptr != nullptr){//Skip animating if we're not displaying the game
-    if(!redraw && !hitObj){ //If we didn't hit an object and we don't need to force a redraw (Does not update map)
-      animateMove(a);
-    }
-    if(hitObj || redraw){ //If either condition is true, animate 
-      animateMove(a);
-      updateMap(); //Update actors and map
-      //printf("Currently %d number of explosions.\n",SFX.size());
-      if (gameptr != nullptr) //redraw screen
-        displayCallback(settings);
-      SFX.clear(); //Clear the explosions
-    } 
+  if (settings->showUI()){//Skip animating if we're not displaying the game
+    animateMove(a);
+    //printf("Currently %d number of explosions.\n",SFX.size());
+    displayCallback(settings);
+    SFX.clear(); //Clear the explosions
   }
-  
+  tempObj = nullptr;
 }
 /***********************************************************************//*
  * @author Jon McKee
@@ -480,18 +444,18 @@ bool GameField::checkHealth(ActorInfo &a, bool object)
 {
   if(a.health <= 0) //if whatever we have has no health left
   {
-    SFX.push_back(make_pair(a.x, a.y));
+    if (settings->showUI()) //Don't make SFX if there is no graphics
+      SFX.push_back(make_pair(a.x, a.y));
     a.damage = 0;
-    a.id = 0;
     a.health = 0;
     a.AP = 0;
     return true;
   }
-  else if(a.id < 0 && object) //If our projectile impacted on an object
+  else if(a.id < 0 && object) //If it was a projectile and hit an object kill it no matter health
   {
-    SFX.push_back(make_pair(a.x, a.y));
+    if (settings->showUI())
+      SFX.push_back(make_pair(a.x, a.y));
     a.damage = 0;
-    a.id = 0;
     a.health = 0;
     a.AP = 0;
     return true;
@@ -506,16 +470,14 @@ bool GameField::checkHealth(ActorInfo &a, bool object)
  * we check the various object lists to see if we struck one and then return the
  * appropriate flag.
  *
- ******************************************************************************/ 
+******************************************************************************/ 
 bool GameField::checkObjectStrike(ActorInfo &a)
 {
   int tempOb = obstacleAt(a.x, a.y);
   int hits = 0;
 
-
   if(a.id > 0 || a.health < 0)  //Get the non projectiles back out of here
     return false;
-
 
   if(tempOb == 0)    //if the spot is empty then we couldn't have hit anything
   {
@@ -533,18 +495,19 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   else if(tempOb == 'R')
   {
     //printf("Rock strike, log it.\n");
-    for(auto* r : gameptr->rocks)
+    for(auto && r : gameptr->rocks)
     {
       if(r->gridx == a.x && r->gridy == a.y && r->health > 0)
       {
         //printf("Found Rock strike, log it.\n");
         r->health -= a.damage;
-        SFX.push_back(make_pair(r->gridx, r->gridy));
+        if (settings->showUI())
+          SFX.push_back(make_pair(r->gridx, r->gridy));
         if(r->health <= 0)
         {
           r->health = 0;
 #ifndef TESTING
-          r->set_destroyed(settings->getTurn());
+          r->set_destroyed(gameTurn);
           removeObstacle(a.x, a.y);
 #endif
         }
@@ -554,18 +517,19 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   }
   else if(tempOb == 'T')
   {
-    for(auto* t : gameptr->trees)
+    for(auto && t : gameptr->trees)
     {
       if(t->gridx == a.x && t->gridy == a.y && t->health > 0)
       {
         //printf("Found tree strike, chop it.\n");
         t->health -= a.damage;
-        SFX.push_back(make_pair(t->gridx, t->gridy));
+        if (settings->showUI())
+          SFX.push_back(make_pair(t->gridx, t->gridy));
         if(t->health <= 0)
         {
           t->health = 0;
 #ifndef TESTING
-          t->set_destroyed(settings->getTurn());
+          t->set_destroyed(gameTurn);
           removeObstacle(a.x, a.y);
           //If a tree you're hiding under get's destroyed take 1 damage
           for (auto tTank : actors)
@@ -582,13 +546,13 @@ bool GameField::checkObjectStrike(ActorInfo &a)
   else if(tempOb == 'C')
   {
     //printf("Hit the crate.\n");
-    for(auto* &c : gameptr->specials)
+    for(auto &&c : gameptr->specials)
     {
       if(c->gridx == a.x && c->gridy == a.y && c->health > 0)
       {
         // printf("Found the crate at (%d, %d) with projectile at (%d,%d).\n",c->gridx, c->gridy, a.x, a.y);
         c->health--;
-        hits+= crate_o_doom(c->gridx, c->gridy, a);//Bang the drum
+        hits += crate_o_doom(c->gridx, c->gridy, a);//Bang the drum
         actorInfoById(-a.id).hits += hits;
         for (int i = gameptr->specials.size(); i > 0; i--){
                 if (gameptr->specials[i-1]->health == 0){
@@ -607,16 +571,14 @@ bool GameField::checkObjectStrike(ActorInfo &a)
 * @brief  Crate destruction.  We check every square in the range of the crate 
 * and deal appropriate damage.  If we struck a crate we begin chaining our damage.
 ******************************************************************************/
-bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
+bool  GameField::crate_o_doom(int x_pos, int y_pos, ActorInfo &a)
 {
   //Steal the good parts from fog of war
   int radar = 1; //How big the explosion
-  int x_pos = x;
-  int y_pos = y;
-  int x_max_radar_range = radar + x_pos >= fieldMap.width ? fieldMap.width - 1 : radar + x_pos;
-  int y_max_radar_range = radar + y_pos >= fieldMap.height ? fieldMap.height - 1 : radar + y_pos;
-  int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
-  int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
+  int x_max_radar_range = radar + x_pos > fieldMap->width ? fieldMap->width : radar + x_pos;
+  int y_max_radar_range = radar + y_pos > fieldMap->height ? fieldMap->height : radar + y_pos;
+  int y_min_radar_range = y_pos - radar < 1 ? 1 : y_pos - radar;
+  int x_min_radar_range = x_pos - radar < 1 ? 1 : x_pos - radar;
   int hit = 0;
 
   for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
@@ -632,7 +594,7 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
             {
               t->health--;
               if(t->health <= 0){
-                t->destroyed = settings->getTurn();
+                t->destroyed = gameTurn;
                 removeObstacle(t->gridx, t->gridy);
               }
             }
@@ -655,7 +617,7 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
             {
               r->health--;
               if(r->health <= 0){
-                r->destroyed = settings->getTurn();
+                r->destroyed = gameTurn;
                 removeObstacle(r->gridx, r->gridy);
               }
             }
@@ -663,24 +625,27 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
           break;
         case 'B':
         default:
-          for(auto &act : actors)
-          {
-            if(act.x == x_iter && act.y == y_iter && act.health > 0)
+          //If there is no actor or projectile on the map we can skip the search
+          if (fieldMap->tileMap[y_iter][x_iter].tank != nullptr || fieldMap->tileMap[y_iter][x_iter].projectile != nullptr){
+            for(auto &act : actors)
             {
-              //printf("Hit a tank at (%d, %d)\n",x_iter, y_iter);
-              act.health--;
-              if(act.health <= 0)
+              if(act.x == x_iter && act.y == y_iter && act.health > 0)
               {
-                act.health = 0;
-                act.id = 0;
-                actorInfoById(-a.id).kills++;
+                //printf("Hit a tank at (%d, %d)\n",x_iter, y_iter);
+                act.health--;
+                if(act.health <= 0)
+                {
+                  act.health = 0;
+                  actorInfoById(-a.id).kills++;
+                }
+                actorInfoById(-a.id).hits++;
               }
-              actorInfoById(-a.id).hits++;
             }
           }
           break;
       }
-      SFX.push_back(make_pair(x_iter, y_iter));
+      if (settings->showUI())
+        SFX.push_back(make_pair(x_iter, y_iter));
     }
   }
   //printf("Hit %d number of tanks.\n",hit);
@@ -692,80 +657,34 @@ bool  GameField::crate_o_doom(int x, int y, ActorInfo &a)
 * @brief
 * turns the map into just what the current tank can see based off radar
 ******************************************************************************/
-void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
+MapData * GameField::create_fog_of_war(const MapData &map, ActorInfo cactor)
 {
-  if(current_actor.id <= 0)
-    return;
+  MapData * new_map = new MapData(map.width, map.height);
+  //if a projectile gets here return empty map
+  if(cactor.id <= 0)
+    return new_map;
+  
+  int x_max_radar_range = cactor.radar + cactor.x > map.width ? map.width : cactor.radar + cactor.x;
+  int y_max_radar_range = cactor.radar + cactor.y > map.height ? map.height : cactor.radar + cactor.y;
+  int y_min_radar_range = cactor.y - cactor.radar < 1 ? 1 : cactor.y - cactor.radar;
+  int x_min_radar_range = cactor.x - cactor.radar < 1 ? 1 : cactor.x - cactor.radar;
 
-  int radar = current_actor.radar;
-  int x_pos = current_actor.x;
-  int y_pos = current_actor.y;
-  int x_max_radar_range = radar + x_pos >= map.width ? map.width - 1 : radar + x_pos;
-  int y_max_radar_range = radar + y_pos >= map.height ? map.height - 1 : radar + y_pos;
-  int y_min_radar_range = y_pos - radar < 0 ? 0 : y_pos - radar;
-  int x_min_radar_range = x_pos - radar < 0 ? 0 : x_pos - radar;
-
-  MapData new_map = map;
-  std::fill(new_map.map.begin(), new_map.map.end(), 0);
-  std::fill(new_map.obstacleMap.begin(), new_map.obstacleMap.end(), 0);
-  new_map.healthMap.resize(new_map.width * new_map.height);
-  std::fill(new_map.healthMap.begin(), new_map.healthMap.end(), 0);
-
-  int value;
+  //int value;
   for(int y_iter = y_min_radar_range; y_iter <= y_max_radar_range; y_iter++)
   {
     for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
     {
-      value = y_iter * map.width + x_iter;
-      new_map.map[value] = map.map[value];
-      new_map.obstacleMap[value] = map.obstacleMap[value];
-      if(map.obstacleMap[value] == 0 && map.map[value] != 0)
-      {
-        for(auto act : actors)
-        {
-          if(act.x == x_iter && act.y == y_iter && act.health > 0)
-          {
-            new_map.healthMap[value] = act.health;
-          }
-        }
-      }
-      switch(obstacleAt(x_iter, y_iter))
-      {
-        case 'T':
-          for(auto t : gameptr->trees)
-          {
-            if(t->gridx == x_iter && t->gridy == y_iter && t->health > 0)
-            {
-              new_map.healthMap[value] = t->health;
-            }
-          }
-          break;
-        case 'C':
-          for(auto c : gameptr->specials)
-          {
-            new_map.healthMap[value] = c->health;
-          }
-          break;
-        case 'R':
-          for(auto r : gameptr->rocks)
-          {
-            if(r->gridx == x_iter && r->gridy == y_iter && r->health > 0)
-            {
-              new_map.healthMap[value] = r->health;
-            }
-          }
-          break;
-          //Future use for destructible bushes
-        /*case 'B':
-          for(auto b : gameptr->bushes)
-          {
-            new_map.healthMap[value] = 1;
-          }
-          break;*/
+      new_map->tileMap[y_iter][x_iter] = map.tileMap[y_iter][x_iter];
+      if ((map.tileMap[y_iter][x_iter].type == "Tree" ||
+        map.tileMap[y_iter][x_iter].type == "Bush" ||
+        map.tileMap[y_iter][x_iter].type == "Rock")
+        && map.tileMap[y_iter][x_iter].health <= 0){//Don't send hidden data on objects that have been destroyed
+        new_map->tileMap[y_iter][x_iter].type = "Empty";
+        new_map->tileMap[y_iter][x_iter].health = 0;
       }
     }
   }
-  map = new_map;
+  return new_map;
 }
 
 /**
@@ -774,30 +693,20 @@ void  GameField::create_fog_of_war(MapData &map, ActorInfo current_actor)
  * This function checks all objects to see if they should be regrown
  */
 void GameField::checkObjectRegrowth(){
-  for(Obstacles* t : gameptr->trees)
+  for(auto && t : gameptr->trees)
   {
     if(t->health <= 0)
     {
-      t->regrow(settings->getTurn(), actors);
+      t->regrow(gameTurn, actors);
       if (t->health > 0)
         addObstacle(t->gridx, t->gridy, 'T');
     }
   }
-  for(Obstacles* r : gameptr->rocks)
-  {
-    if(r->health <= 0)
-    {
-      r->regrow(settings->getTurn(), actors);
-      if (r->health > 0)
-        addObstacle(r->gridx, r->gridy, 'R');
-    }
-  }
-  //Currently bushes are non destructible but this will let them regrow when they do
-  for(Obstacles* b : gameptr->bushes)
+  for(auto && b : gameptr->bushes)
   {
     if(b->health <= 0)
     {
-      b->regrow(settings->getTurn(), actors);
+      b->regrow(gameTurn, actors);
       if (b->health > 0)
         addObstacle(b->gridx, b->gridy, 'B');
     }
@@ -812,88 +721,113 @@ void GameField::checkObjectRegrowth(){
  * Object regrowth is checked at the beginning of the turn phase.
  * AI's are culled at the end of the turn phase.
  */
-
 void GameField::nextTurn()
 {
-  if(settings != nullptr){
-    settings->nextTurn();
-  }
-  direction atk;
+  gameTurn++;
+  //Debug tileMap updating
+  //if (gameTurn >= 1){
+  //  printf("Game turn: %d\n", gameTurn);
+  //  fieldMap->printTileMap();
+  //}
+  if (tracker != nullptr)
+    tracker->newTurn(gameTurn);
+  direction dir;
   ActorInfo newProjectile;
-  PositionData pos;
+  MapData * fog_of_war;
   int action;
   int act_ap;
   unsigned int j = 0;
   bool grow = false;
-  MapData fog_of_war = fieldMap;
   if (gameptr != nullptr){
     checkObjectRegrowth();
   }
   for(unsigned int i = 0; i < actors.size(); ++i)
   {
     act_ap = actors[i].AP;
-    if(actors[i].id > 0 && actors[i].health > 0)
-      settings->setActTurn(actors[i].id);
-    updateMap();  //Give each actor a fresh map
-    if(gameptr != nullptr && settings->showUI())  
+    if(actors[i].id > 0 && actors[i].health > 0){
+      actTurn = actors[i].id;
+    }
+    if (tracker != nullptr)
+        tracker->newPlayerTurn(actors[i].id);
+    if(gameptr != nullptr && settings->showUI()) {
       displayCallback(settings);
-    SFX.clear();
+      SFX.clear();
+    }
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
       actors[i].cDetect++;
-      //if (gameptr != nullptr){
-        settings->setModCounter(settings->getModCounter() + 1); 
-        if(settings->getModCounter() > 7)
-          settings->setModCounter(0);
-      //}
+      modCounter++;
+      if(modCounter > 7)
+        modCounter = 0;
+      if (actors[i].id < 0){
+        dir = actors[i].act_p->move(nullMap, currPos);
+        runMoves(actors[i], dir);
+        if (tracker != nullptr){
+          tracker->move("Projectile", actors[i].heading, actors[i].x, actors[i].y);
+        }
+        --act_ap;
+        continue;
+      }
       updateMap();
-      fog_of_war = fieldMap;
-      create_fog_of_war(fog_of_war, actors[i]);
-      pos.game_x = actors[i].x;
-      pos.game_y = actors[i].y;
-      pos.health = actors[i].health;
-      pos.id = actors[i].id;
-      pos.ap = act_ap;
-      pos.ammo = actors[i].ammo;
-      action = actors[i].act_p->spendAP(fog_of_war, pos);
+      fog_of_war = create_fog_of_war(*fieldMap, actors[i]);
+      currPos.game_x = actors[i].x;
+      currPos.game_y = actors[i].y;
+      currPos.health = actors[i].health;
+      currPos.id = actors[i].id;
+      currPos.ap = act_ap;
+      currPos.ammo = actors[i].ammo;
+      action = actors[i].act_p->spendAP(*fog_of_war, currPos);
       if(action == 1)
       {
-        runMoves(actors[i], fog_of_war, pos);
+        dir = actors[i].act_p->move(*fog_of_war, currPos);
+
+        runMoves(actors[i], dir);
+        if (tracker != nullptr && actors[i].id > 0){
+          tracker->move(actors[i].name, actors[i].heading, actors[i].x, actors[i].y);
+        }else if (tracker != nullptr){
+          tracker->move("Projectile", actors[i].heading, actors[i].x, actors[i].y);
+        }
       }
       else if(action == 2)
       {
         //PositionData to give the AI
-        pos.game_x = actors[i].x;
-        pos.game_y = actors[i].y;
-        pos.health = actors[i].health;
-        pos.id = actors[i].id;
+        currPos.game_x = actors[i].x;
+        currPos.game_y = actors[i].y;
+        currPos.health = actors[i].health;
+        currPos.id = actors[i].id;
 
         //Get the AI's desired attack
-        atk = actors[i].act_p->attack(fog_of_war, pos);
-
+        dir = actors[i].act_p->attack(*fog_of_war, currPos);
+    
         if(actors[i].id > 0)  //tanks attacking
         {
-          if(atk != STAY && actors[i].ammo >= 1)
+          if (tracker != nullptr){
+            tracker->attack(actors[i].name, dir);
+          }
+          if(dir != STAY && actors[i].ammo >= 1)
           {
-            actors[i].heading = atk;
+            actors[i].heading = dir;
+            actors[i].shots += 1;
             j = i+1;
             grow = false;
-            while(j < actors.size() && actors[i].id == -actors[j].id && actors[j].id < 0 && actors[j].health > 0)
-            {//Check projectile list for a projectile in this spot
-              if(actors[i].x == actors[j].x && actors[i].y == actors[j].y) //found one
-              {
-                actors[j].scale += .40;
-                actors[j].health += 1;
-                actors[j].ammo += 1;
-                actors[j].damage += actors[i].damage;
-                grow = true; //See if the projectile is one of our own
-                break;
+            if (fieldMap->tileMap[actors[i].y][actors[i].x].projectile != nullptr){ //If no projectile we don't need to check the list
+              while(j < actors.size() && actors[i].id == -actors[j].id && actors[j].id < 0 && actors[j].health > 0)
+              {//Check projectile list for a projectile in this spot
+                if(actors[i].x == actors[j].x && actors[i].y == actors[j].y) //found one
+                {
+                  actors[j].scale += .40;
+                  actors[j].health += 1;
+                  actors[j].ammo += 1;
+                  actors[j].damage += actors[i].damage;
+                  grow = true; //See if the projectile is one of our own
+                  break;
+                }
+                j++;
               }
-              j++;
             }
             if(grow == false) //If there was no projectiles in this spot create a new one
             {
-              ProjectileActor * proj = new ProjectileActor(atk);
+              ProjectileActor * proj = new ProjectileActor(dir);
               newProjectile.AP = actors[i].range;
               newProjectile.id = -actors[i].id;
               newProjectile.act_p = proj;
@@ -904,13 +838,17 @@ void GameField::nextTurn()
               newProjectile.hits = 0;
               newProjectile.ammo = 1;
               newProjectile.heading = actors[i].heading;
+              newProjectile.name = "Projectile\n";
               actors.insert(actors.begin() + i + 1, newProjectile);
-              actors[i].shots++;
               actors[i].ammo--;
+              fieldMap->tileMap[actors[i].y][actors[i].x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", newProjectile.id, newProjectile.x, newProjectile.y, newProjectile.health));
             }
           }
-          else if(atk != STAY)//Forced reload on empty ammo rack
+          else if(dir != STAY)//Forced reload on empty ammo rack
           {
+            if (tracker != nullptr){
+              tracker->reload(actors[i].name, true);
+            }
             //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
             actors[i].ammo = actors[i].max_ammo;
             //printf("Back up to %d bullets.\n",actors[i].ammo);
@@ -919,19 +857,29 @@ void GameField::nextTurn()
       }
       else if(action == 4) //Chosen reload action
       {
+        if (tracker != nullptr){
+          tracker->reload(actors[i].name, false);
+        }
         actors[i].ammo = actors[i].max_ammo;
         //printf("Reloading... Reloading... Reloading\n");
       }
-      if (actors[i].health > 0 && actors[i].cDetect / actors[i].AP >= 4) //check for a camper
-              actors[i].camp = true; //
+      if (actors[i].health > 0 && actors[i].cDetect / actors[i].AP >= 4){ //check for a camper
+        actors[i].camp = true; //
+        if (tracker != nullptr){
+          tracker->camp(actors[i].name);
+        }
+      
+      }
+      delete fog_of_war;
       --act_ap;
     }
   }
   cull(); //Remove dead actors
   updateMap(); //update map
-  if(gameptr != nullptr && settings->showUI()) //Draw map
+  if(gameptr != nullptr && settings->showUI()){ //Draw map
     displayCallback(settings);
-  SFX.clear(); //remove explosions that remain
+    SFX.clear(); //remove explosions that remain
+  }
 }
 
 /**
@@ -942,7 +890,7 @@ void GameField::nextTurn()
 void GameField::addActor(ActorInfo a)
 {
   actors.push_back(a);
-  updateMap();
+  fieldMap->tileMap[a.y][a.x].tank = std::shared_ptr<Tile>(new Tile("Tank", a.id, a.x, a.y, a.health));
 }
 
 /**
@@ -955,7 +903,30 @@ void GameField::addActor(ActorInfo a)
  */
 void GameField::addObstacle(int x, int y, int type)
 {
-  fieldMap.obstacleMap[x + fieldMap.width * y] = type;
+  int health = 0;
+  std::string tType = "Hedgehog";
+  if (type == 'R'){
+    tType = "Rock";
+    health = 4;
+  }else if (type == 'T'){
+    tType = "Tree";
+    health = 2;
+  }else if (type == 'B'){
+    tType = "Bush";
+    health = 1;
+  }else if (type == 'W'){
+    tType = "Water";
+  }else if (type == 'C'){
+    tType = "Crate";
+    health = 1;
+  }else if (type == 'H'){
+    tType = "Hedgehog";
+  }
+  fieldMap->tileMap[y][x].type = tType;
+  fieldMap->tileMap[y][x].id = 0;
+  fieldMap->tileMap[y][x].x = x;
+  fieldMap->tileMap[y][x].y = y;
+  fieldMap->tileMap[y][x].health = health;
 }
 
 /**
@@ -968,7 +939,11 @@ void GameField::addObstacle(int x, int y, int type)
  */
 void GameField::removeObstacle(int x, int y)
 {
-  fieldMap.obstacleMap[x + fieldMap.width * y] = false;
+  fieldMap->tileMap[y][x].type = "Empty";
+  fieldMap->tileMap[y][x].id = 0;
+  fieldMap->tileMap[y][x].x = x;
+  fieldMap->tileMap[y][x].y = y;
+  fieldMap->tileMap[y][x].health = 0;
 }
 
 /**
@@ -1026,11 +1001,21 @@ void GameField::cull()
   {
     if(actors[i].health == 0)
     {
-      if(actors[i].name != "default\n")
+      if(actors[i].id > 0)
       {
         //std::cout << "Tank Down!! " << actors[i].name << " died\n";
         deceased.push_back(actors[i]);
         //std::cout << "Current number of dead tanks is: " << deceased.size() << endl;
+        if (tracker != nullptr){
+          tracker->killed(actors[i].id, actors[i].name);
+        }
+        if (fieldMap->tileMap[actors[i].y][actors[i].x].tank != nullptr){
+          fieldMap->tileMap[actors[i].y][actors[i].x].tank = nullptr;
+        }
+      }else{
+        if (fieldMap->tileMap[actors[i].y][actors[i].x].projectile != nullptr){
+          fieldMap->tileMap[actors[i].y][actors[i].x].projectile = nullptr;
+        }
       }
       if(actors[i].act_p != NULL)
         delete actors[i].act_p;
@@ -1067,10 +1052,82 @@ ActorInfo & GameField::actorInfoById(int id)
  *
  * @param[in] x - the X coordinate of the tile
  * @param[in] y - the Y coordinate of the tile
- * @return true if an obstacle exists at a tile, false if not
+ * @return true if an obstacle exists at a tile (Or specific object), false if not
  *
  */
 int GameField::obstacleAt(int x, int y)
 {
-  return fieldMap.obstacleMap[x + y * fieldMap.width];
+  std::string tType = fieldMap->tileMap[y][x].type;
+  int obj = 1;
+  if(tType == "Rock")
+    obj = 'R';
+  else if (tType == "Water")
+    obj = 'W';
+  else if (tType == "Bush")
+    obj = 'B';
+  else if (tType == "Tree")
+    obj = 'T';
+  else if (tType == "Crate")
+    obj = 'C';
+  else if (tType == "Empty")
+    obj = 0;
+  return obj;
+}
+
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Returns the current game turn
+ * 
+ * @param[out] returns the current game turn
+ */
+int GameField::getGameTurn(){return gameTurn;}
+
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Returns the current actor
+ * 
+ * @param[out] returns the current actor
+ */
+int GameField::getActTurn(){return actTurn;}
+
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Returns the current modifier counter
+ * 
+ * @param[out] returns the current modifier counter
+ */
+int GameField::getModCounter(){return modCounter;}
+
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Increments game turn counter
+ */
+void GameField::incTurn(){gameTurn++;}
+
+/**
+ * @author Jon McKee
+ * @par Description:
+ * Set the fieldMap to a loaded map file.
+ */
+void GameField::setMap(std::shared_ptr<MapData> newMap){
+    fieldMap = newMap;
+  }
+
+  /**
+ * @author Jon McKee
+ * @par Description:
+ * Moves an actor from one position to another.
+ */
+void GameField::moveActor(int newx, int newy, int oldx, int oldy, int id){
+  if (id > 0){
+    fieldMap->tileMap[newy][newx].tank = fieldMap->tileMap[oldy][oldx].tank;
+    fieldMap->tileMap[oldy][oldx].tank = nullptr;
+  }else if(id < 0){
+    fieldMap->tileMap[newy][newx].projectile = fieldMap->tileMap[oldy][oldx].tank;
+    fieldMap->tileMap[oldy][oldx].projectile = nullptr;
+  }  
 }

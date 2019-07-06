@@ -9,8 +9,8 @@
 #ifndef __SIMPLE_ACTOR_H
 #define __SIMPLE_ACTOR_H
 
-#include <Actor.h>
-#include <direction.h>
+#include <actors/Actor.h>
+#include <structures/direction.h>
 #include <iostream>
 
 class SimpleActor : public Actor
@@ -19,10 +19,10 @@ class SimpleActor : public Actor
     direction dir;
     
     public:
-        virtual direction move(MapData map, PositionData status);
-        virtual direction attack(MapData map, PositionData status);
+        virtual direction move(const MapData &map, PositionData status);
+        virtual direction attack(const MapData &map, PositionData status);
         virtual attributes setAttribute(int pointsAvailable, attributes baseStats);
-        virtual int spendAP(MapData map, PositionData status);
+        virtual int spendAP(const MapData &map, PositionData status);
         SimpleActor();
         SimpleActor(direction mv, direction d);
         void setAttack(direction d);

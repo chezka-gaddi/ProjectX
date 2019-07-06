@@ -1,8 +1,8 @@
 #ifndef __CAMPER_AI_H
 #define __CAMPER_AI_H
 
-#include <Actor.h>
-#include <direction.h>
+#include <actors/Actor.h>
+#include <structures/direction.h>
 #include <cmath>
 #include <iostream>
 
@@ -20,16 +20,16 @@ class CamperAI : public Actor
 public:
 
     // The Overwritten Move function.
-    virtual direction move(MapData map, PositionData status);
+    virtual direction move(const MapData &map, PositionData status);
 
     // The Overwritten attack function.
-    virtual direction attack(MapData map, PositionData status);
+    virtual direction attack(const MapData &map, PositionData status);
 
     // The Overwritten set attribute  function.
     virtual attributes setAttribute(int pointsAvailable, attributes baseStats);
 
     // The Overwritten spendAP  function.
-    virtual int spendAP(MapData map, PositionData status);
+    virtual int spendAP(const MapData &map, PositionData status);
 
     CamperAI();
     ~CamperAI();

@@ -9,7 +9,7 @@ CamperAI::~CamperAI(void)
 {
 }
 
-direction CamperAI::move(MapData map, PositionData status)
+direction CamperAI::move(const MapData &map, PositionData status)
 {
     int x_pos = status.game_x;
     int y_pos = status.game_y;
@@ -19,32 +19,32 @@ direction CamperAI::move(MapData map, PositionData status)
 
     direction retval = STAY;
 
-    if((y_pos == 0 && x_pos == 0) ||
-       (y_pos == map.height - 1 && x_pos == 0) ||
-       (x_pos == map.width - 1 && y_pos == 0) ||
-       (x_pos == map.width - 1 && y_pos == map.height - 1) ||
+    if((y_pos == 1 && x_pos == 1) ||
+       (y_pos == map.height && x_pos == 1) ||
+       (x_pos == map.width && y_pos == 1) ||
+       (x_pos == map.width && y_pos == map.height) ||
        (corner == true))
         return retval;
-    if(y_pos <= median && y_pos - 1 >= 0 
-                && (map.obstacleMap[x_pos + ((y_pos-1)*map.width)] == 0 || 
-                    map.obstacleMap[x_pos + ((y_pos-1)*map.width)] == 'T' ||
-                    map.obstacleMap[x_pos + ((y_pos-1)*map.width)] == 'B'))
+    if(y_pos <= median && y_pos - 1 >= 1 
+                && (map.tileMap[y_pos-1][x_pos].type == "Empty" || 
+                    map.tileMap[y_pos-1][x_pos].type == "Tree" ||
+                    map.tileMap[y_pos-1][x_pos].type == "Bush"))
         UP = true;
-    if(y_pos > median && (y_pos + 1 <= map.height - 1)
-                && (map.obstacleMap[x_pos + ((y_pos+1)*map.width)] == 0 || 
-                map.obstacleMap[x_pos + ((y_pos+1)*map.width)] == 'T' ||
-                map.obstacleMap[x_pos + ((y_pos+1)*map.width)] == 'B'))
+    if(y_pos > median && (y_pos + 1 <= map.height)
+                && (map.tileMap[y_pos+1][x_pos].type == "Empty" || 
+                map.tileMap[y_pos+1][x_pos].type == "Tree" ||
+                map.tileMap[y_pos+1][x_pos].type == "Bush"))
                         
         DOWN = true;
-    if(x_pos > median2 && (x_pos + 1 <= map.width - 1)
-                && (map.obstacleMap[(x_pos + 1) + (y_pos*map.width)] == 0 || 
-                    map.obstacleMap[(x_pos + 1) + (y_pos*map.width)] == 'T' ||
-                    map.obstacleMap[(x_pos + 1) + (y_pos*map.width)] == 'B'))
+    if(x_pos > median2 && (x_pos + 1 <= map.width)
+                && (map.tileMap[y_pos][x_pos+1].type == "Empty" || 
+                    map.tileMap[y_pos][x_pos+1].type == "Tree" ||
+                    map.tileMap[y_pos][x_pos+1].type == "Bush"))
         RIGHT = true;
-    if(x_pos <= median2 && (x_pos - 1 >= 0)
-                && (map.obstacleMap[(x_pos - 1) + (y_pos*map.width)] == 0 || 
-                    map.obstacleMap[(x_pos - 1) + (y_pos*map.width)] == 'T' ||
-                    map.obstacleMap[(x_pos - 1) + (y_pos*map.width)] == 'B'))
+    if(x_pos <= median2 && (x_pos - 1 >= 1)
+                && (map.tileMap[y_pos][x_pos-1].type == "Empty" || 
+                    map.tileMap[y_pos][x_pos-1].type == "Tree" ||
+                    map.tileMap[y_pos][x_pos-1].type == "Bush"))
         LEFT = true;
     
     if (!UP && !DOWN && !RIGHT && !LEFT){
@@ -70,7 +70,7 @@ direction CamperAI::move(MapData map, PositionData status)
     return retval;
 }
 
-direction CamperAI::attack(MapData map, PositionData status)
+direction CamperAI::attack(const MapData &map, PositionData status)
 {
     int y_pos = status.game_y;
     int x_pos = status.game_x;
@@ -151,29 +151,10 @@ attributes CamperAI::setAttribute(int pointsAvailable, attributes baseStats)
     return retval;
 }
 
-int CamperAI::spendAP(MapData map, PositionData status)
+int CamperAI::spendAP(const MapData &map, PositionData status)
 {
     if (maxAp == 0)
         maxAp = status.ap;
-//Debugging map output
-/*printf("Map:\n");
-for (int i = 0; i < map.map.size(); i++){
-  printf("%d ", map.map[i]);
-  if (i % 30 == 29)
-          printf("\n");
-}
-printf("Obstacle:\n");
-for (int i = 0; i < map.obstacleMap.size(); i++){
-  printf("%d ", map.obstacleMap[i]);
-  if (i % 30 == 29)
-          printf("\n");
-}
-printf("Health:\n");
-for (int i = 0; i < map.healthMap.size(); i++){
-  printf("%d ", map.healthMap[i]);
-  if (i % 30 == 29)
-          printf("\n");
-}*/
     if (maxAp == status.ap){
         turn = 0;
         for (int i = 0; i < 6; i++)

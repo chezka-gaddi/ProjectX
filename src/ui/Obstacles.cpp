@@ -4,7 +4,7 @@
 * @brief Contains all maintenance functions for the Obstacles class.
 * *****************************************************************************/
 
-#include "../ui/Drawable.h"
+#include "ui/Drawable.h"
 #include <iostream>
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -18,7 +18,7 @@
 Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
 {
     //id's:
-    // 0 = Tree   1 = Rocks   2 = Bushes  3 = Water   4 = Other
+    // 0 = Tree   1 = Rocks   2 = Bushes  3 = Water   4 = Other 50 = hedgehog
     //Textures:
     //0-9   Trees  - Packaged Trees  0-3   - 4 Trees
     //10-19 Rocks  - Packaged Rocks  10-12 - 3 Rocks
@@ -36,7 +36,7 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
       tex = ((rand() % 3) + 10);
       regrow_rate = 5;
     }else if( id == 2){ //It's a Bushes
-      health = 9999;
+      health = 1;
       tex = ((rand() % 4) + 20);
       regrow_rate = 2;
     }else if( id == 3){ //It's a Waters

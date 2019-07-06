@@ -6,7 +6,7 @@
 #ifndef __settings_h
 #define __settings_h
 
-#include <attributes.h>
+#include <structures/attributes.h>
 #include <string>
 
 class GameField; //Forward declare it for pointer
@@ -31,11 +31,15 @@ public:
     int getBulletSpeed();
     int getMaxTurns();
     gameMode getGameMode();
-    int getTurn();
-    int getActTurn();
-    int getModCounter();
-    bool showUI();
     std::string getResultsFile();
+    std::string getConfigFile();
+    std::string getMapName();
+
+    //mode checkers
+    bool checkCoverage();
+    bool checkQuiet();
+    bool showUI();
+    bool checkTracking();
 
     //individual attribute getters
     int getAttrDamage();
@@ -45,10 +49,6 @@ public:
     int getAttrAmmo();
     int getAttrRange();
     int getAttrSpecial();
-    bool checkCoverage();
-    bool checkQuiet();
-
-    void nextTurn();
 
     //setters
     void setAttributes(attributes attr);
@@ -58,13 +58,14 @@ public:
     void setBulletSpeed(int bs);
     void setMaxTurns(int mt);
     void setGameMode(gameMode gm);
-    void setTurn(int t);
-    void setActTurn(int at);
-    void setModCounter(int mc);
     void setUI(bool set);
     void setCoverageMode(bool c);
     void setQuietMode(bool q);
     void setResultsFile(std::string r);
+    void setConfigFile(std::string c);
+    void setTrackingFile(std::string t);
+    void setTrackingMode(bool t);
+    void setMapName(std::string m);
 
     //individual attribute setters
     void setAttrDamage(int damage);
@@ -75,6 +76,8 @@ public:
     void setAttrRange(int range);
     void setAttrSpecial(int special);
 
+    //Helper functions
+    int checkSettingValue(int, int, int, std::string);
 private:
     //default game settings
     int maxTurns = 1000;
@@ -90,16 +93,14 @@ private:
     GameField *tankGame;   //Pointer to gamefield
     gameMode gMode = ai;  //default game mode
 
-    //Current Match Settings
-    int turn = 0; //Current game turn
-    int actTurn = 0; //0 causes issues on first display call
-    int modCounter = 7; //Modular counter for animation effects
-
     //platform settings
     bool modeQuiet = false; //quiet mode for blocking text
     bool modeCoverage = false; //coverage mode for faster animations
     bool showui = true; //should we display the ui
     std::string resultsFile = "results.txt"; //results output file
+    std::string configFile = "config.ini"; //Config ini file
+    std::string mapName = "default.map"; //map file name
+    bool tracking = false; //track all actions to file
 };
 
 #endif //__GAME_H

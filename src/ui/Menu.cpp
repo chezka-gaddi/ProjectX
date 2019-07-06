@@ -4,7 +4,7 @@
 * @brief Contains all maintenance functions for the Menu class.
 * *****************************************************************************/
 
-#include "../ui/Drawable.h"
+#include "ui/Drawable.h"
 #include <iostream>
 
 
@@ -44,33 +44,26 @@ Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction di
   health = hp;
   bullet = ammo;
   score = hits;
-  angle = 0;
-  id > 0 ? bTex = (id-1) * 5 + 4 : bTex = (-id-1) * 5 + 4;
+  angle = 180; //up
+  id > 0 ? bTex = (id-1) * 3 + 2 : bTex = (-id-1) * 3 + 2;
   id > 0 ? i = id : i = -id;
-  if (mc == 0 || mc == 1 || mc == 7){
-    tex = (i-1) * 5 + 0;//up upright upleft
-    if (mc == 1){
-            angle = -45;
-    }
-    if (mc == 7){
-            angle = 45;
-    }
-  }
-  if (mc == 2){
-    tex = (i-1) * 5 + 1;//right
-  }
-  if (mc == 3 || mc == 4 || mc == 5){
-    tex = (i-1) * 5 + 2;//down downright downleft
-    if (mc == 3){
-            angle = 45;
-    }
-    if (mc == 5){
-            angle = -45;
-    }
-  }
-  if (mc == 6){
-    tex = (i-1) * 5 + 3;//left
-  }
+  
+  tex = (i-1) * 3;
+
+  if (mc == 1)
+    angle = 135;
+  else if (mc == 2)
+    angle = 90;
+  else if (mc == 3)
+    angle = 45;
+  else if (mc == 4)
+    angle = 0;
+  else if (mc == 5)
+    angle = -45;
+  else if (mc == 6)
+    angle = -90;
+  else if (mc == 7)
+    angle = -135;
 }
 
 

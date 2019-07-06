@@ -1,17 +1,9 @@
 CXX = g++
-CXXFLAGS = -Wall -g -std=c++11 -fPIC
+CXXFLAGS = -Wall -fmax-errors=5 -g -std=c++11 -fPIC
 INCS = -I./ -Isrc/
-INCS += -Isrc/game
-INCS += -Isrc/map
-INCS += -Isrc/settings
-INCS += -Isrc/structures
-INCS += -Isrc/tanks
-INCS += -Isrc/ui
-INCS += -Isrc/utilities
-INCS += -Isrc/actors
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
-LIBS += -lSOIL -Llibraries
+LIBS += -lSOIL -Llibraries -lCTF
 SOFLAGS = -DDYNAMIC
 PROFILE ?=
 
@@ -29,25 +21,31 @@ FILES += $(SRC_PATH)actors/ProjectileActor.cpp
 #Game
 FILES += $(SRC_PATH)game/GameField.cpp
 FILES += $(SRC_PATH)game/game.cpp
+FILES += $(SRC_PATH)game/gameover.cpp
+FILES += $(SRC_PATH)game/configParser.cpp
+FILES += $(SRC_PATH)game/Tournament.cpp
 #Map
 FILES += $(SRC_PATH)map/MapData.cpp
+FILES += $(SRC_PATH)map/Tile.cpp
 #Settings
 FILES += $(SRC_PATH)settings/Settings.cpp
 #UI
 FILES += $(SRC_PATH)ui/callbacks.cpp
 FILES += $(SRC_PATH)ui/Crate.cpp
+FILES += $(SRC_PATH)ui/Drawable.cpp
 FILES += $(SRC_PATH)ui/event.cpp
 FILES += $(SRC_PATH)ui/GameFieldDrawable.cpp
 FILES += $(SRC_PATH)ui/Menu.cpp
 FILES += $(SRC_PATH)ui/Projectile.cpp
 FILES += $(SRC_PATH)ui/Obstacles.cpp
 FILES += $(SRC_PATH)ui/sfxDrawable.cpp
-FILES += $(SRC_PATH)ui/Texture.cpp
 FILES += $(SRC_PATH)ui/util.cpp
 FILES += $(SRC_PATH)ui/TankDrawable.cpp
 #Utilities
-FILES += $(SRC_PATH)utilities/DynamicLoader.cpp
-
+FILES += $(SRC_PATH)utilities/textureLoader.cpp
+FILES += $(SRC_PATH)utilities/tankLoader.cpp
+FILES += $(SRC_PATH)utilities/gameTracker.cpp
+FILES += $(SRC_PATH)utilities/mapLoader.cpp
 #Tanks
 TANKS = $(SRC_PATH)tanks/SimpleAI.cpp
 TANKS += $(SRC_PATH)tanks/PongAI.cpp
@@ -61,7 +59,8 @@ platform: $(FILES:.cpp=.o)
 	+make tanks
 	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
 
-coverage: set-coverage $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
+coverage: set-coverage $(FILES:.cpp=.o)
+	+make tanks
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o platform $(FILES:.cpp=.o) $(LIBS)
 
 set-coverage:
@@ -73,24 +72,21 @@ set-coverage:
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
-src/tanks/%.so: src/tanks/%.cpp ./src/actors/Actor.o
+tanks/%.so: src/tanks/%.cpp
 	@mkdir -p tanks
-	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $? $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
-tanks/%.so: src/tanks/%.cpp ./src/actors/Actor.o
-	@mkdir -p tanks
-	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $< $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
-
-tanks: $(TANKS:%.cpp=%.so)
+tanks: src/actors/Actor.o $(TANKS:$(SRC_PATH)tanks/%.cpp=$(TANK_PATH)%.so)
 
 clean:
 	@find . -name \*.o -type f -exec rm -f {} +
 	@find . -name \*.gc* -type f -exec rm -f {} +
 	@rm -rf gprofresults.txt
 	@rm -rf gmon.out
+	@rm -rf platform
 
 clean-lib: clean
-	@rm -rf buildsrc
+	@rm -rf release
 	@rm -rf libraries/libCTF.so
 
 clean-all: clean-lib clean-tests
@@ -107,45 +103,56 @@ clean-tests: clean
 dev: clean-lib
 	make gen-library -j8
 
-gen-library: $(FILES:.cpp=.o) $(TANKS:src/%.cpp=tanks/%.so)
-	@mkdir -p buildsrc/$(LIB_PATH)
-	@mkdir -p buildsrc/$(SRC_PATH)
-	@mkdir -p buildsrc/$(TANK_PATH)
-	@mkdir -p buildsrc/images	
-	#echo "Building object library"
-	g++ -o buildsrc/$(LIB_PATH)libCTF.so -shared $(CXXFLAGS) $(FILES:.cpp=.o) $(SOFLAGS)
-	#echo "Building platform"
-	$(CXX) $(CXXFLAGS) $(INCS) -o buildsrc/platform $(FILES:.cpp=.o) $(LIBS)
-	#echo "Copying support files"
-	cp -R src/buildsrc/ .
-	cp config.txt	buildsrc/config.sample
-	cp README.md buildsrc/README.md
-	cp -R images/ buildsrc/
-	cp -R maps/ buildsrc/
-	cp src/Actor.h buildsrc/src/
-	cp src/MoveData.h buildsrc/src/
-	cp src/attributes.h buildsrc/src/
-	cp src/MapData.h buildsrc/src/
-	cp src/direction.h buildsrc/src/
-	cp src/PositionData.h buildsrc/src/
-	cp $(TANKS) buildsrc/
-	cp $(TANKS:.cpp=.h) buildsrc/
-	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
+gen-library: $(FILES:.cpp=.o)
+	#@echo "Make the tanks"
+	+make tanks
+	#@echo "Make directories for release folder"
+	@mkdir -p release/$(LIB_PATH) release/$(TANK_PATH) release/images release/sample_tanks
+	@mkdir -p release/$(SRC_PATH)/actors release/$(SRC_PATH)/map release/$(SRC_PATH)/structures
+	#@echo "Building object library"
+	$(CXX) $(CXXFLAGS) $(INCS) -o release/$(LIB_PATH)libCTF.a -shared $(FILES:.cpp=.o) $(SOFLAGS)
+	cp release/$(LIB_PATH)libCTF.a $(LIB_PATH)
+	#@echo "Building platform"
+	$(CXX) $(CXXFLAGS) $(INCS) -o release/platform $(FILES:.cpp=.o) $(LIBS)
+	#@echo "Copying support files"
+	cp -R src/release/ .
+	cp README.md release/README.md
+	cp changelog.md release/changelog.md
+	cp -R images/ release/
+	cp -R maps/ release/
+	cp src/actors/Actor.h release/src/actors/
+	cp src/actors/Actor.o release/src/actors/
+	cp src/structures/MoveData.h release/src/structures/
+	cp src/structures/attributes.h release/src/structures/
+	cp src/structures/direction.h release/src/structures/
+	cp src/structures/PositionData.h release/src/structures/
+	cp src/map/MapData.h release/src/map/
+	cp src/map/Tile.h release/src/map/
+	#Copy sample tanks
+	cp $(TANKS) release/sample_tanks/
+	cp $(TANKS:.cpp=.h) release/sample_tanks/
 	# Change tanks src to point to new directory
-	sed -i 's#include "#include "src/#g' buildsrc/SimpleAI.h
-	sed -i 's#include "#include "src/#g' buildsrc/PongAI.h
+	#sed -i 's#include <actors#include <src#g' release/SimpleAI.h
+	#sed -i 's#include <actors#include <src#g' release/PongAI.h
+	#sed -i 's#include <actors#include <src#g' release/CamperAI.h
+	#sed -i 's#include <actors#include <src#g' release/PongAI.h
 
 push-to-git: clean-lib
-	mkdir -p buildsrc
-	git clone git@gitlab.com:jamckee/projectx.git buildsrc/
+	#Create directories
+	mkdir -p release
+	#Pull down current release
+	git clone git@gitlab.com:jamckee/projectx.git release/
+	#Build new files and copy current support files
 	make gen-library -j8
-	git --git-dir=buildsrc/.git --work-tree=buildsrc checkout -b pre-release
-	git --git-dir=buildsrc/.git --work-tree=buildsrc add .
+	#Switch git branches and add files
+	git --git-dir=release/.git --work-tree=release checkout -b pre-release
+	git --git-dir=release/.git --work-tree=release add .
+	##Automated commit lines #Disabled for manual checking
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 4.00"
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc status
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release
 
-tests: set-coverage $(TANKS:%.cpp=%.so) testUnitAll testFunctionalAll
+tests: set-coverage src/actors/Actor.o testUnitAll testFunctionalAll
 
 testUnitAll:
 	+make PROFILE="$(PROFILE)" -C tests/src

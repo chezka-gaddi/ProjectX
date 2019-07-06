@@ -7,7 +7,7 @@
 #ifndef SLACKERS_PLATFORM_POSITIONDATA_H
 #define SLACKERS_PLATFORM_POSITIONDATA_H
 
-#include <direction.h>
+#include <structures/direction.h>
 #include <string>
 
 /***************************************************************************//**

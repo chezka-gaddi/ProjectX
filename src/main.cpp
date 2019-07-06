@@ -50,24 +50,25 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 #include <iostream>
 #include <memory>
 #include <stdio.h>
-#include <util.h>
-#include <Settings.h>
-#include <game.h>
+#include <ui/util.h>
+#include <settings/Settings.h>
+#include <game/game.h>
+#include <game/Tournament.h>
 
 // Main
 
 int main(int argc, char **argv)
 {
-    Settings * settings = new Settings;
+    std::shared_ptr<Settings> settings = std::shared_ptr<Settings>(new Settings);
+    std::unique_ptr<Tournament> tourny;
     gameMode mode = settings->getGameMode();
     
     //game display height
     int height = 727, width = 1000;
     //agument counter
-    int counter = 1;    
-
-    //printf("%d\n", argc);
-    //printf("%s\n", argv[argc-1]);
+    int counter = 1;
+    //default number of rounds for tournament
+    int rounds = 1;
 
     //this is the start up of the game logic atleast 2 tanks need to be on the field at any given time
     while(counter < argc)
@@ -81,10 +82,13 @@ int main(int argc, char **argv)
       {
         printf("Quiet Mode\n");
         settings->setQuietMode(true);
-      }else if ((strcmp(argv[counter], "--tournament") == 0 ) && counter + 1 <= argc)
+      }else if (((strcmp(argv[counter], "--tournament") == 0 ) || strcmp(argv[counter], "-t") == 0) && counter + 2 <= argc)
       {
         printf("Tournament Mode\n");
         mode = tournament;
+        rounds = atoi(argv[counter+1]);
+        tourny = std::unique_ptr<Tournament>(new Tournament(settings, rounds));
+        counter++;
       }else if ((strcmp(argv[counter], "--noui") == 0 ) && counter + 1 <= argc)
       {
         printf("No UI Mode\n");
@@ -98,6 +102,15 @@ int main(int argc, char **argv)
         printf("Results file set to %s\n", argv[counter+1]);
         settings->setResultsFile(argv[counter+1]);
         counter++;
+      }else if (((strcmp(argv[counter], "--settings") == 0) || strcmp(argv[counter], "-s") == 0) && counter + 2 <= argc)
+      {
+        printf("Config file set to %s\n", argv[counter+1]);
+        settings->setConfigFile(argv[counter+1]);
+        counter++;
+      }else if (((strcmp(argv[counter], "--gamelog") == 0) || strcmp(argv[counter], "-g") == 0) && counter + 1 <= argc)
+      {
+        printf("Tracking enabled");
+        settings->setTrackingMode(true);
       }else if((strcmp(argv[counter], "--help") == 0) && counter + 1 <= argc)
       {
         printf("\n\nHelp:\n");
@@ -105,12 +118,18 @@ int main(int argc, char **argv)
         printf("   Demo mode, increases default width to 1900 and height to 1000.\n\n");
         printf("--quiet, -q\n");
         printf("   Quiet text mode, only displays debug text\n\n");
-        printf("--tournament, -t\n");
-        printf("   Tournament mode, not implemented yet\n\n");
+        printf("--tournament, -t (rounds)\n");
+        printf("   Tournament mode, rounds equals number of rounds\n\n");
         printf("--noui, -n\n");
         printf("   No UI Mode, hides the UI for faster playback\n\n");
         printf("--coverage, -c\n");
         printf("   Coverage Mode, runs fast settings for coverage testing with graphics\n\n");
+        printf("--results, -o (results.txt)\n");
+        printf("   Change the match results output file.\n\n");
+        printf("--settings, -s\n");
+        printf("   Change the config source file.\n\n");
+        printf("--gamelog, -g\n");
+        printf("   Enable game log tracking to file.\n\n");
         exit(1);
       }else if(argv[counter][0] == '-' && argv[counter][1] != '-'){
         //printf("multi-params\n");
@@ -126,10 +145,6 @@ int main(int argc, char **argv)
                 settings->setQuietMode(true);
                 printf("Quiet Mode\n");
                 break;
-              case 't':
-                mode = tournament;
-                printf("Tournament Mode\n");
-                break;
               case 'n':
                 settings->setUI(false);
                 printf("No UI Mode\n");
@@ -144,12 +159,18 @@ int main(int argc, char **argv)
                 printf("   Demo mode, increases default width to 1900 and height to 1000.\n\n");
                 printf("--quiet, -q\n");
                 printf("   Quiet text mode, only displays debug text\n\n");
-                printf("--tournament, -t\n");
+                printf("--tournament, -t (rounds)\n");
                 printf("   Tournament mode, not implemented yet\n\n");
                 printf("--noui, -n\n");
                 printf("   No UI Mode, hides the UI for faster playback\n\n");
                 printf("--coverage, -c\n");
                 printf("   Coverage Mode, runs fast settings for coverage testing with graphics\n\n");
+                printf("--results, -o (results.txt)\n");
+                printf("   Change the match results output file.\n\n");
+                printf("--settings, -s\n");
+                printf("   Change the config source file.\n\n");
+                printf("--gamelog, -g\n");
+                printf("   Enable game log tracking to file.\n\n");
                 exit(1);
                 break;
               default:
@@ -170,7 +191,9 @@ int main(int argc, char **argv)
 
     settings->setGameMode(mode);
     //gameMode {none, ai, sp, mp, tournament};
-    if (settings->showUI()){
+    if (mode == tournament){
+        tourny->runTournament();
+    }else if (settings->showUI()){
       initOpenGL( argc, argv, width, height, settings );
       glutMainLoop();
     }else{
@@ -179,6 +202,6 @@ int main(int argc, char **argv)
         game.executeTurn();
     }
 
-    std::cout << "\n GAME OVER \n";
+    std::cout << "\nGAME OVER\n";
     return 0;
 }

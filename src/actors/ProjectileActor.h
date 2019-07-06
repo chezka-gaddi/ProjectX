@@ -8,10 +8,10 @@
 #define SLACKERS_PLATFORM_PROJECTILEACTOR_H
 
 #include <cmath>
-#include <Actor.h>
-#include <direction.h>
-#include <MoveData.h>
-#include <attributes.h>
+#include <actors/Actor.h>
+#include <structures/direction.h>
+#include <structures/MoveData.h>
+#include <structures/attributes.h>
 
 /*!
  * @brief This class is the base class for all projectile actors
@@ -25,10 +25,10 @@ public:
     ProjectileActor();
     ProjectileActor(direction d);
 
-    direction move(MapData map, PositionData status);
-    direction attack(MapData map, PositionData status);  
+    direction move(const MapData &map, PositionData status);
+    direction attack(const MapData &map, PositionData status);  
     attributes setAttribute(int pointsAvailable, attributes baseStats);
-    int spendAP(MapData map, PositionData status);
+    int spendAP(const MapData &map, PositionData status);
 };
 
 

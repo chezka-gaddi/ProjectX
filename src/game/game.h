@@ -11,13 +11,16 @@
 #include <vector>
 #include <GL/glut.h>
 #include <GL/freeglut.h>
-#include <ActorInfo.h>
-#include <GameField.h>
-#include <Drawable.h>
-#include <Actor.h>
-#include <SimpleAI.h>
-#include <DynamicLoader.h>
-#include <Settings.h>
+#include <actors/ActorInfo.h>
+#include <game/GameField.h>
+#include <ui/Drawable.h>
+#include <actors/Actor.h>
+#include <tanks/SimpleAI.h>
+#include <utilities/tankLoader.h>
+#include <utilities/mapLoader.h>
+#include <settings/Settings.h>
+#include <game/gameover.h>
+#include <game/configParser.h>
 #include <fstream>
 #include <sstream>
 #include <utility>
@@ -35,36 +38,33 @@ using namespace std;
 class Game
 {
 public:
-    GameField *tankGame;               /*!<Pointer to the game manager */
-    Settings *settings;                /*!<Pointer to settings */
+    std::unique_ptr<GameField> tankGame;               /*!<Pointer to the game manager */
+    std::shared_ptr<Settings> settings;                /*!<Pointer to the settings holder*/
     Game();
     Game(gameMode mode);
     ~Game();
 
-    void makeDrawables();
     void executeTurn();
-    void initGameState(Settings * setting);
+    void initGameState(std::shared_ptr<Settings> setting);
     void closeDown();
     void earlyOut();
-    void createConfig();
     float convertGLXCoordinate( int );
     float convertGLYCoordinate( int );
-    void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner);
     void noGUIGame();
     bool checkMaxTurn();
 
-    int getX(){return fieldx;};
-    int getY(){return fieldy;};
+    int getX(){return tankGame->getWidth();};
+    int getY(){return tankGame->getHeight();};
 
     std::vector<ActorInfo> loadPlayers(bool, std::vector<std::pair<int,int>>, std::vector<std::string>, std::vector<Actor*>, attributes, int, int);
 
     vector<std::unique_ptr<Drawable>> objects;       /*!<Holds all of the current actors */
-    vector<Drawable *> constants;     /*!<Holds the GameFieldDrawable and menus */
-    vector<Obstacles *> bushes;        /*!<Holds the bushes drawables */
-    vector<Obstacles *> rocks;         /*!<Holds the rocks drawables */
-    vector<Obstacles *> trees;         /*!<Holds the trees drawables */
-    vector<Drawable *> waters;		   /*!<Holds the waters drawables */
-    vector<Drawable *> specials;       /*!<Holds other special drawables */
+    vector<std::unique_ptr<Drawable>> constants;     /*!<Holds the GameFieldDrawable and menus */
+    vector<std::unique_ptr<Obstacles>> bushes;        /*!<Holds the bushes drawables */
+    vector<std::unique_ptr<Obstacles>> rocks;         /*!<Holds the rocks drawables */
+    vector<std::unique_ptr<Obstacles>> trees;         /*!<Holds the trees drawables */
+    vector<std::unique_ptr<Drawable>> waters;		   /*!<Holds the waters drawables */
+    vector<std::unique_ptr<Drawable>> specials;       /*!<Holds other special drawables */
     vector<std::unique_ptr<Drawable>> sfx;           /*!<Holds the sfx drawables */
 
 private:

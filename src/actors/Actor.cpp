@@ -1,6 +1,6 @@
 /*! \file */
 
-#include "../actors/Actor.h"
+#include "actors/Actor.h"
 //Actor::Actor() {}
 /**************************************************************************//**
  * @author Jon McKee

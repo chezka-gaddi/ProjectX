@@ -4,7 +4,7 @@
 * @brief Contains all maintenance functions for Crate class.
 * *****************************************************************************/
 
-#include "../ui/Drawable.h"
+#include "ui/Drawable.h"
 
 /***************************************************************************//**
 * @author Jon McKee

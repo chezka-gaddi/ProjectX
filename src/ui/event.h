@@ -11,8 +11,8 @@
 #include <sstream>
 #include <GL/glut.h>
 
-#include <game.h>
-#include <Drawable.h>
+#include <game/game.h>
+#include <ui/Drawable.h>
 
 #define ESCAPE_KEY 27
 
@@ -39,10 +39,10 @@ class InitEvent : public Event
 {
 private:
     int columns, rows;
-    Settings * settings;
+    std::shared_ptr<Settings> settings;
 
 public:
-    InitEvent(int, int, Settings *);
+    InitEvent(int, int, std::shared_ptr<Settings>);
 
     void doAction(Game &);
 };

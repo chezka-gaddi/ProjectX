@@ -10,7 +10,7 @@
  * @param[in] map - MapData with the current game map
  * @param[in] status - information about the current actor including position and ID
  */
-direction SimpleActor::move(MapData map, PositionData status)
+direction SimpleActor::move(const MapData &map, PositionData status)
 {
     return dir;
 }
@@ -23,7 +23,7 @@ direction SimpleActor::move(MapData map, PositionData status)
  * @param[in] map - MapData with the current game map
  * @param[in] status - information about the current actor including position and ID
  */
-direction SimpleActor::attack(MapData map, PositionData status)
+direction SimpleActor::attack(const MapData &map, PositionData status)
 {
     return atk;
 }
@@ -97,7 +97,7 @@ attributes SimpleActor::setAttribute(int pointsAvailable, attributes baseStats)
     return tankAttributes;
 }
 
-int SimpleActor::spendAP(MapData map, PositionData status)
+int SimpleActor::spendAP(const MapData &map, PositionData status)
 {
     return (status.ap > 1) ? 1 : 2;
 }

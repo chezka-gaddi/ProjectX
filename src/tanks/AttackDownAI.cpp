@@ -38,7 +38,7 @@ AttackDownAI::~AttackDownAI(void)
  * does not move, so this function always returns stay.
  *
  **********************************************************************/
-direction AttackDownAI::move(MapData map, PositionData status)
+direction AttackDownAI::move(const MapData &map, PositionData status)
 {
     direction retval = STAY;
     return retval;
@@ -51,7 +51,7 @@ direction AttackDownAI::move(MapData map, PositionData status)
  * This is the attack function for the AttackDownAI.  It only returns DOWN
  *
  **********************************************************************/
-direction AttackDownAI::attack(MapData map, PositionData status)
+direction AttackDownAI::attack(const MapData &map, PositionData status)
 {
     direction retval;
     retval = DOWN;
@@ -83,7 +83,7 @@ attributes AttackDownAI::setAttribute(int pointsAvailable, attributes baseStats)
  * 2 for attack.
  *
  **********************************************************************/
-int AttackDownAI::spendAP(MapData map, PositionData status)
+int AttackDownAI::spendAP(const MapData &map, PositionData status)
 {
     return 2; // Attack
 }
