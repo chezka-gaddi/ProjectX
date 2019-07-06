@@ -59,7 +59,8 @@ platform: $(FILES:.cpp=.o)
 	+make tanks
 	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
 
-coverage: set-coverage $(FILES:.cpp=.o) $(TANKS:%.cpp=%.so)
+coverage: set-coverage $(FILES:.cpp=.o)
+	+make tanks
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o platform $(FILES:.cpp=.o) $(LIBS)
 
 set-coverage:
@@ -71,11 +72,11 @@ set-coverage:
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
-src/tanks/%.so: src/tanks/%.cpp
+tanks/%.so: src/tanks/%.cpp
 	@mkdir -p tanks
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $? $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
-tanks: src/actors/Actor.o $(TANKS:%.cpp=%.so)
+tanks: src/actors/Actor.o $(TANKS:$(SRC_PATH)tanks/%.cpp=$(TANK_PATH)%.so)
 
 clean:
 	@find . -name \*.o -type f -exec rm -f {} +
@@ -85,7 +86,7 @@ clean:
 	@rm -rf platform
 
 clean-lib: clean
-	@rm -rf buildsrc
+	@rm -rf release
 	@rm -rf libraries/libCTF.so
 
 clean-all: clean-lib clean-tests
@@ -102,43 +103,51 @@ clean-tests: clean
 dev: clean-lib
 	make gen-library -j8
 
-gen-library: $(FILES:.cpp=.o) $(TANKS:%.cpp=%.so)
-	@mkdir -p buildsrc/$(LIB_PATH)
-	@mkdir -p buildsrc/$(SRC_PATH)
-	@mkdir -p buildsrc/$(TANK_PATH)
-	@mkdir -p buildsrc/images	
-	#echo "Building object library"
-	g++ -o buildsrc/$(LIB_PATH)libCTF.a -shared $(CXXFLAGS) $(FILES:.cpp=.o) $(SOFLAGS)
-	cp buildsrc/$(LIB_PATH)libCTF.a $(LIB_PATH)
-	#echo "Building platform"
-	$(CXX) $(CXXFLAGS) $(INCS) -o buildsrc/platform $(FILES:.cpp=.o) $(LIBS)
-	#echo "Copying support files"
-	cp -R src/buildsrc/ .
-	cp README.md buildsrc/README.md
-	cp changelog.md buildsrc/changelog.md
-	cp -R images/ buildsrc/
-	cp -R maps/ buildsrc/
-	cp src/actors/Actor.h buildsrc/src/actors/
-	cp src/structures/MoveData.h buildsrc/src/structures/
-	cp src/structures/attributes.h buildsrc/src/structures/
-	cp src/map/MapData.h buildsrc/src/map/
-	cp src/structures/direction.h buildsrc/src/structures/
-	cp src/structures/PositionData.h buildsrc/src/structures/
-	cp $(TANKS) buildsrc/
-	cp $(TANKS:.cpp=.h) buildsrc/
-	#	cp -R $(SRC_PATH)*.o build/$(SRC_PATH)
+gen-library: $(FILES:.cpp=.o)
+	#@echo "Make the tanks"
+	+make tanks
+	#@echo "Make directories for release folder"
+	@mkdir -p release/$(LIB_PATH) release/$(TANK_PATH) release/images release/sample_tanks
+	@mkdir -p release/$(SRC_PATH)/actors release/$(SRC_PATH)/map release/$(SRC_PATH)/structures
+	#@echo "Building object library"
+	$(CXX) $(CXXFLAGS) $(INCS) -o release/$(LIB_PATH)libCTF.a -shared $(FILES:.cpp=.o) $(SOFLAGS)
+	cp release/$(LIB_PATH)libCTF.a $(LIB_PATH)
+	#@echo "Building platform"
+	$(CXX) $(CXXFLAGS) $(INCS) -o release/platform $(FILES:.cpp=.o) $(LIBS)
+	#@echo "Copying support files"
+	cp -R src/release/ .
+	cp README.md release/README.md
+	cp changelog.md release/changelog.md
+	cp -R images/ release/
+	cp -R maps/ release/
+	cp src/actors/Actor.h release/src/actors/
+	cp src/actors/Actor.o release/src/actors/
+	cp src/structures/MoveData.h release/src/structures/
+	cp src/structures/attributes.h release/src/structures/
+	cp src/structures/direction.h release/src/structures/
+	cp src/structures/PositionData.h release/src/structures/
+	cp src/map/MapData.h release/src/map/
+	cp src/map/Tile.h release/src/map/
+	#Copy sample tanks
+	cp $(TANKS) release/sample_tanks/
+	cp $(TANKS:.cpp=.h) release/sample_tanks/
 	# Change tanks src to point to new directory
-	#sed -i 's#include <actors#include <src#g' buildsrc/SimpleAI.h
-	#sed -i 's#include <actors#include <src#g' buildsrc/PongAI.h
-	#sed -i 's#include <actors#include <src#g' buildsrc/CamperAI.h
-	#sed -i 's#include <actors#include <src#g' buildsrc/PongAI.h
+	#sed -i 's#include <actors#include <src#g' release/SimpleAI.h
+	#sed -i 's#include <actors#include <src#g' release/PongAI.h
+	#sed -i 's#include <actors#include <src#g' release/CamperAI.h
+	#sed -i 's#include <actors#include <src#g' release/PongAI.h
 
 push-to-git: clean-lib
-	mkdir -p buildsrc
-	git clone git@gitlab.com:jamckee/projectx.git buildsrc/
+	#Create directories
+	mkdir -p release
+	#Pull down current release
+	git clone git@gitlab.com:jamckee/projectx.git release/
+	#Build new files and copy current support files
 	make gen-library -j8
-	git --git-dir=buildsrc/.git --work-tree=buildsrc checkout -b pre-release
-	git --git-dir=buildsrc/.git --work-tree=buildsrc add .
+	#Switch git branches and add files
+	git --git-dir=release/.git --work-tree=release checkout -b pre-release
+	git --git-dir=release/.git --work-tree=release add .
+	##Automated commit lines #Disabled for manual checking
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc commit -m "Automated push of new version. 4.00"
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc status
 	#git --git-dir=buildsrc/.git --work-tree=buildsrc push -fu origin pre-release
@@ -149,6 +158,6 @@ testUnitAll:
 	+make PROFILE="$(PROFILE)" -C tests/src
 	mv tests/src/testUnitAll .
 
-testFunctionalAll: src/tanks/SimpleActor.so src/tanks/SimpleAI.so
+testFunctionalAll: tanks/SimpleActor.so tanks/SimpleAI.so
 	+make PROFILE="$(PROFILE)" -C tests/functional_tests
 	mv tests/functional_tests/testFunctionalAll .

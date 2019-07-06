@@ -34,9 +34,9 @@ direction SimpleAI::move(const MapData &map, PositionData status)
     {
         for (int y = 1; y <= map.height; ++y)
         {
-            if ( map.tileMap[y][x].actor != nullptr &&
-                    map.tileMap[y][x].actor->id != status.id &&
-                    map.tileMap[y][x].actor->id != -status.id &&
+            if ( map.tileMap[y][x].tank != nullptr &&
+                    map.tileMap[y][x].tank->id != status.id &&
+                    map.tileMap[y][x].tank->id != -status.id &&
                     calcDist(status.game_x, status.game_y, x, y) < min_dist &&
                     calcDist(status.game_x, status.game_y, x, y) > 1)
             {
@@ -153,8 +153,8 @@ direction SimpleAI::attack(const MapData &map, PositionData status)
         for (int y = 1; y <= map.height; ++y)
         {
             //If an enemy is encountered closer than previously encountered
-            if (((map.tileMap[y][x].actor != nullptr && //if there is an actor at X, Y
-                    map.tileMap[y][x].actor->id != status.id) || //And it is not you 
+            if (((map.tileMap[y][x].tank != nullptr && //if there is an actor at X, Y
+                    map.tileMap[y][x].tank->id != status.id) || //And it is not you 
                     (map.tileMap[y][x].projectile != nullptr && 
                     map.tileMap[y][x].projectile->id != -status.id)) && //And it is not your projectile
                     calcDist(status.game_x, status.game_y, x, y) < min_dist) //And it is the closest one

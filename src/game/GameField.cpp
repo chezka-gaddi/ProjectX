@@ -105,12 +105,12 @@ void GameField::updateMap()
     //for each actor fill in its id on the map
     if(a.health > 0){
       if (a.id > 0){
-        if (fieldMap->tileMap[a.y][a.x].actor == nullptr){
-          fieldMap->tileMap[a.y][a.x].actor = std::shared_ptr<Tile>(new Tile("Tank", a.id, a.x, a.y, a.health));
+        if (fieldMap->tileMap[a.y][a.x].tank == nullptr){
+          fieldMap->tileMap[a.y][a.x].tank = std::shared_ptr<Tile>(new Tile("Tank", a.id, a.x, a.y, a.health));
         }else{
-          fieldMap->tileMap[a.y][a.x].actor->x = a.x;
-          fieldMap->tileMap[a.y][a.x].actor->y = a.y;
-          fieldMap->tileMap[a.y][a.x].actor->health = a.health;
+          fieldMap->tileMap[a.y][a.x].tank->x = a.x;
+          fieldMap->tileMap[a.y][a.x].tank->y = a.y;
+          fieldMap->tileMap[a.y][a.x].tank->health = a.health;
         }
       }else{
         if (fieldMap->tileMap[a.y][a.x].projectile == nullptr){
@@ -352,7 +352,7 @@ void GameField::runMoves(ActorInfo &a, direction dir)
       a.cDetect = 0;
       a.camp = false;
     }
-    if (tempObj->actor != nullptr || tempObj->projectile != nullptr){ //Only check for actors if there was one in the tile
+    if (tempObj->tank != nullptr || tempObj->projectile != nullptr){ //Only check for actors if there was one in the tile
       for(unsigned int i = 0; i < actors.size(); ++i)   //check each actor
       {
         if(a.id < 0 && actors[i].id == -a.id){//If it's one of our projectiles update it's camp value
@@ -626,7 +626,7 @@ bool  GameField::crate_o_doom(int x_pos, int y_pos, ActorInfo &a)
         case 'B':
         default:
           //If there is no actor or projectile on the map we can skip the search
-          if (fieldMap->tileMap[y_iter][x_iter].actor != nullptr || fieldMap->tileMap[y_iter][x_iter].projectile != nullptr){
+          if (fieldMap->tileMap[y_iter][x_iter].tank != nullptr || fieldMap->tileMap[y_iter][x_iter].projectile != nullptr){
             for(auto &act : actors)
             {
               if(act.x == x_iter && act.y == y_iter && act.health > 0)
@@ -675,7 +675,10 @@ MapData * GameField::create_fog_of_war(const MapData &map, ActorInfo cactor)
     for(int x_iter = x_min_radar_range; x_iter <= x_max_radar_range; x_iter++)
     {
       new_map->tileMap[y_iter][x_iter] = map.tileMap[y_iter][x_iter];
-      if (map.tileMap[y_iter][x_iter].type != "Empty" && map.tileMap[y_iter][x_iter].health <= 0){//Don't send hidden data on objects that have been destroyed
+      if ((map.tileMap[y_iter][x_iter].type == "Tree" ||
+        map.tileMap[y_iter][x_iter].type == "Bush" ||
+        map.tileMap[y_iter][x_iter].type == "Rock")
+        && map.tileMap[y_iter][x_iter].health <= 0){//Don't send hidden data on objects that have been destroyed
         new_map->tileMap[y_iter][x_iter].type = "Empty";
         new_map->tileMap[y_iter][x_iter].health = 0;
       }
@@ -887,7 +890,7 @@ void GameField::nextTurn()
 void GameField::addActor(ActorInfo a)
 {
   actors.push_back(a);
-  fieldMap->tileMap[a.y][a.x].actor = std::shared_ptr<Tile>(new Tile("Tank", a.id, a.x, a.y, a.health));
+  fieldMap->tileMap[a.y][a.x].tank = std::shared_ptr<Tile>(new Tile("Tank", a.id, a.x, a.y, a.health));
 }
 
 /**
@@ -1006,8 +1009,8 @@ void GameField::cull()
         if (tracker != nullptr){
           tracker->killed(actors[i].id, actors[i].name);
         }
-        if (fieldMap->tileMap[actors[i].y][actors[i].x].actor != nullptr){
-          fieldMap->tileMap[actors[i].y][actors[i].x].actor = nullptr;
+        if (fieldMap->tileMap[actors[i].y][actors[i].x].tank != nullptr){
+          fieldMap->tileMap[actors[i].y][actors[i].x].tank = nullptr;
         }
       }else{
         if (fieldMap->tileMap[actors[i].y][actors[i].x].projectile != nullptr){
@@ -1121,10 +1124,10 @@ void GameField::setMap(std::shared_ptr<MapData> newMap){
  */
 void GameField::moveActor(int newx, int newy, int oldx, int oldy, int id){
   if (id > 0){
-    fieldMap->tileMap[newy][newx].actor = fieldMap->tileMap[oldy][oldx].actor;
-    fieldMap->tileMap[oldy][oldx].actor = nullptr;
+    fieldMap->tileMap[newy][newx].tank = fieldMap->tileMap[oldy][oldx].tank;
+    fieldMap->tileMap[oldy][oldx].tank = nullptr;
   }else if(id < 0){
-    fieldMap->tileMap[newy][newx].projectile = fieldMap->tileMap[oldy][oldx].actor;
+    fieldMap->tileMap[newy][newx].projectile = fieldMap->tileMap[oldy][oldx].tank;
     fieldMap->tileMap[oldy][oldx].projectile = nullptr;
   }  
 }

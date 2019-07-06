@@ -52,7 +52,7 @@ void MapData::clearTileMap()
             tileMap[i][j].y = i;
             tileMap[i][j].health = 0;
 
-            tileMap[i][j].actor = nullptr;
+            tileMap[i][j].tank = nullptr;
             tileMap[i][j].projectile = nullptr;
 
         }
@@ -111,9 +111,9 @@ void MapData::clearTanks()
 {
     for(int i = 0; i < (int) tileMap.size(); i++){
         for (int j = 0; j < (int) tileMap[i].size(); j++){
-            if (tileMap[i][j].actor != nullptr){
-                //delete tileMap[i][j].actor;
-                tileMap[i][j].actor = nullptr;
+            if (tileMap[i][j].tank != nullptr){
+                //delete tileMap[i][j].tank;
+                tileMap[i][j].tank = nullptr;
             }
         }
     }

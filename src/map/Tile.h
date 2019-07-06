@@ -11,16 +11,16 @@
 #include <memory>
 
 struct Tile{
-    std::string type="Empty"; //{Rock, Bush, Tree, Water, Crate, Tank, Projectile}
+    std::string type="Empty"; //{Rock, Bush, Tree, Water, Crate, Hedgehog}
     int id = 0;
     int x = 0;
     int y = 0;
     int health = 0;
-    std::shared_ptr<Tile> actor;
-    std::shared_ptr<Tile> projectile;
+    std::shared_ptr<Tile> tank; //Tanks go here
+    std::shared_ptr<Tile> projectile; //Projectiles go here
     //constructor with initial values
     Tile(std::string t="Empty", int newid=0, int newx=0, int newy=0, int h=0) 
-        : type(t), id(newid), x(newx), y(newy), health(h) {actor = nullptr; projectile = nullptr;};
+        : type(t), id(newid), x(newx), y(newy), health(h) {tank = nullptr; projectile = nullptr;};
     Tile(const Tile &tTile);
     ~Tile(){};
 };

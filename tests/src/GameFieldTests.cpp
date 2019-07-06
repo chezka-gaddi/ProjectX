@@ -88,8 +88,8 @@ TEST_CASE("GameField correctly places actors on the map at construction")
     actorVect[1].health = 1;
     GameField g (2, 2, actorVect, NULL, nullptr, nullptr);
     g.updateMap();
-    REQUIRE(g.fieldMap->tileMap[1][2].actor != nullptr);
-    REQUIRE(g.fieldMap->tileMap[2][1].actor != nullptr);
+    REQUIRE(g.fieldMap->tileMap[1][2].tank != nullptr);
+    REQUIRE(g.fieldMap->tileMap[2][1].tank != nullptr);
 }
 
 TEST_CASE("GameField correctly places actors on the map when added")
@@ -98,7 +98,7 @@ TEST_CASE("GameField correctly places actors on the map when added")
     ActorInfo newAI(a, "a1", 1, 1, 1, 1);
     GameField g (2, 2);
     g.addActor(newAI);
-    REQUIRE(g.fieldMap->tileMap[1][1].actor->type == "Tank");
+    REQUIRE(g.fieldMap->tileMap[1][1].tank->type == "Tank");
 }
 TEST_CASE("SimpleActor moves when nextTurn() is called")
 {
@@ -111,8 +111,8 @@ TEST_CASE("SimpleActor moves when nextTurn() is called")
     a->setMove(UP);
     a->setAttack(STAY);
     g.nextTurn();
-    REQUIRE(g.fieldMap->tileMap[1][1].actor != nullptr);
-    REQUIRE(g.fieldMap->tileMap[1][1].actor->type == "Tank");
+    REQUIRE(g.fieldMap->tileMap[1][1].tank != nullptr);
+    REQUIRE(g.fieldMap->tileMap[1][1].tank->type == "Tank");
 }
 TEST_CASE("Actors are prevented from moving off the map")
 {
@@ -121,7 +121,7 @@ TEST_CASE("Actors are prevented from moving off the map")
     GameField g (2, 2);
     g.addActor(newAI);
     g.nextTurn();
-    REQUIRE(g.fieldMap->tileMap[1][1].actor->type == "Tank");
+    REQUIRE(g.fieldMap->tileMap[1][1].tank->type == "Tank");
 }
 TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are culled")
 {
@@ -137,7 +137,7 @@ TEST_CASE("Actors can attack the desired space on nextMove() and dead Actors are
     a2->setAttack(STAY);
     a2->setMove(STAY);
     g.nextTurn();
-    REQUIRE(g.fieldMap->tileMap[1][1].actor == nullptr);
+    REQUIRE(g.fieldMap->tileMap[1][1].tank == nullptr);
 }
 TEST_CASE("Actors move until their range is depleted")
 {
@@ -148,8 +148,8 @@ TEST_CASE("Actors move until their range is depleted")
     a->setMove(DOWN);
     a->setAttack(STAY);
     g.nextTurn();
-    REQUIRE(g.fieldMap->tileMap[1][1].actor == nullptr);
-    REQUIRE(g.fieldMap->tileMap[3][1].actor != nullptr);
+    REQUIRE(g.fieldMap->tileMap[1][1].tank == nullptr);
+    REQUIRE(g.fieldMap->tileMap[3][1].tank != nullptr);
 }
 TEST_CASE("Actors spawn and move projectiles on attack")
 {
@@ -161,7 +161,7 @@ TEST_CASE("Actors spawn and move projectiles on attack")
     a->setMove(STAY);
     g.nextTurn();
     REQUIRE(g.fieldMap->tileMap[2][1].projectile != nullptr);
-    REQUIRE(g.fieldMap->tileMap[8][1].actor != nullptr);
+    REQUIRE(g.fieldMap->tileMap[8][1].tank != nullptr);
 }
 TEST_CASE("Actors take 1 point of damage from the walls of the arena")
 {
@@ -173,7 +173,7 @@ TEST_CASE("Actors take 1 point of damage from the walls of the arena")
     a->setAttack(STAY);
     g.nextTurn();
     REQUIRE(g.getActors().back().health == 1); //check for damage from the wall
-    REQUIRE(g.fieldMap->tileMap[1][1].actor->health == 1);
+    REQUIRE(g.fieldMap->tileMap[1][1].tank->health == 1);
 }
 
 TEST_CASE("Actors are culled and do not move after collision")
@@ -195,9 +195,9 @@ TEST_CASE("Actors are culled and do not move after collision")
 
     g.nextTurn(); //tank 1 will fire up at the other tanks
 
-    REQUIRE(g.fieldMap->tileMap[1][1].actor != nullptr);
-    REQUIRE(g.fieldMap->tileMap[2][1].actor == nullptr);
-    REQUIRE(g.fieldMap->tileMap[4][1].actor != nullptr);
+    REQUIRE(g.fieldMap->tileMap[1][1].tank != nullptr);
+    REQUIRE(g.fieldMap->tileMap[2][1].tank == nullptr);
+    REQUIRE(g.fieldMap->tileMap[4][1].tank != nullptr);
 
 }
 
@@ -222,9 +222,9 @@ TEST_CASE("Collision is checked when firing point-blank")
     g.nextTurn(); //tank 1 will fire up at the other tanks, point blank on t2
 
     //failure looks like {0, 2, 1}
-    REQUIRE(g.fieldMap->tileMap[1][1].actor != nullptr);
-    REQUIRE(g.fieldMap->tileMap[2][1].actor == nullptr);
-    REQUIRE(g.fieldMap->tileMap[3][1].actor != nullptr);
+    REQUIRE(g.fieldMap->tileMap[1][1].tank != nullptr);
+    REQUIRE(g.fieldMap->tileMap[2][1].tank == nullptr);
+    REQUIRE(g.fieldMap->tileMap[3][1].tank != nullptr);
 
 }
 
@@ -507,6 +507,6 @@ TEST_CASE("GameField hides other tanks in the Fog of War")
     test_map = manager.create_fog_of_war(*manager.fieldMap, test);
 
 
-    REQUIRE(test_map->tileMap[7][7].actor == nullptr);
+    REQUIRE(test_map->tileMap[7][7].tank == nullptr);
 
 }

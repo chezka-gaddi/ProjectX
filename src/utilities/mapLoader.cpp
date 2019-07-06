@@ -65,7 +65,6 @@ std::shared_ptr<MapData> loadMap(std::shared_ptr<Settings> settings){
             {
                 for(x = 1; x <= width; x++)
                 {
-                    //obstacleLocations.push_back(std::pair<int, int> (x, y));
                     map->tileMap[y][x].type = "Hedgehog";
                     map->tileMap[y][x].health = 0;
                 }
@@ -88,13 +87,11 @@ std::shared_ptr<MapData> loadMap(std::shared_ptr<Settings> settings){
                 {
                     if(x > (int) fileLine.size() + wPad)
                         {
-                            //obstacleLocations.push_back(std::pair<int,int> (x, y));
                             map->tileMap[y][x].type = "Hedgehog";
                             map->tileMap[y][x].health = 0;
                         }
                         else if(x < wPad)
                         {
-                            //obstacleLocations.push_back(std::pair<int,int> (x, y));
                             map->tileMap[y][x].type = "Hedgehog";
                             map->tileMap[y][x].health = 0;
                         }
@@ -104,31 +101,26 @@ std::shared_ptr<MapData> loadMap(std::shared_ptr<Settings> settings){
                             {
                             case 'B':
                             case 'b':
-                                //bushLocations.push_back(std::pair<int,int> (x, y));
                                 map->tileMap[y][x].type = "Bush";
                                 map->tileMap[y][x].health = 1;
                                 break;
                             case 'R':
                             case 'r':
-                                //rockLocations.push_back(std::pair<int,int> (x, y));
                                 map->tileMap[y][x].type = "Rock";
                                 map->tileMap[y][x].health = 4;
                                 break;
                             case 'T':
                             case 't':
-                                //treeLocations.push_back(std::pair<int,int> (x, y));
                                 map->tileMap[y][x].type = "Tree";
                                 map->tileMap[y][x].health = 2;
                                 break;
                             case 'W':
                             case 'w':
-                                //waterLocations.push_back(std::pair<int,int> (x, y));
                                 map->tileMap[y][x].type = "Water";
                                 map->tileMap[y][x].health = 0;
                                 break;
                             case 'C':
                             case 'c':
-                                //specialLocations.push_back(std::pair<int,int> (x, y));
                                 map->tileMap[y][x].type = "Crate";
                                 map->tileMap[y][x].health = 1;
                                 break;
@@ -137,7 +129,6 @@ std::shared_ptr<MapData> loadMap(std::shared_ptr<Settings> settings){
                             case ' ':
                                 break;
                             default:
-                                //obstacleLocations.push_back(std::pair<int, int> (x, y));
                                 map->tileMap[y][x].type = "Hedgehog";
                                 map->tileMap[y][x].health = 0;
                                 break;

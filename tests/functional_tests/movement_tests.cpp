@@ -60,15 +60,15 @@ SCENARIO("The tank moves around the gamefield")
             THEN("The tank moves up")
             {
                 //Compare map with the initial map
-                REQUIRE(gamefield.fieldMap->tileMap[1][2].actor != nullptr);
-                REQUIRE(gamefield.fieldMap->tileMap[2][2].actor == nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[1][2].tank != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[2][2].tank == nullptr);
             }
         }
 
         WHEN("The tank tries to move down")
         {
             gamefield.updateMap();
-            CHECK(gamefield.fieldMap->tileMap[2][2].actor != nullptr);
+            CHECK(gamefield.fieldMap->tileMap[2][2].tank != nullptr);
 
             tank->setMove(moveDown);
             gamefield.nextTurn();
@@ -76,36 +76,36 @@ SCENARIO("The tank moves around the gamefield")
             THEN("The tank moves down")
             {
                 //Compare map with the initial map
-                REQUIRE(gamefield.fieldMap->tileMap[3][2].actor != nullptr);
-                REQUIRE(gamefield.fieldMap->tileMap[2][2].actor == nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[3][2].tank != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[2][2].tank == nullptr);
             }
         }
 
         WHEN("The tank tries to move right")
         {
             gamefield.updateMap();
-            REQUIRE(gamefield.fieldMap->tileMap[2][2].actor != nullptr);
+            REQUIRE(gamefield.fieldMap->tileMap[2][2].tank != nullptr);
             
             tank->setMove(moveRight);
             gamefield.nextTurn();
             THEN("The tank moves right")
             {
-                REQUIRE(gamefield.fieldMap->tileMap[2][3].actor != nullptr);
-                REQUIRE(gamefield.fieldMap->tileMap[2][2].actor == nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[2][3].tank != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[2][2].tank == nullptr);
             }
         }
 
         WHEN("The tank tries to move left")
         {
             gamefield.updateMap();
-            REQUIRE(gamefield.fieldMap->tileMap[2][2].actor != nullptr);
+            REQUIRE(gamefield.fieldMap->tileMap[2][2].tank != nullptr);
 
             tank->setMove(moveLeft);
             gamefield.nextTurn();
             THEN("The tank moves left")
             {
-                REQUIRE(gamefield.fieldMap->tileMap[2][1].actor != nullptr);
-                REQUIRE(gamefield.fieldMap->tileMap[2][2].actor == nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[2][1].tank != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[2][2].tank == nullptr);
             }
         }
     }
@@ -140,7 +140,7 @@ SCENARIO("The tank encounters a wall")
         // 2
         GameField gamefield(1, 1, actor_list, NULL, nullptr, nullptr);
         gamefield.updateMap();
-        REQUIRE(gamefield.fieldMap->tileMap[1][1].actor != nullptr);
+        REQUIRE(gamefield.fieldMap->tileMap[1][1].tank != nullptr);
 
         WHEN("A tank hits a wall going up")
         {
@@ -148,8 +148,8 @@ SCENARIO("The tank encounters a wall")
             gamefield.nextTurn();
             THEN("The tank cannot move up anymore")
             {
-                REQUIRE(gamefield.fieldMap->tileMap[1][1].actor != nullptr);
-                REQUIRE(gamefield.fieldMap->tileMap[1][1].actor->health == 1);
+                REQUIRE(gamefield.fieldMap->tileMap[1][1].tank != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[1][1].tank->health == 1);
             }
         }
 
@@ -159,8 +159,8 @@ SCENARIO("The tank encounters a wall")
             gamefield.nextTurn();
             THEN("The tank cannot move up anymore")
             {
-                REQUIRE(gamefield.fieldMap->tileMap[1][1].actor != nullptr);
-                REQUIRE(gamefield.fieldMap->tileMap[1][1].actor->health == 1);
+                REQUIRE(gamefield.fieldMap->tileMap[1][1].tank != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[1][1].tank->health == 1);
             }
         }
 
@@ -170,8 +170,8 @@ SCENARIO("The tank encounters a wall")
             gamefield.nextTurn();
             THEN("The tank cannot move up anymore")
             {
-                REQUIRE(gamefield.fieldMap->tileMap[1][1].actor != nullptr);
-                REQUIRE(gamefield.fieldMap->tileMap[1][1].actor->health == 1);
+                REQUIRE(gamefield.fieldMap->tileMap[1][1].tank != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[1][1].tank->health == 1);
             }
         }
 
@@ -181,8 +181,8 @@ SCENARIO("The tank encounters a wall")
             gamefield.nextTurn();
             THEN("The tank cannot move up anymore")
             {
-                REQUIRE(gamefield.fieldMap->tileMap[1][1].actor != nullptr);
-                REQUIRE(gamefield.fieldMap->tileMap[1][1].actor->health == 1);
+                REQUIRE(gamefield.fieldMap->tileMap[1][1].tank != nullptr);
+                REQUIRE(gamefield.fieldMap->tileMap[1][1].tank->health == 1);
             }
         }
 
