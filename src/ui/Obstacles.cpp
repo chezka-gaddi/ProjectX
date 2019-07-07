@@ -58,6 +58,15 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
 * *****************************************************************************/
 void Obstacles::draw(int, int)
 {
+    float txscalar = xscalar;
+    float tyscalar = yscalar;
+
+    if (xscalar > yscalar){
+      txscalar = tyscalar;
+    }else{
+      tyscalar = txscalar;
+    }
+
     glEnable(GL_TEXTURE_2D);
     glColor4ub(255,255,255,255);
     glPushMatrix();
@@ -75,18 +84,24 @@ void Obstacles::draw(int, int)
       glBindTexture(GL_TEXTURE_2D, bushTex[tex-20]);
     }else if( tex >= 30 && tex <= 39){ //It's a Waters
       glBindTexture(GL_TEXTURE_2D, waterTex[tex - 30]);
+      txscalar = xscalar;
+      tyscalar = yscalar;
     }else if( tex >= 50 && tex <= 60){ //It's a hedgehog
       glBindTexture(GL_TEXTURE_2D, gameTex[tex-50]);
     }
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.16f * xscalar, -0.19f * yscalar,  1.0f);
+    //glVertex3f(-0.16f * xscalar, -0.19f * yscalar,  1.0f);
+    glVertex3f(-1.0f * txscalar, -1.0f * tyscalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.16f * xscalar, -0.19f * yscalar,  1.0f);
+    //glVertex3f( 0.16f * xscalar, -0.19f * yscalar,  1.0f);
+    glVertex3f(1.0f * txscalar, -1.0f * tyscalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.16f * xscalar,  0.19f * yscalar,  1.0f);
+    //glVertex3f( 0.16f * xscalar,  0.19f * yscalar,  1.0f);
+    glVertex3f(1.0f * txscalar, 1.0f * tyscalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.16f * xscalar,  0.19f * yscalar,  1.0f);
+    //glVertex3f(-0.16f * xscalar,  0.19f * yscalar,  1.0f);
+    glVertex3f(-1.0f * txscalar, 1.0f * tyscalar,  1.0f);
     glEnd();
 
     glPopMatrix();

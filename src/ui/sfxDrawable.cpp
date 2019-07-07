@@ -36,6 +36,15 @@ sfxDrawable::sfxDrawable( GLfloat x_coor, GLfloat y_coor )
 * *****************************************************************************/
 void sfxDrawable::draw(int x, int y)
 {
+    float txscalar = xscalar;
+    float tyscalar = yscalar;
+
+    if (xscalar > yscalar){
+      txscalar = tyscalar;
+    }else{
+      tyscalar = txscalar;
+    }
+
     glEnable(GL_TEXTURE_2D);
     glColor4ub(255,255,255,255);
     glPushMatrix();
@@ -48,14 +57,15 @@ void sfxDrawable::draw(int x, int y)
     glBindTexture(GL_TEXTURE_2D, sfxTex[tex]);
 
     glBegin(GL_QUADS);
+    //.13, .1
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.13f * xscalar, -0.1f * yscalar,  1.0f);
+    glVertex3f(-1.0f * txscalar, -1.0f * tyscalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.13f * xscalar, -0.1f * yscalar,  1.0f);
+    glVertex3f( 1.0f * txscalar, -1.0f * tyscalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.13f * xscalar,  0.1f * yscalar,  1.0f);
+    glVertex3f( 1.0f * txscalar,  1.0f * tyscalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.13f * xscalar,  0.1f * yscalar,  1.0f);
+    glVertex3f(-1.0f * txscalar,  1.0f * tyscalar,  1.0f);
     glEnd();
 
     glPopMatrix();

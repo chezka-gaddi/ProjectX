@@ -48,10 +48,11 @@ Game::~Game()
  *******************************************************************************/
 float Game::convertGLXCoordinate(int x)
 {
-  float fscaler;
-  fscaler = (x - 1) * (4.0717* pow(tankGame->getWidth(), -1.031));
-  GLfloat x_gl = -1.75 + (fscaler);
-  return x_gl;
+  //float fscaler = (x - 1) * (4.0717* pow(tankGame->getWidth(), -1.031));
+  //GLfloat x_gl = -1.75 + (fscaler);
+  //return x_gl;
+  float tempx = (2.0 * x + 1.0) / tankGame->getWidth() - 1.0;
+  return tempx * 2;
 }
 
 
@@ -66,9 +67,11 @@ float Game::convertGLXCoordinate(int x)
  *******************************************************************************/
 float Game::convertGLYCoordinate(int y)
 {
-  float fscaler =  (y - 1) * (3.1923* pow(tankGame->getHeight(), -1.08));
-  GLfloat y_gl = 0.75 - (fscaler);
-  return y_gl;
+  //float fscaler =  (y - 1) * (3.1923* pow(tankGame->getHeight(), -1.08));
+  //GLfloat y_gl = 0.75 - (fscaler);
+  //return y_gl;
+  float tempy = (2.0 * y + 1.0) / tankGame->getHeight() - 1.0;
+  return tempy * 1.5;
 }
 
 
@@ -297,8 +300,10 @@ void Game::initGameState(std::shared_ptr<Settings> setting)
 
   //set globals
   TimerEvent::idle_speed = settings->getIdleSpeed();
-  Drawable::xscalar = (3.75/mapLoader->width)/.32;
-  Drawable::yscalar = Drawable::xscalar;
+  //Drawable::xscalar = (3.75/mapLoader->width)/.32;
+  Drawable::xscalar = (1.0/mapLoader->width);
+  //Drawable::yscalar = Drawable::xscalar;
+  Drawable::yscalar = (1.0/mapLoader->height);
   
   //Only load textures if we're showing UI
   if (settings->showUI()){
@@ -334,7 +339,7 @@ void Game::initGameState(std::shared_ptr<Settings> setting)
       || mapLoader->tileMap[tank.second][tank.first].type == "Hedgehog")
     {
       if (!quiet)
-        cout << "WARNING: removing object at (" << tank.first << "," << tank.second << ")\n";
+        cout << "WARNING: removing object at (" << tank.first << "," << tank.second << ") for tank spawn.\n";
       mapLoader->tileMap[tank.second][tank.first].type = "Empty";
       mapLoader->tileMap[tank.second][tank.first].health = 0;
     }
@@ -344,22 +349,16 @@ void Game::initGameState(std::shared_ptr<Settings> setting)
     for (int j=1; j <= mapLoader->width; j++){
       tType = mapLoader->tileMap[i][j].type;
       if(tType == "Rock"){
-          //tempOb = new Obstacles(1, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           rocks.push_back(std::unique_ptr<Obstacles>(new Obstacles(1, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Water"){
-          //tempOb = new Obstacles(3, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           constants.push_back(std::unique_ptr<Drawable>(new Obstacles(3, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Bush"){
-          //tempOb = new Obstacles(2, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           bushes.push_back(std::unique_ptr<Obstacles>(new Obstacles(2, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Tree"){
-          //tempOb = new Obstacles(0, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           trees.push_back(std::unique_ptr<Obstacles>(new Obstacles(0, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Crate"){
-          //tempObj = new Crate(convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           specials.push_back(std::unique_ptr<Drawable>(new Crate(convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Hedgehog"){
-          //tempOb = new Obstacles(50, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           constants.push_back(std::unique_ptr<Drawable>(new Obstacles(50, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }
     }

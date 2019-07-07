@@ -50,6 +50,15 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
 * *****************************************************************************/
 void TankDrawable::draw(int x, int y)
 {
+    float txscalar = xscalar;
+    float tyscalar = yscalar;
+
+    if (xscalar > yscalar){
+      txscalar = tyscalar;
+    }else{
+      tyscalar = txscalar;
+    }
+
     glEnable(GL_TEXTURE_2D);
     glColor4ub(255,255,255,255);
     glPushMatrix();
@@ -67,13 +76,15 @@ void TankDrawable::draw(int x, int y)
     }
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.13f * xscalar, -0.13f * yscalar,  1.0f);
+    //.13 old adjustment
+
+    glVertex3f(-1.0f * txscalar, -1.0f * tyscalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.13f * xscalar, -0.13f * yscalar,  1.0f);
+    glVertex3f( 1.0f * txscalar, -1.0f * tyscalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.13f * xscalar,  0.13f * yscalar,  1.0f);
+    glVertex3f( 1.0f * txscalar,  1.0f * tyscalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.13f * xscalar,  0.13f * yscalar,  1.0f);
+    glVertex3f(-1.0f * txscalar,  1.0f * tyscalar,  1.0f);
     glEnd();
 
     //draw turret
@@ -85,14 +96,15 @@ void TankDrawable::draw(int x, int y)
       glRotatef(angle,0,0,1);
       glBindTexture(GL_TEXTURE_2D, tankTex[tex+1]);
       glBegin(GL_QUADS);
+      //.13
       glTexCoord2f(0.0f, 0.0f);
-      glVertex3f(-0.13f * xscalar, -0.13f * yscalar,  1.0f);
+      glVertex3f(-1.0f * txscalar, -1.0f * tyscalar,  1.0f);
       glTexCoord2f(1.0f, 0.0f);
-      glVertex3f( 0.13f * xscalar, -0.13f * yscalar,  1.0f);
+      glVertex3f( 1.0f * txscalar, -1.0f * tyscalar,  1.0f);
       glTexCoord2f(1.0f, 1.0f);
-      glVertex3f( 0.13f * xscalar,  0.13f * yscalar,  1.0f);
+      glVertex3f( 1.0f * txscalar,  1.0f * tyscalar,  1.0f);
       glTexCoord2f(0.0f, 1.0f);
-      glVertex3f(-0.13f * xscalar,  0.13f * yscalar,  1.0f);
+      glVertex3f(-1.0f * txscalar,  1.0f * tyscalar,  1.0f);
       glEnd();
     }
     //First smoke    
