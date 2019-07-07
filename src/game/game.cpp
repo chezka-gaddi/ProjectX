@@ -48,11 +48,12 @@ Game::~Game()
  *******************************************************************************/
 float Game::convertGLXCoordinate(int x)
 {
-  //float fscaler = (x - 1) * (4.0717* pow(tankGame->getWidth(), -1.031));
-  //GLfloat x_gl = -1.75 + (fscaler);
-  //return x_gl;
-  float tempx = (2.0 * x + 1.0) / tankGame->getWidth() - 1.0;
-  return tempx * 2;
+  float fscaler = (x - 1) * (4.0717* pow(tankGame->getWidth(), -1.031));
+  GLfloat x_gl = -1.75 + (fscaler);
+  
+  //float tempx = (2.0 * x + 1.0) / tankGame->getWidth() - 1.9;
+  //return tempx;
+   return x_gl;
 }
 
 
@@ -67,11 +68,11 @@ float Game::convertGLXCoordinate(int x)
  *******************************************************************************/
 float Game::convertGLYCoordinate(int y)
 {
-  //float fscaler =  (y - 1) * (3.1923* pow(tankGame->getHeight(), -1.08));
-  //GLfloat y_gl = 0.75 - (fscaler);
-  //return y_gl;
-  float tempy = (2.0 * y + 1.0) / tankGame->getHeight() - 1.0;
-  return tempy * 1.5;
+  float fscaler =  (y - 1) * (3.1923* pow(tankGame->getHeight(), -1.08));
+  GLfloat y_gl = 0.75 - (fscaler);
+  return y_gl;
+  //float tempy = (2.0 * y + 1.0) / tankGame->getHeight() - 1.925;
+  //return tempy;
 }
 
 
@@ -301,9 +302,9 @@ void Game::initGameState(std::shared_ptr<Settings> setting)
   //set globals
   TimerEvent::idle_speed = settings->getIdleSpeed();
   //Drawable::xscalar = (3.75/mapLoader->width)/.32;
-  Drawable::xscalar = (1.0/mapLoader->width);
+  Drawable::xscalar = 1.85/mapLoader->width;
   //Drawable::yscalar = Drawable::xscalar;
-  Drawable::yscalar = (1.0/mapLoader->height);
+  Drawable::yscalar = 1.25/mapLoader->height;
   
   //Only load textures if we're showing UI
   if (settings->showUI()){
