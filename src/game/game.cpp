@@ -333,16 +333,16 @@ void Game::initGameState(std::shared_ptr<Settings> setting)
   // Add tanks to the gamefield map
   if (!quiet)
     cout << "Clearing spawn points...\n";
-  for(auto tank : tankLocations)
+  for(auto tank : startActors)
   {
-    if (mapLoader->tileMap[tank.second][tank.first].type == "Rock"
-      || mapLoader->tileMap[tank.second][tank.first].type == "Water"
-      || mapLoader->tileMap[tank.second][tank.first].type == "Hedgehog")
+    if (mapLoader->tileMap[tank.y][tank.x].type == "Rock"
+      || mapLoader->tileMap[tank.y][tank.x].type == "Water"
+      || mapLoader->tileMap[tank.y][tank.x].type == "Hedgehog")
     {
       if (!quiet)
-        cout << "WARNING: removing object at (" << tank.first << "," << tank.second << ") for tank spawn.\n";
-      mapLoader->tileMap[tank.second][tank.first].type = "Empty";
-      mapLoader->tileMap[tank.second][tank.first].health = 0;
+        cout << "WARNING: removing object at (" << tank.x << "," << tank.y << ") for tank spawn.\n";
+      mapLoader->tileMap[tank.y][tank.x].type = "Empty";
+      mapLoader->tileMap[tank.y][tank.x].health = 0;
     }
   }
   //Create one-time use drawable objects
@@ -409,6 +409,8 @@ std::vector<ActorInfo> Game::loadPlayers(bool quiet, std::vector<std::pair<int,i
     //printf("Actor %d name: %s\n", i, AINames[i].c_str());
     }else{
       cout << "WARNING: Invalid location for " << AINames[i] << " (" << tankLocations[i].first << "," << tankLocations[i].second << ")" << endl;
+      tankLocations.erase(tankLocations.begin() + i);
+      --i;
     }
   }
   return actors;
