@@ -152,14 +152,19 @@ public:
     float offsetx; /*!< x offset for the tank drawable */
     float offsety; /*!< y offset for the tank drawable */
     bool camp; /*!< bool setting for the tank detected as camping */
+    int ammo;
+    int maxAmmo;
 
     TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, int sMod, float osx, float osy, bool camping); /*!< The constructor for making a Tank Drawable object */
 
     void draw(int, int); /*!< The draw function for displaying a tank drawable object */
     void drawFire(float xlow, float xhigh, float ylow, float yhigh, float scale);
     void setHealth(int h); /*!< Setting the health of the drawable object */
-    void setMax_health(int mh); /*!< Setting the max health of the drawable object */
+    void setMaxHealth(int mh); /*!< Setting the max health of the drawable object */
+    void setAmmo(int a); /*!< Setting the health of the drawable object */
+    void setMaxAmmo(int ma); /*!< Setting the max health of the drawable object */
     void drawHealthBar();
+    void drawAmmo();
 };
 
 /***************************************************************************//**

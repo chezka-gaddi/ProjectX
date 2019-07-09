@@ -55,7 +55,6 @@ void updateDrawables(Game &game)
   std::unique_ptr<Drawable> temp_draw;
   std::unique_ptr<Projectile> temp_proj;
   std::unique_ptr<TankDrawable> temp_tank;
-  unsigned int i = 0;
 
   game.constants[0]->updateScalar();
 
@@ -74,7 +73,9 @@ void updateDrawables(Game &game)
       act.sMod = !act.sMod;
       //Give our tanks health for sfx drawing
       temp_tank->setHealth(act.health);
-      temp_tank->setMax_health(act.max_health);
+      temp_tank->setMaxHealth(act.max_health);
+      temp_tank->setAmmo(act.ammo);
+      temp_tank->setMaxAmmo(act.max_ammo);
       //move the smart pointer into the list
       game.objects.push_back(std::move(temp_tank));
     }

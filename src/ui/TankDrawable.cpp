@@ -140,6 +140,7 @@ glEnable(GL_TEXTURE_2D);
     }
     glDisable(GL_TEXTURE_2D);
     drawHealthBar();
+    drawAmmo();
     glPopMatrix();
 
 }
@@ -156,7 +157,21 @@ void TankDrawable::setHealth(int h){health = h;}
  * @brief allows us to set the drawables max health
  * @param[in] mh the max health of the object
  *******************/
-void TankDrawable::setMax_health(int mh){max_health = mh;}
+void TankDrawable::setMaxHealth(int mh){max_health = mh;}
+
+/*****************//*
+ * @author Jon McKee
+ * @brief allows us to set the drawables health
+ * @param[in] h the current health of the object
+ *******************/
+void TankDrawable::setAmmo(int a){ammo = a;}
+
+/*****************//*
+ * @author Jon McKee
+ * @brief allows us to set the drawables max health
+ * @param[in] mh the max health of the object
+ *******************/
+void TankDrawable::setMaxAmmo(int ma){maxAmmo = ma;}
 
 /*****************//*
  * @author Erica Keeble
@@ -177,7 +192,7 @@ void TankDrawable::drawHealthBar()
 
 	//Draw the bar background
 	glLoadIdentity();
-	glTranslatef ( screen_x + offsetx + 0.0f, screen_y + 0.1f + offsety, -4.0f );
+	glTranslatef ( screen_x + offsetx, screen_y + 0.1f + offsety, -4.0f );
 	glColor3f ( 0.1765f, 0.1882f, 0.2784f );
 	glBegin ( GL_QUADS );
 	glVertex2f ( -1.0f * scalar, 0.25f * scalar);
@@ -201,4 +216,32 @@ void TankDrawable::drawHealthBar()
 	glVertex2f ( -.9f * scalar, -0.15f * scalar);
 	glEnd();
 	return;
+}
+
+void TankDrawable::drawAmmo(){
+  int bTex = (id-1) * 3 + 2;
+  float ammoSpace = .025;
+
+  // Draw Ammo
+  for( int i = 0; i < ammo ; i++ )
+  {
+    glEnable(GL_TEXTURE_2D);
+    glPushMatrix();
+    glLoadIdentity();
+    glTranslatef ( screen_x + offsetx + 0.05f, screen_y - 0.1f + offsety + (ammoSpace * i), -5.0f );
+    glBindTexture(GL_TEXTURE_2D, tankTex[bTex]);
+    glRotatef(0,0,0,1);
+    glBegin(GL_QUADS);
+    glTexCoord2f(1.0f, 0.0f); //bot right
+    glVertex3f( 1.0f * scalar, 0.5f * scalar,  1.0f);
+    glTexCoord2f(1.0f, 1.0f); //top right
+    glVertex3f( 1.0f * scalar,  1.0f * scalar,  1.0f);
+    glTexCoord2f(0.0f, 1.0f); //top left
+    glVertex3f( 0.5f * scalar,  1.0f * scalar,  1.0f);
+    glTexCoord2f(0.0f, 0.0f); //bot left
+    glVertex3f( 0.5f * scalar, 0.5f * scalar,  1.0f);
+    glEnd();
+    glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
+  }
 }
