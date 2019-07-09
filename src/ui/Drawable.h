@@ -37,6 +37,7 @@ public:
     ~Drawable() {}      /*!< Drawable deconstructor */
 
     int dirToDeg(direction d); /*!< Convert direction enum into degrees */
+    void updateScalar(); /*!< Updatethe single scalar value */
     void drawAddon(float xlow, float xhigh, float ylow, float yhigh, float ror, float scale); /*!< Add aditional SFX to a drawable image */
 
     virtual void draw(int, int) = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
@@ -46,6 +47,7 @@ protected:
     int gridy;          /*!< Drawables grid y coordinate */
     static float xscalar; /*!< Drawable x shared scalar value */
     static float yscalar; /*!< Drawable y shared scalar value */
+    static float scalar; /*!< Drawable shared scalar value for square images */
 
 friend class Game;        //Make Game class a friend of the drawable classes
 friend class GameField;   //Make GameField class a friend of the drawable classes
@@ -107,6 +109,8 @@ protected:
     int destroyed = -1; /*!< The turn the obstacle was destoryed on */
     int regrow_rate = 8; /*!< The number of turns the obstacle takes to regrow */
     void set_destroyed(int d); /*!< Set's the turn the object was destoryed on */
+    void drawWaterQuad();
+    void drawQuad();
 friend class GameField; // Make the gamefield class a friend of the Obstacle sub-class
 };
 

@@ -51,3 +51,11 @@ void Drawable::drawAddon(float xlow, float xhigh, float ylow, float yhigh, float
     glVertex3f( xlow, yhigh,  scale);
   glEnd();
 }
+
+void Drawable::updateScalar(){
+    if (xscalar > yscalar){
+      scalar = yscalar;
+    }else{
+      scalar = xscalar;
+    }
+}

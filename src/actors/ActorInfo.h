@@ -83,5 +83,6 @@ struct ActorInfo
 };
 
 bool operator==(const ActorInfo& lhs, const ActorInfo& rhs); /*!< Overloaded comparison operator */
+bool operator!=(const ActorInfo& lhs, const ActorInfo& rhs); /*!< Overloaded comparison operator */
 
 #endif

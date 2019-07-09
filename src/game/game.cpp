@@ -205,6 +205,7 @@ void displayWrapper(std::shared_ptr<Settings> settings)
  *******************************************************************************/
 float Drawable::xscalar = 1.0;
 float Drawable::yscalar = 1.0;
+float Drawable::scalar = 1.0;
 int TimerEvent::idle_speed = 750;
 void Game::initGameState(std::shared_ptr<Settings> setting)
 {
@@ -213,6 +214,7 @@ void Game::initGameState(std::shared_ptr<Settings> setting)
 
   std::string configLine, tType, name, imgPath;
   int x, y, hPad = 0, wPad=0;
+  //Player Count
   int pCount = 1;
   std::vector<ActorInfo> startActors;
   //Location vectors

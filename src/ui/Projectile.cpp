@@ -46,15 +46,6 @@ Projectile::Projectile( int ID, GLfloat x_coor, GLfloat y_coor, direction dir, b
 * *****************************************************************************/
 void Projectile::draw(int x, int y)
 {   
-    float txscalar = xscalar;
-    float tyscalar = yscalar;
-
-    if (xscalar > yscalar){
-      txscalar = tyscalar;
-    }else{
-      tyscalar = txscalar;
-    }
-
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
     glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
@@ -67,13 +58,13 @@ void Projectile::draw(int x, int y)
     glBegin(GL_QUADS);
     //.07 original 
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-1.0f * txscalar * sizeMod, -1.0f * tyscalar * sizeMod,  1.0f);
+    glVertex3f(-1.0f * scalar * sizeMod, -1.0f * scalar * sizeMod,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 1.0f * txscalar * sizeMod, -1.0f * tyscalar * sizeMod,  1.0f);
+    glVertex3f( 1.0f * scalar * sizeMod, -1.0f * scalar * sizeMod,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 1.0f * txscalar * sizeMod,  1.0f * tyscalar * sizeMod,  1.0f);
+    glVertex3f( 1.0f * scalar * sizeMod,  1.0f * scalar * sizeMod,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-1.0f * txscalar * sizeMod,  1.0f * tyscalar * sizeMod,  1.0f);
+    glVertex3f(-1.0f * scalar * sizeMod,  1.0f * scalar * sizeMod,  1.0f);
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
@@ -92,14 +83,6 @@ void Projectile::draw(int x, int y)
 * *****************************************************************************/
 void Projectile::drawTrail(int mod){
     float trailMod = .9; //Scale the trail
-    float txscalar = xscalar;
-    float tyscalar = yscalar;
-
-    if (xscalar > yscalar){
-      txscalar = tyscalar;
-    }else{
-      tyscalar = txscalar;
-    }
 
     glEnable(GL_TEXTURE_2D);
       glPushMatrix();
@@ -109,13 +92,13 @@ void Projectile::drawTrail(int mod){
       glBegin(GL_QUADS);
       //.2, .06, .07
       glTexCoord2f(0.0f, 0.0f);
-      glVertex3f(-1.0f * txscalar * sizeMod * trailMod, -1.0f * tyscalar * sizeMod * trailMod,  1.0f);
+      glVertex3f(-1.0f * scalar * sizeMod * trailMod, -1.0f * scalar * sizeMod * trailMod,  1.0f);
       glTexCoord2f(1.0f, 0.0f);
-      glVertex3f( -1.0f * txscalar * sizeMod * trailMod, -1.0f * tyscalar * sizeMod * trailMod,  1.0f);
+      glVertex3f( 1.0f * scalar * sizeMod * trailMod, -1.0f * scalar * sizeMod * trailMod,  1.0f);
       glTexCoord2f(1.0f, 1.0f);
-      glVertex3f( -1.0f * txscalar * sizeMod * trailMod,  1.0f * tyscalar * sizeMod * trailMod,  1.0f);
+      glVertex3f( 1.0f * scalar * sizeMod * trailMod,  1.0f * scalar * sizeMod * trailMod,  1.0f);
       glTexCoord2f(0.0f, 1.0f);
-      glVertex3f(-1.0f * txscalar * sizeMod * trailMod,  1.0f * tyscalar * sizeMod * trailMod,  1.0f);
+      glVertex3f(-1.0f * scalar * sizeMod * trailMod,  1.0f * scalar * sizeMod * trailMod,  1.0f);
       glEnd();
       glPopMatrix();
     glDisable(GL_TEXTURE_2D);

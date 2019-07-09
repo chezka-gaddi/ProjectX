@@ -57,6 +57,8 @@ void updateDrawables(Game &game)
   std::unique_ptr<TankDrawable> temp_tank;
   unsigned int i = 0;
 
+  game.constants[0]->updateScalar();
+
   if(!game.objects.empty())
     game.objects.clear();
 

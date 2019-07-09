@@ -58,15 +58,6 @@ Obstacles::Obstacles(int id, GLfloat x_coor, GLfloat y_coor, int gx, int gy )
 * *****************************************************************************/
 void Obstacles::draw(int, int)
 {
-    float txscalar = xscalar;
-    float tyscalar = yscalar;
-
-    if (xscalar > yscalar){
-      txscalar = tyscalar;
-    }else{
-      tyscalar = txscalar;
-    }
-
     glEnable(GL_TEXTURE_2D);
     glColor4ub(255,255,255,255);
     glPushMatrix();
@@ -78,34 +69,49 @@ void Obstacles::draw(int, int)
     //Check what obstacle it is
     if (tex >= 0 && tex <= 9){ //It's a tree
       glBindTexture(GL_TEXTURE_2D, treeTex[tex]);
+      drawQuad();
     }else if( tex >= 10 && tex <= 19){ //It's a Rocks
       glBindTexture(GL_TEXTURE_2D, rockTex[tex-10]);
+      drawQuad();
     }else if( tex >= 20 && tex <= 29){ //It's a Bushes
       glBindTexture(GL_TEXTURE_2D, bushTex[tex-20]);
+      drawQuad();
     }else if( tex >= 30 && tex <= 39){ //It's a Waters
       glBindTexture(GL_TEXTURE_2D, waterTex[tex - 30]);
-      txscalar = xscalar;
-      tyscalar = yscalar;
+      drawWaterQuad();
     }else if( tex >= 50 && tex <= 60){ //It's a hedgehog
       glBindTexture(GL_TEXTURE_2D, gameTex[tex-50]);
+      drawQuad();
     }
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f);
-    //glVertex3f(-0.16f * xscalar, -0.19f * yscalar,  1.0f);
-    glVertex3f(-1.0f * txscalar, -1.0f * tyscalar,  1.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    //glVertex3f( 0.16f * xscalar, -0.19f * yscalar,  1.0f);
-    glVertex3f(1.0f * txscalar, -1.0f * tyscalar,  1.0f);
-    glTexCoord2f(1.0f, 1.0f);
-    //glVertex3f( 0.16f * xscalar,  0.19f * yscalar,  1.0f);
-    glVertex3f(1.0f * txscalar, 1.0f * tyscalar,  1.0f);
-    glTexCoord2f(0.0f, 1.0f);
-    //glVertex3f(-0.16f * xscalar,  0.19f * yscalar,  1.0f);
-    glVertex3f(-1.0f * txscalar, 1.0f * tyscalar,  1.0f);
-    glEnd();
 
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
+}
+
+void Obstacles::drawWaterQuad(){
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-1.0f * xscalar, -1.0f * yscalar,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(1.0f * xscalar, -1.0f * yscalar,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(1.0f * xscalar, 1.0f * yscalar,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-1.0f * xscalar, 1.0f * yscalar,  1.0f);
+    glEnd();
+}
+
+void Obstacles::drawQuad(){
+  glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-1.0f * scalar, -1.0f * scalar,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(1.0f * scalar, -1.0f * scalar,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(1.0f * scalar, 1.0f * scalar,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-1.0f * scalar, 1.0f * scalar,  1.0f);
+    glEnd();
 }
 
 /****************//*

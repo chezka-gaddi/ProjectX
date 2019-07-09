@@ -506,10 +506,8 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         if(r->health <= 0)
         {
           r->health = 0;
-#ifndef TESTING
-          r->set_destroyed(gameTurn);
-          removeObstacle(a.x, a.y);
-#endif
+          //For rock regrowth
+          //r->set_destroyed(gameTurn);
         }
         return true;
       }
@@ -528,16 +526,15 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         if(t->health <= 0)
         {
           t->health = 0;
-#ifndef TESTING
           t->set_destroyed(gameTurn);
-          removeObstacle(a.x, a.y);
           //If a tree you're hiding under get's destroyed take 1 damage
-          for (auto tTank : actors)
-          {
-                  if (tTank.x == a.x && tTank.y == a.y)
-                          tTank.health--;
+          if (fieldMap->tileMap[a.y][a.x].tank != nullptr){
+            for (auto tTank : actors)
+            {
+              if (tTank.x == a.x && tTank.y == a.y)
+                tTank.health--;
+            }
           }
-#endif
         }
         return true;
       }
@@ -992,6 +989,7 @@ std::vector<std::pair<int,int>> *GameField::getSFXPointer()
 
 /**
  * @author David Donahue
+ * @modified by Jon McKee
  * @par Description:
  * Remove actors with hp of 0 from the game
  */
@@ -999,7 +997,7 @@ void GameField::cull()
 {
   for(unsigned int i = 0; i < actors.size(); ++i)  //This is used instead of the c++11 version so that we can use the index.
   {
-    if(actors[i].health == 0)
+    if(actors[i].health == 0 && actors[i] != nullActor)
     {
       if(actors[i].id > 0)
       {
@@ -1012,13 +1010,14 @@ void GameField::cull()
         if (fieldMap->tileMap[actors[i].y][actors[i].x].tank != nullptr){
           fieldMap->tileMap[actors[i].y][actors[i].x].tank = nullptr;
         }
-      }else{
+      }else if(actors[i].id < 0){
         if (fieldMap->tileMap[actors[i].y][actors[i].x].projectile != nullptr){
           fieldMap->tileMap[actors[i].y][actors[i].x].projectile = nullptr;
         }
       }
       if(actors[i].act_p != NULL)
         delete actors[i].act_p;
+      //actors[i] = nullActor;
       actors.erase(actors.begin()+i);
       --i; // go back one since everything just shifted back
     }
