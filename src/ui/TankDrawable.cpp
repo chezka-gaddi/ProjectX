@@ -138,9 +138,10 @@ glEnable(GL_TEXTURE_2D);
           drawAddon(-0.04f * xscalar, 0.01f * xscalar, -0.04f * yscalar, 0.01f * yscalar, 1.0f, 1.0f);
         }
     }
-
-    glPopMatrix();
     glDisable(GL_TEXTURE_2D);
+    drawHealthBar();
+    glPopMatrix();
+
 }
 
 /*****************//*
@@ -156,3 +157,48 @@ void TankDrawable::setHealth(int h){health = h;}
  * @param[in] mh the max health of the object
  *******************/
 void TankDrawable::setMax_health(int mh){max_health = mh;}
+
+/*****************//*
+ * @author Erica Keeble
+ * @Modified by Jon McKee
+ * @Originally in the-new-tank program for spring 2019.
+ * 
+ * @brief draws the health and ammo bars above the tanks
+ *******************/
+void TankDrawable::drawHealthBar()
+{
+	float remaining_health = ( float ) health / max_health;
+
+  //Shouldn't ever have a 0 and if we do, no need to draw an empty bar
+	if ( remaining_health <= 0 )
+	{
+		return;
+	}
+
+	//Draw the bar background
+	glLoadIdentity();
+	glTranslatef ( screen_x + offsetx + 0.0f, screen_y + 0.1f + offsety, -4.0f );
+	glColor3f ( 0.1765f, 0.1882f, 0.2784f );
+	glBegin ( GL_QUADS );
+	glVertex2f ( -1.0f * scalar, 0.25f * scalar);
+	glVertex2f ( 1.0f * scalar, 0.25f * scalar);
+	glVertex2f ( 1.0f * scalar, -0.25f * scalar);
+	glVertex2f ( -1.0f * scalar, -0.25f * scalar);
+	glEnd();
+
+  //Draw the bar
+  if (remaining_health >= .66)
+	  glColor3f ( 0.1f, 1.0f, 0.4f );
+  else if (remaining_health >= .33)
+    glColor3f ( 0.0f, 0.5f, 0.0f );
+  else
+    glColor3f ( 0.8f, 0.0f, 0.1f );
+
+  glBegin ( GL_QUADS );
+	glVertex2f ( -.9f * scalar, 0.15f * scalar);
+	glVertex2f ( ((remaining_health * 1.9f) - 1) * scalar, 0.15f * scalar);
+	glVertex2f ( ((remaining_health * 1.9f) - 1) * scalar, -0.15f * scalar);
+	glVertex2f ( -.9f * scalar, -0.15f * scalar);
+	glEnd();
+	return;
+}

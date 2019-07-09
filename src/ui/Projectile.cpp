@@ -58,13 +58,13 @@ void Projectile::draw(int x, int y)
     glBegin(GL_QUADS);
     //.07 original 
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-1.0f * scalar * sizeMod, -1.0f * scalar * sizeMod,  1.0f);
+    glVertex3f(0.0f * scalar * sizeMod, -1.0f * scalar * sizeMod,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f( 1.0f * scalar * sizeMod, -1.0f * scalar * sizeMod,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f( 1.0f * scalar * sizeMod,  1.0f * scalar * sizeMod,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-1.0f * scalar * sizeMod,  1.0f * scalar * sizeMod,  1.0f);
+    glVertex3f(0.0f * scalar * sizeMod,  1.0f * scalar * sizeMod,  1.0f);
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
@@ -94,9 +94,9 @@ void Projectile::drawTrail(int mod){
       glTexCoord2f(0.0f, 0.0f);
       glVertex3f(-1.0f * scalar * sizeMod * trailMod, -1.0f * scalar * sizeMod * trailMod,  1.0f);
       glTexCoord2f(1.0f, 0.0f);
-      glVertex3f( 1.0f * scalar * sizeMod * trailMod, -1.0f * scalar * sizeMod * trailMod,  1.0f);
+      glVertex3f( 0.0f * scalar * sizeMod * trailMod, -1.0f * scalar * sizeMod * trailMod,  1.0f);
       glTexCoord2f(1.0f, 1.0f);
-      glVertex3f( 1.0f * scalar * sizeMod * trailMod,  1.0f * scalar * sizeMod * trailMod,  1.0f);
+      glVertex3f( 0.0f * scalar * sizeMod * trailMod,  1.0f * scalar * sizeMod * trailMod,  1.0f);
       glTexCoord2f(0.0f, 1.0f);
       glVertex3f(-1.0f * scalar * sizeMod * trailMod,  1.0f * scalar * sizeMod * trailMod,  1.0f);
       glEnd();

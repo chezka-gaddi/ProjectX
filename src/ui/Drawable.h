@@ -159,6 +159,7 @@ public:
     void drawFire(float xlow, float xhigh, float ylow, float yhigh, float scale);
     void setHealth(int h); /*!< Setting the health of the drawable object */
     void setMax_health(int mh); /*!< Setting the max health of the drawable object */
+    void drawHealthBar();
 };
 
 /***************************************************************************//**

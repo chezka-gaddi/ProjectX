@@ -728,7 +728,7 @@ void GameField::nextTurn()
   if (tracker != nullptr)
     tracker->newTurn(gameTurn);
   direction dir;
-  ActorInfo newProjectile;z
+  ActorInfo newProjectile;
   MapData * fog_of_war;
   int action;
   int act_ap;
