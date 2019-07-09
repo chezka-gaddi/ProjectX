@@ -207,7 +207,7 @@ float Drawable::xscalar = 1.0;
 float Drawable::yscalar = 1.0;
 float Drawable::scalar = 1.0;
 int TimerEvent::idle_speed = 750;
-void Game::initGameState(std::shared_ptr<Settings> setting)
+void Game::initGameState(std::shared_ptr<Settings> & setting)
 {
   settings = setting;
   bool quiet = settings->checkQuiet();
@@ -305,6 +305,7 @@ void Game::initGameState(std::shared_ptr<Settings> setting)
   TimerEvent::idle_speed = settings->getIdleSpeed();
   //Drawable::xscalar = (3.75/mapLoader->width)/.32;
   Drawable::xscalar = 1.85/mapLoader->width;
+  Drawable::scalar = Drawable::xscalar;
   //Drawable::yscalar = Drawable::xscalar;
   Drawable::yscalar = 1.25/mapLoader->height;
   

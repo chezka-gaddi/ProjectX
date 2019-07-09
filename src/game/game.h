@@ -45,7 +45,7 @@ public:
     ~Game();
 
     void executeTurn();
-    void initGameState(std::shared_ptr<Settings> setting);
+    void initGameState(std::shared_ptr<Settings> & setting);
     void closeDown();
     void earlyOut();
     float convertGLXCoordinate( int );

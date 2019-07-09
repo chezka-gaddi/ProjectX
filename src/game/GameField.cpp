@@ -317,7 +317,6 @@ void GameField::runMoves(ActorInfo &a, direction dir)
   a.prevx = a.x;
   a.prevy = a.y;
   //try and move
-
   if (dir == UP || dir == UPLEFT || dir == UPRIGHT){yoff = -1;}
   else if (dir == DOWN || dir == DOWNLEFT || dir == DOWNRIGHT){yoff = 1;}
   if (dir == LEFT || dir == UPLEFT || dir == DOWNLEFT){xoff = -1;}
@@ -729,7 +728,7 @@ void GameField::nextTurn()
   if (tracker != nullptr)
     tracker->newTurn(gameTurn);
   direction dir;
-  ActorInfo newProjectile;
+  ActorInfo newProjectile;z
   MapData * fog_of_war;
   int action;
   int act_ap;

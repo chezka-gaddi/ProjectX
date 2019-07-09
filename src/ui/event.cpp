@@ -24,7 +24,7 @@ Event::~Event() {}
  * @param[in] c - columns (in pixels) of the window
  * @param[in] r - rows (in pixels) of the window
  ******************************************************************************/
-InitEvent::InitEvent(int c, int r, std::shared_ptr<Settings> s) : columns(c), rows(r), settings(s) {}
+InitEvent::InitEvent(int c, int r, std::shared_ptr<Settings> & s) : columns(c), rows(r), settings(&s) {}
 
 
 /***************************************************************************//**
@@ -38,7 +38,7 @@ InitEvent::InitEvent(int c, int r, std::shared_ptr<Settings> s) : columns(c), ro
 void InitEvent::doAction(Game &game)
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  game.initGameState(settings);
+  game.initGameState(*settings);
 }
 
 
@@ -62,7 +62,7 @@ void updateDrawables(Game &game)
   if(!game.objects.empty())
     game.objects.clear();
 
-  vector<ActorInfo> *actors = game.tankGame->getActorsPointer();
+  vector<ActorInfo> * actors = game.tankGame->getActorsPointer();
   vector<std::pair<int,int>> *SFX = game.tankGame->getSFXPointer();
 
   for(auto &act : *actors)
@@ -86,16 +86,19 @@ void updateDrawables(Game &game)
     }
     if(game.tankGame->getActTurn() == act.id)
     {
-      for(i = 0; i < actors->size() && actors[0][i].id != game.tankGame->getActTurn(); i++);
-      std::unique_ptr<Menu> temp_draw(new Menu(actors[0][i].id, actors[0][i].health, actors[0][i].ammo, actors[0][i].hits, actors[0][i].name, actors[0][i].heading, game.tankGame->getModCounter(), game.tankGame->getGameTurn()));
-      game.objects.push_back(std::move(temp_draw));
+      //for(i = 0; i < actors->size() && actors[0][i].id != game.tankGame->getActTurn(); i++);
+      //std::unique_ptr<Menu> temp_draw(new Menu(actors[0][i].id, actors[0][i].health, actors[0][i].ammo, actors[0][i].hits, actors[0][i].name, actors[0][i].heading, game.tankGame->getModCounter(), game.tankGame->getGameTurn()));
+      //game.objects.push_back(std::move(temp_draw));
+      //game.objects.push_back(std::unique_ptr<Menu>(new Menu(actors[0][i].id, actors[0][i].health, actors[0][i].ammo, actors[0][i].hits, actors[0][i].name, actors[0][i].heading, game.tankGame->getModCounter(), game.tankGame->getGameTurn())));
+      game.objects.push_back(std::unique_ptr<Menu>(new Menu(act.id, act.health, act.ammo, act.hits, act.name, act.heading, game.tankGame->getModCounter(), game.tankGame->getGameTurn())));
     }
 
   }
   for(auto &sfx : *SFX)
   {
-    std::unique_ptr<Drawable> temp_draw(new sfxDrawable(game.convertGLXCoordinate(sfx.first), game.convertGLYCoordinate(sfx.second)));
-    game.sfx.push_back(std::move(temp_draw));
+    //std::unique_ptr<Drawable> temp_draw(new sfxDrawable(game.convertGLXCoordinate(sfx.first), game.convertGLYCoordinate(sfx.second)));
+    //game.sfx.push_back(std::move(temp_draw));
+    game.sfx.push_back(std::unique_ptr<Drawable>(new sfxDrawable(game.convertGLXCoordinate(sfx.first), game.convertGLYCoordinate(sfx.second))));
   }
 }
 

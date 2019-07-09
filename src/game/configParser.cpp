@@ -1,6 +1,6 @@
 #include "configParser.h"
 
-std::shared_ptr<MapData> parseConfig( std::shared_ptr<Settings> settings){
+std::shared_ptr<MapData> parseConfig( const std::shared_ptr<Settings> & settings){
     std::string configFile = settings->getConfigFile();
     //bool quiet = settings->checkQuiet();
 
@@ -36,7 +36,7 @@ std::shared_ptr<MapData> parseConfig( std::shared_ptr<Settings> settings){
     return map;
 }
 
-std::vector<std::string> parseList(std::shared_ptr<Settings> settings, std::string section, std::string key){
+std::vector<std::string> parseList(const std::shared_ptr<Settings> & settings, std::string section, std::string key){
     std::string configFile = settings->getConfigFile(), temp;
     //bool quiet = settings->checkQuiet();
     bool done = false;
@@ -69,7 +69,7 @@ std::vector<std::string> parseList(std::shared_ptr<Settings> settings, std::stri
     return list;
 }
 
-std::string parseAI(std::shared_ptr<Settings> settings, std::string section, std::string key){
+std::string parseAI(const std::shared_ptr<Settings> & settings, std::string section, std::string key){
     std::string configFile = settings->getConfigFile(), param;
     //bool quiet = settings->checkQuiet();
     INIReader config(configFile);
