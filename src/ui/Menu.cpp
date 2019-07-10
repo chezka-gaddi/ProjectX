@@ -182,10 +182,6 @@ void drawTank(GLfloat x, GLfloat y, GLuint icon, bool tank, int angle)
     glDisable(GL_TEXTURE_2D);
 }
 
-
-
-
-
 /***************************************************************************//**
 * @author Chezka Gaddi
 * @brief drawTextBox

@@ -55,6 +55,7 @@ void updateDrawables(Game &game)
   std::unique_ptr<Drawable> temp_draw;
   std::unique_ptr<Projectile> temp_proj;
   std::unique_ptr<TankDrawable> temp_tank;
+  bool found = false;
 
   game.constants[0]->updateScalar();
 
@@ -84,9 +85,10 @@ void updateDrawables(Game &game)
       temp_proj->sizeMod = act.scale;
       game.objects.push_back(std::move(temp_proj));
     }
-    if(game.tankGame->getActTurn() == act.id || game.tankGame->getActTurn() == -act.id)
+    if((game.tankGame->getActTurn() == act.id || game.tankGame->getActTurn() == -act.id) && !found)
     {
       game.objects.push_back(std::unique_ptr<Menu>(new Menu(act.id, act.health, act.ammo, act.hits, act.name, act.heading, game.tankGame->getModCounter(), game.tankGame->getGameTurn())));
+      found = true;
     }
   }
   for(auto &sfx : *SFX)

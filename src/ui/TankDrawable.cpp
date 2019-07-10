@@ -232,13 +232,13 @@ void TankDrawable::drawAmmo(){
     glRotatef(0,0,0,1);
     glBegin(GL_QUADS);
     glTexCoord2f(1.0f, 0.0f); //bot right
-    glVertex3f( 1.0f * scalar, 0.5f * scalar,  1.0f);
+    glVertex3f( 1.0f * scalar, 0.25f * scalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f); //top right
     glVertex3f( 1.0f * scalar,  1.0f * scalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f); //top left
     glVertex3f( 0.5f * scalar,  1.0f * scalar,  1.0f);
     glTexCoord2f(0.0f, 0.0f); //bot left
-    glVertex3f( 0.5f * scalar, 0.5f * scalar,  1.0f);
+    glVertex3f( 0.5f * scalar, 0.25f * scalar,  1.0f);
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
