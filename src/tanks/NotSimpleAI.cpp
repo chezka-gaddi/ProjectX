@@ -146,6 +146,11 @@ direction NotSimpleAI::move(const MapData &map, PositionData status)
  */
 direction NotSimpleAI::attack(const MapData &map, PositionData status)
 {
+    return checkTargets(map, status);
+}
+
+
+direction NotSimpleAI::checkTargets(const MapData &map, PositionData status){
     direction ret = STAY;
     int min_dist = map.width * map.height + 1; //Guaranteed to be greater than any real distance
     for (int x = 1; x <= map.width; ++x)
@@ -159,8 +164,7 @@ direction NotSimpleAI::attack(const MapData &map, PositionData status)
                     map.tileMap[y][x].projectile->id != -status.id)) && //And it is not your projectile
                     calcDist(status.game_x, status.game_y, x, y) < min_dist) //And it is the closest one
             {
-                if (x == status.game_x || y == status.game_y ||(
-                            abs(x - status.game_x) == abs(status.game_y - y)))
+                if (lineOfFire(x, y, status))
                 {
                     min_dist = calcDist(status.game_x, status.game_y, x, y);
                     if (status.game_x == x)
@@ -186,7 +190,6 @@ direction NotSimpleAI::attack(const MapData &map, PositionData status)
     }
     return ret;
 }
-
 /**
  * @author David Donahue
  * @par Description:
@@ -221,8 +224,12 @@ int NotSimpleAI::calcDist(int x1, int y1, int x2, int y2)
 int NotSimpleAI::spendAP(const MapData &map, PositionData status)
 {
     updateMap(map, status);
+
+    if (status.ap == myStats.tankAP){
+        targetList.clear();
+    }
+
     spend = false;
-    direction tMove = move(map,status);
     direction tAttack = attack(map,status);
     spend = true;
     /*printf("Spend Map:\n");
@@ -236,6 +243,8 @@ int NotSimpleAI::spendAP(const MapData &map, PositionData status)
 
     if (tAttack != STAY) //Try and attack first
         return 2;
+
+    direction tMove = move(map,status);
 
     if (tMove != STAY) //If there is nowhere to attack, move
         return 1;
@@ -261,6 +270,7 @@ void NotSimpleAI::updateMap(const MapData &map, PositionData status){
         heatMap[map.height][1] = 150;
         heatMap[map.height][map.width] = 250;
         heatMap[1][map.width] = 200;
+        myStats.tankAP = status.ap;
         firstTurn = false;
     }
     for(int i = 1; i < (int) map.tileMap.size(); i++){
@@ -287,6 +297,22 @@ void NotSimpleAI::updateMap(const MapData &map, PositionData status){
                 std::cout << heatMap[i][j] << "  ";
             }
         }
+}
+
+bool NotSimpleAI::lineOfFire(int x, int y, PositionData status){
+    int tx, ty;
+    int myx = status.game_x;
+    int myy = status.game_y;
+
+    tx = myx - x;
+    ty = myy - y;
+    if (tx == 0 || ty == 0){ //It's directly verticle or horizontal to us
+        return true;
+    }
+    if (tx == ty || tx == -ty){ //It's on a diagonal
+        return true;
+    }
+    return false;
 }
 
 #ifdef DYNAMIC

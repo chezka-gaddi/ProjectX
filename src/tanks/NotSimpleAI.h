@@ -29,16 +29,25 @@ public:
     virtual int spendAP(const MapData &map, PositionData status);
 
     void updateMap(const MapData &map, PositionData status);
+    bool lineOfFire(int x, int y, PositionData status);
+    direction checkTargets(const MapData &map, PositionData status);
    
     attributes myStats; 
     NotSimpleAI();
     ~NotSimpleAI();
 
 private:
-    bool target = false;
+    struct target{
+        int x;
+        int y;
+        int health;
+        int damaged;
+    };
+
     bool spend = false;
     bool firstTurn = true;
     std::vector<std::vector<int>> heatMap;
+    std::vector<target> targetList;
 #endif
 };
 
