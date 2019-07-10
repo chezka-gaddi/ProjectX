@@ -58,8 +58,7 @@ void updateDrawables(Game &game)
 
   game.constants[0]->updateScalar();
 
-  if(!game.objects.empty())
-    game.objects.clear();
+  game.objects.clear();
 
   vector<ActorInfo> * actors = game.tankGame->getActorsPointer();
   vector<std::pair<int,int>> *SFX = game.tankGame->getSFXPointer();
@@ -85,15 +84,10 @@ void updateDrawables(Game &game)
       temp_proj->sizeMod = act.scale;
       game.objects.push_back(std::move(temp_proj));
     }
-    if(game.tankGame->getActTurn() == act.id)
+    if(game.tankGame->getActTurn() == act.id || game.tankGame->getActTurn() == -act.id)
     {
-      //for(i = 0; i < actors->size() && actors[0][i].id != game.tankGame->getActTurn(); i++);
-      //std::unique_ptr<Menu> temp_draw(new Menu(actors[0][i].id, actors[0][i].health, actors[0][i].ammo, actors[0][i].hits, actors[0][i].name, actors[0][i].heading, game.tankGame->getModCounter(), game.tankGame->getGameTurn()));
-      //game.objects.push_back(std::move(temp_draw));
-      //game.objects.push_back(std::unique_ptr<Menu>(new Menu(actors[0][i].id, actors[0][i].health, actors[0][i].ammo, actors[0][i].hits, actors[0][i].name, actors[0][i].heading, game.tankGame->getModCounter(), game.tankGame->getGameTurn())));
       game.objects.push_back(std::unique_ptr<Menu>(new Menu(act.id, act.health, act.ammo, act.hits, act.name, act.heading, game.tankGame->getModCounter(), game.tankGame->getGameTurn())));
     }
-
   }
   for(auto &sfx : *SFX)
   {

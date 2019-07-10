@@ -65,7 +65,6 @@ protected:
     void (*displayCallback)(std::shared_ptr<Settings>);
     
     //game functions
-    void runMoves(ActorInfo &a, direction dir);
     void checkObjectRegrowth();
     bool checkObjectStrike(ActorInfo &a);
     bool crate_o_doom(int x, int y, ActorInfo &a);
@@ -73,11 +72,18 @@ protected:
     void animateMove(ActorInfo &a);
     void setSPECIAL(const attributes baseStats);
     void nextTurn();
-    void projectileTurn(std::vector<ActorInfo> &proj);
     void addActor(ActorInfo);
     void cull();
     std::vector<ActorInfo> getDeceased(){return deceased;};
     void incTurn();
+
+    //Tank actions
+    void moveAction(ActorInfo &a, direction dir);
+    void attackAction(ActorInfo &a, const MapData &map, int i);
+    void reloadAction(ActorInfo &a);
+
+    //Projectile actions
+    void projectileTurn(ActorInfo &a);
 
     //Map functions
     void updateMap();
@@ -93,8 +99,7 @@ protected:
 
     //variables
     ActorInfo nullActor = ActorInfo (NULL, "", 0, 0, 0, 0, 0);
-    MapData nullMap = MapData(1,1);
-    PositionData currPos;
+    PositionData currPos; //Information for the current player
     GLfloat y_scalar = 0;
     GLfloat x_scalar = 0;
 

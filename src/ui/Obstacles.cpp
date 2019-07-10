@@ -120,8 +120,7 @@ void Obstacles::drawQuad(){
  * @param[in] turn the current turn
  * @param[in] actor the object to check
  ******************/
-void Obstacles::regrow(int turn, const std::vector<ActorInfo> actor){
-  bool taken = false;
+void Obstacles::regrow(int turn){
   if (destroyed == -1)
     return;
 
@@ -131,12 +130,7 @@ void Obstacles::regrow(int turn, const std::vector<ActorInfo> actor){
     if (tex < 10){ //Its a tree
       health = 3;
     }else if( tex < 20){ //Its a Rocks
-      for (unsigned int i = 0; i < actor.size(); i++){
-            if (actor[i].x == gridx && actor[i].y == gridy)
-                    taken = true;
-      }
-      if (!taken)
-        health = 5;
+      health = 5;
     }else if( tex < 30){ //Its a Bushes
       health = 1;
     }

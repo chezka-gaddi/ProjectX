@@ -13,7 +13,6 @@
 #include <structures/direction.h>
 #include <GL/glut.h>
 #include <GL/freeglut.h>
-#include <actors/ActorInfo.h>
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -103,7 +102,7 @@ class Obstacles : public Drawable
 {
 public:
     Obstacles( int, GLfloat, GLfloat, int, int); /*!< Initial constructor for the Obstacle drawables */
-    void regrow(int turn, const std::vector<ActorInfo> actor); /*!< Function to check for a rock/Tree regrowing */
+    void regrow(int turn); /*!< Function to check for a rock/Tree regrowing */
     void draw(int, int); /*!< Function to draw the Obstacle on the map */
 protected:
     int destroyed = -1; /*!< The turn the obstacle was destoryed on */

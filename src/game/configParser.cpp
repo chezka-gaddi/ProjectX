@@ -33,6 +33,7 @@ std::shared_ptr<MapData> parseConfig( const std::shared_ptr<Settings> & settings
     settings->setAniFrames(config.GetInteger("PLATFORM", "animation_frames", 20));
     settings->setBulletSpeed(config.GetInteger("PLATFORM", "bullet_speed", 80));
     settings->setTankSpeed(config.GetInteger("PLATFORM", "tank_speed", 400));
+    settings->setInstantProj(config.GetBoolean("PROJECTILE", "instant", false));
     return map;
 }
 

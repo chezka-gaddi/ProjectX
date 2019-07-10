@@ -34,6 +34,7 @@ public:
     std::string getResultsFile();
     std::string getConfigFile();
     std::string getMapName();
+    bool checkInstantProj();
 
     //mode checkers
     bool checkCoverage();
@@ -66,6 +67,7 @@ public:
     void setTrackingFile(std::string t);
     void setTrackingMode(bool t);
     void setMapName(std::string m);
+    void setInstantProj(bool p);
 
     //individual attribute setters
     void setAttrDamage(int damage);
@@ -101,6 +103,7 @@ private:
     std::string configFile = "config.ini"; //Config ini file
     std::string mapName = "default.map"; //map file name
     bool tracking = false; //track all actions to file
+    bool projInstant = false; //Single turn projectiles
 };
 
 #endif //__GAME_H

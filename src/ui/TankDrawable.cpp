@@ -50,25 +50,45 @@ TankDrawable::TankDrawable( int ID, GLfloat x_coor, GLfloat y_coor, direction di
 * *****************************************************************************/
 void TankDrawable::draw(int x, int y)
 {
-glEnable(GL_TEXTURE_2D);
-    glColor4ub(255,255,255,255);
-    glPushMatrix();
+  glEnable(GL_TEXTURE_2D);
+  glColor4ub(255,255,255,255);
+  glPushMatrix();
 
-    //draw base
+  //draw base
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+  glLoadIdentity();
+  glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
+  if (camp == true){
+    glBindTexture(GL_TEXTURE_2D, sfxTex[tex]);
+  }else{
+    glRotatef(angle,0,0,1);
+    glBindTexture(GL_TEXTURE_2D, tankTex[tex]);
+  }
+  glBegin(GL_QUADS);
+  glTexCoord2f(0.0f, 0.0f);
+  //.13 old adjustment
+
+  glVertex3f(-1.0f * scalar, -1.0f * scalar,  1.0f);
+  glTexCoord2f(1.0f, 0.0f);
+  glVertex3f( 1.0f * scalar, -1.0f * scalar,  1.0f);
+  glTexCoord2f(1.0f, 1.0f);
+  glVertex3f( 1.0f * scalar,  1.0f * scalar,  1.0f);
+  glTexCoord2f(0.0f, 1.0f);
+  glVertex3f(-1.0f * scalar,  1.0f * scalar,  1.0f);
+  glEnd();
+
+  //draw turret
+  if (camp == false){
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
     glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
-    if (camp == true){
-      glBindTexture(GL_TEXTURE_2D, sfxTex[tex]);
-    }else{
-      glRotatef(angle,0,0,1);
-      glBindTexture(GL_TEXTURE_2D, tankTex[tex]);
-    }
+    glRotatef(angle,0,0,1);
+    glBindTexture(GL_TEXTURE_2D, tankTex[tex+1]);
     glBegin(GL_QUADS);
+    //.13
     glTexCoord2f(0.0f, 0.0f);
-    //.13 old adjustment
-
     glVertex3f(-1.0f * scalar, -1.0f * scalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f( 1.0f * scalar, -1.0f * scalar,  1.0f);
@@ -77,72 +97,51 @@ glEnable(GL_TEXTURE_2D);
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-1.0f * scalar,  1.0f * scalar,  1.0f);
     glEnd();
+  }
+  //First smoke    
+  if (health <= max_health * .66666){
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glLoadIdentity();
+    glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
+    glBindTexture(GL_TEXTURE_2D, sfxTex[12]);
 
-    //draw turret
-    if (camp == false){
-      glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-      glLoadIdentity();
-      glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
-      glRotatef(angle,0,0,1);
-      glBindTexture(GL_TEXTURE_2D, tankTex[tex+1]);
-      glBegin(GL_QUADS);
-      //.13
-      glTexCoord2f(0.0f, 0.0f);
-      glVertex3f(-1.0f * scalar, -1.0f * scalar,  1.0f);
-      glTexCoord2f(1.0f, 0.0f);
-      glVertex3f( 1.0f * scalar, -1.0f * scalar,  1.0f);
-      glTexCoord2f(1.0f, 1.0f);
-      glVertex3f( 1.0f * scalar,  1.0f * scalar,  1.0f);
-      glTexCoord2f(0.0f, 1.0f);
-      glVertex3f(-1.0f * scalar,  1.0f * scalar,  1.0f);
-      glEnd();
+    if (sMod % 2 == 0) {
+      drawAddon(-0.05f * xscalar, 0.0f, 0.2f * yscalar, 0.3f * yscalar, 1.0f, 1.0f);
+    } else {
+      drawAddon(-0.05f * xscalar, 0.0f * xscalar, 0.1f * yscalar, 0.2f * yscalar, 45.0f, 1.0f);
     }
-    //First smoke    
-    if (health <= max_health*.66666){
-      glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-      glLoadIdentity();
-      glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
-      glBindTexture(GL_TEXTURE_2D, sfxTex[12]);
-
-      if (sMod % 2 == 0) {
-        drawAddon(-0.05f * xscalar, 0.0f, 0.2f * yscalar, 0.3f * yscalar, 1.0f, 1.0f);
-      } else {
-        drawAddon(-0.05f * xscalar, 0.0f * xscalar, 0.1f * yscalar, 0.2f * yscalar, 45.0f, 1.0f);
+    //second smoke
+    if (health <= max_health*.5){ 
+      if (sMod % 2 == 1 ) {
+        drawAddon(0.0f, 0.05f * xscalar, 0.2f * yscalar, 0.3f * yscalar, 1.0f, 1.0f);
+      }else{
+        drawAddon(0.0f, 0.05f * xscalar, 0.1f * yscalar, 0.2f * yscalar, 45.0f, 1.0f);
       }
-      //second smoke
-      if (health <= max_health*.5){ 
-        if (sMod % 2 == 1 ) {
-          drawAddon(0.0f, 0.05f * xscalar, 0.2f * yscalar, 0.3f * yscalar, 1.0f, 1.0f);
-        }else{
-          drawAddon(0.0f, 0.05f * xscalar, 0.1f * yscalar, 0.2f * yscalar, 45.0f, 1.0f);
-        }
-      }
-      //fire
-      if (health <= max_health*.3){ 
-          glEnable(GL_BLEND);
-          glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-          glLoadIdentity();
-          glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
-          glBindTexture(GL_TEXTURE_2D, sfxTex[8]);
-          
-          //sizing width .05  height .05
-          //left
-          drawAddon(-0.07f * xscalar, -0.02f * xscalar, -0.05f * yscalar, 0.0f, 1.0f, 1.0f);
-          
-          //right
-          drawAddon(0.01f * xscalar, 0.06f * xscalar, 0.01f * yscalar, 0.06f * yscalar, 1.0f, 1.0f);
-          
-          //middle
-          drawAddon(-0.04f * xscalar, 0.01f * xscalar, -0.04f * yscalar, 0.01f * yscalar, 1.0f, 1.0f);
-        }
     }
-    glDisable(GL_TEXTURE_2D);
-    drawHealthBar();
-    drawAmmo();
-    glPopMatrix();
-
+    //fire
+    if (health <= max_health*.3){ 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glLoadIdentity();
+        glTranslatef(screen_x + offsetx, screen_y + offsety, -5.0f);
+        glBindTexture(GL_TEXTURE_2D, sfxTex[8]);
+        
+        //sizing width .05  height .05
+        //left
+        drawAddon(-0.07f * xscalar, -0.02f * xscalar, -0.05f * yscalar, 0.0f, 1.0f, 1.0f);
+        
+        //right
+        drawAddon(0.01f * xscalar, 0.06f * xscalar, 0.01f * yscalar, 0.06f * yscalar, 1.0f, 1.0f);
+        
+        //middle
+        drawAddon(-0.04f * xscalar, 0.01f * xscalar, -0.04f * yscalar, 0.01f * yscalar, 1.0f, 1.0f);
+      }
+  }
+  glDisable(GL_TEXTURE_2D);
+  drawHealthBar();
+  drawAmmo();
+  glPopMatrix();
 }
 
 /*****************//*

@@ -348,7 +348,7 @@ void Game::initGameState(std::shared_ptr<Settings> & setting)
       mapLoader->tileMap[tank.y][tank.x].health = 0;
     }
   }
-  //Create one-time use drawable objects
+  //Create one-time usable drawable objects
   for (int i = 1; i <= mapLoader->height; i++){
     for (int j=1; j <= mapLoader->width; j++){
       tType = mapLoader->tileMap[i][j].type;
