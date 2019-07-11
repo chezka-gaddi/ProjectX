@@ -528,7 +528,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
           t->set_destroyed(gameTurn);
           //If a tree you're hiding under get's destroyed take 1 damage
           if (fieldMap->tileMap[a.y][a.x].tank != nullptr){
-            for (auto tTank : actors)
+            for (auto & tTank : actors)
             {
               if (tTank.x == a.x && tTank.y == a.y)
                 tTank.health--;
@@ -1163,7 +1163,7 @@ void GameField::moveActor(int newx, int newy, int oldx, int oldy, int id){
     fieldMap->tileMap[newy][newx].tank = fieldMap->tileMap[oldy][oldx].tank;
     fieldMap->tileMap[oldy][oldx].tank = nullptr;
   }else if(id < 0){
-    fieldMap->tileMap[newy][newx].projectile = fieldMap->tileMap[oldy][oldx].tank;
+    fieldMap->tileMap[newy][newx].projectile = fieldMap->tileMap[oldy][oldx].projectile;
     fieldMap->tileMap[oldy][oldx].projectile = nullptr;
   }  
 }

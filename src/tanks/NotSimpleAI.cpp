@@ -19,6 +19,8 @@ direction NotSimpleAI::move(const MapData &map, PositionData status)
     int mHeight = map.height/2, mWidth = map.width/2;
     int x_pos = status.game_x, y_pos = status.game_y;
     int offset = 2; //lee way for moving
+    unsigned int i = 0;
+    int tempDist;
     
     if (spend == true){
       //Debug for testing mapupdate
@@ -30,6 +32,30 @@ direction NotSimpleAI::move(const MapData &map, PositionData status)
       }
       printf("X: %d, Y: %d\n", status.game_x, status.game_y);*/
     }
+    //Check target list first
+    printf("Checking Targetlist before Moving: \n");
+    while( i < targetList.size() ){
+        if (targetList[i].health > targetList[i].damage){
+            //find direction of tank
+            for (int j = 0; j < 8; j++){
+                tempDist = calcDist((direction) j, targetList[i].x, targetList[i].y, status);
+                if ( tempDist <= min_dist){
+                    printf("New direction found: %d with distance: %d.\n", j, tempDist );
+                    min_dist = tempDist;
+                    ret = (direction) j;
+                }else{
+                    printf("Old direction kept: %d, with distance: %d, checked distance %d.\n", (int) ret, min_dist, tempDist);
+                }
+            }
+        }else{
+            printf("Bad target found: %d/%d health/damage.\n", targetList[i].health, targetList[i].damage);
+        }
+        i++;
+    }
+
+    if (ret != STAY)
+        return ret;
+
     for (int x = 1; x <= map.width; ++x)
     {
         for (int y = 1; y <= map.height; ++y)
@@ -145,13 +171,43 @@ direction NotSimpleAI::move(const MapData &map, PositionData status)
  * @return Location to attack and whether to attack
  */
 direction NotSimpleAI::attack(const MapData &map, PositionData status)
-{
-    return checkTargets(map, status);
+{   
+    direction ret = STAY;
+    unsigned int i = 0;
+    if (targetList.size() == 0) //No targets available
+        return ret;
+    
+    while (i < targetList.size() && targetList[i].health < targetList[i].damage
+            && !lineOfFire(targetList[i].x, targetList[i].y, status)){
+        i++; //Find the first non killed target
+    }
+
+    if (targetList[i].health < targetList[i].damage || !(lineOfFire(targetList[i].x, targetList[i].y, status))){
+        return ret; //No valid targets found
+    }
+    else if (status.game_x == targetList[i].x)
+    {
+        ret = (targetList[i].y > status.game_y) ? DOWN : UP;
+    }
+    else if (status.game_y == targetList[i].y)
+    {
+        ret = (targetList[i].x > status.game_x) ? RIGHT : LEFT;
+    }
+    else if (status.game_x > targetList[i].x) //to the upright or downright
+    {
+        ret = (targetList[i].y > status.game_y) ? DOWNLEFT : UPLEFT;
+    }
+    else
+    {
+        ret = (targetList[i].y > status.game_y) ? DOWNRIGHT : UPRIGHT;
+    }
+    if (spend == false)
+        targetList[i].damage += myStats.tankDamage;
+    return ret;
 }
 
 
-direction NotSimpleAI::checkTargets(const MapData &map, PositionData status){
-    direction ret = STAY;
+void NotSimpleAI::checkTargets(const MapData &map, PositionData status){
     int min_dist = map.width * map.height + 1; //Guaranteed to be greater than any real distance
     for (int x = 1; x <= map.width; ++x)
     {
@@ -164,31 +220,20 @@ direction NotSimpleAI::checkTargets(const MapData &map, PositionData status){
                     map.tileMap[y][x].projectile->id != -status.id)) && //And it is not your projectile
                     calcDist(status.game_x, status.game_y, x, y) < min_dist) //And it is the closest one
             {
-                if (lineOfFire(x, y, status))
-                {
+                //if (lineOfFire(x, y, status))
+                //{
                     min_dist = calcDist(status.game_x, status.game_y, x, y);
-                    if (status.game_x == x)
-                    {
-                        ret = (y > status.game_y) ? DOWN : UP;
+                    if (map.tileMap[y][x].tank != nullptr){
+                        targetList.emplace_back(min_dist, x, y, map.tileMap[y][x].tank->health, 0);
+                    }else if(map.tileMap[y][x].projectile != nullptr){
+                        targetList.emplace_back(min_dist, x, y, map.tileMap[y][x].projectile->health, 0);
                     }
-                    else if (status.game_y == y)
-                    {
-                        ret = (x > status.game_x) ? RIGHT : LEFT;
-                    }
-                    else if (status.game_x > x) //to the upright or downright
-                    {
-                        ret = (y > status.game_y) ? DOWNLEFT : UPLEFT;
-                    }
-                    else
-                    {
-                        ret = (y > status.game_y) ? DOWNRIGHT : UPRIGHT;
-                    }
-                }
+                //}
 
             }
         }
     }
-    return ret;
+    std::sort(targetList.begin(), targetList.end());
 }
 /**
  * @author David Donahue
@@ -217,7 +262,31 @@ attributes NotSimpleAI::setAttribute(int pointsAvailable, attributes baseStats)
  */
 int NotSimpleAI::calcDist(int x1, int y1, int x2, int y2)
 {
-    return (std::abs(x1 - x2) + std::abs(y1 - y2));
+    int xDist = std::abs(x1 - x2);
+    int yDist = std::abs(y1 - y2);
+    int diagDist = 0;
+    while (xDist > 0 && yDist > 0){
+        yDist--;
+        xDist--;
+        diagDist++;
+    }
+    return xDist + yDist;
+}
+
+int NotSimpleAI::calcDist(direction dir, int dx, int dy, PositionData status){
+    int dist = 9999, xoff=0, yoff=0, x, y;
+    
+    if (dir == UP || dir == UPLEFT || dir == UPRIGHT){yoff = -1;}
+     else if (dir == DOWN || dir == DOWNLEFT || dir == DOWNRIGHT){yoff = 1;}
+    if (dir == LEFT || dir == UPLEFT || dir == DOWNLEFT){xoff = -1;}
+     else if (dir == RIGHT || dir == UPRIGHT || dir == DOWNRIGHT){xoff = 1;}
+    x = xoff + status.game_x;
+    y = yoff + status.game_y;
+
+    if (x < 1 || y < 1 || (unsigned) x > heatMap[0].size() || (unsigned) y > heatMap.size()) //Not a valid move
+        return dist;
+
+    return calcDist(x, y, dx, dy);
 }
 
 
@@ -226,12 +295,17 @@ int NotSimpleAI::spendAP(const MapData &map, PositionData status)
     updateMap(map, status);
 
     if (status.ap == myStats.tankAP){
+        printf("\n\nChecking Targets on start of turn.\n");
         targetList.clear();
+        checkTargets(map, status);
+        printf("Number of targets found: %d.\n", (int) targetList.size());
+    }else{
+        printf("Continuing turn.\n");
     }
 
-    spend = false;
-    direction tAttack = attack(map,status);
     spend = true;
+    direction tAttack = attack(map,status);
+    
     /*printf("Spend Map:\n");
     for (int i = 0; i < map.map.size(); i++){
     printf("%d ", map.map[i]);
@@ -245,6 +319,7 @@ int NotSimpleAI::spendAP(const MapData &map, PositionData status)
         return 2;
 
     direction tMove = move(map,status);
+    spend = false;
 
     if (tMove != STAY) //If there is nowhere to attack, move
         return 1;
@@ -290,13 +365,14 @@ void NotSimpleAI::updateMap(const MapData &map, PositionData status){
         }
     }
     heatMap[status.game_y][status.game_x] = 0;
-    std::cout << std::endl;
-    for(int i = 1; i < (int) map.tileMap.size(); i++){
-        std::cout << std::endl;
-        for (int j = 1; j < (int) map.tileMap[i].size(); j++){
-                std::cout << heatMap[i][j] << "  ";
-            }
-        }
+    
+    //std::cout << std::endl;
+    //for(int i = 1; i < (int) map.tileMap.size(); i++){
+    //    std::cout << std::endl;
+    //    for (int j = 1; j < (int) map.tileMap[i].size(); j++){
+    //            std::cout << heatMap[i][j] << "  ";
+    //    }
+    //}
 }
 
 bool NotSimpleAI::lineOfFire(int x, int y, PositionData status){

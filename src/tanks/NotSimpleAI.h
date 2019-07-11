@@ -30,7 +30,8 @@ public:
 
     void updateMap(const MapData &map, PositionData status);
     bool lineOfFire(int x, int y, PositionData status);
-    direction checkTargets(const MapData &map, PositionData status);
+    void checkTargets(const MapData &map, PositionData status);
+    int calcDist(direction dir, int dx, int dy, PositionData status);
    
     attributes myStats; 
     NotSimpleAI();
@@ -38,10 +39,18 @@ public:
 
 private:
     struct target{
+        int dist;
         int x;
         int y;
         int health;
-        int damaged;
+        int damage;
+
+        target( int d, int nx, int ny, int h, int dam) : dist(d), x(nx), y(ny), health(h), damage(dam){}
+
+        bool operator<(const target& a) const
+        {
+            return dist < a.dist;
+        }
     };
 
     bool spend = false;
