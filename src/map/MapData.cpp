@@ -94,9 +94,9 @@ MapData::~MapData(){
 void MapData::printTileMap(){
     for (int i = 1; i <= height; i++){
             for (int j=1; j <= width; j++){
-                    std::cout << tileMap[i][j] << "  ";
+                    std::cout << tileMap[i][j] << "  "; //Left as cout because of the operator overload
                     if (j == width) 
-                        std::cout << "\n";
+                        printf("\n");
             }
     }
     printf("Done.\n");

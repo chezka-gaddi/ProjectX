@@ -13,41 +13,19 @@ gameMode Settings::getGameMode(){ return gMode;}
 //setters
 void Settings::setAttributes(attributes attr){baseAttributes = attr;}
 void Settings::setIdleSpeed(int ai_speed){
-  if (!modeQuiet)
-    std::cout << "Speeding up the AI's...  \n";
-  idleSpeed = checkSettingValue(1, 1500, ai_speed, "idle speed");
-  if (!modeQuiet)
-    std::cout << "   ...done.\n";  
+  idleSpeed = checkSettingValue(1, 1500, ai_speed, "idle speed", true);
 }
 void Settings::setAniFrames(int aniSpeed){
-  if (!modeQuiet)
-    std::cout << "Slowing down time...  \n";
-  aniFrames = checkSettingValue(0, 30, aniSpeed, "animation frames");
-  if (!modeQuiet)
-    std::cout << "   ...done.\n";
+  aniFrames = checkSettingValue(0, 30, aniSpeed, "animation frames", true);
 }
 void Settings::setTankSpeed(int tank_speed){
-  if (!modeQuiet)
-    std::cout << "Greasing the wheels...  \n";
-  tankSpeed = checkSettingValue(0, 800, tank_speed, "tank speed");  
-  if (!modeQuiet)
-    std::cout << "   ...done.\n";
-  
+  tankSpeed = checkSettingValue(0, 800, tank_speed, "tank speed", true);    
 }
 void Settings::setBulletSpeed(int bullet_speed){
-  if (!modeQuiet){
-    std::cout << "Putting helium in the bullets...  \n";
-  }
-  bulletSpeed = checkSettingValue(0, 100, bullet_speed, "bullet speed");
-  if (!modeQuiet)
-    std::cout << "   ...done.\n";
+  bulletSpeed = checkSettingValue(0, 100, bullet_speed, "bullet speed", true);
 }
 void Settings::setMaxTurns(int maxT){
-  if (!modeQuiet)
-    std::cout << "Reducing camping spots...\n";
-  maxTurns = checkSettingValue(1, 1000, maxT, "max turns");
-  if (!modeQuiet)
-    std::cout << "   ...done.\n";  
+  maxTurns = checkSettingValue(1, 1000, maxT, "max turns", true);
 }
 void Settings::setGameMode(gameMode gm){ gMode = gm;}
 void Settings::setUI(bool s){showui = s;}
@@ -107,7 +85,7 @@ std::string Settings::getResultsFile(){return resultsFile;}
 std::string Settings::getConfigFile(){return configFile;}
 std::string Settings::getMapName(){return mapName;}
 
-int Settings::checkSettingValue(int min, int max, int value, std::string param){
+int Settings::checkSettingValue(int min, int max, int value, std::string param, bool force){
   if(value < min)
   {
     value = min;
@@ -117,6 +95,8 @@ int Settings::checkSettingValue(int min, int max, int value, std::string param){
   {
     printf("WARNING: %d %s is too high, setting to %d.\n", value, param.c_str(), max);
     value = max;
+  }else if (false){
+    printf("   The %s was set to %d.\n", param.c_str(), value);
   }
   return value;
 }

@@ -79,7 +79,7 @@ public:
     void setAttrSpecial(int special);
 
     //Helper functions
-    int checkSettingValue(int, int, int, std::string);
+    int checkSettingValue(int, int, int, std::string, bool = false);
 private:
     //default game settings
     int maxTurns = 1000;

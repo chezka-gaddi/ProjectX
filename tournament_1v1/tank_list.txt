@@ -1,5 +1,0 @@
-PongAI
-SimpleAI
-CamperAI
-SimpleAI
-PongAI

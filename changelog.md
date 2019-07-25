@@ -8,6 +8,9 @@ Want instant communication with the Dev team? Join our
   - Increased gamefield size to coincide with small player UI in top of field
   - Made the window resizeable during gameplay
   - Added new executeGame function and converted executeTurn to only handle a single gameturn
+  - Made warnings and error messages more meaningful
+  - Removed using namespace std;
+  - Removed unecessary loading text
 
 ## Release 7.00  ****  Major Changes to map system, AI's will need to be updated  ****
 ##  Changes

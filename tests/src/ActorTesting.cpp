@@ -2,7 +2,6 @@
 #include <Actor.h>
 #include <string>
 #include <iostream>
-using namespace std;
 
 // Testing setters and default constructor
 TEST_CASE("Calling getName() member function and checking constructor")

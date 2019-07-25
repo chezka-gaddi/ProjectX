@@ -204,7 +204,7 @@ int main(int argc, char **argv)
         game.executeGame();
     }
 
-    std::cout << "\nGAME OVER\n";
+    printf("\nGAME OVER\n");
     return 0;
     //ProfilerStop(); //Stop the profiler
 }
