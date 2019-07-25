@@ -54,13 +54,13 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 #include <settings/Settings.h>
 #include <game/game.h>
 #include <game/Tournament.h>
-#include <gperftools/profiler.h>
+//#include <gperftools/profiler.h> //Google performance profiler
 
 // Main
 
 int main(int argc, char **argv)
 {
-    ProfilerStart("platform.pform");
+    //ProfilerStart("platform.pform"); //Start google profiler
     std::shared_ptr<Settings> settings = std::shared_ptr<Settings>(new Settings);
     std::unique_ptr<Tournament> tourny;
     gameMode mode = settings->getGameMode();
@@ -201,10 +201,10 @@ int main(int argc, char **argv)
     }else{
         Game game;
         game.initGameState(settings);
-        game.executeTurn();
+        game.executeGame();
     }
 
     std::cout << "\nGAME OVER\n";
     return 0;
-    ProfilerStop();
+    //ProfilerStop(); //Stop the profiler
 }

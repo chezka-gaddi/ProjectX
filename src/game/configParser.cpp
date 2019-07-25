@@ -1,4 +1,7 @@
 #include "configParser.h"
+#include "utilities/inireader.h"
+#include "utilities/mapLoader.h"
+
 
 std::shared_ptr<MapData> parseConfig( const std::shared_ptr<Settings> & settings){
     std::string configFile = settings->getConfigFile();

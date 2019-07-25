@@ -13,10 +13,6 @@
 #define __ACTOR_INFO_H
 
 #include <actors/Actor.h>
-#include <actors/ProjectileActor.h>
-#include <structures/attributes.h>
-#include <iostream>
-#include <memory>
 
 /*! \struct ActorInfo
     \brief A structure containing Actor stats and info

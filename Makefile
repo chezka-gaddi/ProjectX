@@ -3,7 +3,8 @@ CXXFLAGS = -Wall -fmax-errors=5 -g -std=c++11 -fPIC
 INCS = -I./ -Isrc/
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
-LIBS += -lSOIL -Llibraries -lCTF -lprofiler
+LIBS += -lSOIL -Llibraries -lCTF 
+#LIBS += -lprofiler #Google Profiler
 SOFLAGS = -DDYNAMIC
 PROFILE ?=
 

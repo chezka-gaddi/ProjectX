@@ -3,11 +3,15 @@
  * @author David Donahue
  */
 
-#include <memory>
 #include <iostream>
 #include "ui/event.h"
 #include "game/GameField.h"
-#include "game/game.h"
+#include <iostream>
+#include <GL/glut.h>
+#include <actors/ProjectileActor.h>
+#include <structures/PositionData.h>
+
+
 
 /**
  * @author David Donahue
@@ -895,9 +899,9 @@ void GameField::attackAction(ActorInfo &a, const MapData &map, int i){
         newProjectile.heading = a.heading;
         newProjectile.name = "Projectile\n";
         a.ammo--;
-        if (settings->checkInstantProj())
+        if (settings->checkInstantProj()){ //If instant projectiles we won't add them to actor list
           projectileTurn(newProjectile);
-        else{
+        }else{
           actors.insert(actors.begin() + i + 1, newProjectile);
           fieldMap->tileMap[a.y][a.x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", newProjectile.id, newProjectile.x, newProjectile.y, newProjectile.health));
         }

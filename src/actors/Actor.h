@@ -3,7 +3,6 @@
 #ifndef SLACKERS_PLATFORM_ACTOR_H
 #define SLACKERS_PLATFORM_ACTOR_H
 #include <string>
-#include <structures/MoveData.h>
 #include <structures/attributes.h>
 #include <map/MapData.h>
 #include <structures/direction.h>

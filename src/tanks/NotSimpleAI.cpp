@@ -1,5 +1,6 @@
 #include "NotSimpleAI.h"
 #include <iostream>
+#include <algorithm>
 
 NotSimpleAI::NotSimpleAI() {}
 NotSimpleAI::~NotSimpleAI() {}
