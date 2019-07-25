@@ -1,6 +1,14 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
+## Releast 7.01
+## Changes
+  - changed convertGL_ functions to use game coordinates and fixed conversion instead of linear regression line
+  - Adjusted scalar calculations to take into account the new playing field sizes
+  - Increased gamefield size to coincide with small player UI in top of field
+  - Made the window resizeable during gameplay
+  - Added new executeGame function and converted executeTurn to only handle a single gameturn
+
 ## Release 7.00  ****  Major Changes to map system, AI's will need to be updated  ****
 ##  Changes
   - Smart pointers.  Most conventional points were switched to smart pointers for better memory management.
