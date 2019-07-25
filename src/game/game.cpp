@@ -256,17 +256,19 @@ void Game::initGameState(std::shared_ptr<Settings> & setting)
   std::vector<std::string> tankImages, gameImages, treeImages, rockImages, bushImages,
       waterImages, tImages, AINames;
 
-  ofstream fout;
+  std::ofstream fout;
   std::shared_ptr<MapData> mapLoader = nullptr;
 
   //Seed random for random obstacle selection
   srand(time(0));
 
-  // Load game field
+  //Load game field drawable object
   constants.push_back(std::unique_ptr<Drawable>(new GameFieldDrawable));
 
+  if (!quiet)
+    printf("Loading configuration from file ");
   mapLoader = parseConfig(setting); //INI Config reader
-  //mapLoader->printTileMap(); //Test map loaded correctly
+  //mapLoader->printTileMap(); //Test map loaded correctly 
 
   //Load images from config.ini
   if (settings->showUI()){
@@ -307,6 +309,9 @@ void Game::initGameState(std::shared_ptr<Settings> & setting)
     }
   }
 
+  if (!quiet){
+
+  }
   //Check player locations
   for(unsigned int x=0; x < tankLocations.size(); x++)
   {
@@ -314,22 +319,24 @@ void Game::initGameState(std::shared_ptr<Settings> & setting)
     {
       if(tankLocations.at(x) == tankLocations.at(y))
       {
-        cout << "Tanks cannot spawn on the same tile!" << endl;
+        printf("WARNING: Tanks cannot spawn on the same tile (%d, %d).\n", tankLocations[x].first, tankLocations[y].second);
         continue;
       }
     }
   }
 
   //Try and create output file
-  fout.open(settings->getResultsFile(), ios::out | ios::in | ios::app);
+  fout.open(settings->getResultsFile(), std::ios::out | std::ios::in | std::ios::app);
   //Warn if we cannot save settings, ignore quiet for this error
   if(!fout)
   {
+    //Warning because game will still play
     printf("WARNING: Unable to open results file (%s).  Game will play but results will not be saved.\n", settings->getResultsFile().c_str());
   }
   
+  //This should not be possible
   if (mapLoader == nullptr){
-    printf("ERROR: No map name specified or loaded.\n");
+    printf("ERROR: No map file was loaded.\n");
     exit(1);
   }
 
@@ -341,31 +348,32 @@ void Game::initGameState(std::shared_ptr<Settings> & setting)
   
   //Only load textures if we're showing UI
   if (settings->showUI()){
+    if (!quiet)
+      printf("Loading textures...\n");
     glEnable(GL_TEXTURE_2D);
     if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages, waterImages, quiet) && !quiet)
-        cout << "Failed to open image(s).\n" << endl;
+        printf("WARNING: Failed to open image(s).  Game will still play but will have broken textures.\n");
     glDisable(GL_TEXTURE_2D);
   }
 
   //Load the tank players from shared objects
   if (!quiet)
-    cout << "Loading Shared Objects...\n";
+    printf("Loading Shared Objects (Tanks)...\n");
   std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
-
+    
   if (!quiet)
-    cout << "Finalizing game settings...\n";
-
+    printf("Loading players...\n");
   startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, settings->getAttributes(), mapLoader->height, mapLoader->width);
   //printf("Height: %d  Width: %d\n",height, width);
   tankGame = std::unique_ptr<GameField>(new GameField(mapLoader->width, mapLoader->height, startActors, displayWrapper, this, settings));
   tankGame->setMap(mapLoader);
   tankGame->setSPECIAL(settings->getAttributes());
-  if (!quiet)
-    cout << "   ...Done\n" << endl;
-
+  
+  if (!quiet){
+    printf("   ...Done\n");
+    printf("Clearing spawn points...\n");
+  }
   // Add tanks to the gamefield map
-  if (!quiet)
-    cout << "Clearing spawn points...\n";
   for(auto tank : startActors)
   {
     if (mapLoader->tileMap[tank.y][tank.x].type == "Rock"
@@ -373,7 +381,7 @@ void Game::initGameState(std::shared_ptr<Settings> & setting)
       || mapLoader->tileMap[tank.y][tank.x].type == "Hedgehog")
     {
       if (!quiet)
-        cout << "WARNING: removing object at (" << tank.x << "," << tank.y << ") for tank spawn.\n";
+        printf("WARNING: removing object at (%d,%d) for tank spawn.\n",tank.x, tank.y);
       mapLoader->tileMap[tank.y][tank.x].type = "Empty";
       mapLoader->tileMap[tank.y][tank.x].health = 0;
     }
@@ -399,9 +407,9 @@ void Game::initGameState(std::shared_ptr<Settings> & setting)
   }
 
   if (!quiet)
-    cout << "...done.\n" << endl;
+    printf("...done.\n");
   if (settings->checkCoverage()){
-    cout << "Turning on coverage mode." << endl;
+    printf("Turning on coverage mode.");
     settings->setIdleSpeed(1);
     settings->setAniFrames(1);
     settings->setTankSpeed(1);
@@ -418,7 +426,7 @@ void Game::initGameState(std::shared_ptr<Settings> & setting)
 std::vector<ActorInfo> Game::loadPlayers(bool quiet, std::vector<std::pair<int,int>> tankLocations, std::vector<std::string> AINames, std::vector<Actor*> startActorPointers, attributes baseAttr, int height, int width){
  std::vector<ActorInfo> actors;
  if (!quiet)
-    cout << "Creating Player Tanks...\n";
+    printf("Creating Player Tanks...\n");
   for(unsigned int i = 0; i < startActorPointers.size(); ++i)
   {
     if ( tankLocations[i].first <= width &&
@@ -441,7 +449,7 @@ std::vector<ActorInfo> Game::loadPlayers(bool quiet, std::vector<std::pair<int,i
                                     ));
     //printf("Actor %d name: %s\n", i, AINames[i].c_str());
     }else{
-      cout << "WARNING: Invalid location for " << AINames[i] << " (" << tankLocations[i].first << "," << tankLocations[i].second << ")" << endl;
+      printf("WARNING: Invalid location for %s (%d, %d)\n", AINames[i].c_str(), tankLocations[i].first, tankLocations[i].second);
       tankLocations.erase(tankLocations.begin() + i);
       --i;
     }
@@ -456,7 +464,7 @@ std::vector<ActorInfo> Game::loadPlayers(bool quiet, std::vector<std::pair<int,i
  *******************************************************************************/
 void Game::closeDown()
 {
-  std::cout << "Game::Closing game, cleaning up memory\n";
+  printf("Game::Closing game, cleaning up memory\n");
 }
 
 /***************************************************************************//**

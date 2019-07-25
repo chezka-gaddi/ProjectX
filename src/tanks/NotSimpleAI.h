@@ -4,6 +4,7 @@
 #include <actors/Actor.h>
 #include <structures/direction.h>
 #include <cmath>
+#include <ostream>
 #include <iostream>
 
 class NotSimpleAI : public Actor
@@ -11,8 +12,6 @@ class NotSimpleAI : public Actor
     int calcDist(int x1, int y1, int x2, int y2);
 
 public:
-#ifndef testing
-
     /**
      * calculates a move, and returns the data describing its move
      * @return MoveData the desired move to be made, if it is possible then the gamefield will do the move
@@ -38,17 +37,17 @@ public:
     attributes myStats; 
     NotSimpleAI();
     ~NotSimpleAI();
-
-private:
+    
     struct target{
         int dist;
         int x;
         int y;
         int health;
         int damage;
+        int id;
         bool bullet = false;
 
-        target( int d, int nx, int ny, int h, int dam, bool b = false) : dist(d), x(nx), y(ny), health(h), damage(dam), bullet(b){}
+        target( int d, int nx, int ny, int h, int dam, int i = 0, bool b = false) : dist(d), x(nx), y(ny), health(h), damage(dam), id(i), bullet(b){}
 
         bool operator<(const target& a) const
         {
@@ -56,19 +55,15 @@ private:
             return (a.bullet < bullet || (a.bullet == bullet && dist < a.dist));
         }
 
-        ostream& operator<<(ostream& os, const target& t)
-        {
-            os << "Target: " << t.dist << '/' << t.x << '/' << t.y << 
-                '/' << t.health << '/' << t.damage << '/' << (t.bullet ? "Bullet":"Tank") << '\n';
-            return os;
-        }
+        friend std::ostream& operator<<(std::ostream& os, const NotSimpleAI::target& t);
+
     };
 
+private:
     bool spend = false;
     bool firstTurn = true;
     std::vector<std::vector<int>> heatMap;
     std::vector<target> targetList;
-#endif
 };
 
 #endif

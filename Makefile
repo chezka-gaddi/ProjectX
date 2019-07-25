@@ -61,6 +61,8 @@ platform: $(FILES:.cpp=.o)
 	+make tanks
 	$(CXX) $(CXXFLAGS) $(INCS) -o platform $(FILES:.cpp=.o) $(LIBS)
 
+#-include ./src/.depend
+
 coverage: set-coverage $(FILES:.cpp=.o)
 	+make tanks
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -o platform $(FILES:.cpp=.o) $(LIBS)
@@ -80,6 +82,12 @@ tanks/%.so: src/tanks/%.cpp
 
 tanks: src/actors/Actor.o $(TANKS:$(SRC_PATH)tanks/%.cpp=$(TANK_PATH)%.so)
 
+depend: .depend
+
+.depend: $(FILES) $(TANKS)
+	rm -f ./src/.depend
+	$(CXX) $(CXXFLAGS) $(INCS) -MM $^>>./src/.depend;
+
 clean:
 	@find . -name \*.o -type f -exec rm -f {} +
 	@find . -name \*.gc* -type f -exec rm -f {} +
@@ -94,6 +102,8 @@ clean-lib: clean
 clean-all: clean-lib clean-tests
 	@rm -rf $(TANK_PATH)*
 	@rm -rf coverage
+	@rm -rf results.txt
+	@rm -rf gameMoves.txt
 
 clean-tests: clean
 	@rm -rf testUnitAll

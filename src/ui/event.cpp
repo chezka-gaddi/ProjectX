@@ -62,8 +62,8 @@ void updateDrawables(Game &game)
 
   game.objects.clear();
 
-  vector<ActorInfo> * actors = game.tankGame->getActorsPointer();
-  vector<std::pair<int,int>> *SFX = game.tankGame->getSFXPointer();
+  std::vector<ActorInfo> * actors = game.tankGame->getActorsPointer();
+  std::vector<std::pair<int,int>> *SFX = game.tankGame->getSFXPointer();
 
   for(auto &act : *actors)
   {

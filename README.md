@@ -65,7 +65,7 @@ Capture the flag is an AI driver tank battle simulation platform.
   * Method 2:  
     ```cd tests/src``` or ```cd tests/functional_tests```  
     ```make```  
-    This method will build a single bianry in next to the test source files.  
+    This method will build a single binary in next to the test source files.  
   
 # Coverage  
   * ```./runCoverage.sh```  
@@ -74,3 +74,6 @@ Capture the flag is an AI driver tank battle simulation platform.
       Runs a baseline test from the current configuration file.  
       Combines all of the data to show which lines of code were executed by the testing.  
       Generates an HTML report of the coverage data.  
+  * ```./runCodeCheck.sh```
+    This works similarly as runCoverage.  The difference is that it runs the platform during the checks to try and determine what code is never used by the platform. 
+      *** Warning:  This is not 100% accurate, because of timing and how fast functions run it is possible for a function to simply be called in between the checks.

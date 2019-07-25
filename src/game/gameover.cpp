@@ -197,8 +197,7 @@ void displayScoreBoard(std::vector<ActorInfo> dead, std::vector<ActorInfo> winne
         str++;
       }
 
-
-      //std::cout << "Finding " << count << "th place.........\n";
+      //printf("Finding %dth place...\n", count);
       str = dead[l].name.c_str();
 
       glRasterPos3f(-0.4f, k, 2.0f);

@@ -234,12 +234,7 @@ void GameField::setSPECIAL(const attributes baseStats)
       }
     }
     else
-      std::cout << "Tank "
-                << actor.id
-                << "(" << actor.name.c_str() << ")"
-                << " did not provide the correct amount of special points! Points used: "
-                << sum
-                << std::endl;
+      printf("Tank number %d (%s) did not provide the correct amount of special points! Points used: %d\n", actor.id, actor.name.c_str(), sum);
 
     actor.max_health = actor.health;
     actor.max_ammo = actor.ammo;
@@ -448,7 +443,7 @@ bool GameField::checkHealth(ActorInfo &a, bool object)
   if(a.health <= 0) //if whatever we have has no health left
   {
     if (settings->showUI()) //Don't make SFX if there is no graphics
-      SFX.push_back(make_pair(a.x, a.y));
+      SFX.push_back(std::make_pair(a.x, a.y));
     a.damage = 0;
     a.health = 0;
     a.AP = 0;
@@ -457,7 +452,7 @@ bool GameField::checkHealth(ActorInfo &a, bool object)
   else if(a.id < 0 && object) //If it was a projectile and hit an object kill it no matter health
   {
     if (settings->showUI())
-      SFX.push_back(make_pair(a.x, a.y));
+      SFX.push_back(std::make_pair(a.x, a.y));
     a.damage = 0;
     a.health = 0;
     a.AP = 0;
@@ -505,7 +500,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         //printf("Found Rock strike, log it.\n");
         r->health -= a.damage;
         if (settings->showUI())
-          SFX.push_back(make_pair(r->gridx, r->gridy));
+          SFX.push_back(std::make_pair(r->gridx, r->gridy));
         if(r->health <= 0)
         {
           r->health = 0;
@@ -525,7 +520,7 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         //printf("Found tree strike, chop it.\n");
         t->health -= a.damage;
         if (settings->showUI())
-          SFX.push_back(make_pair(t->gridx, t->gridy));
+          SFX.push_back(std::make_pair(t->gridx, t->gridy));
         if(t->health <= 0)
         {
           t->health = 0;
@@ -645,7 +640,7 @@ bool  GameField::crate_o_doom(int x_pos, int y_pos, ActorInfo &a)
           break;
       }
       if (settings->showUI())
-        SFX.push_back(make_pair(x_iter, y_iter));
+        SFX.push_back(std::make_pair(x_iter, y_iter));
     }
   }
   //printf("Hit %d number of tanks.\n",hit);
@@ -1042,9 +1037,7 @@ void GameField::cull()
     {
       if(actors[i].id > 0)
       {
-        //std::cout << "Tank Down!! " << actors[i].name << " died\n";
         deceased.push_back(actors[i]);
-        //std::cout << "Current number of dead tanks is: " << deceased.size() << endl;
         if (tracker != nullptr){
           tracker->killed(actors[i].id, actors[i].name);
         }

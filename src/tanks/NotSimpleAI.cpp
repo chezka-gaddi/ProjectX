@@ -175,7 +175,6 @@ direction NotSimpleAI::attack(const MapData &map, PositionData status)
 {   
     direction ret = STAY;
     unsigned int i = 0;
-    unsigned int j = 0;
     if (targetList.size() == 0) //No targets available
         return ret;
     
@@ -183,7 +182,6 @@ direction NotSimpleAI::attack(const MapData &map, PositionData status)
             && !lineOfFire(targetList[i].x, targetList[i].y, status)){
         i++; //Find the first non killed target
     }
-    j = i;
 
     if (targetList[i].health < targetList[i].damage || !(lineOfFire(targetList[i].x, targetList[i].y, status))){
         return ret; //No valid targets found
@@ -227,9 +225,9 @@ void NotSimpleAI::checkTargets(const MapData &map, PositionData status){
                 //{
                     min_dist = calcDist(status.game_x, status.game_y, x, y);
                     if (map.tileMap[y][x].tank != nullptr){
-                        targetList.emplace_back(min_dist, x, y, map.tileMap[y][x].tank->health, 0, false);
+                        targetList.emplace_back(min_dist, x, y, map.tileMap[y][x].tank->health, 0, map.tileMap[y][x].tank->id, false);
                     }else if(map.tileMap[y][x].projectile != nullptr){
-                        targetList.emplace_back(min_dist, x, y, map.tileMap[y][x].projectile->health, 0, true);
+                        targetList.emplace_back(min_dist, x, y, map.tileMap[y][x].projectile->health, 0, map.tileMap[y][x].projectile->id, true);
                     }
                 //}
 
@@ -255,9 +253,9 @@ void NotSimpleAI::updateTargets(const MapData &map, PositionData status){
             {
                 min_dist = calcDist(status.game_x, status.game_y, x, y);
                 if (map.tileMap[y][x].tank != nullptr){
-                    tempTarget.emplace_back(min_dist, x, y, map.tileMap[y][x].tank->health, 0);
+                    tempTarget.emplace_back(min_dist, x, y, map.tileMap[y][x].tank->health, 0, map.tileMap[y][x].tank->id, false);
                 }else if(map.tileMap[y][x].projectile != nullptr){
-                    tempTarget.emplace_back(min_dist, x, y, map.tileMap[y][x].projectile->health, 0);
+                    tempTarget.emplace_back(min_dist, x, y, map.tileMap[y][x].projectile->health, 0, map.tileMap[y][x].projectile->id, true);
                 }
             }
         }
@@ -273,7 +271,16 @@ void NotSimpleAI::updateTargets(const MapData &map, PositionData status){
             }
         }
         
+        printf("Before sort:\n");
+        for(auto & t : targetList){
+        //    std::cout << t;
+        }
+
         std::sort(targetList.begin(), targetList.end());
+        printf("After sort:\n");
+        for(auto & t : targetList){
+        //    std::cout << t;
+        }
     }
 }
 
@@ -444,3 +451,9 @@ extern "C" //required for runtime linking
     }
 }
 #endif
+
+std::ostream& operator<<(std::ostream& os, const NotSimpleAI::target& t)
+{
+    os << "Target: " << t.id << " (" << t.dist << '/' << t.x << '/' << t.y << '/' << t.health << '/' << t.damage << '/' << (t.bullet ? "Bullet)":"Tank)") << std::endl;
+    return os;
+}

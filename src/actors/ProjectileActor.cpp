@@ -1,7 +1,6 @@
 /*! \file */
 #include "actors/ProjectileActor.h"
 
-using namespace std;
 /**************************************************************************//**
  * @author Brad Peterson
  *

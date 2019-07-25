@@ -11,11 +11,14 @@
 
 #include <GL/freeglut.h>
 
-#include <map/MapData.h>
 #include <actors/ActorInfo.h>
 #include <structures/direction.h>
-#include <settings/Settings.h>
 #include <utilities/gameTracker.h>
+
+//Moved to forward declared classes, left in case of issues with platform release
+//#include <settings/Settings.h>
+//#include <map/MapData.h>
+
 
 /***************************************************************************//**
 * @class GameField
@@ -26,6 +29,7 @@
 
 class Game;
 class Settings;
+class MapData;
 
 class GameField
 {

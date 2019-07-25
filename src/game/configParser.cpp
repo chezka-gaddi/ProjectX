@@ -5,19 +5,20 @@
 
 std::shared_ptr<MapData> parseConfig( const std::shared_ptr<Settings> & settings){
     std::string configFile = settings->getConfigFile();
-    //bool quiet = settings->checkQuiet();
+    bool quiet = settings->checkQuiet();
 
+    if (!quiet)
+        printf("%s...", configFile.c_str());
     INIReader config(configFile);
-    //INIReader config("config.ini");
-   std::shared_ptr<MapData> map;
+    std::shared_ptr<MapData> map;
 
     //Store the parse error/line number
+    //Currently generates errors on lines that appear to be correctly written
     //int cerrors = config.ParseError();
     //if (config.ParseError() != 0) {
     //    printf("Can't load %s\n", configFile.c_str());
     //    return false;
     //}
-    //std::cout << "Config loaded from " << configFile  << ": \n";
     //Load the map
     settings->setMapName(config.Get("MAP","name","default.map"));
     map = loadMap(settings);
