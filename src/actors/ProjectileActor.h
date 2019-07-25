@@ -10,7 +10,6 @@
 #include <cmath>
 #include <actors/Actor.h>
 #include <structures/direction.h>
-#include <structures/MoveData.h>
 #include <structures/attributes.h>
 
 /*!

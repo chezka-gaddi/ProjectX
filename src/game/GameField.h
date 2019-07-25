@@ -8,18 +8,13 @@
 #define SLACKERS_PLATFORM_GAMEFIELD_H
 
 #include <vector>
-#include <algorithm>
-#include <actors/ProjectileActor.h>
-#include <structures/PositionData.h>
-#include <actors/Actor.h>
+
+#include <GL/freeglut.h>
+
 #include <map/MapData.h>
 #include <actors/ActorInfo.h>
 #include <structures/direction.h>
 #include <settings/Settings.h>
-#include <iostream>
-#include <ctime>
-#include <GL/glut.h>
-#include <GL/freeglut.h>
 #include <utilities/gameTracker.h>
 
 /***************************************************************************//**

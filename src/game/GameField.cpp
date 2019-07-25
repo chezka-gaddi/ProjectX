@@ -3,11 +3,15 @@
  * @author David Donahue
  */
 
-#include <memory>
 #include <iostream>
 #include "ui/event.h"
 #include "game/GameField.h"
-#include "game/game.h"
+#include <iostream>
+#include <GL/glut.h>
+#include <actors/ProjectileActor.h>
+#include <structures/PositionData.h>
+
+
 
 /**
  * @author David Donahue

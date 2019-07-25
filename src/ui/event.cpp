@@ -8,6 +8,7 @@
 #include "ui/event.h"
 #include <iostream>
 #include <memory>
+#include <unistd.h>
 
 /***************************************************************************//**
  * @author Chezka Gaddi

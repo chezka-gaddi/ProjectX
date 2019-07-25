@@ -6,8 +6,21 @@
 
 #include <game/game.h>
 #include <ui/callbacks.h>
-#include <ui/event.h>
-#include <ctime>
+//#include <ui/event.h>
+//#include <ctime>
+#include <iostream>
+#include <GL/glut.h>
+//#include <GL/freeglut.h>
+//#include <tanks/SimpleAI.h>
+#include <utilities/tankLoader.h>
+#include <utilities/mapLoader.h>
+#include <game/gameover.h>
+#include <game/configParser.h>
+#include <fstream>
+//#include <sstream>
+//#include <utility>
+//#include <memory>
+
 
 /***************************************************************************//**
  * @author Chezka Gaddi

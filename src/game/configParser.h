@@ -6,12 +6,10 @@
 #ifndef __parseconfig_h
 #define __parseconfig_h
 
-#include <utilities/inireader.h>
-#include <utilities/mapLoader.h>
-#include <map/MapData.h>
-#include <string>
-#include <iostream>
+//#include <iostream>
 
+#include <string>
+#include <map/MapData.h>
 #include <settings/Settings.h>
 
 std::shared_ptr<MapData> parseConfig(const std::shared_ptr<Settings> & settings);

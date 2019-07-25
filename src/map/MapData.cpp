@@ -4,6 +4,8 @@
 
 #include "MapData.h"
 #include <iostream>
+#include <ostream>
+#include <algorithm>
 
 /*****************//*
  * Author Original Developers

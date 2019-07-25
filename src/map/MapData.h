@@ -7,10 +7,8 @@
 #ifndef __MAP_DATA_H
 #define __MAP_DATA_H
 #include <vector>
-#include <ostream>
-#include <algorithm>
-
 #include <map/Tile.h>
+
 /*******************************************************************//**
  * @author David Donahue
  *
