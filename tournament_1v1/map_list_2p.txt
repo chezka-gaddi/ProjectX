@@ -1,5 +1,0 @@
-../maps/DK.txt
-../maps/MiddleEarth.txt
-../maps/SpaceInvaders.txt
-../maps/Target.txt
-../maps/TheMaze.txt
