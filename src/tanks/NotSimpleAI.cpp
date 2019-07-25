@@ -33,22 +33,22 @@ direction NotSimpleAI::move(const MapData &map, PositionData status)
       printf("X: %d, Y: %d\n", status.game_x, status.game_y);*/
     }
     //Check target list first
-    printf("Checking Targetlist before Moving: \n");
+    //printf("Checking Targetlist before Moving: \n");
     while( i < targetList.size() ){
-        if (targetList[i].health > targetList[i].damage){
+        if (targetList[i].health > targetList[i].damage && !targetList[i].bullet){ //Only move towards tanks
             //find direction of tank
             for (int j = 0; j < 8; j++){
                 tempDist = calcDist((direction) j, targetList[i].x, targetList[i].y, status);
                 if ( tempDist <= min_dist){
-                    printf("New direction found: %d with distance: %d.\n", j, tempDist );
+                    //printf("New direction found: %d with distance: %d.\n", j, tempDist );
                     min_dist = tempDist;
                     ret = (direction) j;
                 }else{
-                    printf("Old direction kept: %d, with distance: %d, checked distance %d.\n", (int) ret, min_dist, tempDist);
+                    //printf("Old direction kept: %d, with distance: %d, checked distance %d.\n", (int) ret, min_dist, tempDist);
                 }
             }
         }else{
-            printf("Bad target found: %d/%d health/damage.\n", targetList[i].health, targetList[i].damage);
+            //printf("Bad target found: %d/%d health/damage.\n", targetList[i].health, targetList[i].damage);
         }
         i++;
     }
@@ -224,9 +224,9 @@ void NotSimpleAI::checkTargets(const MapData &map, PositionData status){
                 //{
                     min_dist = calcDist(status.game_x, status.game_y, x, y);
                     if (map.tileMap[y][x].tank != nullptr){
-                        targetList.emplace_back(min_dist, x, y, map.tileMap[y][x].tank->health, 0);
+                        targetList.emplace_back(min_dist, x, y, map.tileMap[y][x].tank->health, 0, false);
                     }else if(map.tileMap[y][x].projectile != nullptr){
-                        targetList.emplace_back(min_dist, x, y, map.tileMap[y][x].projectile->health, 0);
+                        targetList.emplace_back(min_dist, x, y, map.tileMap[y][x].projectile->health, 0, true);
                     }
                 //}
 
@@ -235,6 +235,44 @@ void NotSimpleAI::checkTargets(const MapData &map, PositionData status){
     }
     std::sort(targetList.begin(), targetList.end());
 }
+
+void NotSimpleAI::updateTargets(const MapData &map, PositionData status){
+    int min_dist = map.width * map.height + 1; //Guaranteed to be greater than any real distance
+    std::vector<target> tempTarget;
+    for (int x = 1; x <= map.width; ++x)
+    {
+        for (int y = 1; y <= map.height; ++y)
+        {
+            //If an enemy is encountered closer than previously encountered
+            if (((map.tileMap[y][x].tank != nullptr && //if there is an actor at X, Y
+                    map.tileMap[y][x].tank->id != status.id) || //And it is not you 
+                    (map.tileMap[y][x].projectile != nullptr && 
+                    map.tileMap[y][x].projectile->id != -status.id)) && //And it is not your projectile
+                    calcDist(status.game_x, status.game_y, x, y) < min_dist) //And it is the closest one
+            {
+                min_dist = calcDist(status.game_x, status.game_y, x, y);
+                if (map.tileMap[y][x].tank != nullptr){
+                    tempTarget.emplace_back(min_dist, x, y, map.tileMap[y][x].tank->health, 0);
+                }else if(map.tileMap[y][x].projectile != nullptr){
+                    tempTarget.emplace_back(min_dist, x, y, map.tileMap[y][x].projectile->health, 0);
+                }
+            }
+        }
+    }
+    if (tempTarget.size() > 0){
+        for (unsigned int i = 0; i < tempTarget.size(); i++){
+            for (unsigned int j = 0; j < targetList.size(); j++){
+                if (tempTarget[i].x == targetList[j].x && tempTarget[i].y == targetList[j].y){
+                    targetList.push_back(tempTarget[i]);
+                    tempTarget[i].x = 0;
+                    tempTarget[i].y = 0;
+                }
+            }
+        }
+        std::sort(targetList.begin(), targetList.end());
+    }
+}
+
 /**
  * @author David Donahue
  * @par Description:
@@ -295,17 +333,19 @@ int NotSimpleAI::spendAP(const MapData &map, PositionData status)
     updateMap(map, status);
 
     if (status.ap == myStats.tankAP){
-        printf("\n\nChecking Targets on start of turn.\n");
+        //printf("\n\nChecking Targets on start of turn.\n");
         targetList.clear();
         checkTargets(map, status);
-        printf("Number of targets found: %d.\n", (int) targetList.size());
+        //printf("Number of targets found: %d.\n", (int) targetList.size());
     }else{
-        printf("Continuing turn.\n");
+        updateTargets(map, status);
+        //printf("Continuing turn.\n");
     }
 
     spend = true;
     direction tAttack = attack(map,status);
-    
+    spend = false;
+
     /*printf("Spend Map:\n");
     for (int i = 0; i < map.map.size(); i++){
     printf("%d ", map.map[i]);
@@ -318,6 +358,7 @@ int NotSimpleAI::spendAP(const MapData &map, PositionData status)
     if (tAttack != STAY) //Try and attack first
         return 2;
 
+    spend = true;
     direction tMove = move(map,status);
     spend = false;
 
@@ -364,8 +405,7 @@ void NotSimpleAI::updateMap(const MapData &map, PositionData status){
             }
         }
     }
-    heatMap[status.game_y][status.game_x] = 0;
-    
+    heatMap[status.game_y][status.game_x] = 0;   
     //std::cout << std::endl;
     //for(int i = 1; i < (int) map.tileMap.size(); i++){
     //    std::cout << std::endl;

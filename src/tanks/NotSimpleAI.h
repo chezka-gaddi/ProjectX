@@ -31,6 +31,7 @@ public:
     void updateMap(const MapData &map, PositionData status);
     bool lineOfFire(int x, int y, PositionData status);
     void checkTargets(const MapData &map, PositionData status);
+    void updateTargets(const MapData &map, PositionData status);
     int calcDist(direction dir, int dx, int dy, PositionData status);
    
     attributes myStats; 
@@ -44,8 +45,9 @@ private:
         int y;
         int health;
         int damage;
+        bool bullet = false;
 
-        target( int d, int nx, int ny, int h, int dam) : dist(d), x(nx), y(ny), health(h), damage(dam){}
+        target( int d, int nx, int ny, int h, int dam, bool b = false) : dist(d), x(nx), y(ny), health(h), damage(dam), bullet(b){}
 
         bool operator<(const target& a) const
         {
