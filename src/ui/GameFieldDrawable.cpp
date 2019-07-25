@@ -47,13 +47,13 @@ void GameFieldDrawable::draw(int x, int y)
     glBindTexture(GL_TEXTURE_2D, gameTex[tex]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-1.89f, -1.875f,  1.0f); //Bottom left
+    glVertex3f(-1.90f, -1.875f,  1.0f); //Bottom left
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 1.91f, -1.875f,  1.0f); //Bottom Right
+    glVertex3f( 1.92f, -1.875f,  1.0f); //Bottom Right
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 1.91f,  0.92f,  1.0f);  //Top Right
+    glVertex3f( 1.92f,  1.32f,  1.0f);  //Top Right
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-1.89f,  0.92f,  1.0f);  //Top Left
+    glVertex3f(-1.90f,  1.32f,  1.0f);  //Top Left
     glEnd();
     glPopMatrix();
 }

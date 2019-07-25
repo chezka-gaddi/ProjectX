@@ -28,14 +28,8 @@ void display()
  * @param[in] h      - new window height
  ******************************************************************************/
 void reshape(const int w, const int h)
-{
-    glLoadIdentity();
-    // project 3d world space into 2d
-    gluOrtho2D(0.0, w, 0.0, h);
-    // point the camera at the 2d projection
-    glViewport(0,0,w,h);
-    // dispatch the reshape event
-    utilityCentral(new ReshapeEvent(w, h));
+{   
+  utilityCentral(new ReshapeEvent(w, h));
 }
 
 /***************************************************************************//**

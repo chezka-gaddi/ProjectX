@@ -899,9 +899,9 @@ void GameField::attackAction(ActorInfo &a, const MapData &map, int i){
         newProjectile.heading = a.heading;
         newProjectile.name = "Projectile\n";
         a.ammo--;
-        if (settings->checkInstantProj())
+        if (settings->checkInstantProj()){ //If instant projectiles we won't add them to actor list
           projectileTurn(newProjectile);
-        else{
+        }else{
           actors.insert(actors.begin() + i + 1, newProjectile);
           fieldMap->tileMap[a.y][a.x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", newProjectile.id, newProjectile.x, newProjectile.y, newProjectile.health));
         }

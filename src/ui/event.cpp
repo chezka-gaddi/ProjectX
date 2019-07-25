@@ -111,8 +111,9 @@ void updateDrawables(Game &game)
  ******************************************************************************/
 void DisplayEvent::doAction(Game &game)
 {
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glLoadIdentity();
+  //glLoadIdentity();
   if (!game.settings->showUI()){
     return;
   }
@@ -167,6 +168,7 @@ void DisplayEvent::doAction(Game &game)
   pause = TimerEvent::idle_speed*80;
   pause >= 0 ? usleep(pause) : usleep(0);
   glutSwapBuffers();
+  glutPostRedisplay();
 }
 
 
@@ -176,7 +178,7 @@ void DisplayEvent::doAction(Game &game)
  * @param[in] w - width (in pixels) of the window
  * @param[in] h - height (in pixels) of the window
  ******************************************************************************/
-ReshapeEvent::ReshapeEvent(int w, int h) : width(w), height(h) {}
+ReshapeEvent::ReshapeEvent(int w, int h) :width(w), height(h) {}
 
 
 /***************************************************************************//**
@@ -189,13 +191,14 @@ ReshapeEvent::ReshapeEvent(int w, int h) : width(w), height(h) {}
  ******************************************************************************/
 void ReshapeEvent::doAction(Game &game)
 {
-  const float ar = width / height;
-  glViewport(0, 10, width, height);
+  if (height == 0) // Prevent divide by 0 for aspect ratio
+    height = 1.0;
+  float ar = width / height;
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
+  glViewport(0, 10, width, height);
   glFrustum(-ar, ar, -1.0, 1.0, 2.0, 90.0);
   glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
 }
 
 

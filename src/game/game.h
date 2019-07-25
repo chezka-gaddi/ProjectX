@@ -33,6 +33,7 @@ public:
     ~Game();
 
     void executeTurn();
+    void executeGame();
     void initGameState(std::shared_ptr<Settings> & setting);
     void closeDown();
     void earlyOut();

@@ -201,7 +201,7 @@ int main(int argc, char **argv)
     }else{
         Game game;
         game.initGameState(settings);
-        game.executeTurn();
+        game.executeGame();
     }
 
     std::cout << "\nGAME OVER\n";

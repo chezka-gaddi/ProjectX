@@ -6,20 +6,14 @@
 
 #include <game/game.h>
 #include <ui/callbacks.h>
-//#include <ui/event.h>
-//#include <ctime>
 #include <iostream>
 #include <GL/glut.h>
-//#include <GL/freeglut.h>
-//#include <tanks/SimpleAI.h>
 #include <utilities/tankLoader.h>
 #include <utilities/mapLoader.h>
 #include <game/gameover.h>
 #include <game/configParser.h>
 #include <fstream>
-//#include <sstream>
-//#include <utility>
-//#include <memory>
+
 
 
 /***************************************************************************//**
@@ -61,12 +55,12 @@ Game::~Game()
  *******************************************************************************/
 float Game::convertGLXCoordinate(int x)
 {
-  float fscaler = (x - 1) * (4.0717* pow(tankGame->getWidth(), -1.031));
-  GLfloat x_gl = -1.75 + (fscaler);
-  
-  //float tempx = (2.0 * x + 1.0) / tankGame->getWidth() - 1.9;
-  //return tempx;
-   return x_gl;
+  //float fscaler = (x - 1) * (4.0717* pow(tankGame->getWidth(), -1.031));
+  //GLfloat x_gl = -1.75 + (fscaler);
+  //return x_gl;
+
+  float tempx = 3.70 * ((x - 0.5) / tankGame->getWidth()) - 1.85;
+  return tempx; 
 }
 
 
@@ -81,11 +75,13 @@ float Game::convertGLXCoordinate(int x)
  *******************************************************************************/
 float Game::convertGLYCoordinate(int y)
 {
-  float fscaler =  (y - 1) * (3.1923* pow(tankGame->getHeight(), -1.08));
-  GLfloat y_gl = 0.75 - (fscaler);
-  return y_gl;
-  //float tempy = (2.0 * y + 1.0) / tankGame->getHeight() - 1.925;
-  //return tempy;
+  //float fscaler =  (y - 1) * (3.195 * pow(tankGame->getHeight(), -1.08));
+  //GLfloat y_gl = 0.75 - (fscaler);
+  //return y_gl;
+
+  float tempy = -3.0 * ((y - 0.5) / tankGame->getHeight()) + 1.22;
+  return tempy;
+  
 }
 
 
@@ -159,7 +155,7 @@ bool Game::checkMaxTurn()
     {
       for(auto &a : *actors)
       {
-        if(a.id != actorId)
+        if(a.id != actorId)//prevent killing off the winner
         {
           a.health = 0;
         }
@@ -170,15 +166,15 @@ bool Game::checkMaxTurn()
 
 
  /**************************************************************************//**
- * @author Chezka Gaddi
- * @modified Jon McKee
- * @brief executeTurn
+ * @author Jon McKee
+ * @brief executeGame
  *
  * While the game is still playable, execute a turn from each of the tanks,
- * otherwise return back to main and destroy the GUI.
+ * otherwise return back to main and destroy the GUI.  This function allows the
+ * game to run independent of the GUI.
  *
  *******************************************************************************/
-void Game::executeTurn()
+void Game::executeGame()
 {
   //printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
   while (isplayable(tankGame->getActorsConst())) //If we still have tanks keep playing
@@ -190,8 +186,31 @@ void Game::executeTurn()
     }
   }
   gameOver(tankGame->getDeceased(), tankGame->getActors(), settings, tankGame->gameTurn);
-  if (settings->showUI())
+}
+
+/**************************************************************************//**
+ * @author Chezka Gaddi
+ * @modified Jon McKee
+ * @brief executeTurn
+ *
+ * Execute a game turn from each of the tanks if the game is playable, 
+ * otherwise return back to main and destroy the GUI.
+ *
+ *******************************************************************************/
+void Game::executeTurn()
+{
+  //printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
+  if (isplayable(tankGame->getActorsConst())) //If we still have tanks keep playing
+  {
+    tankGame->nextTurn();
+    if(checkMaxTurn())
+    {
+      tankGame->cull();
+    }
+  }else{
+    gameOver(tankGame->getDeceased(), tankGame->getActors(), settings, tankGame->gameTurn);
     glutLeaveMainLoop();
+  }
 }
 
 /**
@@ -316,11 +335,9 @@ void Game::initGameState(std::shared_ptr<Settings> & setting)
 
   //set globals
   TimerEvent::idle_speed = settings->getIdleSpeed();
-  //Drawable::xscalar = (3.75/mapLoader->width)/.32;
-  Drawable::xscalar = 1.85/mapLoader->width;
+  Drawable::xscalar = 1.85/mapLoader->width; //The available width area (3.7) divided by 2 divided by map width
   Drawable::scalar = Drawable::xscalar;
-  //Drawable::yscalar = Drawable::xscalar;
-  Drawable::yscalar = 1.25/mapLoader->height;
+  Drawable::yscalar = 1.50/mapLoader->height; //The available height area (3.0) divided by 2 divided by map height
   
   //Only load textures if we're showing UI
   if (settings->showUI()){
