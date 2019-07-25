@@ -291,7 +291,7 @@ void GameField::animateMove(ActorInfo &a)
   a.prevx = a.x; //Save new previous values
   a.prevy = a.y;
   if (gameptr != nullptr){//Skip during testing
-   TimerEvent::idle_speed = settings->getIdleSpeed(); //fix idle speed
+    TimerEvent::idle_speed = settings->getIdleSpeed(); //fix idle speed
   }
 }
 
@@ -301,7 +301,7 @@ void GameField::animateMove(ActorInfo &a)
  * @par Description:
  * Executes the move phase of an AI's turn and then AI's are culled
  */
-void GameField::runMoves(ActorInfo &a, direction dir)
+void GameField::moveAction(ActorInfo &a, direction dir)
 {
 
   int xoff = 0, yoff = 0, tHealth = 0, hit = 0;
@@ -317,7 +317,6 @@ void GameField::runMoves(ActorInfo &a, direction dir)
   a.prevx = a.x;
   a.prevy = a.y;
   //try and move
-
   if (dir == UP || dir == UPLEFT || dir == UPRIGHT){yoff = -1;}
   else if (dir == DOWN || dir == DOWNLEFT || dir == DOWNRIGHT){yoff = 1;}
   if (dir == LEFT || dir == UPLEFT || dir == DOWNLEFT){xoff = -1;}
@@ -506,10 +505,8 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         if(r->health <= 0)
         {
           r->health = 0;
-#ifndef TESTING
-          r->set_destroyed(gameTurn);
-          removeObstacle(a.x, a.y);
-#endif
+          //For rock regrowth
+          //r->set_destroyed(gameTurn);
         }
         return true;
       }
@@ -528,16 +525,15 @@ bool GameField::checkObjectStrike(ActorInfo &a)
         if(t->health <= 0)
         {
           t->health = 0;
-#ifndef TESTING
           t->set_destroyed(gameTurn);
-          removeObstacle(a.x, a.y);
           //If a tree you're hiding under get's destroyed take 1 damage
-          for (auto tTank : actors)
-          {
-                  if (tTank.x == a.x && tTank.y == a.y)
-                          tTank.health--;
+          if (fieldMap->tileMap[a.y][a.x].tank != nullptr){
+            for (auto & tTank : actors)
+            {
+              if (tTank.x == a.x && tTank.y == a.y)
+                tTank.health--;
+            }
           }
-#endif
         }
         return true;
       }
@@ -697,7 +693,7 @@ void GameField::checkObjectRegrowth(){
   {
     if(t->health <= 0)
     {
-      t->regrow(gameTurn, actors);
+      t->regrow(gameTurn);
       if (t->health > 0)
         addObstacle(t->gridx, t->gridy, 'T');
     }
@@ -706,7 +702,7 @@ void GameField::checkObjectRegrowth(){
   {
     if(b->health <= 0)
     {
-      b->regrow(gameTurn, actors);
+      b->regrow(gameTurn);
       if (b->health > 0)
         addObstacle(b->gridx, b->gridy, 'B');
     }
@@ -732,19 +728,20 @@ void GameField::nextTurn()
   if (tracker != nullptr)
     tracker->newTurn(gameTurn);
   direction dir;
-  ActorInfo newProjectile;
   MapData * fog_of_war;
-  int action;
-  int act_ap;
-  unsigned int j = 0;
-  bool grow = false;
-  if (gameptr != nullptr){
+  int action, act_ap;
+
+  if (gameptr != nullptr){ //Check regrowth once per turn
     checkObjectRegrowth();
   }
+
   for(unsigned int i = 0; i < actors.size(); ++i)
   {
+    if (actors[i].health == 0){
+      continue; //Skip this player if no health
+    }
     act_ap = actors[i].AP;
-    if(actors[i].id > 0 && actors[i].health > 0){
+    if(actors[i].id > 0){
       actTurn = actors[i].id;
     }
     if (tracker != nullptr)
@@ -753,21 +750,16 @@ void GameField::nextTurn()
       displayCallback(settings);
       SFX.clear();
     }
+    if (actors[i].id < 0){
+      projectileTurn(actors[i]);
+      act_ap = 0;
+    }
     while(act_ap > 0 && actors[i].id != 0 && actors[i].health > 0)
     {
       actors[i].cDetect++;
       modCounter++;
       if(modCounter > 7)
         modCounter = 0;
-      if (actors[i].id < 0){
-        dir = actors[i].act_p->move(nullMap, currPos);
-        runMoves(actors[i], dir);
-        if (tracker != nullptr){
-          tracker->move("Projectile", actors[i].heading, actors[i].x, actors[i].y);
-        }
-        --act_ap;
-        continue;
-      }
       updateMap();
       fog_of_war = create_fog_of_war(*fieldMap, actors[i]);
       currPos.game_x = actors[i].x;
@@ -780,8 +772,7 @@ void GameField::nextTurn()
       if(action == 1)
       {
         dir = actors[i].act_p->move(*fog_of_war, currPos);
-
-        runMoves(actors[i], dir);
+        moveAction(actors[i], dir);
         if (tracker != nullptr && actors[i].id > 0){
           tracker->move(actors[i].name, actors[i].heading, actors[i].x, actors[i].y);
         }else if (tracker != nullptr){
@@ -790,78 +781,11 @@ void GameField::nextTurn()
       }
       else if(action == 2)
       {
-        //PositionData to give the AI
-        currPos.game_x = actors[i].x;
-        currPos.game_y = actors[i].y;
-        currPos.health = actors[i].health;
-        currPos.id = actors[i].id;
-
-        //Get the AI's desired attack
-        dir = actors[i].act_p->attack(*fog_of_war, currPos);
-    
-        if(actors[i].id > 0)  //tanks attacking
-        {
-          if (tracker != nullptr){
-            tracker->attack(actors[i].name, dir);
-          }
-          if(dir != STAY && actors[i].ammo >= 1)
-          {
-            actors[i].heading = dir;
-            actors[i].shots += 1;
-            j = i+1;
-            grow = false;
-            if (fieldMap->tileMap[actors[i].y][actors[i].x].projectile != nullptr){ //If no projectile we don't need to check the list
-              while(j < actors.size() && actors[i].id == -actors[j].id && actors[j].id < 0 && actors[j].health > 0)
-              {//Check projectile list for a projectile in this spot
-                if(actors[i].x == actors[j].x && actors[i].y == actors[j].y) //found one
-                {
-                  actors[j].scale += .40;
-                  actors[j].health += 1;
-                  actors[j].ammo += 1;
-                  actors[j].damage += actors[i].damage;
-                  grow = true; //See if the projectile is one of our own
-                  break;
-                }
-                j++;
-              }
-            }
-            if(grow == false) //If there was no projectiles in this spot create a new one
-            {
-              ProjectileActor * proj = new ProjectileActor(dir);
-              newProjectile.AP = actors[i].range;
-              newProjectile.id = -actors[i].id;
-              newProjectile.act_p = proj;
-              newProjectile.health = 1;
-              newProjectile.damage = actors[i].damage;
-              newProjectile.x = actors[i].x;
-              newProjectile.y = actors[i].y;
-              newProjectile.hits = 0;
-              newProjectile.ammo = 1;
-              newProjectile.heading = actors[i].heading;
-              newProjectile.name = "Projectile\n";
-              actors.insert(actors.begin() + i + 1, newProjectile);
-              actors[i].ammo--;
-              fieldMap->tileMap[actors[i].y][actors[i].x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", newProjectile.id, newProjectile.x, newProjectile.y, newProjectile.health));
-            }
-          }
-          else if(dir != STAY)//Forced reload on empty ammo rack
-          {
-            if (tracker != nullptr){
-              tracker->reload(actors[i].name, true);
-            }
-            //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",actors[i].ammo,actors[i].shots);
-            actors[i].ammo = actors[i].max_ammo;
-            //printf("Back up to %d bullets.\n",actors[i].ammo);
-          }
-        }
+        attackAction(actors[i], *fog_of_war, i);
       }
       else if(action == 4) //Chosen reload action
       {
-        if (tracker != nullptr){
-          tracker->reload(actors[i].name, false);
-        }
-        actors[i].ammo = actors[i].max_ammo;
-        //printf("Reloading... Reloading... Reloading\n");
+        reloadAction(actors[i]);
       }
       if (actors[i].health > 0 && actors[i].cDetect / actors[i].AP >= 4){ //check for a camper
         actors[i].camp = true; //
@@ -881,6 +805,116 @@ void GameField::nextTurn()
     SFX.clear(); //remove explosions that remain
   }
 }
+
+void GameField::projectileTurn(ActorInfo &a){
+  int act_ap = a.AP;
+  direction dir = a.heading;
+
+  while(act_ap > 0 && a.health > 0){
+    if(modCounter > 7)
+      modCounter = 0;
+    moveAction(a, dir);
+    if (tracker != nullptr){
+      tracker->move("Projectile", a.heading, a.x, a.y);
+    }
+    --act_ap;
+  }
+}
+
+/**
+ * @author Jon McKee
+ * @par Description:
+ * This action reload's a tank's ammo back to full
+ */
+void GameField::reloadAction(ActorInfo &a){
+  if (tracker != nullptr){
+    tracker->reload(a.name, false);
+  }
+  a.ammo = a.max_ammo;
+  //printf("Reloading... Reloading... Reloading\n");
+}
+
+/**
+ * @author Jon McKee
+ * @par Description:
+ * This action handles the attack action.
+ */
+void GameField::attackAction(ActorInfo &a, const MapData &map, int i){
+  direction dir;
+  ActorInfo newProjectile;
+  bool grow = false;
+  unsigned int j = 0;
+
+  //PositionData to give the AI
+  currPos.game_x = a.x;
+  currPos.game_y = a.y;
+  currPos.health = a.health;
+  currPos.id = a.id;
+
+  //Get the AI's desired attack
+  dir = a.act_p->attack(map, currPos);
+
+  if(a.id > 0)  //tanks attacking
+  {
+    if (tracker != nullptr){
+      tracker->attack(a.name, dir);
+    }
+    if(dir != STAY && a.ammo >= 1)
+    {
+      a.heading = dir;
+      a.shots += 1;
+      j = i + 1;
+      grow = false;
+      if (fieldMap->tileMap[a.y][a.x].projectile != nullptr){ //If no projectile we don't need to check the list
+        while(j < actors.size() && a.id == -actors[j].id && actors[j].id < 0 && actors[j].health > 0)
+        {//Check projectile list for a projectile in this spot
+          if(a.x == actors[j].x && a.y == actors[j].y) //found one
+          {
+            actors[j].scale += .40;
+            actors[j].health += 1;
+            actors[j].ammo += 1;
+            actors[j].damage += a.damage;
+            grow = true; //See if the projectile is one of our own
+            break;
+          }
+          j++;
+        }
+      }
+      if(grow == false) //If there was no projectiles in this spot create a new one
+      {
+        ProjectileActor * proj = new ProjectileActor(dir);
+        newProjectile.AP = a.range;
+        newProjectile.id = -a.id;
+        newProjectile.act_p = proj;
+        newProjectile.health = 1;
+        newProjectile.damage = a.damage;
+        newProjectile.x = a.x;
+        newProjectile.y = a.y;
+        newProjectile.hits = 0;
+        newProjectile.ammo = 1;
+        newProjectile.heading = a.heading;
+        newProjectile.name = "Projectile\n";
+        a.ammo--;
+        if (settings->checkInstantProj())
+          projectileTurn(newProjectile);
+        else{
+          actors.insert(actors.begin() + i + 1, newProjectile);
+          fieldMap->tileMap[a.y][a.x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", newProjectile.id, newProjectile.x, newProjectile.y, newProjectile.health));
+        }
+      }
+    }
+    else if(dir != STAY)//Forced reload on empty ammo rack
+    {
+      if (tracker != nullptr){
+        tracker->reload(a.name, true);
+      }
+      //printf("Out of ammo... Out of ammo... Out of ammo... Reloading.  %d bullets left %d bullets fired.  ",a.ammo,a.shots);
+      a.ammo = a.max_ammo;
+      //printf("Back up to %d bullets.\n",a.ammo);
+    }
+  }
+}
+
 
 /**
  * @author David Donahue
@@ -992,6 +1026,7 @@ std::vector<std::pair<int,int>> *GameField::getSFXPointer()
 
 /**
  * @author David Donahue
+ * @modified by Jon McKee
  * @par Description:
  * Remove actors with hp of 0 from the game
  */
@@ -999,7 +1034,7 @@ void GameField::cull()
 {
   for(unsigned int i = 0; i < actors.size(); ++i)  //This is used instead of the c++11 version so that we can use the index.
   {
-    if(actors[i].health == 0)
+    if(actors[i].health == 0 && actors[i] != nullActor)
     {
       if(actors[i].id > 0)
       {
@@ -1012,13 +1047,14 @@ void GameField::cull()
         if (fieldMap->tileMap[actors[i].y][actors[i].x].tank != nullptr){
           fieldMap->tileMap[actors[i].y][actors[i].x].tank = nullptr;
         }
-      }else{
+      }else if(actors[i].id < 0){
         if (fieldMap->tileMap[actors[i].y][actors[i].x].projectile != nullptr){
           fieldMap->tileMap[actors[i].y][actors[i].x].projectile = nullptr;
         }
       }
       if(actors[i].act_p != NULL)
         delete actors[i].act_p;
+      //actors[i] = nullActor;
       actors.erase(actors.begin()+i);
       --i; // go back one since everything just shifted back
     }
@@ -1127,7 +1163,7 @@ void GameField::moveActor(int newx, int newy, int oldx, int oldy, int id){
     fieldMap->tileMap[newy][newx].tank = fieldMap->tileMap[oldy][oldx].tank;
     fieldMap->tileMap[oldy][oldx].tank = nullptr;
   }else if(id < 0){
-    fieldMap->tileMap[newy][newx].projectile = fieldMap->tileMap[oldy][oldx].tank;
+    fieldMap->tileMap[newy][newx].projectile = fieldMap->tileMap[oldy][oldx].projectile;
     fieldMap->tileMap[oldy][oldx].projectile = nullptr;
   }  
 }

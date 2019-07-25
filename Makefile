@@ -3,7 +3,7 @@ CXXFLAGS = -Wall -fmax-errors=5 -g -std=c++11 -fPIC
 INCS = -I./ -Isrc/
 LIBS = -ldl
 LIBS += -lglut -lGL -lGLU -lpthread
-LIBS += -lSOIL -Llibraries -lCTF
+LIBS += -lSOIL -Llibraries -lCTF -lprofiler
 SOFLAGS = -DDYNAMIC
 PROFILE ?=
 
@@ -52,6 +52,7 @@ TANKS += $(SRC_PATH)tanks/PongAI.cpp
 TANKS += $(SRC_PATH)tanks/CamperAI.cpp
 TANKS += $(SRC_PATH)tanks/StationaryAI.cpp
 TANKS += $(SRC_PATH)tanks/AttackDownAI.cpp
+TANKS += $(SRC_PATH)tanks/NotSimpleAI.cpp
 
 TANKS_LINK = $(SRC_PATH)actors/Actor.o #need to link in the base class for the .so to have everything.
 

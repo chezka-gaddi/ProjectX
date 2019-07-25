@@ -13,7 +13,6 @@
 #include <structures/direction.h>
 #include <GL/glut.h>
 #include <GL/freeglut.h>
-#include <actors/ActorInfo.h>
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -37,6 +36,7 @@ public:
     ~Drawable() {}      /*!< Drawable deconstructor */
 
     int dirToDeg(direction d); /*!< Convert direction enum into degrees */
+    void updateScalar(); /*!< Updatethe single scalar value */
     void drawAddon(float xlow, float xhigh, float ylow, float yhigh, float ror, float scale); /*!< Add aditional SFX to a drawable image */
 
     virtual void draw(int, int) = 0; /*!<A pure virtual function to ensure drawable objects define how they are drawn */
@@ -46,6 +46,7 @@ protected:
     int gridy;          /*!< Drawables grid y coordinate */
     static float xscalar; /*!< Drawable x shared scalar value */
     static float yscalar; /*!< Drawable y shared scalar value */
+    static float scalar; /*!< Drawable shared scalar value for square images */
 
 friend class Game;        //Make Game class a friend of the drawable classes
 friend class GameField;   //Make GameField class a friend of the drawable classes
@@ -101,12 +102,14 @@ class Obstacles : public Drawable
 {
 public:
     Obstacles( int, GLfloat, GLfloat, int, int); /*!< Initial constructor for the Obstacle drawables */
-    void regrow(int turn, const std::vector<ActorInfo> actor); /*!< Function to check for a rock/Tree regrowing */
+    void regrow(int turn); /*!< Function to check for a rock/Tree regrowing */
     void draw(int, int); /*!< Function to draw the Obstacle on the map */
 protected:
     int destroyed = -1; /*!< The turn the obstacle was destoryed on */
     int regrow_rate = 8; /*!< The number of turns the obstacle takes to regrow */
     void set_destroyed(int d); /*!< Set's the turn the object was destoryed on */
+    void drawWaterQuad();
+    void drawQuad();
 friend class GameField; // Make the gamefield class a friend of the Obstacle sub-class
 };
 
@@ -148,13 +151,19 @@ public:
     float offsetx; /*!< x offset for the tank drawable */
     float offsety; /*!< y offset for the tank drawable */
     bool camp; /*!< bool setting for the tank detected as camping */
+    int ammo;
+    int maxAmmo;
 
     TankDrawable( int ID, GLfloat x, GLfloat y, direction dir, int t, int sMod, float osx, float osy, bool camping); /*!< The constructor for making a Tank Drawable object */
 
     void draw(int, int); /*!< The draw function for displaying a tank drawable object */
     void drawFire(float xlow, float xhigh, float ylow, float yhigh, float scale);
     void setHealth(int h); /*!< Setting the health of the drawable object */
-    void setMax_health(int mh); /*!< Setting the max health of the drawable object */
+    void setMaxHealth(int mh); /*!< Setting the max health of the drawable object */
+    void setAmmo(int a); /*!< Setting the health of the drawable object */
+    void setMaxAmmo(int ma); /*!< Setting the max health of the drawable object */
+    void drawHealthBar();
+    void drawAmmo();
 };
 
 /***************************************************************************//**

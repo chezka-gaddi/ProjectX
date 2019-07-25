@@ -48,10 +48,12 @@ Game::~Game()
  *******************************************************************************/
 float Game::convertGLXCoordinate(int x)
 {
-  float fscaler;
-  fscaler = (x - 1) * (4.0717* pow(tankGame->getWidth(), -1.031));
+  float fscaler = (x - 1) * (4.0717* pow(tankGame->getWidth(), -1.031));
   GLfloat x_gl = -1.75 + (fscaler);
-  return x_gl;
+  
+  //float tempx = (2.0 * x + 1.0) / tankGame->getWidth() - 1.9;
+  //return tempx;
+   return x_gl;
 }
 
 
@@ -69,6 +71,8 @@ float Game::convertGLYCoordinate(int y)
   float fscaler =  (y - 1) * (3.1923* pow(tankGame->getHeight(), -1.08));
   GLfloat y_gl = 0.75 - (fscaler);
   return y_gl;
+  //float tempy = (2.0 * y + 1.0) / tankGame->getHeight() - 1.925;
+  //return tempy;
 }
 
 
@@ -201,14 +205,16 @@ void displayWrapper(std::shared_ptr<Settings> settings)
  *******************************************************************************/
 float Drawable::xscalar = 1.0;
 float Drawable::yscalar = 1.0;
+float Drawable::scalar = 1.0;
 int TimerEvent::idle_speed = 750;
-void Game::initGameState(std::shared_ptr<Settings> setting)
+void Game::initGameState(std::shared_ptr<Settings> & setting)
 {
   settings = setting;
   bool quiet = settings->checkQuiet();
 
   std::string configLine, tType, name, imgPath;
   int x, y, hPad = 0, wPad=0;
+  //Player Count
   int pCount = 1;
   std::vector<ActorInfo> startActors;
   //Location vectors
@@ -297,8 +303,11 @@ void Game::initGameState(std::shared_ptr<Settings> setting)
 
   //set globals
   TimerEvent::idle_speed = settings->getIdleSpeed();
-  Drawable::xscalar = (3.75/mapLoader->width)/.32;
-  Drawable::yscalar = Drawable::xscalar;
+  //Drawable::xscalar = (3.75/mapLoader->width)/.32;
+  Drawable::xscalar = 1.85/mapLoader->width;
+  Drawable::scalar = Drawable::xscalar;
+  //Drawable::yscalar = Drawable::xscalar;
+  Drawable::yscalar = 1.25/mapLoader->height;
   
   //Only load textures if we're showing UI
   if (settings->showUI()){
@@ -327,39 +336,33 @@ void Game::initGameState(std::shared_ptr<Settings> setting)
   // Add tanks to the gamefield map
   if (!quiet)
     cout << "Clearing spawn points...\n";
-  for(auto tank : tankLocations)
+  for(auto tank : startActors)
   {
-    if (mapLoader->tileMap[tank.second][tank.first].type == "Rock"
-      || mapLoader->tileMap[tank.second][tank.first].type == "Water"
-      || mapLoader->tileMap[tank.second][tank.first].type == "Hedgehog")
+    if (mapLoader->tileMap[tank.y][tank.x].type == "Rock"
+      || mapLoader->tileMap[tank.y][tank.x].type == "Water"
+      || mapLoader->tileMap[tank.y][tank.x].type == "Hedgehog")
     {
       if (!quiet)
-        cout << "WARNING: removing object at (" << tank.first << "," << tank.second << ")\n";
-      mapLoader->tileMap[tank.second][tank.first].type = "Empty";
-      mapLoader->tileMap[tank.second][tank.first].health = 0;
+        cout << "WARNING: removing object at (" << tank.x << "," << tank.y << ") for tank spawn.\n";
+      mapLoader->tileMap[tank.y][tank.x].type = "Empty";
+      mapLoader->tileMap[tank.y][tank.x].health = 0;
     }
   }
-  //Create one-time use drawable objects
+  //Create one-time usable drawable objects
   for (int i = 1; i <= mapLoader->height; i++){
     for (int j=1; j <= mapLoader->width; j++){
       tType = mapLoader->tileMap[i][j].type;
       if(tType == "Rock"){
-          //tempOb = new Obstacles(1, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           rocks.push_back(std::unique_ptr<Obstacles>(new Obstacles(1, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Water"){
-          //tempOb = new Obstacles(3, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           constants.push_back(std::unique_ptr<Drawable>(new Obstacles(3, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Bush"){
-          //tempOb = new Obstacles(2, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           bushes.push_back(std::unique_ptr<Obstacles>(new Obstacles(2, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Tree"){
-          //tempOb = new Obstacles(0, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           trees.push_back(std::unique_ptr<Obstacles>(new Obstacles(0, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Crate"){
-          //tempObj = new Crate(convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           specials.push_back(std::unique_ptr<Drawable>(new Crate(convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }else if (tType == "Hedgehog"){
-          //tempOb = new Obstacles(50, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i);
           constants.push_back(std::unique_ptr<Drawable>(new Obstacles(50, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
       }
     }
@@ -409,6 +412,8 @@ std::vector<ActorInfo> Game::loadPlayers(bool quiet, std::vector<std::pair<int,i
     //printf("Actor %d name: %s\n", i, AINames[i].c_str());
     }else{
       cout << "WARNING: Invalid location for " << AINames[i] << " (" << tankLocations[i].first << "," << tankLocations[i].second << ")" << endl;
+      tankLocations.erase(tankLocations.begin() + i);
+      --i;
     }
   }
   return actors;

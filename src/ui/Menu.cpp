@@ -34,6 +34,8 @@ Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction di
 
 	while(i < nameIn.size() && i < 20)
 	{
+    if (nameIn[i] == '\n')
+      break;
 	  name[i] = nameIn[i];
 	  i++;
 	}
@@ -64,6 +66,8 @@ Menu::Menu( int id, int hp, int ammo, int hits, std::string nameIn, direction di
     angle = -90;
   else if (mc == 7)
     angle = -135;
+
+  angle = dirToDeg(dir) - 90;
 }
 
 
@@ -95,7 +99,7 @@ void drawIcon(GLfloat x, GLfloat y, GLuint icon, bool tank, int angle = 1)
 {
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
-    glTranslatef(x - 0.85, y + 0.65, -5.0f);
+    glTranslatef(x - 0.85, y + 0.97, -5.0f);
     if(!tank)
     	glBindTexture(GL_TEXTURE_2D, gameTex[icon]);
     else
@@ -117,35 +121,35 @@ void drawIcon(GLfloat x, GLfloat y, GLuint icon, bool tank, int angle = 1)
 
 /***************************************************************************//**
 * @author Jon McKee
-* @brief drawIcon
+* @brief drawAmmo
 *
-* Draws the health and hit icons.
+* Draws the Ammo counter.
 * *****************************************************************************/
 void drawAmmo(GLfloat x, GLfloat y, GLuint icon, bool tank, int angle = 1)
 {
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
-    glTranslatef(x - 0.85, y + 0.65, -5.0f);
+    glTranslatef(x - 0.85, y + 0.97, -5.0f);
     glBindTexture(GL_TEXTURE_2D, tankTex[icon]);
     glRotatef(angle,0,0,1);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.06f, -0.06f,  1.0f);
+    glVertex3f(-0.04f, -0.06f,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f( 0.06f, -0.06f,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f( 0.06f,  0.03f,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.06f,  0.03f,  1.0f);
+    glVertex3f(-0.04f,  0.03f,  1.0f);
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }
 /***************************************************************************//**
 * @author Jon McKee
-* @brief drawIcon
+* @brief drawTank
 *
-* Draws the health and hit icons.
+* Draws the spinning tank.
 * *****************************************************************************/
 void drawTank(GLfloat x, GLfloat y, GLuint icon, bool tank, int angle)
 {
@@ -155,27 +159,28 @@ void drawTank(GLfloat x, GLfloat y, GLuint icon, bool tank, int angle)
     	glBindTexture(GL_TEXTURE_2D, tankTex[icon]);
     else
     	glBindTexture(GL_TEXTURE_2D, tankTex[icon]);
-    glTranslatef(1.5 ,1.2, -5.0f);
+    
+    glLoadIdentity();
+    
+    glTranslatef(x - 1.55, y + 0.95, -5.0f);
+    //glTranslatef(-.5, .5, -5.0f);
     glRotatef(angle, 0, 0, 1);
-    glTranslatef(-1.5, -1.2, 5.0f);
-    glTranslatef(x - 0.95, y + 0.75, -5.0f);
+    //glTranslatef(.5, -.5, 5.0f);
+    
+
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.2f, -0.2f,  1.0f);
+    glVertex3f(-0.15f, -0.15f,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.06f, -0.2f,  1.0f);
+    glVertex3f( 0.15f, -0.15f,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.06f,  0.06f,  1.0f);
+    glVertex3f( 0.15f,  0.15f,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.2f,  0.06f,  1.0f);
+    glVertex3f(-0.15f,  0.15f,  1.0f);
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }
-
-
-
-
 
 /***************************************************************************//**
 * @author Chezka Gaddi
@@ -185,22 +190,21 @@ void drawTank(GLfloat x, GLfloat y, GLuint icon, bool tank, int angle)
 * *****************************************************************************/
 void Menu::drawTextBox(GLfloat x, GLfloat y)
 {
-    glEnable(GL_TEXTURE_2D);
-    glPushMatrix();
-		glTranslatef(x - .5, y + 0.6, -5.0f);
-    glBindTexture(GL_TEXTURE_2D, gameTex[3]);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, -1.5f,  1.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 3.0f, -1.5f,  1.0f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 3.0f,  2.0f,  1.0f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f,  2.0f,  1.0f);
-    glEnd();
-    glPopMatrix();
-    glDisable(GL_TEXTURE_2D);
+  glEnable(GL_TEXTURE_2D);
+  glPushMatrix();
+  glTranslatef(x - .55, y + 0.8, -5.0f);
+  glBindTexture(GL_TEXTURE_2D, gameTex[3]);
+  glBegin(GL_QUADS);
+  glVertex3f( -0.5f,  0.0f,  1.0f);
+  glTexCoord2f(1.0f, 0.0f);
+  glVertex3f( 4.0f,  0.0f,  1.0f);
+  glTexCoord2f(1.0f, 1.0f);
+  glVertex3f( 4.0f,  0.4f,  1.0f);
+  glTexCoord2f(0.0f, 1.0f);
+  glVertex3f( -0.5f,  0.4f,  1.0f);
+  glEnd();
+  glPopMatrix();
+  glDisable(GL_TEXTURE_2D);
 }
 
 
@@ -215,7 +219,6 @@ void Menu::drawPlayerStats()
     // Create text box player stats will go in
     drawTextBox(screen_x, screen_y);
 
-
     //Output name of the player
     drawBitmapText(name, screen_x - 0.13, screen_y + 0.24);
     
@@ -225,14 +228,18 @@ void Menu::drawPlayerStats()
     // Draw health points
     for( int i = 0; i < health ; i++ )
     {
-    	drawIcon(screen_x - .05 + (0.14 * i), screen_y - 0.04, 2, false );
+      if (i <= 5){
+    	  drawIcon(screen_x + .57 + (0.14 * i), screen_y - 0.04, 2, false );
+      }else{
+        drawIcon(screen_x + .57 + (0.14 * (5 - (i - 6))), screen_y + 0.08, 2, false );
+      }
     }
 
     // Draw number of hits
-    for( int i = 0; i < score ; i++ )
-    {
-    	drawIcon((screen_x + 2.05) + 0.1 * i, screen_y - 0.04, 4, false );
-    }
+    //for( int i = 0; i < score ; i++ )
+    //{
+    //	drawIcon((screen_x + 2.05) + 0.1 * i, screen_y - 0.04, 4, false );
+    //}
 
     // Draw Ammo
     for( int i = 0; i < bullet ; i++ )

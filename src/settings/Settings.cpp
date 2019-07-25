@@ -54,6 +54,7 @@ void Settings::setUI(bool s){showui = s;}
 void Settings::setQuietMode(bool q){modeQuiet = q;}
 void Settings::setTrackingMode(bool t){tracking = t;}
 void Settings::setMapName(std::string m){mapName = m;}
+void Settings::setInstantProj(bool p){projInstant = p;}
 
 void Settings::setAttrDamage(int damage){
   baseAttributes.tankDamage = checkSettingValue(0, 8, damage, "damage");
@@ -100,6 +101,7 @@ void Settings::setCoverageMode(bool c){modeCoverage = c;}
 bool Settings::checkCoverage(){return modeCoverage;}
 bool Settings::checkQuiet(){return modeQuiet;}
 bool Settings::checkTracking(){return tracking;}
+bool Settings::checkInstantProj(){return projInstant;}
 
 std::string Settings::getResultsFile(){return resultsFile;}
 std::string Settings::getConfigFile(){return configFile;}

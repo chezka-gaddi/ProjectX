@@ -69,28 +69,49 @@ void Obstacles::draw(int, int)
     //Check what obstacle it is
     if (tex >= 0 && tex <= 9){ //It's a tree
       glBindTexture(GL_TEXTURE_2D, treeTex[tex]);
+      drawQuad();
     }else if( tex >= 10 && tex <= 19){ //It's a Rocks
       glBindTexture(GL_TEXTURE_2D, rockTex[tex-10]);
+      drawQuad();
     }else if( tex >= 20 && tex <= 29){ //It's a Bushes
       glBindTexture(GL_TEXTURE_2D, bushTex[tex-20]);
+      drawQuad();
     }else if( tex >= 30 && tex <= 39){ //It's a Waters
       glBindTexture(GL_TEXTURE_2D, waterTex[tex - 30]);
+      drawWaterQuad();
     }else if( tex >= 50 && tex <= 60){ //It's a hedgehog
       glBindTexture(GL_TEXTURE_2D, gameTex[tex-50]);
+      drawQuad();
     }
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.16f * xscalar, -0.19f * yscalar,  1.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.16f * xscalar, -0.19f * yscalar,  1.0f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.16f * xscalar,  0.19f * yscalar,  1.0f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.16f * xscalar,  0.19f * yscalar,  1.0f);
-    glEnd();
 
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
+}
+
+void Obstacles::drawWaterQuad(){
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-1.0f * xscalar, -1.0f * yscalar,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(1.0f * xscalar, -1.0f * yscalar,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(1.0f * xscalar, 1.0f * yscalar,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-1.0f * xscalar, 1.0f * yscalar,  1.0f);
+    glEnd();
+}
+
+void Obstacles::drawQuad(){
+  glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-1.0f * scalar, -1.0f * scalar,  1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(1.0f * scalar, -1.0f * scalar,  1.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(1.0f * scalar, 1.0f * scalar,  1.0f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-1.0f * scalar, 1.0f * scalar,  1.0f);
+    glEnd();
 }
 
 /****************//*
@@ -99,8 +120,7 @@ void Obstacles::draw(int, int)
  * @param[in] turn the current turn
  * @param[in] actor the object to check
  ******************/
-void Obstacles::regrow(int turn, const std::vector<ActorInfo> actor){
-  bool taken = false;
+void Obstacles::regrow(int turn){
   if (destroyed == -1)
     return;
 
@@ -110,12 +130,7 @@ void Obstacles::regrow(int turn, const std::vector<ActorInfo> actor){
     if (tex < 10){ //Its a tree
       health = 3;
     }else if( tex < 20){ //Its a Rocks
-      for (unsigned int i = 0; i < actor.size(); i++){
-            if (actor[i].x == gridx && actor[i].y == gridy)
-                    taken = true;
-      }
-      if (!taken)
-        health = 5;
+      health = 5;
     }else if( tex < 30){ //Its a Bushes
       health = 1;
     }

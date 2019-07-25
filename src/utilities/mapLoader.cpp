@@ -1,6 +1,6 @@
 #include <utilities/mapLoader.h>
 
-std::shared_ptr<MapData> loadMap(std::shared_ptr<Settings> settings){
+std::shared_ptr<MapData> loadMap(const std::shared_ptr<Settings> & settings){
     std::shared_ptr<MapData> map;
     std::string key, args, fileLine, mapName = "maps/" + settings->getMapName();
     std::ifstream fin;

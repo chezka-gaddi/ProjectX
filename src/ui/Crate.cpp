@@ -41,13 +41,13 @@ void Crate::draw(int x, int y)
     glBindTexture(GL_TEXTURE_2D, gameTex[tex]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.12f * xscalar, -0.14f * yscalar,  1.0f);
+    glVertex3f(-1.0f * scalar, -1.0f * scalar,  1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f( 0.12f * xscalar, -0.14f * yscalar,  1.0f);
+    glVertex3f( 1.0f * scalar, -1.0f * scalar,  1.0f);
     glTexCoord2f(1.0f, 1.0f);
-    glVertex3f( 0.12f * xscalar,  0.14f * yscalar,  1.0f);
+    glVertex3f( 1.0f * scalar,  1.0f * scalar,  1.0f);
     glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.12f * xscalar,  0.14f * yscalar,  1.0f);
+    glVertex3f(-1.0f * scalar,  1.0f * scalar,  1.0f);
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
