@@ -175,6 +175,7 @@ direction NotSimpleAI::attack(const MapData &map, PositionData status)
 {   
     direction ret = STAY;
     unsigned int i = 0;
+    unsigned int j = 0;
     if (targetList.size() == 0) //No targets available
         return ret;
     
@@ -182,6 +183,7 @@ direction NotSimpleAI::attack(const MapData &map, PositionData status)
             && !lineOfFire(targetList[i].x, targetList[i].y, status)){
         i++; //Find the first non killed target
     }
+    j = i;
 
     if (targetList[i].health < targetList[i].damage || !(lineOfFire(targetList[i].x, targetList[i].y, status))){
         return ret; //No valid targets found
@@ -270,6 +272,7 @@ void NotSimpleAI::updateTargets(const MapData &map, PositionData status){
                 }
             }
         }
+        
         std::sort(targetList.begin(), targetList.end());
     }
 }

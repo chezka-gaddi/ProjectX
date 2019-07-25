@@ -4,6 +4,7 @@
 #include <actors/Actor.h>
 #include <structures/direction.h>
 #include <cmath>
+#include <iostream>
 
 class NotSimpleAI : public Actor
 {
@@ -51,7 +52,15 @@ private:
 
         bool operator<(const target& a) const
         {
-            return dist < a.dist;
+            //false = 0, true = 1
+            return (a.bullet < bullet || (a.bullet == bullet && dist < a.dist));
+        }
+
+        ostream& operator<<(ostream& os, const target& t)
+        {
+            os << "Target: " << t.dist << '/' << t.x << '/' << t.y << 
+                '/' << t.health << '/' << t.damage << '/' << (t.bullet ? "Bullet":"Tank") << '\n';
+            return os;
         }
     };
 
