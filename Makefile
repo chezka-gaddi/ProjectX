@@ -47,6 +47,8 @@ FILES += $(SRC_PATH)utilities/textureLoader.cpp
 FILES += $(SRC_PATH)utilities/tankLoader.cpp
 FILES += $(SRC_PATH)utilities/gameTracker.cpp
 FILES += $(SRC_PATH)utilities/mapLoader.cpp
+#Tournament
+FILES += $(SRC_PATH)tournament/tournamentParser.cpp
 #Tanks
 TANKS = $(SRC_PATH)tanks/SimpleAI.cpp
 TANKS += $(SRC_PATH)tanks/PongAI.cpp
