@@ -895,7 +895,7 @@ void GameField::attackAction(ActorInfo &a, const MapData &map, int i){
         newProjectile.name = "Projectile\n";
         a.ammo--;
         if (settings->checkInstantProj()){ //If instant projectiles we won't add them to actor list
-          projectileTurn(newProjectile);
+          projectileTurn(newProjectile); //Because they run their turn now, they won't ever grow
         }else{
           actors.insert(actors.begin() + i + 1, newProjectile);
           fieldMap->tileMap[a.y][a.x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", newProjectile.id, newProjectile.x, newProjectile.y, newProjectile.health));
