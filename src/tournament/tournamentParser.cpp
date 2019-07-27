@@ -2,7 +2,7 @@
 #include "utilities/inireader.h"
 #include "utilities/mapLoader.h"
 
-
+/*
 std::shared_ptr<MapData> parseConfig( const std::shared_ptr<Settings> & settings){
     std::string configFile = settings->getConfigFile();
     bool quiet = settings->checkQuiet();
@@ -78,17 +78,49 @@ std::string parseAI(const std::shared_ptr<Settings> & settings, std::string sect
     std::string configFile = settings->getConfigFile(), param;
     //bool quiet = settings->checkQuiet();
     INIReader config(configFile);
-
     param = config.Get(section, key, "");
     return param;
-}
+} */
 
 std::vector<bracket> parseBrackets(){
-    std::string mName = "not_default", stats = "not_default", settings = "not_default", images = "not_default";
-    int players = 2, count=1;
+    std::string mName = "not_default", stats = "not_default", settings = "not_default";
+    std::string images = "not_default", section = "";
+    int players = 0, count=0;
+    std::vector<bracket> bracketList;
+    bracket tBracket;
     INIReader config("../../tournament/map_list.ini");
-    while (mName != "" && stats != "" && settings != "" && images != "" && players != 0){
+    while (mName != "" && stats != "" && settings != "" && images != "" && players >= 0){
+        //Save the previous data if we've started getting it
+        if (count > 0){
+            tBracket.mapName = mName;
+            tBracket.stats = stats;
+            tBracket.images = images;
+            tBracket.settings = settings;
+            tBracket.players = players;
+            bracketList.push_back(tBracket);
+        }
+        //Increment counter for section name
+        count++;
+        //build the section name
+        section = "MAP";
+        if (count < 10){
+            section += "00" + std::to_string(count);
+        } else if (count < 100){
+            section += "0" + std::to_string(count);
+        }
 
+        //Load the parameters
+        mName = config.Get(section, "name", "");
+        stats = config.Get(section, "stats", "");
+        settings = config.Get(section, "settings", "");
+        images = config.Get(section, "images", "");
+        players = config.GetInteger(section, "players", -1);
     }
 
+    return bracketList;
 }
+
+void parseStats(){}
+void parseSettings(){}
+void parsePlayers(){}
+void parseImages(){}

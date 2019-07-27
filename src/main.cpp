@@ -53,7 +53,7 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 #include <ui/util.h>
 #include <settings/Settings.h>
 #include <game/game.h>
-#include <game/Tournament.h>
+#include <tournament/Tournament.h>
 //#include <gperftools/profiler.h> //Google performance profiler
 
 // Main

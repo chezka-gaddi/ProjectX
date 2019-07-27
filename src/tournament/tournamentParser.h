@@ -12,8 +12,9 @@
 #include "bracket.h"
 
 std::vector<bracket> parseBracket();
-std::shared_ptr<MapData> parseConfig(const std::shared_ptr<Settings> & settings);
-std::vector<std::string> parseList(const std::shared_ptr<Settings> & settings, std::string section, std::string key);
-std::string parseAI(const std::shared_ptr<Settings> & settings, std::string section, std::string key);
+void parseStats();
+void parseSettings();
+void parsePlayers();
+void parseImages();
 
 #endif

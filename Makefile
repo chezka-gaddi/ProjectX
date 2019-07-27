@@ -24,7 +24,6 @@ FILES += $(SRC_PATH)game/GameField.cpp
 FILES += $(SRC_PATH)game/game.cpp
 FILES += $(SRC_PATH)game/gameover.cpp
 FILES += $(SRC_PATH)game/configParser.cpp
-FILES += $(SRC_PATH)game/Tournament.cpp
 #Map
 FILES += $(SRC_PATH)map/MapData.cpp
 FILES += $(SRC_PATH)map/Tile.cpp
@@ -49,12 +48,15 @@ FILES += $(SRC_PATH)utilities/gameTracker.cpp
 FILES += $(SRC_PATH)utilities/mapLoader.cpp
 #Tournament
 FILES += $(SRC_PATH)tournament/tournamentParser.cpp
+FILES += $(SRC_PATH)tournament/Tournament.cpp
 #Tanks
 TANKS = $(SRC_PATH)tanks/SimpleAI.cpp
 TANKS += $(SRC_PATH)tanks/PongAI.cpp
 TANKS += $(SRC_PATH)tanks/CamperAI.cpp
 TANKS += $(SRC_PATH)tanks/StationaryAI.cpp
 TANKS += $(SRC_PATH)tanks/AttackDownAI.cpp
+#SimpleAI2 for tournament
+TANKS += $(SRC_PATH)tanks/SimpleAI2.cpp
 
 TANKS_LINK = $(SRC_PATH)actors/Actor.o #need to link in the base class for the .so to have everything.
 

@@ -1,4 +1,4 @@
-#include <game/Tournament.h>
+#include <tournament/Tournament.h>
 
 /***************************************************************************//**
  * @author Jon McKee
@@ -53,6 +53,22 @@ void Tournament::newGame(){
  * Entry point to running the tournament.  
  *******************************************************************************/
 void Tournament::runTournament(){
+    //load players
+    //load brackets
+    //loop through brackets
+        //calculate max number of rounds
+        //load map
+        //load spawns
+        //loop through iterations
+            //manual game initialization
+            //run game
+            //store winner/losers
+            //delete game
+            //continue through iteration
+
+
+
+
     printf("Starting Tournament.\n");
     int roundCounter = 0; //Current round counter
     while (roundCounter < rounds){ //Tournament loop
