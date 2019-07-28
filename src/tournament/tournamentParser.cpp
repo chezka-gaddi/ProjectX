@@ -84,7 +84,7 @@ std::string parseAI(const std::shared_ptr<Settings> & settings, std::string sect
 
 std::vector<bracket> parseBrackets(){
     std::string mName = "not_default", stats = "not_default", settings = "not_default";
-    std::string images = "not_default", section = "";
+    std::string images = "not_default", spawns = "not_default", section = "";
     int players = 0, count=0;
     std::vector<bracket> bracketList;
     bracket tBracket;
@@ -97,6 +97,7 @@ std::vector<bracket> parseBrackets(){
             tBracket.images = images;
             tBracket.settings = settings;
             tBracket.players = players;
+            tBracket.spawns = spawns;
             bracketList.push_back(tBracket);
         }
         //Increment counter for section name
@@ -114,6 +115,7 @@ std::vector<bracket> parseBrackets(){
         stats = config.Get(section, "stats", "");
         settings = config.Get(section, "settings", "");
         images = config.Get(section, "images", "");
+        spawns = config.Get(section, "spawns", "");
         players = config.GetInteger(section, "players", -1);
     }
 
@@ -124,3 +126,4 @@ void parseStats(){}
 void parseSettings(){}
 void parsePlayers(){}
 void parseImages(){}
+void parseSpawns(){}

@@ -10,9 +10,11 @@
 #include <map/MapData.h>
 #include <settings/Settings.h>
 #include "bracket.h"
+#include "player.h"
 
 std::vector<bracket> parseBracket();
 void parseStats();
+void parseSpawns();
 void parseSettings();
 void parsePlayers();
 void parseImages();

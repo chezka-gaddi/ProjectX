@@ -7,6 +7,7 @@
 #include <settings/Settings.h>
 #include <game/game.h>
 #include <tournament/bracket.h>
+#include <tournament/player.h>
 
 class Tournament {
 public:

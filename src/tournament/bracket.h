@@ -13,6 +13,7 @@ struct bracket{
     std::string stats;
     std::string images;
     std::string settings;
+    std::string spawns;
     int players;
 };
 
