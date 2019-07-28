@@ -120,7 +120,15 @@ std::vector<bracket> parseBrackets(){
     return bracketList;
 }
 
+std::vector<player> parsePlayers(){
+    std::string mName = "not_default", stats = "not_default", settings = "not_default";
+    std::string images = "not_default", section = "";
+    int players = 0, count=0;
+    std::vector<player> playerList;
+    player tPlayer;
+    INIReader config("./tournament/player_list.ini");
+}
+
 void parseStats(){}
 void parseSettings(){}
-void parsePlayers(){}
 void parseImages(){}
