@@ -11,7 +11,7 @@
 #include <settings/Settings.h>
 #include "bracket.h"
 
-std::vector<bracket> parseBracket();
+std::vector<bracket> parseBrackets();
 void parseStats();
 void parseSettings();
 void parsePlayers();

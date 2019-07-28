@@ -55,6 +55,9 @@ void Tournament::newGame(){
 void Tournament::runTournament(){
     //load players
     //load brackets
+    bracketList = parseBrackets();
+    //Print bracket information to tournament output folder
+    printBracketInfo();
     //loop through brackets
         //calculate max number of rounds
         //load map
@@ -71,11 +74,36 @@ void Tournament::runTournament(){
 
     printf("Starting Tournament.\n");
     int roundCounter = 0; //Current round counter
+    int limit = rounds / 10;
+    printf("Limit: %d\n", limit);
     while (roundCounter < rounds){ //Tournament loop
         roundCounter++; //Increment round counter
-        if (roundCounter % (rounds / 10) == 0) //limit output
+        if (roundCounter % (limit > 0 ? limit : 1) == 0) //limit output
             printf("Game %d of %d\n",roundCounter, rounds);
         game->executeTurn(); //Run the round
         newGame();
+    }
+}
+
+/***************************************************************************//**
+ * @author Jon McKee
+ * @brief printBracketInfo
+ *
+ * Outputs the bracketInfo to the tournament output folder
+ *******************************************************************************/
+void Tournament::printBracketInfo(){
+    printf("Bracket information:\n");
+    for (auto& b : bracketList) {
+        printf("Map Name:");
+        printf(" %s\n", b.mapName.c_str());
+        printf("Stats Set Used:");
+        printf(" %s\n", b.stats.c_str());
+        printf("Image Set Used:");
+        printf(" %s\n", b.images.c_str());
+        printf("Settings Set Used:");
+        printf(" %s\n", b.settings.c_str());
+        printf("Number of players:");
+        printf(" %d\n", b.players);
+        printf("\n");
     }
 }

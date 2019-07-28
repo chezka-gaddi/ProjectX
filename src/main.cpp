@@ -89,7 +89,6 @@ int main(int argc, char **argv)
         printf("Tournament Mode\n");
         mode = tournament;
         rounds = atoi(argv[counter+1]);
-        tourny = std::unique_ptr<Tournament>(new Tournament(settings, rounds));
         counter++;
       }else if ((strcmp(argv[counter], "--noui") == 0 ) && counter + 1 <= argc)
       {
@@ -194,6 +193,7 @@ int main(int argc, char **argv)
     settings->setGameMode(mode);
     //gameMode {none, ai, sp, mp, tournament};
     if (mode == tournament){
+        tourny = std::unique_ptr<Tournament>(new Tournament(settings, rounds));
         tourny->runTournament();
     }else if (settings->showUI()){
       initOpenGL( argc, argv, width, height, settings );

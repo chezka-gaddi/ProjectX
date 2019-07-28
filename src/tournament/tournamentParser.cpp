@@ -88,7 +88,7 @@ std::vector<bracket> parseBrackets(){
     int players = 0, count=0;
     std::vector<bracket> bracketList;
     bracket tBracket;
-    INIReader config("../../tournament/map_list.ini");
+    INIReader config("./tournament/map_list.ini");
     while (mName != "" && stats != "" && settings != "" && images != "" && players >= 0){
         //Save the previous data if we've started getting it
         if (count > 0){
