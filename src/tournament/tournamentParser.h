@@ -12,11 +12,11 @@
 #include "bracket.h"
 #include "player.h"
 
-std::vector<bracket> parseBracket();
+std::vector<bracket> parseBrackets();
 void parseStats();
-void parseSpawns();
+std::vector<std::pair<int,int>> parseSpawns(std::string);
 void parseSettings();
-void parsePlayers();
+std::vector<player> parsePlayers();
 void parseImages();
 
 #endif

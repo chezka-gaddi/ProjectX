@@ -88,7 +88,7 @@ std::vector<bracket> parseBrackets(){
     int players = 0, count=0;
     std::vector<bracket> bracketList;
     bracket tBracket;
-    INIReader config("../../tournament/map_list.ini");
+    INIReader config("./tournament/map_list.ini");
     while (mName != "" && stats != "" && settings != "" && images != "" && players >= 0){
         //Save the previous data if we've started getting it
         if (count > 0){
@@ -122,8 +122,66 @@ std::vector<bracket> parseBrackets(){
     return bracketList;
 }
 
+std::vector<player> parsePlayers(){
+    std::string name = "not_default", images = "Default", section = "";
+    int count=0;
+    std::vector<player> playerList;
+    player tPlayer;
+    INIReader config("./tournament/player_list.ini");
+        while (name != ""){
+        //Save the previous data if we've started getting it
+        if (count > 0){
+            tPlayer.name = name;
+            tPlayer.wins = 0;
+            tPlayer.losses = 0;
+            tPlayer.participated = 0;
+            tPlayer.images = "images\\tanks\\" + images;
+            playerList.push_back(tPlayer);
+        }
+        //Increment counter for section name
+        count++;
+        //build the section name
+        section = "AI";
+        if (count < 10){
+            section += "0" + std::to_string(count);
+        }else{
+            section += std::to_string(count);
+        }
+
+        //Load the parameters
+        name = config.Get(section, "name", "");
+        images = config.Get(section, "images", "Default");
+    }
+    return playerList;
+}
+
+std::vector<std::pair<int,int>> parseSpawns(std::string spawnList){
+    int count = 0;
+    int x, y;
+    int i = 0;
+    INIReader config("./tournament/spawns_list.ini");
+    std::vector<std::pair<int,int>> spawns;
+    std::string key;
+
+    count = config.GetInteger(spawnList, "number", 0);
+    //printf("%s specified %d spawns.\n", spawnList.c_str(), count);
+    if (count == 0)
+        return spawns;
+
+    for (i = 0; i <= count; i++){
+        key = "spawnx" + std::to_string(i);
+        x = config.GetInteger(spawnList, key, 0);
+        key = "spawny" + std::to_string(i);
+        y = config.GetInteger(spawnList, key, 0);
+        if (x != 0 && y != 0){
+            spawns.push_back(std::pair<int,int>(x, y));
+        }
+    }
+    //printf("Found %d of %d spawns.\n", i - 1, count);
+
+    return spawns;
+}
+
 void parseStats(){}
 void parseSettings(){}
-void parsePlayers(){}
 void parseImages(){}
-void parseSpawns(){}

@@ -13,6 +13,7 @@ struct player{
     int wins;
     int losses;
     int participated;
+    std::string images;
 };
 
 #endif
