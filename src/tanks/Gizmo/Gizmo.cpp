@@ -22,6 +22,7 @@ Gizmo::~Gizmo() {}
  */
 attributes Gizmo::setAttribute(int pointsAvailable, attributes baseStats)
 {
+    return baseStats;
 }
 
 /**
@@ -37,6 +38,7 @@ attributes Gizmo::setAttribute(int pointsAvailable, attributes baseStats)
  */
 int Gizmo::spendAP(const MapData &map, PositionData status)
 {
+    return 0;
 }
 
 /**
@@ -52,6 +54,7 @@ int Gizmo::spendAP(const MapData &map, PositionData status)
  */
 direction Gizmo::move(const MapData &map, PositionData status)
 {
+    return UP;
 }
 
 /**
@@ -67,4 +70,15 @@ direction Gizmo::move(const MapData &map, PositionData status)
  */
 direction Gizmo::attack(const MapData &map, PositionData status)
 {
+    return UP;
 }
+
+#ifndef DYNAMIC
+extern "C"
+{
+    Actor *maker()
+    {
+        return new Gizmo;
+    }
+}
+#endif

@@ -2,14 +2,12 @@
 // Created by jlee on 10/12/18.
 //
 
-
 #include "utilities/tankLoader.h"
 #include <dlfcn.h>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include "actors/Actor.h"
-
 
 /**
  * @author David Donahue
@@ -24,27 +22,27 @@
 std::vector<Actor *> dynamicTankLoader(std::vector<std::string> objectNames)
 {
     std::vector<Actor *> ret;
-    std::string relPath ("./tanks/");
+    std::string relPath("./tanks/");
     std::string soPath;
     std::string symName;
     for (auto s : objectNames)
     {
-        //build up the full realative file path from the given name
+        //build up the full relative file path from the given name
         soPath = (relPath);
         soPath.append(s);
         soPath.append(".so");
 
         //get a 'handle' to the .so file, which can be used to load symbols
-        void * handle = dlopen(soPath.c_str(), RTLD_LAZY); //open the .so
-        if (handle == NULL) //make sure it opened
+        void *handle = dlopen(soPath.c_str(), RTLD_LAZY); //open the .so
+        if (handle == NULL)                               //make sure it opened
         {
             std::cout << "Failed to open " << s << "\n";
             std::cout << dlerror() << std::endl;
         }
         else
         {
-            Actor* (*maker)() = (Actor* (*)()) dlsym(handle, "maker"); //get the maker() symbol
-            if (maker == NULL) //If the symbol was not found in the .so
+            Actor *(*maker)() = (Actor * (*)()) dlsym(handle, "maker"); //get the maker() symbol
+            if (maker == NULL)                                          //If the symbol was not found in the .so
             {
                 std::cout << "Failed to load symbol " << symName << '\n';
             }
@@ -53,10 +51,6 @@ std::vector<Actor *> dynamicTankLoader(std::vector<std::string> objectNames)
                 ret.push_back(maker()); //Run maker() to construct an instance of the class
             }
         }
-
     }
     return ret;
-
 }
-
-

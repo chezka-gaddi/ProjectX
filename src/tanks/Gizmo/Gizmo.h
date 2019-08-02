@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief Gizmo tank header file.
+ */
 #ifndef __GIZMO_H
 #define __GIZMO_H
 
