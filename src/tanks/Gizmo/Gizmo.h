@@ -7,13 +7,29 @@
 
 #include <actors/Actor.h>
 #include <structures/direction.h>
+#include "GameState.h"
+#include "PlayStyle.h"
+
+#include <vector>
+using namespace std;
 
 class Gizmo : public Actor
 {
 private:
     attributes myStats;
+    vector<vector<Tile>> map;
+
+    GameState *State;
+    PlayStyle *Strategy;
 
 public:
+    enum PlayStyles
+    {
+        Defensive,
+        Aggressive,
+        Sniper
+    };
+
     Gizmo();
     ~Gizmo();
 
