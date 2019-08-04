@@ -6,7 +6,7 @@ NotSimpleAI::NotSimpleAI() {}
 NotSimpleAI::~NotSimpleAI() {}
 
 /**
- * @author David Donahue
+ * @author Jon McKee
  * @par Description:
  * Calculates how many moves it will take to reach a given coordinate
  * @param[in] map - The current state of the playfield
@@ -36,7 +36,10 @@ direction NotSimpleAI::move(const MapData &map, PositionData status)
     //Check target list first
     //printf("Checking Targetlist before Moving: \n");
     while( i < targetList.size() ){
-        if (targetList[i].health > targetList[i].damage && !targetList[i].bullet){ //Only move towards tanks
+        if (targetList[i].bullet){
+            //assume bullet is coming for us
+            
+        }else if (targetList[i].health > targetList[i].damage && !targetList[i].bullet){ //Only move towards tanks
             //find direction of tank
             for (int j = 0; j < 8; j++){
                 tempDist = calcDist((direction) j, targetList[i].x, targetList[i].y, status);
@@ -164,7 +167,7 @@ direction NotSimpleAI::move(const MapData &map, PositionData status)
 }
 
 /**
- * @author David Donahue
+ * @author Jon McKee
  * @par Description:
  * Calculates whether or not not too attack, and if so where to attack
  * @param[in] map - The current state of the playfield
@@ -244,7 +247,6 @@ void NotSimpleAI::updateTargets(const MapData &map, PositionData status){
     {
         for (int y = 1; y <= map.height; ++y)
         {
-            //If an enemy is encountered closer than previously encountered
             if (((map.tileMap[y][x].tank != nullptr && //if there is an actor at X, Y
                     map.tileMap[y][x].tank->id != status.id) || //And it is not you 
                     (map.tileMap[y][x].projectile != nullptr && 
@@ -264,28 +266,31 @@ void NotSimpleAI::updateTargets(const MapData &map, PositionData status){
         for (unsigned int i = 0; i < tempTarget.size(); i++){
             for (unsigned int j = 0; j < targetList.size(); j++){
                 if (tempTarget[i].x == targetList[j].x && tempTarget[i].y == targetList[j].y){
+                    targetList[j].x = tempTarget[i].x;
+                    targetList[j].y = tempTarget[i].y;
+                    targetList[j].dist = tempTarget[i].dist;
+                    targetList[j].health = tempTarget[i].health;
+                }else{
                     targetList.push_back(tempTarget[i]);
-                    tempTarget[i].x = 0;
-                    tempTarget[i].y = 0;
                 }
             }
         }
         
-        printf("Before sort:\n");
+        /*printf("Before sort:\n");
         for(auto & t : targetList){
-        //    std::cout << t;
+            std::cout << t;
         }
 
         std::sort(targetList.begin(), targetList.end());
         printf("After sort:\n");
         for(auto & t : targetList){
-        //    std::cout << t;
-        }
+            std::cout << t;
+        }*/
     }
 }
 
 /**
- * @author David Donahue
+ * @author Jon McKee
  * @par Description:
  * Returns the attributes for the tank
  * @param[in] pointsAvailable - available points for the distribution
@@ -300,7 +305,7 @@ attributes NotSimpleAI::setAttribute(int pointsAvailable, attributes baseStats)
     return tankAttributes;
 }
 /**
- * @author David Donahue
+ * @author Jon McKee
  * @par Description:
  * Calculates how many moves it will take to reach a given coordinate
  * @param[in] x1 - starting point x coordinate
@@ -454,6 +459,6 @@ extern "C" //required for runtime linking
 
 std::ostream& operator<<(std::ostream& os, const NotSimpleAI::target& t)
 {
-    os << "Target: " << t.id << " (" << t.dist << '/' << t.x << '/' << t.y << '/' << t.health << '/' << t.damage << '/' << (t.bullet ? "Bullet)":"Tank)") << std::endl;
+    os << "Target " << t.id << ": (" << t.dist << '/' << t.x << '/' << t.y << '/' << t.health << '/' << t.damage << '/' << (t.bullet ? "Bullet)":"Tank)") << std::endl;
     return os;
 }

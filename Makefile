@@ -11,6 +11,7 @@ PROFILE ?=
 SRC_PATH= src/
 TANK_PATH= tanks/
 LIB_PATH= libraries/
+SRC_TANKS= $(SRC_PATH)$(TANK_PATH)
 
 MAIN = $(SRC_PATH)main.cpp
 
@@ -50,14 +51,14 @@ FILES += $(SRC_PATH)utilities/mapLoader.cpp
 FILES += $(SRC_PATH)tournament/tournamentParser.cpp
 FILES += $(SRC_PATH)tournament/Tournament.cpp
 #Tanks
-TANKS = $(SRC_PATH)tanks/SimpleAI/SimpleAI.cpp
-TANKS += $(SRC_PATH)tanks/PongAI/PongAI.cpp
-TANKS += $(SRC_PATH)tanks/CamperAI/CamperAI.cpp
-TANKS += $(SRC_PATH)tanks/StationaryAI/StationaryAI.cpp
-TANKS += $(SRC_PATH)tanks/AttackDownAI/AttackDownAI.cpp
+TANKS = SimpleAI.cpp
+TANKS += PongAI.cpp
+TANKS += CamperAI.cpp
+TANKS += StationaryAI.cpp
+TANKS += AttackDownAI.cpp
 #SimpleAI2 for tournament
-TANKS += $(SRC_PATH)tanks/SimpleAI2/SimpleAI2.cpp
-TANKS += $(SRC_PATH)tanks/NotSimpleAI/NotSimpleAI.cpp
+TANKS += SimpleAI2.cpp
+TANKS += NotSimpleAI.cpp
 
 TANKS_LINK = $(SRC_PATH)actors/Actor.o #need to link in the base class for the .so to have everything.
 
@@ -80,11 +81,11 @@ set-coverage:
 %.h.gch: %.h
 	$(CXX) -x c++-header -c $< -o $@ $(INCS) $(LIBS)
 
-tanks/%.so: src/tanks/%.cpp
+tanks/%.so: src/tanks/*/%.cpp
 	@mkdir -p tanks
 	$(CXX) $(CXXFLAGS) $(INCS) $(PROFILE) -shared $? $(TANKS_LINK) -o $(TANK_PATH)$(@F) $(SOFLAGS) $(LIBS)
 
-tanks: src/actors/Actor.o $(TANKS:$(SRC_PATH)tanks/%.cpp=$(TANK_PATH)%.so)
+tanks: $(TANKS_LINK) $(TANKS:%.cpp=$(TANK_PATH)%.so)
 
 depend: .depend
 
