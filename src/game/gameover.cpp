@@ -12,15 +12,17 @@
  *
  * Display the screen that reads game over
  *******************************************************************************/
-void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, std::shared_ptr<Settings> settings, int turn)
+int gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, std::shared_ptr<Settings> settings, int turn)
 {
   std::ofstream fout(settings->getResultsFile(), std::ios::out | std::ios::app);
   unsigned int winDex = 0;
+  int winnerNumber = -1;
 
   if(winner.size() != 0)
   {
     while(winDex < winner.size() && winner[winDex].id <= 0)
       winDex++; 
+    winnerNumber = winner[winDex].id;
     fout << "\n\nGame ended on turn: " << turn;
     fout << "\nWinner: " << winner[winDex].name
         << " Kills: " << winner[winDex].kills
@@ -52,6 +54,7 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, std::s
           << "," << dead[l].y << ")";
     }
   }else{ //Draw Game
+  winnerNumber = 0;
     fout << "\n\nGame ended on turn: " << turn;
     fout << "\nDraw Game: ";
     for(int l = dead.size() - 1; l >= 0; l--)
@@ -73,6 +76,8 @@ void gameOver(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, std::s
 
   if (settings->showUI())
     displayScoreBoard(dead, winner, settings, winDex);
+
+  return winnerNumber;
 }
 
 void displayScoreBoard(std::vector<ActorInfo> dead, std::vector<ActorInfo> winner, std::shared_ptr<Settings> settings, int winDex){

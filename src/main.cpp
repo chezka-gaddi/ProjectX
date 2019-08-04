@@ -110,7 +110,7 @@ int main(int argc, char **argv)
         counter++;
       }else if (((strcmp(argv[counter], "--gamelog") == 0) || strcmp(argv[counter], "-g") == 0) && counter + 1 <= argc)
       {
-        printf("Tracking enabled");
+        printf("Tracking moves enabled\n");
         settings->setTrackingMode(true);
       }else if((strcmp(argv[counter], "--help") == 0) && counter + 1 <= argc)
       {

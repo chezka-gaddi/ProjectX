@@ -58,6 +58,7 @@ std::vector<player> parsePlayers(){
             tPlayer.losses = 0;
             tPlayer.participated = 0;
             tPlayer.images = "images\\tanks\\" + images;
+            tPlayer.id = count;
             playerList.push_back(tPlayer);
         }
         //Increment counter for section name

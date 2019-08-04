@@ -174,7 +174,7 @@ bool Game::checkMaxTurn()
  * game to run independent of the GUI.
  *
  *******************************************************************************/
-void Game::executeGame()
+int Game::executeGame()
 {
   //printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
   while (isplayable(tankGame->getActorsConst())) //If we still have tanks keep playing
@@ -185,7 +185,7 @@ void Game::executeGame()
       tankGame->cull();
     }
   }
-  gameOver(tankGame->getDeceased(), tankGame->getActors(), settings, tankGame->gameTurn);
+  return gameOver(tankGame->getDeceased(), tankGame->getActors(), settings, tankGame->gameTurn);
 }
 
 /**************************************************************************//**
@@ -197,8 +197,9 @@ void Game::executeGame()
  * otherwise return back to main and destroy the GUI.
  *
  *******************************************************************************/
-void Game::executeTurn()
+int Game::executeTurn()
 {
+  int winner = -1;
   //printf("Current Turns:  %d of %d\n",tankGame->getTurnCount(), max_turns);
   if (isplayable(tankGame->getActorsConst())) //If we still have tanks keep playing
   {
@@ -208,9 +209,10 @@ void Game::executeTurn()
       tankGame->cull();
     }
   }else{
-    gameOver(tankGame->getDeceased(), tankGame->getActors(), settings, tankGame->gameTurn);
+    winner = gameOver(tankGame->getDeceased(), tankGame->getActors(), settings, tankGame->gameTurn);
     glutLeaveMainLoop();
   }
+  return winner;
 }
 
 /**

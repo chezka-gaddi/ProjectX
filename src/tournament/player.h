@@ -10,10 +10,15 @@
 
 struct player{
     std::string name;
+    int id;
     int wins;
     int losses;
     int participated;
     std::string images;
+
+    bool operator<(const player &p){
+        return (this->id < p.id);
+    }
 };
 
 #endif
