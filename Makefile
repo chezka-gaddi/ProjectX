@@ -57,6 +57,7 @@ TANKS += $(SRC_PATH)tanks/StationaryAI/StationaryAI.cpp
 TANKS += $(SRC_PATH)tanks/AttackDownAI/AttackDownAI.cpp
 #SimpleAI2 for tournament
 TANKS += $(SRC_PATH)tanks/SimpleAI2/SimpleAI2.cpp
+TANKS += $(SRC_PATH)tanks/NotSimpleAI/NotSimpleAI.cpp
 
 TANKS_LINK = $(SRC_PATH)actors/Actor.o #need to link in the base class for the .so to have everything.
 
