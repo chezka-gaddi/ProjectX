@@ -13,7 +13,7 @@
 #include <vector>
 #include <iostream>
 #include <direction.h>
-#include <SimpleActor.h>
+#include <SimpleActor/SimpleActor.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 // FEATURE:

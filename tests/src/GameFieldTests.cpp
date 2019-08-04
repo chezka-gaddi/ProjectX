@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include <GameField.h>
 #include <Actor.h>
-#include <SimpleActor.h>
+#include <SimpleActor/SimpleActor.h>
 
 class Settings;
 

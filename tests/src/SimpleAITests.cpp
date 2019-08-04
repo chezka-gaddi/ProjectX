@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include <SimpleAI.h>
+#include <SimpleAI/SimpleAI.h>
 #include <MapData.h>
 #include <PositionData.h>
 #include <iostream>

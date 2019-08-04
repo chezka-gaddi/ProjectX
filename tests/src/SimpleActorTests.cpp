@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include <SimpleActor.h>
+#include <SimpleActor/SimpleActor.h>
 #include <Actor.h>
 
 

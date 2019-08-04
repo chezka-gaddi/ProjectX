@@ -45,7 +45,7 @@ FILES += $(SRC_PATH)utilities/gameTracker.cpp
 FILES += $(SRC_PATH)ui/Menu.cpp
 FILES += $(SRC_PATH)ui/sfxDrawable.cpp
 FILES += $(SRC_PATH)ui/Crate.cpp
-FILES += $(SRC_PATH)tanks/SimpleActor.cpp
+FILES += $(SRC_PATH)tanks/SimpleActor/SimpleActor.cpp
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) $(PROFILE) -c $< -o $@ $(INCS)

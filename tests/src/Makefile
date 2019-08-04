@@ -48,8 +48,8 @@ FILES += $(SRC_PATH)utilities/mapLoader.cpp
 FILES += $(SRC_PATH)ui/Menu.cpp
 FILES += $(SRC_PATH)ui/sfxDrawable.cpp
 FILES += $(SRC_PATH)ui/Crate.cpp
-FILES += $(SRC_PATH)tanks/SimpleAI.cpp
-FILES += $(SRC_PATH)tanks/SimpleActor.cpp
+FILES += $(SRC_PATH)tanks/SimpleAI/SimpleAI.cpp
+FILES += $(SRC_PATH)tanks/SimpleActor/SimpleActor.cpp
 FILES += $(SRC_PATH)settings/Settings.cpp
 
 TANK_PATH = ./tanks/
@@ -61,7 +61,7 @@ TANKS_LINK = ../../src/actors/Actor.o #need to link in the base class for the .s
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) $(PROFILE) -c $? -o $@ $(INCS)
 
-%.so: ../../src/tanks/%.cpp
+%.so: ../../src/tanks/*/%.cpp
 	$(CXX) $(CXXFLAGS) $(PROFILE) -shared $? $(TANKS_LINK) -o $@ $(SOFLAGS) $(INCS)
 
 testAll: $(FILES:.cpp=.o) $(TEST_FILES:.cpp=.o)

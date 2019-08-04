@@ -1,5 +1,5 @@
 #include "SimpleActor.h"
-#include "../structures/attributes.h"
+#include "structures/attributes.h"
 
 
 /**

@@ -11,7 +11,7 @@
 // Include(s)
 #include <catch.hpp>
 #include <GameField.h>
-#include <SimpleActor.h>
+#include <SimpleActor/SimpleActor.h>
 #include <vector>
 #include <iostream>
 #include <catch.hpp>
