@@ -2,90 +2,10 @@
 #include "utilities/inireader.h"
 #include "utilities/mapLoader.h"
 
-/*
-std::shared_ptr<MapData> parseConfig( const std::shared_ptr<Settings> & settings){
-    std::string configFile = settings->getConfigFile();
-    bool quiet = settings->checkQuiet();
-
-    if (!quiet)
-        printf("%s...", configFile.c_str());
-    INIReader config(configFile);
-    std::shared_ptr<MapData> map;
-
-    //Store the parse error/line number
-    //Currently generates errors on lines that appear to be correctly written
-    //int cerrors = config.ParseError();
-    //if (config.ParseError() != 0) {
-    //    printf("Can't load %s\n", configFile.c_str());
-    //    return false;
-    //}
-    //Load the map
-    settings->setMapName(config.Get("MAP","name","default.map"));
-    map = loadMap(settings);
-    //Player Stats
-    settings->setAttrDamage(config.GetInteger("STATS", "damage", 2));
-    settings->setAttrHealth(config.GetInteger("STATS", "health", 2));
-    settings->setAttrRadar(config.GetInteger("STATS", "radar", 4), map->width);
-    settings->setAttrAP(config.GetInteger("STATS", "ap", 2));
-    settings->setAttrSpecial(config.GetInteger("STATS", "special", 1));
-    settings->setAttrRange(config.GetInteger("STATS", "range", 4));
-    settings->setAttrAmmo(config.GetInteger("STATS", "ammo", 6));
-    //Game Settings
-    settings->setMaxTurns(config.GetInteger("GAME", "maxturns", 200));
-    //Platform Settings
-    settings->setIdleSpeed(config.GetInteger("PLATFORM", "ai_speed", 750));
-    settings->setAniFrames(config.GetInteger("PLATFORM", "animation_frames", 20));
-    settings->setBulletSpeed(config.GetInteger("PLATFORM", "bullet_speed", 80));
-    settings->setTankSpeed(config.GetInteger("PLATFORM", "tank_speed", 400));
-    settings->setInstantProj(config.GetBoolean("PROJECTILE", "instant", false));
-    return map;
-}
-
-std::vector<std::string> parseList(const std::shared_ptr<Settings> & settings, std::string section, std::string key){
-    std::string configFile = settings->getConfigFile(), temp;
-    //bool quiet = settings->checkQuiet();
-    bool done = false;
-    int i = 0;
-    INIReader config(configFile);
-
-    std::vector<std::string> list;
-
-    temp = config.Get(section, key, "\n");
-    if (temp == ""){
-        return list;
-    }
-    
-    while(!done)
-    {
-        if(temp.find('\n') == std::string::npos)
-        {
-        done = true;
-        list.push_back(temp);
-        }
-        else
-        {
-        i = temp.find('\n');
-        list.push_back(temp.substr(0, i));
-        temp = temp.substr(i + 1);
-        }
-
-    }
-
-    return list;
-}
-
-std::string parseAI(const std::shared_ptr<Settings> & settings, std::string section, std::string key){
-    std::string configFile = settings->getConfigFile(), param;
-    //bool quiet = settings->checkQuiet();
-    INIReader config(configFile);
-    param = config.Get(section, key, "");
-    return param;
-} */
-
 std::vector<bracket> parseBrackets(){
     std::string mName = "not_default", stats = "not_default", settings = "not_default";
     std::string images = "not_default", spawns = "not_default", section = "";
-    int players = 0, count=0;
+    int players = 0, count=0, rounds = 0;
     std::vector<bracket> bracketList;
     bracket tBracket;
     INIReader config("./tournament/map_list.ini");
@@ -98,6 +18,7 @@ std::vector<bracket> parseBrackets(){
             tBracket.settings = settings;
             tBracket.players = players;
             tBracket.spawns = spawns;
+            tBracket.rounds = rounds;
             bracketList.push_back(tBracket);
         }
         //Increment counter for section name
@@ -117,6 +38,7 @@ std::vector<bracket> parseBrackets(){
         images = config.Get(section, "images", "");
         spawns = config.Get(section, "spawns", "");
         players = config.GetInteger(section, "players", -1);
+        rounds = config.GetInteger(section, "rounds", 1);
     }
 
     return bracketList;
@@ -182,6 +104,35 @@ std::vector<std::pair<int,int>> parseSpawns(std::string spawnList){
     return spawns;
 }
 
-void parseStats(){}
-void parseSettings(){}
+attributes parseStats(std::string statList){
+    attributes baseAttributes;
+    INIReader config(".tournament/stats_list.ini");
+
+    baseAttributes.tankDamage = config.GetInteger("statsList", "damage", 2);
+    baseAttributes.tankHealth = config.GetInteger("statsList", "health", 2);
+    baseAttributes.tankAP = config.GetInteger("statsList", "ap", 2);
+    baseAttributes.tankRadar = config.GetInteger("statsList", "radar", 4);
+    baseAttributes.tankAmmo = config.GetInteger("statsList", "ammo", 6);
+    baseAttributes.projRange = config.GetInteger("statsList", "range", 4);
+    baseAttributes.tankSpecial = config.GetInteger("statsList", "special", 1);
+
+    return baseAttributes;
+}
+void parseSettings(std::string settingList, std::shared_ptr<Settings> settings){
+    int maxturns=200, ai_speed=1, animation_frames=1, bullet_speed=1, tank_speed=1;
+
+    INIReader config(".tournament/settings_list.ini");
+
+    maxturns = config.GetInteger("settingList", "maxturns", 200);
+    ai_speed = config.GetInteger("settingList", "ai_speed", 750);
+    animation_frames = config.GetInteger("settingList", "animation_frames", 20);
+    bullet_speed = config.GetInteger("settingList", "bullet_speed", 80);
+    tank_speed = config.GetInteger("settingList", "tank_speed", 400);
+
+    settings->setMaxTurns(maxturns);
+    settings->setIdleSpeed(ai_speed);
+    settings->setAniFrames(animation_frames);
+    settings->setTankSpeed(tank_speed);
+    settings->setBulletSpeed(bullet_speed);
+}
 void parseImages(){}

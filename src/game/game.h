@@ -32,6 +32,8 @@ public:
     void executeTurn();
     void executeGame();
     void initGameState(std::shared_ptr<Settings> & setting);
+    void initTournState(std::shared_ptr<Settings> & setting, std::shared_ptr<MapData>, std::vector<std::string>, std::vector<std::pair<int, int>>, std::vector<std::string>);
+
     void closeDown();
     void earlyOut();
     float convertGLXCoordinate( int );

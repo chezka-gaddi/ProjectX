@@ -26,7 +26,7 @@ GameField::~GameField()
     if(a.act_p != NULL)
       delete a.act_p;
   }
-  if (settings->checkTracking())
+  if (settings->checkTracking() && tracker != nullptr)
     tracker->close();
   actors.clear();
   deceased.clear();
@@ -45,7 +45,7 @@ GameField::GameField(int width, int height)
   settings->setUI(false);
   displayCallback = NULL;
   if (settings->checkTracking()){
-    tracker = new gameTracker();
+    tracker = new gameTracker(settings->getTrackingFile());
     tracker->open();
   }
 }
@@ -70,7 +70,7 @@ GameField::GameField(int width, int height, std::vector<ActorInfo> startActors, 
   }
   actors = startActors;
   if (settings->checkTracking()){
-    tracker = new gameTracker();
+    tracker = new gameTracker(settings->getTrackingFile());
     tracker->open();
   }
 }
@@ -110,7 +110,7 @@ void GameField::updateMap()
     if(a.health > 0){
       if (a.id > 0){
         if (fieldMap->tileMap[a.y][a.x].tank == nullptr){
-          fieldMap->tileMap[a.y][a.x].tank = std::shared_ptr<Tile>(new Tile("Tank", a.id, a.x, a.y, a.health));
+          fieldMap->tileMap[a.y][a.x].tank = std::shared_ptr<Tile>(new Tile("Tank", a.id, a.x, a.y, a.health, a.heading));
         }else{
           fieldMap->tileMap[a.y][a.x].tank->x = a.x;
           fieldMap->tileMap[a.y][a.x].tank->y = a.y;
@@ -118,7 +118,7 @@ void GameField::updateMap()
         }
       }else{
         if (fieldMap->tileMap[a.y][a.x].projectile == nullptr){
-          fieldMap->tileMap[a.y][a.x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", a.id, a.x, a.y, a.health));
+          fieldMap->tileMap[a.y][a.x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", a.id, a.x, a.y, a.health, a.heading));
         }else{
           fieldMap->tileMap[a.y][a.x].projectile->x = a.x;
           fieldMap->tileMap[a.y][a.x].projectile->y = a.y;
@@ -341,7 +341,7 @@ void GameField::moveAction(ActorInfo &a, direction dir)
   }
     
   //Move actor over on internal map instead of deleting a creating new
-  moveActor(a.x, a.y, a.prevx, a.prevy, a.id);
+  moveActor(a.x, a.y, a.prevx, a.prevy, a.id, a.heading);
 
   //Run the main loop through actors to see if we hit one
   if(hitObj == false && (xoff != 0 || yoff != 0))
@@ -898,7 +898,7 @@ void GameField::attackAction(ActorInfo &a, const MapData &map, int i){
           projectileTurn(newProjectile); //Because they run their turn now, they won't ever grow
         }else{
           actors.insert(actors.begin() + i + 1, newProjectile);
-          fieldMap->tileMap[a.y][a.x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", newProjectile.id, newProjectile.x, newProjectile.y, newProjectile.health));
+          fieldMap->tileMap[a.y][a.x].projectile = std::shared_ptr<Tile>(new Tile("Projectile", newProjectile.id, newProjectile.x, newProjectile.y, newProjectile.health, newProjectile.heading));
         }
       }
     }
@@ -923,7 +923,7 @@ void GameField::attackAction(ActorInfo &a, const MapData &map, int i){
 void GameField::addActor(ActorInfo a)
 {
   actors.push_back(a);
-  fieldMap->tileMap[a.y][a.x].tank = std::shared_ptr<Tile>(new Tile("Tank", a.id, a.x, a.y, a.health));
+  fieldMap->tileMap[a.y][a.x].tank = std::shared_ptr<Tile>(new Tile("Tank", a.id, a.x, a.y, a.health, a.heading));
 }
 
 /**
@@ -1155,12 +1155,14 @@ void GameField::setMap(std::shared_ptr<MapData> newMap){
  * @par Description:
  * Moves an actor from one position to another.
  */
-void GameField::moveActor(int newx, int newy, int oldx, int oldy, int id){
+void GameField::moveActor(int newx, int newy, int oldx, int oldy, int id, direction d){
   if (id > 0){
     fieldMap->tileMap[newy][newx].tank = fieldMap->tileMap[oldy][oldx].tank;
+    fieldMap->tileMap[newy][newx].tank->dir = d;
     fieldMap->tileMap[oldy][oldx].tank = nullptr;
   }else if(id < 0){
     fieldMap->tileMap[newy][newx].projectile = fieldMap->tileMap[oldy][oldx].projectile;
+    fieldMap->tileMap[newy][newx].projectile->dir = d;
     fieldMap->tileMap[oldy][oldx].projectile = nullptr;
   }  
 }

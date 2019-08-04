@@ -34,6 +34,7 @@ public:
     std::string getResultsFile();
     std::string getConfigFile();
     std::string getMapName();
+    std::string getTrackingFile();
     bool checkInstantProj();
 
     //mode checkers
@@ -52,7 +53,7 @@ public:
     int getAttrSpecial();
 
     //setters
-    void setAttributes(attributes attr);
+    void setAttributes(attributes attr, int width);
     void setIdleSpeed(int is);
     void setAniFrames(int af);
     void setTankSpeed(int ts);
@@ -102,6 +103,7 @@ private:
     std::string resultsFile = "results.txt"; //results output file
     std::string configFile = "config.ini"; //Config ini file
     std::string mapName = "default.map"; //map file name
+    std::string trackingFile = "gameTracker.txt";
     bool tracking = false; //track all actions to file
     bool projInstant = false; //Single turn projectiles
 };

@@ -1,5 +1,8 @@
 #include <tournament/Tournament.h>
 #include <algorithm>
+#include <utilities/mapLoader.h>
+#include <structures/attributes.h>
+#include <cstdlib>
 
 /***************************************************************************//**
  * @author Jon McKee
@@ -55,41 +58,72 @@ void Tournament::newGame(){
  *******************************************************************************/
 void Tournament::runTournament(){
     bracket cBracket;
-    int maxRounds;
+    int maxRounds, currMatch, count = 1;
     std::vector<std::pair<int,int>> spawnLocations;
+    std::shared_ptr<MapData> bMap;
+    std::string resultsFile, trackerFile;
+    attributes baseAttr;
 
     //load players
     playerList = parsePlayers();
-    printPlayerInfo();
+    //printPlayerInfo();
     //load brackets
     bracketList = parseBrackets();
     //Print bracket information to tournament output folder
-    printBracketInfo();
+    //printBracketInfo();
     //loop through brackets
+    system("mkdir -p tResults");
     for (unsigned int b = 0; b < bracketList.size(); b++){
         //calculate max number of rounds
         cBracket = bracketList[b];
         printf("Starting %s bracket.\n", cBracket.mapName.c_str());
-        spawnLocations = parseSpawns(cBracket.spawns);
-        //printSpawnInfo(spawnLocations);
-        do{
-            printSpawnInfo(spawnLocations);
-        }while(std::next_permutation(spawnLocations.begin(), spawnLocations.end()));
-        //load map
         //load spawns
-        //loop through iterations
-            //manual game initialization
-            //run game
-            //store winner/losers
-            //delete game
-            //continue through iteration
+        maxRounds = cBracket.rounds;
+        resultsFile = "mkdir -p tResults/bracket" + std::to_string(b);
+        system(resultsFile.c_str());
+        resultsFile = "tResults/bracket" + std::to_string(b) + "/results.txt";
+        for (int r = 0; r < maxRounds; r++){
+            currMatch = 1;
+            spawnLocations = parseSpawns(cBracket.spawns);
+            printf("Round %d of %d.\n", r + 1, maxRounds);
+            do{  //loop through iterations
+                //Check spawns
+                //printSpawnInfo(spawnLocations);
+                //load map
+                settings->setMapName("../tournament/" + bracketList[b].mapName); //Set map name into settings
+                bMap = loadMap(settings);
+                //load stats
+                baseAttr = parseStats(bracketList[b].stats);
+                settings->setAttributes(baseAttr, bMap->width);
+                settings->setResultsFile(resultsFile);
+                trackerFile = "tResults/bracket" + std::to_string(b) + "/match" + std::to_string(r) + ".txt";
+                settings->setTrackingFile(trackerFile);
+                settings->setTrackingMode(true);
+                //load settings
+                parseSettings(bracketList[b].settings, settings);
+
+                //printMatchInfo(spawnLocations, b, currMatch, spawnLocations.size());
+                //manual game initialization
+                initGame(bMap, bracketList[b].players, spawnLocations);
+
+                //run game
+                game->executeGame(); //runs with no images
+                count++;
+                //store winner/losers
+
+
+                //delete game
+                newGame();
+
+                //continue through iteration
+                currMatch++;  //round
+            }while(std::next_permutation(spawnLocations.begin(), spawnLocations.end()));
+        }
+        
+        
     }
         
-
-
-
-
-    printf("Starting Tournament.\n");
+    /*printf("Starting Tournament.\n");
     int roundCounter = 0; //Current round counter
     int limit = rounds / 10;
     while (roundCounter < rounds){ //Tournament loop
@@ -98,7 +132,7 @@ void Tournament::runTournament(){
             printf("Game %d of %d\n",roundCounter, rounds);
         game->executeTurn(); //Run the round
         newGame();
-    }
+    }*/
 }
 
 /***************************************************************************//**
@@ -148,4 +182,45 @@ void Tournament::printSpawnInfo(std::vector<std::pair<int,int>> spawnList){
         printf("(%d, %d), ", s.first, s.second);
     }
     printf("\n");
+}
+
+/***************************************************************************//**
+ * @author Jon McKee
+ * @brief printMatchInfo
+ *
+ * Outputs the match info to the tournament output folder
+ *******************************************************************************/
+void Tournament::printMatchInfo(std::vector<std::pair<int,int>> spawnList, int bracket, int cMatch, int tMatch){
+    printf("Match %d of %d:\n", cMatch, tMatch);
+    for (int i = 0; i < bracketList[bracket].players; i++) {
+        printf("%s (%d, %d)\n", playerList[i].name.c_str(), spawnList[i].first, spawnList[i].second);
+    }
+}
+
+/***************************************************************************//**
+ * @author Jon McKee
+ * @brief printRoundInfo
+ *
+ * Outputs the round info to the tournament output folder
+ *******************************************************************************/
+void Tournament::printRoundInfo(){
+    
+}
+
+void Tournament::initGame(std::shared_ptr<MapData> map, int players, std::vector<std::pair<int, int>> spawnLocations){
+    std::vector<std::string> AINames;
+    std::vector<std::string> tankImages;
+    std::vector<std::pair<int,int>> tankLocations;
+
+    for (int i = 0; i < players; i++){
+        AINames.push_back(playerList[i].name);
+        tankImages.push_back(playerList[i].images + "/base.png");
+        tankImages.push_back(playerList[i].images + "/turret.png");
+        tankImages.push_back(playerList[i].images + "/bullet.png");
+        tankLocations.push_back(spawnLocations[i]);
+        tankLocations[i].first += map->widthPadding;
+        tankLocations[i].second += map->heightPadding;
+    }
+
+    game->initTournState(settings, map, AINames, tankLocations, tankImages);
 }

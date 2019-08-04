@@ -11,7 +11,6 @@ int Settings::getMaxTurns(){return maxTurns;}
 gameMode Settings::getGameMode(){ return gMode;}
 
 //setters
-void Settings::setAttributes(attributes attr){baseAttributes = attr;}
 void Settings::setIdleSpeed(int ai_speed){
   idleSpeed = checkSettingValue(1, 1500, ai_speed, "idle speed", !modeQuiet);
 }
@@ -34,6 +33,15 @@ void Settings::setTrackingMode(bool t){tracking = t;}
 void Settings::setMapName(std::string m){mapName = m;}
 void Settings::setInstantProj(bool p){projInstant = p;}
 
+void Settings::setAttributes(attributes attr, int width){
+    baseAttributes.tankDamage = checkSettingValue(0, 8, attr.tankDamage, "damage", !modeQuiet);
+    baseAttributes.tankHealth = checkSettingValue(0, 8, attr.tankHealth, "health", !modeQuiet);
+    baseAttributes.tankAP = checkSettingValue(0, 6, attr.tankAP, "action points", !modeQuiet);
+    baseAttributes.tankRadar = checkSettingValue(0, width, attr.tankRadar, "radar", !modeQuiet);
+    baseAttributes.tankAmmo = checkSettingValue(0, 10, attr.tankAmmo, "ammo", !modeQuiet);
+    baseAttributes.projRange = checkSettingValue(0, 10, attr.projRange, "range", !modeQuiet);
+    baseAttributes.tankSpecial = checkSettingValue(0, 20, attr.tankSpecial, "special points", !modeQuiet);
+  }
 void Settings::setAttrDamage(int damage){
   baseAttributes.tankDamage = checkSettingValue(0, 8, damage, "damage", !modeQuiet);
 }
@@ -65,6 +73,10 @@ void Settings::setConfigFile(std::string c){
   configFile = c;
 }
 
+void Settings::setTrackingFile(std::string t){
+  trackingFile = t;
+}
+
 int Settings::getAttrDamage(){return baseAttributes.tankDamage;}
 int Settings::getAttrHealth(){return baseAttributes.tankHealth;}
 int Settings::getAttrAP(){return baseAttributes.tankAP;}
@@ -84,6 +96,7 @@ bool Settings::checkInstantProj(){return projInstant;}
 std::string Settings::getResultsFile(){return resultsFile;}
 std::string Settings::getConfigFile(){return configFile;}
 std::string Settings::getMapName(){return mapName;}
+std::string Settings::getTrackingFile(){return trackingFile;}
 
 int Settings::checkSettingValue(int min, int max, int value, std::string param, bool force){
   if(value < min)

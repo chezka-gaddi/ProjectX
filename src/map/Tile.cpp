@@ -32,12 +32,12 @@ Tile::Tile(const Tile & tTile){
     y = tTile.y;
     health = tTile.health;
     if (tank != nullptr){
-        tank = std::unique_ptr<Tile>(new Tile(tTile.tank->type, tTile.tank->id, tTile.tank->x, tTile.tank->y, tTile.tank->health));
+        tank = std::unique_ptr<Tile>(new Tile(tTile.tank->type, tTile.tank->id, tTile.tank->x, tTile.tank->y, tTile.tank->health, tTile.tank->dir));
     }else{
         tank = nullptr;
     }
     if (projectile != nullptr){
-        projectile = std::unique_ptr<Tile>(new Tile(tTile.projectile->type, tTile.projectile->id, tTile.projectile->x, tTile.projectile->y, tTile.projectile->health));
+        projectile = std::unique_ptr<Tile>(new Tile(tTile.projectile->type, tTile.projectile->id, tTile.projectile->x, tTile.projectile->y, tTile.projectile->health, tTile.projectile->dir));
     }else{
         projectile = nullptr;
     }

@@ -89,7 +89,7 @@ protected:
     void addObstacle(int x, int y, int type = 1);
     void removeObstacle(int x, int y);
     void setMap(std::shared_ptr<MapData> newMap);
-    void moveActor(int newx, int newy, int oldx, int oldy, int id);
+    void moveActor(int newx, int newy, int oldx, int oldy, int id, direction d);
 
     //pointers to other game components
     Game *gameptr = nullptr;

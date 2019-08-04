@@ -23,6 +23,8 @@ class MapData
     public:
         int width;  /*!< The width value of the map */
         int height; /*!< The height value of the map */
+        int widthPadding; /*!< The padding added to left of map */
+        int heightPadding; /*!< The padding added to top of map */
         std::vector<std::vector<Tile>> tileMap;
 
         MapData(int w, int h);

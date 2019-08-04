@@ -6,9 +6,14 @@
     * gameTracker constructor that sets the outfile to the specified parameter.  If
     * no parameter is specified then the default outfile is used.
     *******************************************************************************/
-    gameTracker::gameTracker(std::string o="gameMoves.txt"){
+    gameTracker::gameTracker(std::string o){
         outfile = o;
     }
+
+    gameTracker::gameTracker(){
+        outfile = "gameMoves.txt";
+    }
+
     /***************************************************************************//**
     * @author Jon McKee
     * @brief open()
@@ -17,6 +22,8 @@
     *******************************************************************************/
     void gameTracker::open(){
         fout.open(outfile, std::ios::out | std::ios::in | std::ios::app);
+        if (!fout)
+            printf("ERROR: Problem opening tracking file %s.\n", outfile.c_str());
     }
 
     /***************************************************************************//**
@@ -26,7 +33,8 @@
     * Closes the output file the game is being tracked into
     *******************************************************************************/
     void gameTracker::close(){
-        fout.close();
+        if (fout)
+            fout.close();
     }
 
     /***************************************************************************//**

@@ -24,10 +24,13 @@ public:
     void printBracketInfo();
     void printPlayerInfo();
     void printSpawnInfo(std::vector<std::pair<int,int>>);
+    void printMatchInfo(std::vector<std::pair<int,int>>, int, int, int);
+    void printRoundInfo();
 
 protected:
     //tournament management functions
     void newGame(); //starts a new game
+    void initGame(std::shared_ptr<MapData> map, int players, std::vector<std::pair<int, int>> spawnLocations);
 
 private:
     std::shared_ptr<Settings> settings; //pointer to settings to use

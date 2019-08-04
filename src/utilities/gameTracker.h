@@ -12,7 +12,7 @@ class gameTracker{
 
 public:
     gameTracker(std::string o);
-    gameTracker(){};
+    gameTracker();
     ~gameTracker(){};
 
     void move(std::string player, direction dir, int x, int y);

@@ -50,13 +50,13 @@ FILES += $(SRC_PATH)utilities/mapLoader.cpp
 FILES += $(SRC_PATH)tournament/tournamentParser.cpp
 FILES += $(SRC_PATH)tournament/Tournament.cpp
 #Tanks
-TANKS = $(SRC_PATH)tanks/SimpleAI.cpp
-TANKS += $(SRC_PATH)tanks/PongAI.cpp
-TANKS += $(SRC_PATH)tanks/CamperAI.cpp
-TANKS += $(SRC_PATH)tanks/StationaryAI.cpp
-TANKS += $(SRC_PATH)tanks/AttackDownAI.cpp
+TANKS = $(SRC_PATH)tanks/SimpleAI/SimpleAI.cpp
+TANKS += $(SRC_PATH)tanks/PongAI/PongAI.cpp
+TANKS += $(SRC_PATH)tanks/CamperAI/CamperAI.cpp
+TANKS += $(SRC_PATH)tanks/StationaryAI/StationaryAI.cpp
+TANKS += $(SRC_PATH)tanks/AttackDownAI/AttackDownAI.cpp
 #SimpleAI2 for tournament
-TANKS += $(SRC_PATH)tanks/SimpleAI2.cpp
+TANKS += $(SRC_PATH)tanks/SimpleAI2/SimpleAI2.cpp
 
 TANKS_LINK = $(SRC_PATH)actors/Actor.o #need to link in the base class for the .so to have everything.
 
@@ -107,6 +107,7 @@ clean-all: clean-lib clean-tests
 	@rm -rf coverage
 	@rm -rf results.txt
 	@rm -rf gameMoves.txt
+	@rm -rf tResults
 
 clean-tests: clean
 	@rm -rf testUnitAll

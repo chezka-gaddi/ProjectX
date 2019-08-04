@@ -14,7 +14,8 @@ struct bracket{
     std::string images;
     std::string settings;
     std::string spawns;
-    int players;
+    int players = 2;
+    int rounds = 1;
 };
 
 #endif

@@ -11,11 +11,12 @@
 #include <settings/Settings.h>
 #include "bracket.h"
 #include "player.h"
+#include <structures/attributes.h>
 
 std::vector<bracket> parseBrackets();
-void parseStats();
+attributes parseStats(std::string);
 std::vector<std::pair<int,int>> parseSpawns(std::string);
-void parseSettings();
+void parseSettings(std::string, std::shared_ptr<Settings>);
 std::vector<player> parsePlayers();
 void parseImages();
 

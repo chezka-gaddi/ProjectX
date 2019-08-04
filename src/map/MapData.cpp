@@ -34,7 +34,7 @@ void MapData::generateTileMap()
     for(int i = 0; i < (int) tileMap.size(); i++){
         tileMap[i].resize(w);
         for (int j = 0; j < (int) tileMap[i].size(); j++){
-            tileMap[i][j] = Tile("Empty", 0, j, i, 0); //default empty tiles
+            tileMap[i][j] = Tile("Empty", 0, j, i, 0, direction::STAY); //default empty tiles
         }
     }
 }

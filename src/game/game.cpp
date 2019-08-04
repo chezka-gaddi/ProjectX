@@ -319,7 +319,7 @@ void Game::initGameState(std::shared_ptr<Settings> & setting)
     {
       if(tankLocations.at(x) == tankLocations.at(y))
       {
-        printf("WARNING: Tanks cannot spawn on the same tile (%d, %d).\n", tankLocations[x].first, tankLocations[y].second);
+        printf("WARNING: Tanks set to spawn on the same tile (%d, %d).\n", tankLocations[x].first, tankLocations[y].second);
         continue;
       }
     }
@@ -414,6 +414,131 @@ void Game::initGameState(std::shared_ptr<Settings> & setting)
     settings->setAniFrames(1);
     settings->setTankSpeed(1);
     settings->setBulletSpeed(1);
+  }
+}
+
+/***************************************************************************//**
+ * @author Chezka Gaddi
+ * @modified Jon McKee
+ * @brief initTournState
+ *
+ * Initialize the main GameField and all the Drawables needed to start the game.
+ * Reads settings from the file "config.txt"
+ *******************************************************************************/
+void Game::initTournState(std::shared_ptr<Settings> & setting, std::shared_ptr<MapData> map, std::vector<std::string> AINames, 
+    std::vector<std::pair<int, int>> tankLocations, std::vector<std::string> tankImages)
+{
+  settings = setting;
+  bool quiet = settings->checkQuiet();
+  std::string configLine, tType, name, imgPath;
+  std::vector<ActorInfo> startActors;
+
+  //Image vectors for custom images
+  std::vector<std::string> gameImages = {"images/green.png"}; 
+  std::vector<std::string> treeImages = {"images/tree/treea.png", "images/tree/treeb.png", "images/tree/treec.png"}; 
+  std::vector<std::string> rockImages = {"images/rock/rocka.png", "images/rock/rockb.png"}; 
+  std::vector<std::string> bushImages = {"images/bush/busha.png", "images/bush/bushb.png","images/bush/bushc.png"};
+  std::vector<std::string> waterImages = {"images/water/waterTex.png"};
+  std::vector<std::string> tImages; 
+
+  std::ofstream fout;
+
+  //Seed random for random obstacle selection
+  srand(time(0));
+
+  //Empty the arrays
+  rocks.clear();
+  bushes.clear();
+  trees.clear();
+  specials.clear();
+  constants.clear();
+
+  //Load game field drawable object
+  constants.push_back(std::unique_ptr<Drawable>(new GameFieldDrawable));
+
+  //Check player locations
+  for(unsigned int x=0; x < tankLocations.size(); x++)
+  {
+    for(unsigned int y = x + 1; y < tankLocations.size(); y++)
+    {
+      if(tankLocations.at(x) == tankLocations.at(y))
+      {
+        printf("WARNING: Tanks set to spawn on the same tile (%d, %d).\n", tankLocations[x].first, tankLocations[y].second);
+        continue;
+      }
+    }
+  }
+
+  //Try and create output file
+  fout.open(settings->getResultsFile(), std::ios::out | std::ios::in | std::ios::app);
+  //Warn if we cannot save settings, ignore quiet for this error
+  if(!fout)
+  {
+    //Warning because game will still play
+    printf("WARNING: Unable to open results file (%s).  Game will play but results will not be saved.\n", settings->getResultsFile().c_str());
+  }
+  
+  //This should not be possible
+  if (map == nullptr){
+    printf("ERROR: No map file was loaded.\n");
+    exit(1);
+  }
+
+  //set globals
+  TimerEvent::idle_speed = settings->getIdleSpeed();
+  Drawable::xscalar = 1.85/map->width; //The available width area (3.7) divided by 2 divided by map width
+  Drawable::scalar = Drawable::xscalar;
+  Drawable::yscalar = 1.50/map->height; //The available height area (3.0) divided by 2 divided by map height
+  
+  //Only load textures if we're showing UI
+  /*if (settings->showUI()){
+    if (!quiet)
+      printf("Loading textures...\n");
+    glEnable(GL_TEXTURE_2D);
+    if(!LoadGLTextures(tankImages, gameImages, treeImages, rockImages, bushImages, waterImages, quiet) && !quiet)
+        printf("WARNING: Failed to open image(s).  Game will still play but will have broken textures.\n");
+    glDisable(GL_TEXTURE_2D);
+  }*/
+
+  //Load the tank players from shared objects
+  std::vector<Actor*> startActorPointers = dynamicTankLoader(AINames);
+    
+  startActors = loadPlayers(quiet, tankLocations, AINames, startActorPointers, settings->getAttributes(), map->height, map->width);
+  tankGame = std::unique_ptr<GameField>(new GameField(map->width, map->height, startActors, displayWrapper, this, settings));
+  tankGame->setMap(map);
+  tankGame->setSPECIAL(settings->getAttributes());
+
+  // Add tanks to the gamefield map
+  for(auto tank : startActors)
+  {
+    if (map->tileMap[tank.y][tank.x].type == "Rock"
+      || map->tileMap[tank.y][tank.x].type == "Water"
+      || map->tileMap[tank.y][tank.x].type == "Hedgehog")
+    {
+      if (!quiet)
+        printf("WARNING: removing object at (%d,%d) for tank spawn.\n",tank.x, tank.y);
+      map->tileMap[tank.y][tank.x].type = "Empty";
+      map->tileMap[tank.y][tank.x].health = 0;
+    }
+  }
+  //Create one-time usable drawable objects
+  for (int i = 1; i <= map->height; i++){
+    for (int j=1; j <= map->width; j++){
+      tType = map->tileMap[i][j].type;
+      if(tType == "Rock"){
+          rocks.push_back(std::unique_ptr<Obstacles>(new Obstacles(1, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
+      }else if (tType == "Water"){
+          constants.push_back(std::unique_ptr<Drawable>(new Obstacles(3, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
+      }else if (tType == "Bush"){
+          bushes.push_back(std::unique_ptr<Obstacles>(new Obstacles(2, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
+      }else if (tType == "Tree"){
+          trees.push_back(std::unique_ptr<Obstacles>(new Obstacles(0, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
+      }else if (tType == "Crate"){
+          specials.push_back(std::unique_ptr<Drawable>(new Crate(convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
+      }else if (tType == "Hedgehog"){
+          constants.push_back(std::unique_ptr<Drawable>(new Obstacles(50, convertGLXCoordinate(j), convertGLYCoordinate(i), j, i)));
+      }
+    }
   }
 }
 
