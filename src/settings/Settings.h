@@ -38,7 +38,6 @@ public:
     bool checkInstantProj();
 
     //mode checkers
-    bool checkCoverage();
     bool checkQuiet();
     bool showUI();
     bool checkTracking();
@@ -61,7 +60,6 @@ public:
     void setMaxTurns(int mt);
     void setGameMode(gameMode gm);
     void setUI(bool set);
-    void setCoverageMode(bool c);
     void setQuietMode(bool q);
     void setResultsFile(std::string r);
     void setConfigFile(std::string c);
@@ -98,12 +96,11 @@ private:
 
     //platform settings
     bool modeQuiet = false; //quiet mode for blocking text
-    bool modeCoverage = false; //coverage mode for faster animations
     bool showui = true; //should we display the ui
     std::string resultsFile = "results.txt"; //results output file
     std::string configFile = "config.ini"; //Config ini file
     std::string mapName = "default.map"; //map file name
-    std::string trackingFile = "gameTracker.txt";
+    std::string trackingFile = "moveTracker.txt";
     bool tracking = false; //track all actions to file
     bool projInstant = false; //Single turn projectiles
 };

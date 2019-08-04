@@ -1158,11 +1158,13 @@ void GameField::setMap(std::shared_ptr<MapData> newMap){
 void GameField::moveActor(int newx, int newy, int oldx, int oldy, int id, direction d){
   if (id > 0){
     fieldMap->tileMap[newy][newx].tank = fieldMap->tileMap[oldy][oldx].tank;
-    fieldMap->tileMap[newy][newx].tank->dir = d;
+    if (fieldMap->tileMap[newy][newx].tank != nullptr)
+      fieldMap->tileMap[newy][newx].tank->dir = d;
     fieldMap->tileMap[oldy][oldx].tank = nullptr;
   }else if(id < 0){
     fieldMap->tileMap[newy][newx].projectile = fieldMap->tileMap[oldy][oldx].projectile;
-    fieldMap->tileMap[newy][newx].projectile->dir = d;
+    if (fieldMap->tileMap[newy][newx].projectile != nullptr)
+      fieldMap->tileMap[newy][newx].projectile->dir = d;
     fieldMap->tileMap[oldy][oldx].projectile = nullptr;
   }  
 }

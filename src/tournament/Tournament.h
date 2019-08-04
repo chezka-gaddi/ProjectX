@@ -26,7 +26,7 @@ public:
     void printSpawnInfo(std::vector<std::pair<int,int>>);
     void printMatchInfo(std::vector<std::pair<int,int>>, int, int, int);
     void printRoundInfo();
-    void printScores();
+    void printScores(int);
 
 protected:
     //tournament management functions

@@ -1,7 +1,56 @@
 # Slackers_Platform
 Want instant communication with the Dev team? Join our
 [Discord Channel](https://discord.gg/VN7ZuWR)!
-## Releast 7.01
+## Release 7.02
+## Changes
+  - Added direction information to Tile's for maps.
+  - Removed --coverage/-c startup options
+  - Removed settings adjustment for coverage mode
+  - Updated CLI options and help text
+  - Enabled specifying the filename for game tracking
+  # Tournament Mode
+    - Changed the tournament flag to initiate tournament mode instead of repeat config.ini
+    - Inside of the tournament folder are sample maps and ini's for running a small tournament
+      - spawns_list.ini - List of spawn coordinates
+        - number = the number of coordinates in list
+        - spawnx1 = the x for the spawn point
+        - spawny1 = the y for the spawn point
+          - increment the 1 to add additional spawn points
+      - stats_list.ini - List of player stats
+        - damage = default damage for tanks
+        - health = default health for tanks
+        - radar = default radar range for tanks
+        - ap = default action points for tanks
+        - special = default special points for tanks
+        - range = default projectile range
+        - ammo = default ammo amount for tanks
+      - settings_list.ini - List of game settings
+        - maxturns= max number of turns
+        - ai_speed= the amount of idle time in between turns
+        - animation_frames= the number of frames to use when animating
+        - bullet_speed= the speed of the bullets
+        - tank_speed= the speed of the tanks
+      - image_list.ini - List of additional images to load
+        - fieldimage= the field background
+        - tree=additional tree images
+        - bush=additional bush images
+        - rock=additional rock images
+        - water=additional water images
+      - player_list.ini - List of players to put in the tournament
+        - name = file name associated with tank
+        - images = the images to use with tank
+      - map_list.ini - List of maps to rotate through
+        - name=name of the map file
+        - stats=section name inside of stats_list.ini to use
+        - images=section name inside of image_list.ini to use
+        - settings=section name inside of settings_list.ini to use
+        - spawns=section name inside of spawns_list.ini to use
+        - players=number of players per match
+        - rounds=default number of rounds to use for the bracket
+    - The tournament mode can be started by calling ./platform -t or ./platform -t 1 where the number after the t option is the number of rounds to play.  The game will then load the data from the map_list.ini to populate bracket information.  For each bracket the game will calculate the combinations for all spawn points and then run all permutations of the players.  Each game is played and the winner is tallied.  After all brackets and matches are completed final player stats are output to the screen.  Results are stored for each match in the tResults folder separated by bracket.  In addition game move tracking can be enabled with -g which will then be sorted into the appropriate bracket folder.
+    - As players are loaded they are assigned a player number so that they can be uniquely identified when they share a name.
+
+## Release 7.01
 ## Changes
   - changed convertGL_ functions to use game coordinates and fixed conversion instead of linear regression line
   - Adjusted scalar calculations to take into account the new playing field sizes

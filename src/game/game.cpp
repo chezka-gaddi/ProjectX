@@ -410,13 +410,6 @@ void Game::initGameState(std::shared_ptr<Settings> & setting)
 
   if (!quiet)
     printf("...done.\n");
-  if (settings->checkCoverage()){
-    printf("Turning on coverage mode.");
-    settings->setIdleSpeed(1);
-    settings->setAniFrames(1);
-    settings->setTankSpeed(1);
-    settings->setBulletSpeed(1);
-  }
 }
 
 /***************************************************************************//**

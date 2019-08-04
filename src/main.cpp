@@ -56,8 +56,10 @@ https://gitlab.mcs.sdsmt.edu/7472586/Slackers_Platform
 #include <tournament/Tournament.h>
 //#include <gperftools/profiler.h> //Google performance profiler
 
-// Main
+//Function to hold help text in single location
+void printHelp();
 
+// Main
 int main(int argc, char **argv)
 {
     //ProfilerStart("platform.pform"); //Start google profiler
@@ -86,19 +88,15 @@ int main(int argc, char **argv)
         settings->setQuietMode(true);
       }else if (((strcmp(argv[counter], "--tournament") == 0 ) || strcmp(argv[counter], "-t") == 0) && counter + 2 <= argc)
       {
-        printf("Tournament Mode\n");
         mode = tournament;
         rounds = atoi(argv[counter+1]);
+        printf("Tournament Mode. %d rounds.\n", rounds);
         counter++;
       }else if ((strcmp(argv[counter], "--noui") == 0 ) && counter + 1 <= argc)
       {
         printf("No UI Mode\n");
         settings->setUI(false);
-      }else if ((strcmp(argv[counter], "--coverage") == 0) && counter + 1 <= argc)
-      {
-        printf("Coverage Mode\n");
-        settings->setCoverageMode(false);
-      }else if (((strcmp(argv[counter], "--results") == 0) || strcmp(argv[counter], "-o") == 0) && counter + 2 <= argc)
+      }else if (((strcmp(argv[counter], "--results") == 0) || strcmp(argv[counter], "-r") == 0) && counter + 2 <= argc)
       {
         printf("Results file set to %s\n", argv[counter+1]);
         settings->setResultsFile(argv[counter+1]);
@@ -108,30 +106,14 @@ int main(int argc, char **argv)
         printf("Config file set to %s\n", argv[counter+1]);
         settings->setConfigFile(argv[counter+1]);
         counter++;
-      }else if (((strcmp(argv[counter], "--gamelog") == 0) || strcmp(argv[counter], "-g") == 0) && counter + 1 <= argc)
+      }else if (((strcmp(argv[counter], "--gamelog") == 0) || strcmp(argv[counter], "-g") == 0) && counter + 2 <= argc)
       {
-        printf("Tracking moves enabled\n");
+        printf("Tracking moves enabled. File set to %s\n", argv[counter+1]);
         settings->setTrackingMode(true);
+        settings->setTrackingFile(argv[counter+1]);
       }else if((strcmp(argv[counter], "--help") == 0) && counter + 1 <= argc)
       {
-        printf("\n\nHelp:\n");
-        printf("--demo, -d\n");
-        printf("   Demo mode, increases default width to 1900 and height to 1000.\n\n");
-        printf("--quiet, -q\n");
-        printf("   Quiet text mode, only displays debug text\n\n");
-        printf("--tournament, -t (rounds)\n");
-        printf("   Tournament mode, rounds equals number of rounds\n\n");
-        printf("--noui, -n\n");
-        printf("   No UI Mode, hides the UI for faster playback\n\n");
-        printf("--coverage, -c\n");
-        printf("   Coverage Mode, runs fast settings for coverage testing with graphics\n\n");
-        printf("--results, -o (results.txt)\n");
-        printf("   Change the match results output file.\n\n");
-        printf("--settings, -s\n");
-        printf("   Change the config source file.\n\n");
-        printf("--gamelog, -g\n");
-        printf("   Enable game log tracking to file.\n\n");
-        exit(1);
+        printHelp();
       }else if(argv[counter][0] == '-' && argv[counter][1] != '-'){
         //printf("multi-params\n");
         int i = 1; //start at first argument
@@ -142,37 +124,29 @@ int main(int argc, char **argv)
                 height = 1000;
                 printf("Demo Mode\n");
                 break;
+              case 'g':
+                printf("Move tracker file set to %s\n", "moveTracker.txt");
+                settings->setResultsFile("moveTracker.txt");
+                break;
               case 'q':
                 settings->setQuietMode(true);
                 printf("Quiet Mode\n");
+                break;
+              case 'r':
+                printf("Results file set to %s\n", "results.txt");
+                settings->setResultsFile("results.txt");
                 break;
               case 'n':
                 settings->setUI(false);
                 printf("No UI Mode\n");
                 break;
-              case 'c':
-                settings->setCoverageMode(true);
-                printf("Coverage Mode\n");
-                break;
               case 'h':
-                printf("\n\nHelp:\n");
-                printf("--demo, -d\n");
-                printf("   Demo mode, increases default width to 1900 and height to 1000.\n\n");
-                printf("--quiet, -q\n");
-                printf("   Quiet text mode, only displays debug text\n\n");
-                printf("--tournament, -t (rounds)\n");
-                printf("   Tournament mode, not implemented yet\n\n");
-                printf("--noui, -n\n");
-                printf("   No UI Mode, hides the UI for faster playback\n\n");
-                printf("--coverage, -c\n");
-                printf("   Coverage Mode, runs fast settings for coverage testing with graphics\n\n");
-                printf("--results, -o (results.txt)\n");
-                printf("   Change the match results output file.\n\n");
-                printf("--settings, -s\n");
-                printf("   Change the config source file.\n\n");
-                printf("--gamelog, -g\n");
-                printf("   Enable game log tracking to file.\n\n");
-                exit(1);
+                printHelp();
+                break;
+              case 't':
+                mode = tournament;
+                rounds = 1;
+                printf("Tournament Mode. %d rounds.\n", rounds);
                 break;
               default:
                 printf("Invalid option specified: %c\n", argv[counter][i]);
@@ -207,4 +181,23 @@ int main(int argc, char **argv)
     printf("\nGAME OVER\n");
     return 0;
     //ProfilerStop(); //Stop the profiler
+}
+
+void printHelp(){
+  printf("\n\nHelp:\n");
+  printf("--demo, -d\n");
+  printf("   Demo mode, increases default width to 1900 and height to 1000.\n\n");
+  printf("--quiet, -q\n");
+  printf("   Quiet text mode, only displays debug text\n\n");
+  printf("--tournament rounds, -t (rounds)\n");
+  printf("   Tournament mode, not implemented yet\n\n");
+  printf("--noui, -n\n");
+  printf("   No UI Mode, hides the UI for faster playback\n\n");
+  printf("--results results.txt, -r (results.txt)\n");
+  printf("   Change the match results output file. Defaults to results.txt if nothing specified after -r.\n\n");
+  printf("--settings config.ini, -s (config.ini)\n");
+  printf("   Change the config source file. Defaults to config.ini if nothing specified after -s.\n\n");
+  printf("--gamelog moveTracker.txt, -g (moveTracker.txt)\n");
+  printf("   Enable game log tracking to file.\n\n");
+  exit(1);
 }

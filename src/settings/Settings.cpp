@@ -87,8 +87,6 @@ int Settings::getAttrSpecial(){return baseAttributes.tankSpecial;}
 
 bool Settings::showUI(){return showui;}
 
-void Settings::setCoverageMode(bool c){modeCoverage = c;}
-bool Settings::checkCoverage(){return modeCoverage;}
 bool Settings::checkQuiet(){return modeQuiet;}
 bool Settings::checkTracking(){return tracking;}
 bool Settings::checkInstantProj(){return projInstant;}
