@@ -2,7 +2,7 @@
  * @file
  * @brief Gizmo Tank
  ******************************************************************************/
-#include "Gizmo.h"
+#include "include/Gizmo.h"
 #include <iostream>
 
 Gizmo::Gizmo() {}
@@ -29,7 +29,7 @@ attributes Gizmo::setAttribute(int pointsAvailable, attributes baseStats)
  * @author Chezka Gaddi
  * @par Description:
  * 
- * Determines which action to spend AP.
+ * Determines which action to spend AP on.
  * 
  * @param[in] map - map of the area within range
  * @param[in] status - tank's position info within the map
@@ -72,6 +72,7 @@ direction Gizmo::attack(const MapData &map, PositionData status)
 {
     return UP;
 }
+
 
 #ifndef DYNAMIC
 extern "C"
